@@ -10,10 +10,12 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    loamanager.cpp
+    loamanager.cpp \
+    ui/widget_manager.cpp
 
 HEADERS += \
-    loamanager.h
+    loamanager.h \
+    ui/widget_manager.h
 
 FORMS += \
     loamanager.ui
@@ -32,3 +34,6 @@ win32: LIBS += -L$$PWD/../../../mongo-cxx-driver/lib/ -llibmongocxx.dll
 
 INCLUDEPATH += $$PWD/../../../mongo-cxx-driver/include
 DEPENDPATH += $$PWD/../../../mongo-cxx-driver/include
+
+RESOURCES += \
+    resource/resource.qrc

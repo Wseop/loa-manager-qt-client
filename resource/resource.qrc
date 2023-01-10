@@ -2,6 +2,13 @@
     <qresource prefix="/icon">
         <file>Home.ico</file>
     </qresource>
+    <qresource prefix="/font">
+        <file>font/NanumSquareNeo-aLt.ttf</file>
+        <file>font/NanumSquareNeo-bRg.ttf</file>
+        <file>font/NanumSquareNeo-cBd.ttf</file>
+        <file>font/NanumSquareNeo-dEb.ttf</file>
+        <file>font/NanumSquareNeo-eHv.ttf</file>
+    </qresource>
     <qresource prefix="/json">
         <file>setting/main.json</file>
     </qresource>

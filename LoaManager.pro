@@ -11,10 +11,12 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     loamanager.cpp \
+    ui/font_manager.cpp \
     ui/widget_manager.cpp
 
 HEADERS += \
     loamanager.h \
+    ui/font_manager.h \
     ui/widget_manager.h
 
 FORMS += \

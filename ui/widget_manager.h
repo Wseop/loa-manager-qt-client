@@ -8,7 +8,7 @@ class WidgetManager : public QObject
     Q_OBJECT
 
 public:
-    static class QPushButton* createPushButton(QString text, int width, int height);
+    static class QPushButton* createPushButton(QString text, int width, int height, int fontSize = 10, QWidget* pParent = nullptr);
 };
 
 #endif // WIDGETMANAGER_H

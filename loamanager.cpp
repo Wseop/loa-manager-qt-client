@@ -45,7 +45,7 @@ void LoaManager::createMenuButtons()
     for (const QJsonValue& menu : menus)
     {
         const QJsonObject& menuObj = menu.toObject();
-        QPushButton* pButton = WidgetManager::createPushButton(menuObj.find("Name")->toString(), MENU_BUTTON_WIDTH, MENU_BUTTON_HEIGHT);
+        QPushButton* pButton = WidgetManager::createPushButton(menuObj.find("Name")->toString(), MENU_BUTTON_WIDTH, MENU_BUTTON_HEIGHT, 10, this);
         ui->hLayoutMenu->addWidget(pButton);
     }
 }

@@ -11,7 +11,7 @@ LoaManager::LoaManager() :
 {
     ui->setupUi(this);
 
-    QFile file(":/json/setting/main.json");
+    QFile file(":/json/json/main.json");
     if (!file.open(QIODevice::ReadOnly))
     {
         qDebug() << Q_FUNC_INFO << ": mainSetting read fail";

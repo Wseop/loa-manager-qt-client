@@ -40,6 +40,7 @@ void FontManager::destroyInstance()
         return;
 
     delete m_pFontManager;
+    m_pFontManager = nullptr;
 }
 
 QFont FontManager::getFont(FontFamily fontFamily, int fontSize)

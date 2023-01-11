@@ -9,6 +9,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    db/db_manager.cpp \
     game_data/character/card/card.cpp \
     game_data/character/character.cpp \
     game_data/character/engrave/engrave.cpp \
@@ -28,6 +29,8 @@ SOURCES += \
     ui/widget_manager.cpp
 
 HEADERS += \
+    db/db_manager.h \
+    db/enum/db_enums.h \
     game_data/character/card/card.h \
     game_data/character/character.h \
     game_data/character/engrave/engrave.h \

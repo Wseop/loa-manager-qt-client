@@ -9,6 +9,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    api/api_manager.cpp \
     db/db_manager.cpp \
     game_data/character/card/card.cpp \
     game_data/character/character.cpp \
@@ -29,6 +30,8 @@ SOURCES += \
     ui/widget_manager.cpp
 
 HEADERS += \
+    api/api_manager.h \
+    api/enum/lostark_api.h \
     db/db_manager.h \
     db/enum/db_enums.h \
     game_data/character/card/card.h \

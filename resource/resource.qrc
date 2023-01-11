@@ -12,6 +12,7 @@
     <qresource prefix="/json">
         <file>json/engrave.json</file>
         <file>json/main.json</file>
+        <file>json/api.json</file>
     </qresource>
     <qresource prefix="/engrave">
         <file>image/engrave/107.png</file>

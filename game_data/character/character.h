@@ -15,12 +15,13 @@ class Gem;
 class Engrave;
 class Card;
 class Skill;
+class Collectible;
 
 struct Other
 {
     QString server;
-    int characterLevel;
     QString characterName;
+    int characterLevel;
     Class cls;
     double itemLevel;
 };
@@ -41,17 +42,19 @@ public:
     const Engrave* getEngrave() const;
     const QList<Card*>& getCards() const;
     const QList<Skill*>& getSkills() const;
+    const QList<Collectible*>& getCollectibles() const;
 
     void addOther(const Other& other);
-    void setProfile(Profile* profile);
-    void setEquip(ItemType type, Equip* equip);
-    void setAccessory(ItemType type, Accessory* accessory);
-    void setAbilityStone(AbilityStone* stone);
-    void setBracelet(Bracelet* bracelet);
-    void addGem(Gem* gem);
-    void setEngrave(Engrave* engrave);
-    void addCard(Card* card);
-    void addSkill(Skill* skill);
+    void setProfile(Profile* pProfile);
+    void setEquip(ItemType type, Equip* pEquip);
+    void setAccessory(ItemType type, Accessory* pAccessory);
+    void setAbilityStone(AbilityStone* pStone);
+    void setBracelet(Bracelet* pBracelet);
+    void addGem(Gem* pGem);
+    void setEngrave(Engrave* pEngrave);
+    void addCard(Card* pCard);
+    void addSkill(Skill* pSkill);
+    void addCollectible(Collectible* pCollectible);
 
 private:
     QList<Other> m_others;
@@ -73,6 +76,7 @@ private:
     Engrave* m_pEngrave;
     QList<Card*> m_cards;
     QList<Skill*> m_skills;
+    QList<Collectible*> m_collectibles;
 
     int m_earIndex;
     int m_ringIndex;

@@ -76,6 +76,7 @@ const QString& ApiManager::getApiKey(LostarkApi api) const
     case LostarkApi::Card:
         return m_apiKeys[2];
     case LostarkApi::Gem:
+    case LostarkApi::Collectible:
         return m_apiKeys[3];
     case LostarkApi::Auction:
     case LostarkApi::Market:

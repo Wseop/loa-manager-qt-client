@@ -10,6 +10,7 @@ enum class LostarkApi
     Engrave,
     Card,
     Gem,
+    Collectible,
     Auction,
     Market,
     Size

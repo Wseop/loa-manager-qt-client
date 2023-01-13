@@ -8,6 +8,7 @@
 #include "game_data/character/item/bracelet.h"
 #include "game_data/character/item/gem.h"
 #include "game_data/character/skill/skill.h"
+#include "game_data/character/collectible/collectible.h"
 #include <QDebug>
 
 Character::Character() :
@@ -66,6 +67,8 @@ Character::~Character()
     m_cards.clear();
     for (Skill* pSkill : m_skills)
         delete pSkill;
+    for (Collectible* pCollectible : m_collectibles)
+        delete pCollectible;
     m_skills.clear();
 }
 
@@ -155,51 +158,56 @@ const QList<Skill*>& Character::getSkills() const
     return m_skills;
 }
 
+const QList<Collectible*>& Character::getCollectibles() const
+{
+    return m_collectibles;
+}
+
 void Character::addOther(const Other& other)
 {
     m_others.append(other);
 }
 
-void Character::setProfile(Profile* profile)
+void Character::setProfile(Profile* pProfile)
 {
     if (m_pProfile != nullptr)
         delete m_pProfile;
-    m_pProfile = profile;
+    m_pProfile = pProfile;
 }
 
-void Character::setEquip(ItemType type, Equip* equip)
+void Character::setEquip(ItemType type, Equip* pEquip)
 {
     switch (type)
     {
     case ItemType::무기:
         if (m_pWeapon != nullptr)
             delete m_pWeapon;
-        m_pWeapon = equip;
+        m_pWeapon = pEquip;
         break;
     case ItemType::투구:
         if (m_pHead != nullptr)
             delete m_pHead;
-        m_pHead = equip;
+        m_pHead = pEquip;
         break;
     case ItemType::상의:
         if (m_pTop != nullptr)
             delete m_pTop;
-        m_pTop = equip;
+        m_pTop = pEquip;
         break;
     case ItemType::하의:
         if (m_pBottom != nullptr)
             delete m_pBottom;
-        m_pBottom = equip;
+        m_pBottom = pEquip;
         break;
     case ItemType::장갑:
         if (m_pHand != nullptr)
             delete m_pHand;
-        m_pHand = equip;
+        m_pHand = pEquip;
         break;
     case ItemType::어깨:
         if (m_pShoulder != nullptr)
             delete m_pShoulder;
-        m_pShoulder = equip;
+        m_pShoulder = pEquip;
         break;
     default:
         qDebug() << Q_FUNC_INFO << ": Invalid type";
@@ -207,28 +215,28 @@ void Character::setEquip(ItemType type, Equip* equip)
     }
 }
 
-void Character::setAccessory(ItemType type, Accessory* accessory)
+void Character::setAccessory(ItemType type, Accessory* pAccessory)
 {
     switch (type)
     {
     case ItemType::목걸이:
         if (m_pNeck != nullptr)
             delete m_pNeck;
-        m_pNeck = accessory;
+        m_pNeck = pAccessory;
         break;
     case ItemType::귀걸이:
         if (m_earIndex == 0)
         {
             if (m_pEar1 != nullptr)
                 delete m_pEar1;
-            m_pEar1 = accessory;
+            m_pEar1 = pAccessory;
             m_earIndex++;
         }
         else if (m_earIndex == 1)
         {
             if (m_pEar2 != nullptr)
                 delete m_pEar2;
-            m_pEar2 = accessory;
+            m_pEar2 = pAccessory;
             m_earIndex++;
         }
         break;
@@ -237,14 +245,14 @@ void Character::setAccessory(ItemType type, Accessory* accessory)
         {
             if (m_pRing1 != nullptr)
                 delete m_pRing1;
-            m_pRing1 = accessory;
+            m_pRing1 = pAccessory;
             m_ringIndex++;
         }
         else if (m_ringIndex == 1)
         {
             if (m_pRing2 != nullptr)
                 delete m_pRing2;
-            m_pRing2 = accessory;
+            m_pRing2 = pAccessory;
             m_ringIndex++;
         }
         break;
@@ -254,38 +262,43 @@ void Character::setAccessory(ItemType type, Accessory* accessory)
     }
 }
 
-void Character::setAbilityStone(AbilityStone* stone)
+void Character::setAbilityStone(AbilityStone* pStone)
 {
     if (m_pStone != nullptr)
         delete m_pStone;
-    m_pStone = stone;
+    m_pStone = pStone;
 }
 
-void Character::setBracelet(Bracelet* bracelet)
+void Character::setBracelet(Bracelet* pBracelet)
 {
     if (m_pBracelet != nullptr)
         delete m_pBracelet;
-    m_pBracelet = bracelet;
+    m_pBracelet = pBracelet;
 }
 
-void Character::addGem(Gem* gem)
+void Character::addGem(Gem* pGem)
 {
-    m_gems.append(gem);
+    m_gems.append(pGem);
 }
 
-void Character::setEngrave(Engrave* engrave)
+void Character::setEngrave(Engrave* pEngrave)
 {
     if (m_pEngrave != nullptr)
         delete m_pEngrave;
-    m_pEngrave = engrave;
+    m_pEngrave = pEngrave;
 }
 
-void Character::addCard(Card* card)
+void Character::addCard(Card* pCard)
 {
-    m_cards.append(card);
+    m_cards.append(pCard);
 }
 
-void Character::addSkill(Skill* skill)
+void Character::addSkill(Skill* pSkill)
 {
-    m_skills.append(skill);
+    m_skills.append(pSkill);
+}
+
+void Character::addCollectible(Collectible* pCollectible)
+{
+    m_collectibles.append(pCollectible);
 }

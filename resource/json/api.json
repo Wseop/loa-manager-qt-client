@@ -34,13 +34,18 @@
 		"RequestURL": "https://developer-lostark.game.onstove.com/armories/characters/%1/gems",
 		"Type": "GET"
 	},
+        {
+                "Index": 7,
+                "RequestURL": "https://developer-lostark.game.onstove.com/armories/characters/%1/collectibles",
+                "Type": "GET"
+        },
 	{
-		"Index": 7,
+                "Index": 8,
 		"RequestURL": "https://developer-lostark.game.onstove.com/auctions/items",
 		"Type": "POST"
 	},
 	{
-		"Index": 8,
+                "Index": 9,
 		"RequestURL": "https://developer-lostark.game.onstove.com/markets/items",
 		"Type": "POST"
 	}

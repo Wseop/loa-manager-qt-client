@@ -13,6 +13,7 @@ SOURCES += \
     db/db_manager.cpp \
     game_data/character/card/card.cpp \
     game_data/character/character.cpp \
+    game_data/character/character_manager.cpp \
     game_data/character/collectible/collectible.cpp \
     game_data/character/engrave/engrave.cpp \
     game_data/character/engrave/engrave_manager.cpp \
@@ -37,6 +38,7 @@ HEADERS += \
     db/enum/db_enums.h \
     game_data/character/card/card.h \
     game_data/character/character.h \
+    game_data/character/character_manager.h \
     game_data/character/collectible/collectible.h \
     game_data/character/collectible/enum/collectible_type.h \
     game_data/character/engrave/engrave.h \

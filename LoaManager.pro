@@ -37,6 +37,7 @@ SOURCES += \
     ui/character/item/equip_widget.cpp \
     ui/character/item/gem_widget.cpp \
     ui/character/skill/skill_widget.cpp \
+    ui/character/skill/skillrune_widget.cpp \
     ui/character/skill/tripod_widget.cpp \
     ui/font_manager.cpp \
     ui/widget_manager.cpp
@@ -78,6 +79,7 @@ HEADERS += \
     ui/character/item/equip_widget.h \
     ui/character/item/gem_widget.h \
     ui/character/skill/skill_widget.h \
+    ui/character/skill/skillrune_widget.h \
     ui/character/skill/tripod_widget.h \
     ui/font_manager.h \
     ui/widget_manager.h
@@ -93,6 +95,7 @@ FORMS += \
     ui/character/item/equip_widget.ui \
     ui/character/item/gem_widget.ui \
     ui/character/skill/skill_widget.ui \
+    ui/character/skill/skillrune_widget.ui \
     ui/character/skill/tripod_widget.ui
 
 # Default rules for deployment.

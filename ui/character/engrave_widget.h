@@ -26,8 +26,6 @@ private:
 private:
     Ui::EngraveWidget *ui;
 
-    const int LABEL_ICON_WIDTH = 50;
-    const int LABEL_ICON_HEIGHT = 50;
     const int LABEL_ENGRAVE_WIDTH = 100;
     const int LABEL_ENGRAVE_HEIGHT = 25;
     const int LABEL_LEVEL_WIDTH = 50;

@@ -1,6 +1,7 @@
 #include "engrave_widget.h"
 #include "ui_engrave_widget.h"
 #include "game_data/character/engrave/engrave.h"
+#include "game_data/character/engrave/engrave_manager.h"
 #include "ui/widget_manager.h"
 #include <QLabel>
 #include <QHBoxLayout>
@@ -32,7 +33,7 @@ void EngraveWidget::addEngraveHLayouts()
 
     for (auto iter = engraves.begin(); iter != engraves.end(); iter++)
     {
-        QLabel* pIconLabel = WidgetManager::createLabel("", LABEL_ICON_WIDTH, LABEL_ICON_HEIGHT, 10, this);
+        QLabel* pIconLabel = WidgetManager::createIcon(EngraveManager::getInstance()->iconPath(iter.key()), nullptr, this);
         QLabel* pEngraveLabel = WidgetManager::createLabel(iter.key(), LABEL_ENGRAVE_WIDTH, LABEL_ENGRAVE_HEIGHT, 10, this);
         QLabel* pLevelLabel = WidgetManager::createLabel(QString("Lv. %1").arg(iter.value() / 5), LABEL_LEVEL_WIDTH, LABEL_LEVEL_HEIGHT, 10, this);
 
@@ -49,7 +50,7 @@ void EngraveWidget::addEngraveHLayouts()
     }
     for (auto iter = penalties.begin(); iter != penalties.end(); iter++)
     {
-        QLabel* pIconLabel = WidgetManager::createLabel("", LABEL_ICON_WIDTH, LABEL_ICON_HEIGHT, 10, this);
+        QLabel* pIconLabel = WidgetManager::createIcon(EngraveManager::getInstance()->iconPath(iter.key()), nullptr, this);
         QLabel* pEngraveLabel = WidgetManager::createLabel(iter.key(), LABEL_ENGRAVE_WIDTH, LABEL_ENGRAVE_HEIGHT, 10, this);
         QLabel* pLevelLabel = WidgetManager::createLabel(QString("Lv. %1").arg(iter.value() / 5), LABEL_LEVEL_WIDTH, LABEL_LEVEL_HEIGHT, 10, this);
 

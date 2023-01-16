@@ -1,0 +1,73 @@
+#include "equip_widget.h"
+#include "ui_equip_widget.h"
+#include "ui/widget_manager.h"
+#include "game_data/character/item/equip.h"
+#include <QLabel>
+#include <QProgressBar>
+#include <QNetworkAccessManager>
+
+EquipWidget::EquipWidget(QWidget* pParent, const Equip* pEquip) :
+    QWidget(pParent),
+    ui(new Ui::EquipWidget),
+    m_pEquip(pEquip),
+    m_pQualityBar(nullptr),
+    m_pNetworkManager(new QNetworkAccessManager())
+{
+    ui->setupUi(this);
+
+    addIcon();
+    addQualityBar();
+    addLabels();
+}
+
+EquipWidget::~EquipWidget()
+{
+    for (QLabel* pLabel : m_labels)
+        delete pLabel;
+    delete m_pQualityBar;
+    delete m_pNetworkManager;
+    delete ui;
+}
+
+void EquipWidget::addIcon()
+{
+    QLabel* pIcon = WidgetManager::createIcon(m_pEquip->getIconPath(), m_pNetworkManager, this);
+    m_labels.append(pIcon);
+    ui->vLayoutLeft->addWidget(pIcon);
+}
+
+void EquipWidget::addQualityBar()
+{
+    m_pQualityBar = WidgetManager::createQualityBar(m_pEquip->getQuality(), QUALITYBAR_WIDTH, QUALITYBAR_HEIGHT, 10, nullptr);
+    ui->vLayoutLeft->addWidget(m_pQualityBar);
+}
+
+void EquipWidget::addLabels()
+{
+    // 강화수치 + 아이템 레벨 정보 추가
+    QString equipTitle;
+    if (m_pEquip->getName().startsWith("+"))
+    {
+        equipTitle += m_pEquip->getName().sliced(0, m_pEquip->getName().indexOf(" "));
+        equipTitle += " ";
+    }
+    equipTitle += m_pEquip->getLevelTier();
+
+    QLabel* pEquipTitleLabel = WidgetManager::createLabel(equipTitle, LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+    m_labels.append(pEquipTitleLabel);
+    ui->vLayoutRight->addWidget(pEquipTitleLabel);
+
+    // 세트효과 or 엘라부여 정보 추가
+    QString setEffect;
+    if (m_pEquip->isElla())
+        setEffect += "엘라 부여";
+    else
+    {
+        setEffect += setEffectToStr(m_pEquip->getSetEffect());
+        setEffect += QString(" Lv. %1").arg(m_pEquip->getSetLevel());
+    }
+
+    QLabel* pSetEffectLabel = WidgetManager::createLabel(setEffect, LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+    m_labels.append(pSetEffectLabel);
+    ui->vLayoutRight->addWidget(pSetEffectLabel);
+}

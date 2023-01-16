@@ -31,6 +31,7 @@ SOURCES += \
     ui/character/card_widget.cpp \
     ui/character/collectible_widget.cpp \
     ui/character/engrave_widget.cpp \
+    ui/character/item/equip_widget.cpp \
     ui/font_manager.cpp \
     ui/widget_manager.cpp
 
@@ -65,6 +66,7 @@ HEADERS += \
     ui/character/card_widget.h \
     ui/character/collectible_widget.h \
     ui/character/engrave_widget.h \
+    ui/character/item/equip_widget.h \
     ui/font_manager.h \
     ui/widget_manager.h
 
@@ -72,7 +74,8 @@ FORMS += \
     loamanager.ui \
     ui/character/card_widget.ui \
     ui/character/collectible_widget.ui \
-    ui/character/engrave_widget.ui
+    ui/character/engrave_widget.ui \
+    ui/character/item/equip_widget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -28,6 +28,7 @@ SOURCES += \
     game_data/character/skill/skillrune.cpp \
     main.cpp \
     loamanager.cpp \
+    ui/character/card_widget.cpp \
     ui/font_manager.cpp \
     ui/widget_manager.cpp
 
@@ -59,11 +60,13 @@ HEADERS += \
     game_data/character/skill/skill.h \
     game_data/character/skill/skillrune.h \
     loamanager.h \
+    ui/character/card_widget.h \
     ui/font_manager.h \
     ui/widget_manager.h
 
 FORMS += \
-    loamanager.ui
+    loamanager.ui \
+    ui/character/card_widget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

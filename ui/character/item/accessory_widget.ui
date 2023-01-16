@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AccessoryWidget</class>
+ <widget class="QWidget" name="AccessoryWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>124</width>
+    <height>60</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="hLayoutAccessory">
+   <item>
+    <layout class="QVBoxLayout" name="vLayoutLeft"/>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="vLayoutRight"/>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

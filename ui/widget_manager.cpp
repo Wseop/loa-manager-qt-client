@@ -3,6 +3,11 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QProgressBar>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QUrl>
+#include <QPixmap>
 
 FontManager* WidgetManager::m_pFontManager = FontManager::getInstance();
 
@@ -20,6 +25,38 @@ QLabel* WidgetManager::createLabel(QString text, int width, int height, int font
     pLabel->setFixedSize(width, height);
     pLabel->setFont(m_pFontManager->getFont(FontFamily::NanumSquareNeoBold, fontSize));
     return pLabel;
+}
+
+QLabel* WidgetManager::createIcon(QString iconPath, QNetworkAccessManager* pNetworkManager, QWidget* pParent)
+{
+    QLabel* pIcon = new QLabel(pParent);
+    pIcon->setFixedSize(50, 50);
+
+    if (pNetworkManager == nullptr)
+    {
+        QPixmap iconImage;
+        // if network manager is nullptr, then load icon from resource
+        if (iconImage.load(iconPath))
+        {
+            pIcon->setPixmap(iconImage.scaled(50, 50, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+            pIcon->setStyleSheet("QLabel { border: 1px solid black }");
+        }
+    }
+    else
+    {
+        QNetworkRequest request;
+        request.setUrl(QUrl(iconPath));
+        connect(pNetworkManager, &QNetworkAccessManager::finished, [&](QNetworkReply* pReply){
+            QPixmap iconImage;
+            if (iconImage.loadFromData(pReply->readAll(), "PNG"))
+            {
+                pIcon->setPixmap(iconImage.scaled(50, 50, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+                pIcon->setStyleSheet("QLabel { border: 1px solid black }");
+            }
+        });
+    }
+
+    return pIcon;
 }
 
 QProgressBar* WidgetManager::createQualityBar(int quality, int width, int height, int fontSize, QWidget* pParent)

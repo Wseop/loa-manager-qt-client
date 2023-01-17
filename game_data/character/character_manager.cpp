@@ -13,6 +13,7 @@
 #include "game_data/character/skill/skillrune.h"
 #include "game_data/character/card/card.h"
 #include "game_data/character/collectible/collectible.h"
+#include "function/character_search/character_search.h"
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QJsonDocument>
@@ -271,7 +272,10 @@ void CharacterManager::handleEquipment(QNetworkReply* pReply)
                         int valueIdx = engraveStr.indexOf("+") + 1;
                         int engraveValue = engraveStr.sliced(valueIdx, 1).toInt();
 
-                        pAccessory->addEngrave(engrave, engraveValue);
+                        if (!engrave.contains("감소"))
+                            pAccessory->addEngrave(engrave, engraveValue);
+                        else
+                            pAccessory->addPenalty(engrave, engraveValue);
                     }
                 }
             }
@@ -324,7 +328,10 @@ void CharacterManager::handleEquipment(QNetworkReply* pReply)
                         int valueIdx = engraveStr.indexOf("+") + 1;
                         int engraveValue = engraveStr.sliced(valueIdx, 1).toInt();
 
-                        pAccessory->addEngrave(engrave, engraveValue);
+                        if (!engrave.contains("감소"))
+                            pAccessory->addEngrave(engrave, engraveValue);
+                        else
+                            pAccessory->addPenalty(engrave, engraveValue);
                     }
                 }
             }
@@ -645,7 +652,7 @@ void CharacterManager::setHandlerStatus(uint8_t bit)
 
     if (m_handlerStatus == HANDLER_STATUS_FINISH)
     {        
-        // TODO. how to signal to requesters?
+        emit CharacterSearch::getInstance()->updateCharacter();
     }
 }
 

@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>157</width>
+    <width>150</width>
     <height>76</height>
    </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>200</width>
+    <height>16777215</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Form</string>
@@ -21,7 +27,11 @@
      </property>
      <layout class="QHBoxLayout" name="hLayoutGroupEquip">
       <item>
-       <layout class="QVBoxLayout" name="vLayoutLeft"/>
+       <layout class="QVBoxLayout" name="vLayoutLeft">
+        <property name="spacing">
+         <number>1</number>
+        </property>
+       </layout>
       </item>
       <item>
        <layout class="QVBoxLayout" name="vLayoutRight"/>

@@ -11,7 +11,8 @@ CharacterSearch::CharacterSearch() :
     m_pCharacterWidget(nullptr)
 {
     ui->setupUi(this);
-    ui->vLayoutCharacterSearch->setAlignment(Qt::AlignLeft);
+    ui->vLayoutCharacterSearch->setAlignment(Qt::AlignHCenter);
+    ui->hLayoutSearchBar->setAlignment(Qt::AlignHCenter);
 
     initConnects();
 }

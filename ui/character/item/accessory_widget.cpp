@@ -15,6 +15,7 @@ AccessoryWidget::AccessoryWidget(QWidget* pParent, const Accessory* pAccessory) 
 {
     ui->setupUi(this);
     ui->groupAccessory->setTitle(itemTypeToStr(m_pAccessory->getType()));
+    ui->vLayoutLeft->setAlignment(Qt::AlignVCenter);
 
     addIcon();
     addQualityBar();

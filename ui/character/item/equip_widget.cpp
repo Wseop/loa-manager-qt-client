@@ -15,6 +15,7 @@ EquipWidget::EquipWidget(QWidget* pParent, const Equip* pEquip) :
 {
     ui->setupUi(this);
     ui->groupEquip->setTitle(itemTypeToStr(m_pEquip->getType()));
+    ui->vLayoutLeft->setAlignment(Qt::AlignVCenter);
 
     addIcon();
     addQualityBar();

@@ -496,6 +496,12 @@
    </item>
    <item>
     <widget class="QGroupBox" name="groupEngrave">
+     <property name="maximumSize">
+      <size>
+       <width>200</width>
+       <height>16777215</height>
+      </size>
+     </property>
      <property name="title">
       <string>각인</string>
      </property>
@@ -504,6 +510,12 @@
    </item>
    <item>
     <widget class="QGroupBox" name="groupGemMyul">
+     <property name="maximumSize">
+      <size>
+       <width>200</width>
+       <height>16777215</height>
+      </size>
+     </property>
      <property name="title">
       <string>멸화 보석</string>
      </property>
@@ -512,6 +524,12 @@
    </item>
    <item>
     <widget class="QGroupBox" name="groupGemHong">
+     <property name="maximumSize">
+      <size>
+       <width>200</width>
+       <height>16777215</height>
+      </size>
+     </property>
      <property name="title">
       <string>홍염 보석</string>
      </property>

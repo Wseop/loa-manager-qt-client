@@ -11,6 +11,7 @@ CONFIG += c++17
 SOURCES += \
     api/api_manager.cpp \
     db/db_manager.cpp \
+    function/character_search/character_search.cpp \
     game_data/character/card/card.cpp \
     game_data/character/character.cpp \
     game_data/character/character_manager.cpp \
@@ -39,6 +40,7 @@ HEADERS += \
     api/enum/lostark_api.h \
     db/db_manager.h \
     db/enum/db_enums.h \
+    function/character_search/character_search.h \
     game_data/character/card/card.h \
     game_data/character/character.h \
     game_data/character/character_manager.h \
@@ -69,6 +71,7 @@ HEADERS += \
     ui/widget_manager.h
 
 FORMS += \
+    function/character_search/character_search.ui \
     loamanager.ui \
     ui/character/character_widget.ui \
     ui/character/item/accessory_widget.ui \

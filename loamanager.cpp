@@ -1,6 +1,7 @@
 #include "loamanager.h"
 #include "ui_loamanager.h"
 #include "ui/widget_manager.h"
+#include "function/character_search/character_search.h"
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -23,6 +24,8 @@ LoaManager::LoaManager() :
 
     setLayoutAlignment();
     createMenuButtons();
+    addFunctions();
+    initConnects();
 
     this->setWindowIcon(QIcon(":/icon/Home.ico"));
     this->setWindowTitle(m_mainSetting.find("Version")->toString());
@@ -37,6 +40,7 @@ LoaManager::~LoaManager()
 void LoaManager::setLayoutAlignment()
 {
     ui->hLayoutMenu->setAlignment(Qt::AlignLeft);
+    ui->vLayoutContents->setAlignment(Qt::AlignTop);
 }
 
 void LoaManager::createMenuButtons()
@@ -82,9 +86,33 @@ void LoaManager::createMenuButtons()
             QPushButton* pChildButton = WidgetManager::createPushButton(menuName, MENU_BUTTON_WIDTH, MENU_BUTTON_HEIGHT, 10, pParentButton);
             ui->hLayoutMenu->addWidget(pChildButton);
             pChildButton->hide();
-            m_childMenuButtons.append(pChildButton);
+            m_childMenuButtons[menuName] = pChildButton;
             m_parentToChildButtons[pParentButton].append(pChildButton);
         }
+    }
+}
+
+void LoaManager::initConnects()
+{
+    connect(m_childMenuButtons["캐릭터 조회"], &QPushButton::pressed, this, [&](){
+        for (QWidget* pWidget : m_functions)
+            pWidget->hide();
+        CharacterSearch::getInstance()->show();
+    });
+    connect(m_childMenuButtons["군장 검사"], &QPushButton::pressed, this, [&](){
+        for (QWidget* pWidget : m_functions)
+            pWidget->hide();
+    });
+}
+
+void LoaManager::addFunctions()
+{
+    m_functions.append(CharacterSearch::getInstance());
+
+    for (QWidget* pWidget : m_functions)
+    {
+        pWidget->hide();
+        ui->vLayoutContents->addWidget(pWidget);
     }
 }
 

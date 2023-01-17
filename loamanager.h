@@ -20,6 +20,8 @@ public:
 private:
     void setLayoutAlignment();
     void createMenuButtons();
+    void initConnects();
+    void addFunctions();
 
 private:
     Ui::LoaManager *ui;
@@ -30,7 +32,8 @@ private:
     QJsonObject m_mainSetting;
     QPushButton* m_pBackButton;
     QList<QPushButton*> m_parentMenuButtons;
-    QList<QPushButton*> m_childMenuButtons;
+    QMap<QString, QPushButton*> m_childMenuButtons;
     QMap<QPushButton*, QList<QPushButton*>> m_parentToChildButtons;
+    QList<QWidget*> m_functions;
 };
 #endif // LOAMANAGER_H

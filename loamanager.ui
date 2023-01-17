@@ -18,13 +18,6 @@
     <layout class="QHBoxLayout" name="hLayoutMenu"/>
    </item>
    <item>
-    <widget class="Line" name="line">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QScrollArea" name="scrollArea">
      <property name="widgetResizable">
       <bool>true</bool>
@@ -35,9 +28,10 @@
         <x>0</x>
         <y>0</y>
         <width>780</width>
-        <height>563</height>
+        <height>572</height>
        </rect>
       </property>
+      <layout class="QVBoxLayout" name="vLayoutContents"/>
      </widget>
     </widget>
    </item>

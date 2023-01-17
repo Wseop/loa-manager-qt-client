@@ -36,6 +36,7 @@ SOURCES += \
     ui/character/item/bracelet_widget.cpp \
     ui/character/item/equip_widget.cpp \
     ui/character/item/gem_widget.cpp \
+    ui/character/profile_widget.cpp \
     ui/character/skill/skill_widget.cpp \
     ui/character/skill/skillrune_widget.cpp \
     ui/character/skill/tripod_widget.cpp \
@@ -78,6 +79,7 @@ HEADERS += \
     ui/character/item/bracelet_widget.h \
     ui/character/item/equip_widget.h \
     ui/character/item/gem_widget.h \
+    ui/character/profile_widget.h \
     ui/character/skill/skill_widget.h \
     ui/character/skill/skillrune_widget.h \
     ui/character/skill/tripod_widget.h \
@@ -94,6 +96,7 @@ FORMS += \
     ui/character/item/bracelet_widget.ui \
     ui/character/item/equip_widget.ui \
     ui/character/item/gem_widget.ui \
+    ui/character/profile_widget.ui \
     ui/character/skill/skill_widget.ui \
     ui/character/skill/skillrune_widget.ui \
     ui/character/skill/tripod_widget.ui

@@ -20,9 +20,6 @@ public:
 
 private:
     static QString getQualityColor(int quality);
-
-private:
-    static class FontManager* m_pFontManager;
 };
 
 #endif // WIDGETMANAGER_H

@@ -9,13 +9,11 @@
 #include <QUrl>
 #include <QPixmap>
 
-FontManager* WidgetManager::m_pFontManager = FontManager::getInstance();
-
 QPushButton* WidgetManager::createPushButton(QString text, int width, int height, int fontSize, QWidget* pParent)
 {
     QPushButton* pButton = new QPushButton(text, pParent);
     pButton->setFixedSize(width, height);
-    pButton->setFont(m_pFontManager->getFont(FontFamily::NanumSquareNeoBold, fontSize));
+    pButton->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
     return pButton;
 }
 
@@ -23,7 +21,7 @@ QLabel* WidgetManager::createLabel(QString text, int width, int height, int font
 {
     QLabel* pLabel = new QLabel(text, pParent);
     pLabel->setFixedSize(width, height);
-    pLabel->setFont(m_pFontManager->getFont(FontFamily::NanumSquareNeoBold, fontSize));
+    pLabel->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
     return pLabel;
 }
 
@@ -66,7 +64,7 @@ QProgressBar* WidgetManager::createQualityBar(int quality, int width, int height
     pQualityBar->setAlignment(Qt::AlignHCenter);
     pQualityBar->setFormat("%p");
     pQualityBar->setFixedSize(width, height);
-    pQualityBar->setFont(m_pFontManager->getFont(FontFamily::NanumSquareNeoBold, fontSize));
+    pQualityBar->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
     pQualityBar->setStyleSheet(QString("QProgressBar::chunk { background-color: %1 }").arg(getQualityColor(quality)));
     return pQualityBar;
 }

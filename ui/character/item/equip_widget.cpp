@@ -14,6 +14,7 @@ EquipWidget::EquipWidget(QWidget* pParent, const Equip* pEquip) :
     m_pNetworkManager(new QNetworkAccessManager())
 {
     ui->setupUi(this);
+    ui->groupEquip->setTitle(itemTypeToStr(m_pEquip->getType()));
 
     addIcon();
     addQualityBar();
@@ -45,14 +46,19 @@ void EquipWidget::addQualityBar()
 void EquipWidget::addLabels()
 {
     // 강화수치 + 아이템 레벨 정보 추가
-    QString equipTitle;
+    QString equipTitle = "%1 (%2)";
     if (m_pEquip->getName().startsWith("+"))
     {
-        equipTitle += m_pEquip->getName().sliced(0, m_pEquip->getName().indexOf(" "));
-        equipTitle += " ";
+        QString reforge = m_pEquip->getName().sliced(0, m_pEquip->getName().indexOf(" "));
+        const QString& levelTier = m_pEquip->getLevelTier();
+        int levelIndex = levelTier.indexOf("레벨") + 3;
+        QString level = levelTier.sliced(levelIndex, levelTier.indexOf("(") - levelIndex - 1);
+        equipTitle = equipTitle.arg(reforge, level);
     }
-    equipTitle += m_pEquip->getLevelTier();
-
+    else
+    {
+        equipTitle = "";
+    }
     QLabel* pEquipTitleLabel = WidgetManager::createLabel(equipTitle, LABEL_WIDTH, LABEL_HEIGHT, 10, this);
     m_labels.append(pEquipTitleLabel);
     ui->vLayoutRight->addWidget(pEquipTitleLabel);
@@ -66,7 +72,6 @@ void EquipWidget::addLabels()
         setEffect += setEffectToStr(m_pEquip->getSetEffect());
         setEffect += QString(" Lv. %1").arg(m_pEquip->getSetLevel());
     }
-
     QLabel* pSetEffectLabel = WidgetManager::createLabel(setEffect, LABEL_WIDTH, LABEL_HEIGHT, 10, this);
     m_labels.append(pSetEffectLabel);
     ui->vLayoutRight->addWidget(pSetEffectLabel);

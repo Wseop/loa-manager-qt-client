@@ -14,6 +14,7 @@ AccessoryWidget::AccessoryWidget(QWidget* pParent, const Accessory* pAccessory) 
     m_pNetworkManager(new QNetworkAccessManager())
 {
     ui->setupUi(this);
+    ui->groupAccessory->setTitle(itemTypeToStr(m_pAccessory->getType()));
 
     addIcon();
     addQualityBar();
@@ -44,17 +45,12 @@ void AccessoryWidget::addQualityBar()
 
 void AccessoryWidget::addLabels()
 {
-    // 악세서리 이름 추가
-    QLabel* pLabelName = WidgetManager::createLabel(m_pAccessory->getName(), LABEL_WIDTH, LABEL_HEIGHT, 10, this);
-    m_labels.append(pLabelName);
-    ui->vLayoutRight->addWidget(pLabelName);
-
     // 특성 추가
     QString abilityText;
     const QMap<Ability, int>& abilities = m_pAccessory->getAbilities();
     for (auto iter = abilities.begin(); iter != abilities.end(); iter++)
     {
-        abilityText += QString("%1 +%2  ").arg(abilityToStr(iter.key()).arg(iter.value()));
+        abilityText += QString("%1 +%2  ").arg(abilityToStr(iter.key())).arg(iter.value());
     }
     QLabel* pLabelAbility = WidgetManager::createLabel(abilityText, LABEL_WIDTH, LABEL_HEIGHT, 10, this);
     m_labels.append(pLabelAbility);

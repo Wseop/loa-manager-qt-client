@@ -6,19 +6,28 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>124</width>
-    <height>60</height>
+    <width>140</width>
+    <height>68</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QHBoxLayout" name="hLayoutAccessory">
+  <layout class="QHBoxLayout" name="hLayoutAccessoryWidget">
    <item>
-    <layout class="QVBoxLayout" name="vLayoutLeft"/>
-   </item>
-   <item>
-    <layout class="QVBoxLayout" name="vLayoutRight"/>
+    <widget class="QGroupBox" name="groupAccessory">
+     <property name="title">
+      <string/>
+     </property>
+     <layout class="QHBoxLayout" name="hLayoutGroupAccessory">
+      <item>
+       <layout class="QVBoxLayout" name="vLayoutLeft"/>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="vLayoutRight"/>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>

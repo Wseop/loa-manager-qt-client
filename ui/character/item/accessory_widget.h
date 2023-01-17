@@ -30,7 +30,7 @@ private:
 
     const int QUALITYBAR_WIDTH = 50;
     const int QUALITYBAR_HEIGHT = 20;
-    const int LABEL_WIDTH = 100;
+    const int LABEL_WIDTH = 150;
     const int LABEL_HEIGHT = 25;
 
     const Accessory* m_pAccessory;

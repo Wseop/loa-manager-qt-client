@@ -28,18 +28,9 @@ SOURCES += \
     game_data/character/skill/skillrune.cpp \
     main.cpp \
     loamanager.cpp \
-    ui/character/card/card_widget.cpp \
-    ui/character/collectible/collectible_widget.cpp \
-    ui/character/engrave/engrave_widget.cpp \
-    ui/character/item/abilitystone_widget.cpp \
+    ui/character/character_widget.cpp \
     ui/character/item/accessory_widget.cpp \
-    ui/character/item/bracelet_widget.cpp \
     ui/character/item/equip_widget.cpp \
-    ui/character/item/gem_widget.cpp \
-    ui/character/profile/profile_widget.cpp \
-    ui/character/skill/skill_widget.cpp \
-    ui/character/skill/skillrune_widget.cpp \
-    ui/character/skill/tripod_widget.cpp \
     ui/font_manager.cpp \
     ui/widget_manager.cpp
 
@@ -71,35 +62,17 @@ HEADERS += \
     game_data/character/skill/skill.h \
     game_data/character/skill/skillrune.h \
     loamanager.h \
-    ui/character/card/card_widget.h \
-    ui/character/collectible/collectible_widget.h \
-    ui/character/engrave/engrave_widget.h \
-    ui/character/item/abilitystone_widget.h \
+    ui/character/character_widget.h \
     ui/character/item/accessory_widget.h \
-    ui/character/item/bracelet_widget.h \
     ui/character/item/equip_widget.h \
-    ui/character/item/gem_widget.h \
-    ui/character/profile/profile_widget.h \
-    ui/character/skill/skill_widget.h \
-    ui/character/skill/skillrune_widget.h \
-    ui/character/skill/tripod_widget.h \
     ui/font_manager.h \
     ui/widget_manager.h
 
 FORMS += \
     loamanager.ui \
-    ui/character/card/card_widget.ui \
-    ui/character/collectible/collectible_widget.ui \
-    ui/character/engrave/engrave_widget.ui \
-    ui/character/item/abilitystone_widget.ui \
+    ui/character/character_widget.ui \
     ui/character/item/accessory_widget.ui \
-    ui/character/item/bracelet_widget.ui \
-    ui/character/item/equip_widget.ui \
-    ui/character/item/gem_widget.ui \
-    ui/character/profile/profile_widget.ui \
-    ui/character/skill/skill_widget.ui \
-    ui/character/skill/skillrune_widget.ui \
-    ui/character/skill/tripod_widget.ui
+    ui/character/item/equip_widget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -22,6 +22,7 @@ QLabel* WidgetManager::createLabel(QString text, int width, int height, int font
     QLabel* pLabel = new QLabel(text, pParent);
     pLabel->setFixedSize(width, height);
     pLabel->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
+    pLabel->setAlignment(Qt::AlignHCenter);
     return pLabel;
 }
 
@@ -44,7 +45,7 @@ QLabel* WidgetManager::createIcon(QString iconPath, QNetworkAccessManager* pNetw
     {
         QNetworkRequest request;
         request.setUrl(QUrl(iconPath));
-        connect(pNetworkManager, &QNetworkAccessManager::finished, [&](QNetworkReply* pReply){
+        connect(pNetworkManager, &QNetworkAccessManager::finished, [&, pIcon](QNetworkReply* pReply){
             QPixmap iconImage;
             if (iconImage.loadFromData(pReply->readAll(), "PNG"))
             {
@@ -52,6 +53,7 @@ QLabel* WidgetManager::createIcon(QString iconPath, QNetworkAccessManager* pNetw
                 pIcon->setStyleSheet("QLabel { border: 1px solid black }");
             }
         });
+        pNetworkManager->get(request);
     }
 
     return pIcon;

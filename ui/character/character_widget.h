@@ -17,12 +17,17 @@ public:
 
 private:
     void setFonts();
+    void setStyleSheets();
     void addProfileWidget();
     void addEquipWidgets();
     void addAccessoryWidgets();
 
 private:
     Ui::CharacterWidget *ui;
+
+    const QString COLOR_GUILD = "#1A9362";
+    const QString COLOR_SERVER = "#B178EA";
+    const QString COLOR_ITEMLEVEL = "#FF009B";
 
     const Character* m_pCharacter;
     QList<class QLabel*> m_labels;

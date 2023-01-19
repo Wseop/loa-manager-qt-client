@@ -24,6 +24,7 @@ private:
     void addIcon();
     void addQualityBar();
     void addLabels();
+    void setFonts();
 
 private:
     Ui::EquipWidget *ui;

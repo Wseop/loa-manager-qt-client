@@ -19,6 +19,7 @@ CharacterWidget::CharacterWidget(QWidget* pParent, const Character* pCharacter) 
     ui->vLayoutCharacter->setAlignment(Qt::AlignHCenter);
 
     setFonts();
+    setStyleSheets();
     addProfileWidget();
     addEquipWidgets();
     addAccessoryWidgets();
@@ -39,6 +40,7 @@ void CharacterWidget::setFonts()
 {
     FontManager* pFontManager = FontManager::getInstance();
     QFont nanumBold10 = pFontManager->getFont(FontFamily::NanumSquareNeoBold, 10);
+    QFont nanumBold12 = pFontManager->getFont(FontFamily::NanumSquareNeoBold, 12);
 
     ui->pbSibling->setFont(nanumBold10);
     ui->lbName->setFont(nanumBold10);
@@ -51,6 +53,15 @@ void CharacterWidget::setFonts()
     ui->lbItemLevel->setFont(nanumBold10);
     ui->groupAbility->setFont(nanumBold10);
     ui->groupCard->setFont(nanumBold10);
+}
+
+void CharacterWidget::setStyleSheets()
+{
+    QString labelColor = "QLabel { color: %1 }";
+
+    ui->lbGuild->setStyleSheet(labelColor.arg(COLOR_GUILD));
+    ui->lbServer->setStyleSheet(labelColor.arg(COLOR_SERVER));
+    ui->lbItemLevel->setStyleSheet(labelColor.arg(COLOR_ITEMLEVEL));
 }
 
 void CharacterWidget::addProfileWidget()

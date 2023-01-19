@@ -1,6 +1,7 @@
 #include "equip_widget.h"
 #include "ui_equip_widget.h"
 #include "ui/widget_manager.h"
+#include "ui/font_manager.h"
 #include "game_data/character/item/equip.h"
 #include <QLabel>
 #include <QProgressBar>
@@ -20,6 +21,7 @@ EquipWidget::EquipWidget(QWidget* pParent, const Equip* pEquip) :
     addIcon();
     addQualityBar();
     addLabels();
+    setFonts();
 }
 
 EquipWidget::~EquipWidget()
@@ -60,7 +62,7 @@ void EquipWidget::addLabels()
     {
         equipTitle = "";
     }
-    QLabel* pEquipTitleLabel = WidgetManager::createLabel(equipTitle, LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+    QLabel* pEquipTitleLabel = WidgetManager::createLabel(equipTitle, LABEL_WIDTH, LABEL_HEIGHT, 10, this, colorCode(m_pEquip->getGrade()));
     m_labels.append(pEquipTitleLabel);
     ui->vLayoutRight->addWidget(pEquipTitleLabel);
 
@@ -76,4 +78,12 @@ void EquipWidget::addLabels()
     QLabel* pSetEffectLabel = WidgetManager::createLabel(setEffect, LABEL_WIDTH, LABEL_HEIGHT, 10, this);
     m_labels.append(pSetEffectLabel);
     ui->vLayoutRight->addWidget(pSetEffectLabel);
+}
+
+void EquipWidget::setFonts()
+{
+    FontManager* pFontManager = FontManager::getInstance();
+    QFont nanumBold10 = pFontManager->getFont(FontFamily::NanumSquareNeoBold, 10);
+
+    ui->groupEquip->setFont(nanumBold10);
 }

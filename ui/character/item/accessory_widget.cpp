@@ -2,6 +2,7 @@
 #include "ui_accessory_widget.h"
 #include "game_data/character/item/accessory.h"
 #include "ui/widget_manager.h"
+#include "ui/font_manager.h"
 #include <QLabel>
 #include <QProgressBar>
 #include <QNetworkAccessManager>
@@ -20,6 +21,7 @@ AccessoryWidget::AccessoryWidget(QWidget* pParent, const Accessory* pAccessory) 
     addIcon();
     addQualityBar();
     addLabels();
+    setFonts();
 }
 
 AccessoryWidget::~AccessoryWidget()
@@ -53,7 +55,7 @@ void AccessoryWidget::addLabels()
     {
         abilityText += QString("%1 +%2  ").arg(abilityToStr(iter.key())).arg(iter.value());
     }
-    QLabel* pLabelAbility = WidgetManager::createLabel(abilityText, LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+    QLabel* pLabelAbility = WidgetManager::createLabel(abilityText, LABEL_WIDTH, LABEL_HEIGHT, 10, this, colorCode(m_pAccessory->getGrade()));
     m_labels.append(pLabelAbility);
     ui->vLayoutRight->addWidget(pLabelAbility);
 
@@ -70,8 +72,16 @@ void AccessoryWidget::addLabels()
     for (auto iter = penalties.begin(); iter != penalties.end(); iter++)
     {
         QString penaltyText = QString("[%1] +%2").arg(iter.key()).arg(iter.value());
-        QLabel* pPenaltyLabel = WidgetManager::createLabel(penaltyText, LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+        QLabel* pPenaltyLabel = WidgetManager::createLabel(penaltyText, LABEL_WIDTH, LABEL_HEIGHT, 10, this, "red");
         m_labels.append(pPenaltyLabel);
         ui->vLayoutRight->addWidget(pPenaltyLabel);
     }
+}
+
+void AccessoryWidget::setFonts()
+{
+    FontManager* pFontManager = FontManager::getInstance();
+    QFont nanumBold10 = pFontManager->getFont(FontFamily::NanumSquareNeoBold, 10);
+
+    ui->groupAccessory->setFont(nanumBold10);
 }

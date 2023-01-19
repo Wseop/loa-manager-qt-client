@@ -23,7 +23,7 @@ QLabel* WidgetManager::createLabel(QString text, int width, int height, int font
     pLabel->setFixedSize(width, height);
     pLabel->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
     pLabel->setStyleSheet(QString("QLabel { color: %1 }").arg(color));
-    pLabel->setAlignment(Qt::AlignHCenter);
+    pLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     return pLabel;
 }
 

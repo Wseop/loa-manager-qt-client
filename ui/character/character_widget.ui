@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1217</width>
+    <width>1279</width>
     <height>659</height>
    </rect>
   </property>
@@ -484,6 +484,26 @@
          <layout class="QVBoxLayout" name="vLayoutCard"/>
         </item>
        </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupCollectible">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>125</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>550</width>
+         <height>125</height>
+        </size>
+       </property>
+       <property name="title">
+        <string>수집품</string>
+       </property>
+       <layout class="QGridLayout" name="gridGroupCollectible"/>
       </widget>
      </item>
     </layout>

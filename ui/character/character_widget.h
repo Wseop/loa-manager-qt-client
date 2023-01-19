@@ -33,7 +33,10 @@ private:
     const QString COLOR_ITEMLEVEL = "#FF009B";
 
     const Character* m_pCharacter;
+
     QList<class QLabel*> m_labels;
+    QList<class QHBoxLayout*> m_hLayouts;
+
     QList<class EquipWidget*> m_equipWidgets;
     QList<class AccessoryWidget*> m_accessoryWidgets;
     class AbilityStoneWidget* m_pAbilityStoneWidget;

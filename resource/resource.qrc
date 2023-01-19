@@ -112,4 +112,15 @@
         <file>image/engrave/309.png</file>
         <file>image/engrave/310.png</file>
     </qresource>
+    <qresource prefix="/collectible">
+        <file>image/collectible/0.png</file>
+        <file>image/collectible/1.png</file>
+        <file>image/collectible/2.png</file>
+        <file>image/collectible/3.png</file>
+        <file>image/collectible/4.png</file>
+        <file>image/collectible/5.png</file>
+        <file>image/collectible/6.png</file>
+        <file>image/collectible/7.png</file>
+        <file>image/collectible/8.png</file>
+    </qresource>
 </RCC>

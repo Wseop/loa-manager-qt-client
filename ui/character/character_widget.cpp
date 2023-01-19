@@ -8,6 +8,7 @@
 #include "game_data/character/item/abilitystone.h"
 #include "game_data/character/item/bracelet.h"
 #include "game_data/character/engrave/engrave.h"
+#include "game_data/character/collectible/collectible.h"
 #include "ui/widget_manager.h"
 #include "ui/character/item/equip_widget.h"
 #include "ui/character/item/accessory_widget.h"
@@ -15,6 +16,7 @@
 #include "ui/character/item/bracelet_widget.h"
 #include "ui/character/engrave/engrave_widget.h"
 #include "ui/font_manager.h"
+#include <QHBoxLayout>
 
 CharacterWidget::CharacterWidget(QWidget* pParent, const Character* pCharacter) :
     QWidget(pParent),
@@ -26,6 +28,9 @@ CharacterWidget::CharacterWidget(QWidget* pParent, const Character* pCharacter) 
 {
     ui->setupUi(this);
     ui->vLayoutCharacter->setAlignment(Qt::AlignHCenter);
+    ui->hLayoutEquip->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    ui->hLayoutAccessory->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    ui->hLayoutStoneBraceletEngrave->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
     setFonts();
     setStyleSheets();
@@ -41,6 +46,8 @@ CharacterWidget::~CharacterWidget()
 {
     for (QLabel* pLabel : m_labels)
         delete pLabel;
+    for (QHBoxLayout* pLayout : m_hLayouts)
+        delete pLayout;
     for (EquipWidget* pEquipWidget : m_equipWidgets)
         delete pEquipWidget;
     for (AccessoryWidget* pAccessoryWidget : m_accessoryWidgets)
@@ -69,6 +76,7 @@ void CharacterWidget::setFonts()
     ui->lbItemLevel->setFont(nanumBold10);
     ui->groupAbility->setFont(nanumBold10);
     ui->groupCard->setFont(nanumBold10);
+    ui->groupCollectible->setFont(nanumBold10);
 }
 
 void CharacterWidget::setStyleSheets()
@@ -100,6 +108,7 @@ void CharacterWidget::addProfileWidget()
     ui->lbEndurance->setText(abilityToStr(Ability::인내) + " " + QString::number(abilities[Ability::인내]));
     ui->lbExpertise->setText(abilityToStr(Ability::숙련) + " " + QString::number(abilities[Ability::숙련]));
 
+    // Card
     const QList<Card*>& cards = m_pCharacter->getCards();
     for (const Card* pCard : cards)
     {
@@ -126,6 +135,26 @@ void CharacterWidget::addProfileWidget()
         QLabel* pCardLabel = WidgetManager::createLabel(cardEffectText, 300, 25, 10, this);
         m_labels.append(pCardLabel);
         ui->vLayoutCard->addWidget(pCardLabel);
+    }
+
+    // Collectible
+    const QList<Collectible*>& collectibles = m_pCharacter->getCollectibles();
+    QString iconPath = ":/collectible/image/collectible/%1.png";
+    QString pointText = "%1/%2";
+    for (int i = 0; i < collectibles.size(); i++)
+    {
+        int row = i / 5;
+        int col = (i % 5) * 2;
+        const Collectible* pCollectible = collectibles[i];
+
+        QLabel* pIcon = WidgetManager::createIcon(iconPath.arg(static_cast<int>(pCollectible->getType())), nullptr, 25, 25, this);
+        m_labels.append(pIcon);
+        ui->gridGroupCollectible->addWidget(pIcon, row, col);
+
+        QLabel* pLabelPoint = WidgetManager::createLabel(pointText.arg(pCollectible->getPoint()).arg(pCollectible->getMaxPoint()), 100, 25, 10, this);
+        pLabelPoint->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+        m_labels.append(pLabelPoint);
+        ui->gridGroupCollectible->addWidget(pLabelPoint, row, col + 1);
     }
 }
 

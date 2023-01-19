@@ -109,5 +109,7 @@
         <file>image/engrave/801.png</file>
         <file>image/engrave/802.png</file>
         <file>image/engrave/803.png</file>
+        <file>image/engrave/309.png</file>
+        <file>image/engrave/310.png</file>
     </qresource>
 </RCC>

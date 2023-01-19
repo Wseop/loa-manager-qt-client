@@ -99,10 +99,6 @@ void LoaManager::initConnects()
             pWidget->hide();
         CharacterSearch::getInstance()->show();
     });
-    connect(m_childMenuButtons["군장 검사"], &QPushButton::pressed, this, [&](){
-        for (QWidget* pWidget : m_functions)
-            pWidget->hide();
-    });
 }
 
 void LoaManager::addFunctions()

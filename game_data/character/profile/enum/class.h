@@ -28,6 +28,7 @@ enum class Class
     건슬링어,
     도화가,
     기상술사,
+    슬레이어,
     Size
 };
 
@@ -81,6 +82,8 @@ static inline QString classToStr(Class cls)
         return "도화가";
     case Class::기상술사:
         return "기상술사";
+    case Class::슬레이어:
+        return "슬레이어";
     default:
         return "";
     }
@@ -134,6 +137,10 @@ static inline Class strToClass(QString cls)
         return Class::도화가;
     else if (cls == "기상술사")
         return Class::기상술사;
+    else if (cls == "슬레이어")
+        return Class::슬레이어;
+    else
+        return Class::Size;
 }
 
 static inline bool isSupporter(Class cls)

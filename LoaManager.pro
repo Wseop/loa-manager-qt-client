@@ -30,7 +30,9 @@ SOURCES += \
     main.cpp \
     loamanager.cpp \
     ui/character/character_widget.cpp \
+    ui/character/item/abilitystone_widget.cpp \
     ui/character/item/accessory_widget.cpp \
+    ui/character/item/bracelet_widget.cpp \
     ui/character/item/equip_widget.cpp \
     ui/font_manager.cpp \
     ui/widget_manager.cpp
@@ -65,7 +67,9 @@ HEADERS += \
     game_data/character/skill/skillrune.h \
     loamanager.h \
     ui/character/character_widget.h \
+    ui/character/item/abilitystone_widget.h \
     ui/character/item/accessory_widget.h \
+    ui/character/item/bracelet_widget.h \
     ui/character/item/equip_widget.h \
     ui/font_manager.h \
     ui/widget_manager.h
@@ -74,7 +78,9 @@ FORMS += \
     function/character_search/character_search.ui \
     loamanager.ui \
     ui/character/character_widget.ui \
+    ui/character/item/abilitystone_widget.ui \
     ui/character/item/accessory_widget.ui \
+    ui/character/item/bracelet_widget.ui \
     ui/character/item/equip_widget.ui
 
 # Default rules for deployment.

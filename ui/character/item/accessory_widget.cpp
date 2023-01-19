@@ -53,8 +53,9 @@ void AccessoryWidget::addLabels()
     const QMap<Ability, int>& abilities = m_pAccessory->getAbilities();
     for (auto iter = abilities.begin(); iter != abilities.end(); iter++)
     {
-        abilityText += QString("%1 +%2  ").arg(abilityToStr(iter.key())).arg(iter.value());
+        abilityText += QString("%1 +%2,  ").arg(abilityToStr(iter.key())).arg(iter.value());
     }
+    abilityText.chop(3);
     QLabel* pLabelAbility = WidgetManager::createLabel(abilityText, LABEL_WIDTH, LABEL_HEIGHT, 10, this, colorCode(m_pAccessory->getGrade()));
     m_labels.append(pLabelAbility);
     ui->vLayoutRight->addWidget(pLabelAbility);

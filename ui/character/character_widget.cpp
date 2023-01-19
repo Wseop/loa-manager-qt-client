@@ -5,15 +5,21 @@
 #include "game_data/character/card/card.h"
 #include "game_data/character/item/equip.h"
 #include "game_data/character/item/accessory.h"
+#include "game_data/character/item/abilitystone.h"
+#include "game_data/character/item/bracelet.h"
 #include "ui/widget_manager.h"
 #include "ui/character/item/equip_widget.h"
 #include "ui/character/item/accessory_widget.h"
+#include "ui/character/item/abilitystone_widget.h"
+#include "ui/character/item/bracelet_widget.h"
 #include "ui/font_manager.h"
 
 CharacterWidget::CharacterWidget(QWidget* pParent, const Character* pCharacter) :
     QWidget(pParent),
     ui(new Ui::CharacterWidget),
-    m_pCharacter(pCharacter)
+    m_pCharacter(pCharacter),
+    m_pAbilityStoneWidget(nullptr),
+    m_pBraceletWidget(nullptr)
 {
     ui->setupUi(this);
     ui->vLayoutCharacter->setAlignment(Qt::AlignHCenter);
@@ -23,6 +29,8 @@ CharacterWidget::CharacterWidget(QWidget* pParent, const Character* pCharacter) 
     addProfileWidget();
     addEquipWidgets();
     addAccessoryWidgets();
+    addAbilityStoneWidget();
+    addBraceletWidget();
 }
 
 CharacterWidget::~CharacterWidget()
@@ -33,6 +41,10 @@ CharacterWidget::~CharacterWidget()
         delete pEquipWidget;
     for (AccessoryWidget* pAccessoryWidget : m_accessoryWidgets)
         delete pAccessoryWidget;
+    if (m_pAbilityStoneWidget != nullptr)
+        delete m_pAbilityStoneWidget;
+    if (m_pBraceletWidget != nullptr)
+        delete m_pBraceletWidget;
     delete ui;
 }
 
@@ -153,5 +165,25 @@ void CharacterWidget::addAccessoryWidgets()
             m_accessoryWidgets.append(pAccessoryWidget);
             ui->hLayoutAccessory->addWidget(pAccessoryWidget);
         }
+    }
+}
+
+void CharacterWidget::addAbilityStoneWidget()
+{
+    const AbilityStone* pAbilityStone = m_pCharacter->getAbilityStone();
+    if (pAbilityStone != nullptr)
+    {
+        m_pAbilityStoneWidget = new AbilityStoneWidget(this, pAbilityStone);
+        ui->hLayoutStoneBraceletEngrave->addWidget(m_pAbilityStoneWidget);
+    }
+}
+
+void CharacterWidget::addBraceletWidget()
+{
+    const Bracelet* pBracelet = m_pCharacter->getBracelet();
+    if (pBracelet != nullptr)
+    {
+        m_pBraceletWidget = new BraceletWidget(this, pBracelet);
+        ui->hLayoutStoneBraceletEngrave->addWidget(m_pBraceletWidget);
     }
 }

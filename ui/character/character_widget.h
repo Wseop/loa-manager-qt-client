@@ -21,6 +21,8 @@ private:
     void addProfileWidget();
     void addEquipWidgets();
     void addAccessoryWidgets();
+    void addAbilityStoneWidget();
+    void addBraceletWidget();
 
 private:
     Ui::CharacterWidget *ui;
@@ -33,6 +35,8 @@ private:
     QList<class QLabel*> m_labels;
     QList<class EquipWidget*> m_equipWidgets;
     QList<class AccessoryWidget*> m_accessoryWidgets;
+    class AbilityStoneWidget* m_pAbilityStoneWidget;
+    class BraceletWidget* m_pBraceletWidget;
 };
 
 #endif // CHARACTER_WIDGET_H

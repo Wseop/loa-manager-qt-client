@@ -29,7 +29,7 @@ AbilityStoneWidget::~AbilityStoneWidget()
 
 void AbilityStoneWidget::addIcon()
 {
-    QLabel* pIcon = WidgetManager::createIcon(m_pAbilityStone->getIconPath(), m_pNetworkManager, this);
+    QLabel* pIcon = WidgetManager::createIcon(m_pAbilityStone->getIconPath(), m_pNetworkManager, ICON_WIDTH, ICON_HEIGHT, this);
     m_labels.append(pIcon);
     ui->vLayoutIcon->addWidget(pIcon);
 }

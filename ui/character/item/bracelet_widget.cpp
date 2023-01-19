@@ -29,7 +29,7 @@ BraceletWidget::~BraceletWidget()
 
 void BraceletWidget::addIcon()
 {
-    QLabel* pIcon = WidgetManager::createIcon(m_pBracelet->getIconPath(), m_pNetworkManager, this);
+    QLabel* pIcon = WidgetManager::createIcon(m_pBracelet->getIconPath(), m_pNetworkManager, ICON_WIDTH, ICON_HEIGHT, this);
     m_labels.append(pIcon);
     ui->vLayoutIcon->addWidget(pIcon);
 }

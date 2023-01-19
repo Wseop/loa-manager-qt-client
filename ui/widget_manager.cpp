@@ -27,10 +27,10 @@ QLabel* WidgetManager::createLabel(QString text, int width, int height, int font
     return pLabel;
 }
 
-QLabel* WidgetManager::createIcon(QString iconPath, QNetworkAccessManager* pNetworkManager, QWidget* pParent)
+QLabel* WidgetManager::createIcon(QString iconPath, QNetworkAccessManager* pNetworkManager, int width, int height, QWidget* pParent)
 {
     QLabel* pIcon = new QLabel(pParent);
-    pIcon->setFixedSize(50, 50);
+    pIcon->setFixedSize(width, height);
 
     if (pNetworkManager == nullptr)
     {
@@ -38,7 +38,7 @@ QLabel* WidgetManager::createIcon(QString iconPath, QNetworkAccessManager* pNetw
         // if network manager is nullptr, then load icon from resource
         if (iconImage.load(iconPath))
         {
-            pIcon->setPixmap(iconImage.scaled(50, 50, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+            pIcon->setPixmap(iconImage.scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
             pIcon->setStyleSheet("QLabel { border: 1px solid black }");
         }
     }
@@ -50,7 +50,7 @@ QLabel* WidgetManager::createIcon(QString iconPath, QNetworkAccessManager* pNetw
             QPixmap iconImage;
             if (iconImage.loadFromData(pReply->readAll(), "PNG"))
             {
-                pIcon->setPixmap(iconImage.scaled(50, 50, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+                pIcon->setPixmap(iconImage.scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
                 pIcon->setStyleSheet("QLabel { border: 1px solid black }");
             }
         });

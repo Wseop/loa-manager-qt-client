@@ -35,7 +35,7 @@ EquipWidget::~EquipWidget()
 
 void EquipWidget::addIcon()
 {
-    QLabel* pIcon = WidgetManager::createIcon(m_pEquip->getIconPath(), m_pNetworkManager, this);
+    QLabel* pIcon = WidgetManager::createIcon(m_pEquip->getIconPath(), m_pNetworkManager, ICON_WIDTH, ICON_HEIGHT, this);
     m_labels.append(pIcon);
     ui->vLayoutLeft->addWidget(pIcon);
 }

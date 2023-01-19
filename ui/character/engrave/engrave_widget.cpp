@@ -48,7 +48,7 @@ void EngraveWidget::addEngraveLayouts()
         m_vLayouts.append(pVLayout);
         ui->hLayoutGroupEngrave->addLayout(pVLayout);
 
-        QLabel* pIcon = WidgetManager::createIcon(pEngraveManager->iconPath(pairEngraveValue.first), nullptr, this);
+        QLabel* pIcon = WidgetManager::createIcon(pEngraveManager->iconPath(pairEngraveValue.first), nullptr, ICON_WIDTH, ICON_HEIGHT, this);
         m_labels.append(pIcon);
         pVLayout->addWidget(pIcon);
 
@@ -65,7 +65,7 @@ void EngraveWidget::addEngraveLayouts()
         m_vLayouts.append(pVLayout);
         ui->hLayoutGroupEngrave->addLayout(pVLayout);
 
-        QLabel* pIcon = WidgetManager::createIcon(pEngraveManager->iconPath(pairEngraveValue.first), nullptr, this);
+        QLabel* pIcon = WidgetManager::createIcon(pEngraveManager->iconPath(pairEngraveValue.first), nullptr, ICON_WIDTH, ICON_HEIGHT, this);
         m_labels.append(pIcon);
         pVLayout->addWidget(pIcon);
 

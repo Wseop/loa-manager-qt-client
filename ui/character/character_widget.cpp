@@ -7,11 +7,13 @@
 #include "game_data/character/item/accessory.h"
 #include "game_data/character/item/abilitystone.h"
 #include "game_data/character/item/bracelet.h"
+#include "game_data/character/engrave/engrave.h"
 #include "ui/widget_manager.h"
 #include "ui/character/item/equip_widget.h"
 #include "ui/character/item/accessory_widget.h"
 #include "ui/character/item/abilitystone_widget.h"
 #include "ui/character/item/bracelet_widget.h"
+#include "ui/character/engrave/engrave_widget.h"
 #include "ui/font_manager.h"
 
 CharacterWidget::CharacterWidget(QWidget* pParent, const Character* pCharacter) :
@@ -19,7 +21,8 @@ CharacterWidget::CharacterWidget(QWidget* pParent, const Character* pCharacter) 
     ui(new Ui::CharacterWidget),
     m_pCharacter(pCharacter),
     m_pAbilityStoneWidget(nullptr),
-    m_pBraceletWidget(nullptr)
+    m_pBraceletWidget(nullptr),
+    m_pEngraveWidget(nullptr)
 {
     ui->setupUi(this);
     ui->vLayoutCharacter->setAlignment(Qt::AlignHCenter);
@@ -31,6 +34,7 @@ CharacterWidget::CharacterWidget(QWidget* pParent, const Character* pCharacter) 
     addAccessoryWidgets();
     addAbilityStoneWidget();
     addBraceletWidget();
+    addEngraveWidget();
 }
 
 CharacterWidget::~CharacterWidget()
@@ -45,6 +49,8 @@ CharacterWidget::~CharacterWidget()
         delete m_pAbilityStoneWidget;
     if (m_pBraceletWidget != nullptr)
         delete m_pBraceletWidget;
+    if (m_pEngraveWidget != nullptr)
+        delete m_pEngraveWidget;
     delete ui;
 }
 
@@ -56,10 +62,8 @@ void CharacterWidget::setFonts()
 
     ui->pbSibling->setFont(nanumBold10);
     ui->lbName->setFont(nanumBold10);
-    ui->lbTitle->setFont(nanumBold10);
-    ui->lbGuild->setFont(nanumBold10);
-    ui->lbServer->setFont(nanumBold10);
-    ui->lbClass->setFont(nanumBold10);
+    ui->groupTitleGuild->setFont(nanumBold10);
+    ui->groupServerClass->setFont(nanumBold10);
     ui->lbBattleLevel->setFont(nanumBold10);
     ui->lbExpLevel->setFont(nanumBold10);
     ui->lbItemLevel->setFont(nanumBold10);
@@ -185,5 +189,15 @@ void CharacterWidget::addBraceletWidget()
     {
         m_pBraceletWidget = new BraceletWidget(this, pBracelet);
         ui->hLayoutStoneBraceletEngrave->addWidget(m_pBraceletWidget);
+    }
+}
+
+void CharacterWidget::addEngraveWidget()
+{
+    const Engrave* pEngrave = m_pCharacter->getEngrave();
+    if (pEngrave != nullptr)
+    {
+        m_pEngraveWidget = new EngraveWidget(this, pEngrave);
+        ui->hLayoutStoneBraceletEngrave->addWidget(m_pEngraveWidget);
     }
 }

@@ -30,6 +30,7 @@ SOURCES += \
     main.cpp \
     loamanager.cpp \
     ui/character/character_widget.cpp \
+    ui/character/engrave/engrave_widget.cpp \
     ui/character/item/abilitystone_widget.cpp \
     ui/character/item/accessory_widget.cpp \
     ui/character/item/bracelet_widget.cpp \
@@ -67,6 +68,7 @@ HEADERS += \
     game_data/character/skill/skillrune.h \
     loamanager.h \
     ui/character/character_widget.h \
+    ui/character/engrave/engrave_widget.h \
     ui/character/item/abilitystone_widget.h \
     ui/character/item/accessory_widget.h \
     ui/character/item/bracelet_widget.h \
@@ -78,6 +80,7 @@ FORMS += \
     function/character_search/character_search.ui \
     loamanager.ui \
     ui/character/character_widget.ui \
+    ui/character/engrave/engrave_widget.ui \
     ui/character/item/abilitystone_widget.ui \
     ui/character/item/accessory_widget.ui \
     ui/character/item/bracelet_widget.ui \

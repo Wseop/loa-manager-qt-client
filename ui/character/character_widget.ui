@@ -99,7 +99,7 @@
         </size>
        </property>
        <property name="title">
-        <string/>
+        <string>칭호 / 길드</string>
        </property>
        <layout class="QVBoxLayout" name="vLayoutTitleGuild">
         <item>
@@ -164,7 +164,7 @@
         </size>
        </property>
        <property name="title">
-        <string/>
+        <string>서버 / 직업</string>
        </property>
        <layout class="QVBoxLayout" name="vLayoutServerClass">
         <item>

@@ -46,7 +46,7 @@ QLabel* WidgetManager::createIcon(QString iconPath, QNetworkAccessManager* pNetw
     {
         QNetworkRequest request;
         request.setUrl(QUrl(iconPath));
-        connect(pNetworkManager, &QNetworkAccessManager::finished, [&, pIcon](QNetworkReply* pReply){
+        connect(pNetworkManager, &QNetworkAccessManager::finished, [&, pIcon, width, height](QNetworkReply* pReply){
             QPixmap iconImage;
             if (iconImage.loadFromData(pReply->readAll(), "PNG"))
             {

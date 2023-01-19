@@ -14,7 +14,7 @@ class WidgetManager : public QObject
 
 public:
     static QPushButton* createPushButton(QString text, int width, int height, int fontSize = 10, QWidget* pParent = nullptr);
-    static QLabel* createLabel(QString text, int width, int height, int fontSize = 10, QWidget* pParent = nullptr);
+    static QLabel* createLabel(QString text, int width, int height, int fontSize = 10, QWidget* pParent = nullptr, QString color = "");
     static QLabel* createIcon(QString iconPath, QNetworkAccessManager* pNetworkManager, QWidget* pParent = nullptr);
     static QProgressBar* createQualityBar(int quality, int width, int height, int fontSize = 10, QWidget* pParent = nullptr);
 

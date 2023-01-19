@@ -17,11 +17,12 @@ QPushButton* WidgetManager::createPushButton(QString text, int width, int height
     return pButton;
 }
 
-QLabel* WidgetManager::createLabel(QString text, int width, int height, int fontSize, QWidget *pParent)
+QLabel* WidgetManager::createLabel(QString text, int width, int height, int fontSize, QWidget *pParent, QString color)
 {
     QLabel* pLabel = new QLabel(text, pParent);
     pLabel->setFixedSize(width, height);
     pLabel->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
+    pLabel->setStyleSheet(QString("QLabel { color: %1 }").arg(color));
     pLabel->setAlignment(Qt::AlignHCenter);
     return pLabel;
 }
@@ -63,7 +64,7 @@ QProgressBar* WidgetManager::createQualityBar(int quality, int width, int height
 {
     QProgressBar* pQualityBar = new QProgressBar(pParent);
     pQualityBar->setValue(quality);
-    pQualityBar->setAlignment(Qt::AlignHCenter);
+    pQualityBar->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     pQualityBar->setFormat("%p");
     pQualityBar->setFixedSize(width, height);
     pQualityBar->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));

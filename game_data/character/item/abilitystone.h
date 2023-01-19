@@ -9,8 +9,8 @@ class AbilityStone : public Item
 public:
     AbilityStone();
 
-    const QMap<QString, int>& getEngraves() const;
-    const QMap<QString, int>& getPenalties() const;
+    const QList<PairEngraveValue>& getEngraves() const;
+    const QList<PairEngraveValue>& getPenalties() const;
 
     void addEngrave(const QString& engrave, int value);
     void addPenalty(const QString& penalty, int value);

@@ -40,18 +40,19 @@ void AbilityStoneWidget::addLabels()
     m_labels.append(pNameLabel);
     ui->vLayoutInfo->addWidget(pNameLabel);
 
-    const QMap<QString, int>& engraves = m_pAbilityStone->getEngraves();
-    for (auto iter = engraves.begin(); iter != engraves.end(); iter++)
+    const QList<PairEngraveValue>& engraves = m_pAbilityStone->getEngraves();
+    for (const PairEngraveValue& pairEngraveValue : engraves)
     {
-        QString labelText = QString("[%1] +%2").arg(iter.key()).arg(iter.value());
+        QString labelText = QString("[%1] +%2").arg(pairEngraveValue.first).arg(pairEngraveValue.second);
         QLabel* pEngraveLabel = WidgetManager::createLabel(labelText, LABEL_WIDTH, LABEL_HEIGHT, 10, this);
         m_labels.append(pEngraveLabel);
         ui->vLayoutInfo->addWidget(pEngraveLabel);
     }
-    const QMap<QString, int>& penalties = m_pAbilityStone->getPenalties();
-    for (auto iter = penalties.begin(); iter != penalties.end(); iter++)
+
+    const QList<PairEngraveValue>& penalties = m_pAbilityStone->getPenalties();
+    for (const PairEngraveValue& pairEngraveValue : penalties)
     {
-        QString labelText = QString("[%1] +%2").arg(iter.key()).arg(iter.value());
+        QString labelText = QString("[%1] +%2").arg(pairEngraveValue.first).arg(pairEngraveValue.second);
         QLabel* pPenaltyLabel = WidgetManager::createLabel(labelText, LABEL_WIDTH, LABEL_HEIGHT, 10, this, "red");
         m_labels.append(pPenaltyLabel);
         ui->vLayoutInfo->addWidget(pPenaltyLabel);

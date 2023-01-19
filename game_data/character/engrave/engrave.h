@@ -4,20 +4,22 @@
 #include <QString>
 #include <QMap>
 
+using PairEngraveValue = QPair<QString, int>;
+
 class Engrave
 {
 public:
     Engrave();
 
-    const QMap<QString, int>& getEngraves() const;
-    const QMap<QString, int>& getPenalties() const;
+    const QList<PairEngraveValue>& getEngraves() const;
+    const QList<PairEngraveValue>& getPenalties() const;
 
     void addEngrave(const QString& engrave, int value);
     void addPenalty(const QString& penalty, int value);
 
 private:
-    QMap<QString, int> m_engraves;
-    QMap<QString, int> m_penalties;
+    QList<PairEngraveValue> m_engraves;
+    QList<PairEngraveValue> m_penalties;
 };
 
 #endif // ENGRAVE_H

@@ -12,8 +12,8 @@ public:
 
     const int& getQuality() const;
     const QMap<Ability, int>& getAbilities() const;
-    const QMap<QString, int>& getEngraves() const;
-    const QMap<QString, int>& getPenalties() const;
+    const QList<PairEngraveValue>& getEngraves() const;
+    const QList<PairEngraveValue>& getPenalties() const;
 
     void setQuality(int quality);
     void addAbility(Ability ability, int value);

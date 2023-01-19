@@ -6,12 +6,12 @@ AbilityStone::AbilityStone() :
 
 }
 
-const QMap<QString, int>& AbilityStone::getEngraves() const
+const QList<PairEngraveValue>& AbilityStone::getEngraves() const
 {
     return m_engrave.getEngraves();
 }
 
-const QMap<QString, int>& AbilityStone::getPenalties() const
+const QList<PairEngraveValue>& AbilityStone::getPenalties() const
 {
     return m_engrave.getPenalties();
 }

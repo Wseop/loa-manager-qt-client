@@ -17,12 +17,12 @@ const QMap<Ability, int>& Accessory::getAbilities() const
     return m_abilities;
 }
 
-const QMap<QString, int>& Accessory::getEngraves() const
+const QList<PairEngraveValue>& Accessory::getEngraves() const
 {
     return m_engrave.getEngraves();
 }
 
-const QMap<QString, int>& Accessory::getPenalties() const
+const QList<PairEngraveValue>& Accessory::getPenalties() const
 {
     return m_engrave.getPenalties();
 }

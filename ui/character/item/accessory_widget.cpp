@@ -61,18 +61,18 @@ void AccessoryWidget::addLabels()
     ui->vLayoutRight->addWidget(pLabelAbility);
 
     // 각인 추가
-    const QMap<QString, int>& engraves = m_pAccessory->getEngraves();
-    for (auto iter = engraves.begin(); iter != engraves.end(); iter++)
+    const QList<PairEngraveValue>& engraves = m_pAccessory->getEngraves();
+    for (const PairEngraveValue& pairEngraveValue : engraves)
     {
-        QString engraveText = QString("[%1] +%2").arg(iter.key()).arg(iter.value());
+        QString engraveText = QString("[%1] +%2").arg(pairEngraveValue.first).arg(pairEngraveValue.second);
         QLabel* pEngraveLabel = WidgetManager::createLabel(engraveText, LABEL_WIDTH, LABEL_HEIGHT, 10, this);
         m_labels.append(pEngraveLabel);
         ui->vLayoutRight->addWidget(pEngraveLabel);
     }
-    const QMap<QString, int>& penalties = m_pAccessory->getPenalties();
-    for (auto iter = penalties.begin(); iter != penalties.end(); iter++)
+    const QList<PairEngraveValue>& penalties = m_pAccessory->getPenalties();
+    for (const PairEngraveValue& pairEngraveValue : penalties)
     {
-        QString penaltyText = QString("[%1] +%2").arg(iter.key()).arg(iter.value());
+        QString penaltyText = QString("[%1] +%2").arg(pairEngraveValue.first).arg(pairEngraveValue.second);
         QLabel* pPenaltyLabel = WidgetManager::createLabel(penaltyText, LABEL_WIDTH, LABEL_HEIGHT, 10, this, "red");
         m_labels.append(pPenaltyLabel);
         ui->vLayoutRight->addWidget(pPenaltyLabel);

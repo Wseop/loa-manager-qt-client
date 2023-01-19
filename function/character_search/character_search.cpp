@@ -2,6 +2,7 @@
 #include "ui_character_search.h"
 #include "game_data/character/character_manager.h"
 #include "ui/character/character_widget.h"
+#include "ui/font_manager.h"
 
 CharacterSearch* CharacterSearch::m_pInstance = nullptr;
 
@@ -15,6 +16,7 @@ CharacterSearch::CharacterSearch() :
     ui->hLayoutSearchBar->setAlignment(Qt::AlignHCenter);
 
     initConnects();
+    setFonts();
 }
 
 CharacterSearch::~CharacterSearch()
@@ -27,6 +29,15 @@ void CharacterSearch::initConnects()
     connect(ui->leCharacterName, &QLineEdit::returnPressed, this, &CharacterSearch::searchCharacter);
     connect(ui->pbSearch, &QPushButton::pressed, this, &CharacterSearch::searchCharacter);
     connect(this, &CharacterSearch::updateCharacter, this, &CharacterSearch::searchCharacter);
+}
+
+void CharacterSearch::setFonts()
+{
+    FontManager* pFontManager = FontManager::getInstance();
+    QFont nanumBold10 = pFontManager->getFont(FontFamily::NanumSquareNeoBold, 10);
+
+    ui->leCharacterName->setFont(nanumBold10);
+    ui->pbSearch->setFont(nanumBold10);
 }
 
 void CharacterSearch::searchCharacter()

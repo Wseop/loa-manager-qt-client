@@ -16,6 +16,7 @@ private:
     ~CharacterSearch();
 
     void initConnects();
+    void setFonts();
     void searchCharacter();
     void clearCharacterWidget();
 

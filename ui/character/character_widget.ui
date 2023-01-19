@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1167</width>
+    <width>1217</width>
     <height>659</height>
    </rect>
   </property>
@@ -20,13 +20,13 @@
       <widget class="QGroupBox" name="groupName">
        <property name="minimumSize">
         <size>
-         <width>143</width>
+         <width>168</width>
          <height>125</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>143</width>
+         <width>168</width>
          <height>125</height>
         </size>
        </property>
@@ -44,13 +44,13 @@
          <widget class="QPushButton" name="pbSibling">
           <property name="minimumSize">
            <size>
-            <width>125</width>
+            <width>150</width>
             <height>25</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>125</width>
+            <width>150</width>
             <height>25</height>
            </size>
           </property>
@@ -63,18 +63,18 @@
          <widget class="QLabel" name="lbName">
           <property name="minimumSize">
            <size>
-            <width>125</width>
+            <width>150</width>
             <height>25</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>125</width>
+            <width>150</width>
             <height>25</height>
            </size>
           </property>
           <property name="text">
-           <string>닉네임</string>
+           <string>-</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -88,13 +88,13 @@
       <widget class="QGroupBox" name="groupTitleGuild">
        <property name="minimumSize">
         <size>
-         <width>143</width>
+         <width>168</width>
          <height>125</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>143</width>
+         <width>168</width>
          <height>125</height>
         </size>
        </property>
@@ -106,18 +106,18 @@
          <widget class="QLabel" name="lbTitle">
           <property name="minimumSize">
            <size>
-            <width>125</width>
+            <width>150</width>
             <height>25</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>125</width>
+            <width>150</width>
             <height>25</height>
            </size>
           </property>
           <property name="text">
-           <string>칭호</string>
+           <string>-</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -128,18 +128,18 @@
          <widget class="QLabel" name="lbGuild">
           <property name="minimumSize">
            <size>
-            <width>125</width>
+            <width>150</width>
             <height>25</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>125</width>
+            <width>150</width>
             <height>25</height>
            </size>
           </property>
           <property name="text">
-           <string>길드</string>
+           <string>-</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -182,7 +182,7 @@
            </size>
           </property>
           <property name="text">
-           <string>서버</string>
+           <string>-</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -204,7 +204,7 @@
            </size>
           </property>
           <property name="text">
-           <string>직업</string>
+           <string>-</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -247,7 +247,7 @@
            </size>
           </property>
           <property name="text">
-           <string>전투 레벨</string>
+           <string>-</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -269,7 +269,7 @@
            </size>
           </property>
           <property name="text">
-           <string>원정대 레벨</string>
+           <string>-</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -291,7 +291,7 @@
            </size>
           </property>
           <property name="text">
-           <string>아이템 레벨</string>
+           <string>-</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>

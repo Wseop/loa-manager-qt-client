@@ -16,6 +16,7 @@ public:
     ~CharacterWidget();
 
 private:
+    void setFonts();
     void addProfileWidget();
     void addEquipWidgets();
     void addAccessoryWidgets();

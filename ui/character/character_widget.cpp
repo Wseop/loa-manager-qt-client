@@ -8,6 +8,7 @@
 #include "ui/widget_manager.h"
 #include "ui/character/item/equip_widget.h"
 #include "ui/character/item/accessory_widget.h"
+#include "ui/font_manager.h"
 
 CharacterWidget::CharacterWidget(QWidget* pParent, const Character* pCharacter) :
     QWidget(pParent),
@@ -17,6 +18,7 @@ CharacterWidget::CharacterWidget(QWidget* pParent, const Character* pCharacter) 
     ui->setupUi(this);
     ui->vLayoutCharacter->setAlignment(Qt::AlignHCenter);
 
+    setFonts();
     addProfileWidget();
     addEquipWidgets();
     addAccessoryWidgets();
@@ -33,13 +35,31 @@ CharacterWidget::~CharacterWidget()
     delete ui;
 }
 
+void CharacterWidget::setFonts()
+{
+    FontManager* pFontManager = FontManager::getInstance();
+    QFont nanumBold10 = pFontManager->getFont(FontFamily::NanumSquareNeoBold, 10);
+
+    ui->pbSibling->setFont(nanumBold10);
+    ui->lbName->setFont(nanumBold10);
+    ui->lbTitle->setFont(nanumBold10);
+    ui->lbGuild->setFont(nanumBold10);
+    ui->lbServer->setFont(nanumBold10);
+    ui->lbClass->setFont(nanumBold10);
+    ui->lbBattleLevel->setFont(nanumBold10);
+    ui->lbExpLevel->setFont(nanumBold10);
+    ui->lbItemLevel->setFont(nanumBold10);
+    ui->groupAbility->setFont(nanumBold10);
+    ui->groupCard->setFont(nanumBold10);
+}
+
 void CharacterWidget::addProfileWidget()
 {
     const Profile* pProfile = m_pCharacter->getProfile();
     ui->lbName->setText(pProfile->getCharacterName());
     ui->lbTitle->setText(pProfile->getTitle());
     ui->lbGuild->setText(pProfile->getGuild());
-    ui->lbServer->setText(pProfile->getServer());
+    ui->lbServer->setText("@" + pProfile->getServer());
     ui->lbClass->setText(classToStr(pProfile->getClass()));
     ui->lbBattleLevel->setText(QString("전투 Lv.%1").arg(pProfile->getCharacterLevel()));
     ui->lbExpLevel->setText(QString("원정대 Lv.%1").arg(pProfile->getExpLevel()));

@@ -14,6 +14,9 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="vLayoutCharacter">
+   <property name="spacing">
+    <number>1</number>
+   </property>
    <item>
     <layout class="QHBoxLayout" name="hLayoutProfile">
      <item>
@@ -518,32 +521,10 @@
     <layout class="QHBoxLayout" name="hLayoutStoneBraceletEngrave"/>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupGemMyul">
-     <property name="maximumSize">
-      <size>
-       <width>200</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="title">
-      <string>멸화 보석</string>
-     </property>
-     <layout class="QHBoxLayout" name="hLayoutGemMyul"/>
-    </widget>
+    <layout class="QHBoxLayout" name="hLayoutGem1"/>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupGemHong">
-     <property name="maximumSize">
-      <size>
-       <width>200</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="title">
-      <string>홍염 보석</string>
-     </property>
-     <layout class="QHBoxLayout" name="hLayoutGemHong"/>
-    </widget>
+    <layout class="QHBoxLayout" name="hLayoutGem2"/>
    </item>
   </layout>
  </widget>

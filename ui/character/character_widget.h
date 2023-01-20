@@ -25,6 +25,7 @@ private:
     void addAbilityStoneWidget();
     void addBraceletWidget();
     void addEngraveWidget();
+    void addGemWidgets();
 
 private:
     Ui::CharacterWidget *ui;
@@ -43,6 +44,7 @@ private:
     class AbilityStoneWidget* m_pAbilityStoneWidget;
     class BraceletWidget* m_pBraceletWidget;
     class EngraveWidget* m_pEngraveWidget;
+    QList<class GemWidget*> m_gemWidgets;
 };
 
 #endif // CHARACTER_WIDGET_H

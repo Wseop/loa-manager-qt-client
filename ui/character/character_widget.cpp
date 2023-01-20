@@ -7,6 +7,7 @@
 #include "game_data/character/item/accessory.h"
 #include "game_data/character/item/abilitystone.h"
 #include "game_data/character/item/bracelet.h"
+#include "game_data/character/item/gem.h"
 #include "game_data/character/engrave/engrave.h"
 #include "game_data/character/collectible/collectible.h"
 #include "ui/widget_manager.h"
@@ -14,6 +15,7 @@
 #include "ui/character/item/accessory_widget.h"
 #include "ui/character/item/abilitystone_widget.h"
 #include "ui/character/item/bracelet_widget.h"
+#include "ui/character/item/gem_widget.h"
 #include "ui/character/engrave/engrave_widget.h"
 #include "ui/font_manager.h"
 #include <QHBoxLayout>
@@ -37,6 +39,7 @@ CharacterWidget::CharacterWidget(QWidget* pParent, const Character* pCharacter) 
     addAbilityStoneWidget();
     addBraceletWidget();
     addEngraveWidget();
+    addGemWidgets();
 }
 
 CharacterWidget::~CharacterWidget()
@@ -55,6 +58,8 @@ CharacterWidget::~CharacterWidget()
         delete m_pBraceletWidget;
     if (m_pEngraveWidget != nullptr)
         delete m_pEngraveWidget;
+    for (GemWidget* pGemWidget : m_gemWidgets)
+        delete pGemWidget;
     delete ui;
 }
 
@@ -82,6 +87,8 @@ void CharacterWidget::setLayoutAlignments()
     ui->hLayoutEquip->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     ui->hLayoutAccessory->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     ui->hLayoutStoneBraceletEngrave->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    ui->hLayoutGem1->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    ui->hLayoutGem2->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 }
 
 void CharacterWidget::setStyleSheets()
@@ -235,4 +242,45 @@ void CharacterWidget::addEngraveWidget()
         m_pEngraveWidget = new EngraveWidget(this, pEngrave);
         ui->hLayoutStoneBraceletEngrave->addWidget(m_pEngraveWidget);
     }
+}
+
+void CharacterWidget::addGemWidgets()
+{
+    const QList<Gem*>& gems = m_pCharacter->getGems();
+    int myulLevelSum = 0, myulCount = 0;
+    int hongLevelSum = 0, hongCount = 0;
+    for (const Gem* pGem : gems)
+    {
+        const GemType gemType = pGem->getGemType();
+        GemWidget* pGemWidget = new GemWidget(this, pGem);
+        m_gemWidgets.append(pGemWidget);
+        if (gemType == GemType::멸화)
+        {
+            ui->hLayoutGem1->addWidget(pGemWidget);
+            myulLevelSum += pGem->getLevel();
+            myulCount++;
+        }
+        else if (gemType == GemType::홍염)
+        {
+            ui->hLayoutGem2->addWidget(pGemWidget);
+            hongLevelSum += pGem->getLevel();
+            hongCount++;
+        }
+    }
+
+    const int LABEL_WIDTH = 100;
+    const int LABEL_HEIGHT = 50;
+    if (myulCount > 0)
+    {
+        QLabel* pLabelMyulAvg = WidgetManager::createLabel(QString("멸화 평균 Lv.\n%1").arg(myulLevelSum / (double)myulCount, 0, 'f', 2, QChar(' ')), LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+        m_labels.append(pLabelMyulAvg);
+        ui->hLayoutGem1->addWidget(pLabelMyulAvg);
+    }
+    if (hongCount > 0)
+    {
+        QLabel* pLabelHongAvg = WidgetManager::createLabel(QString("홍염 평균 Lv.\n%1").arg(hongLevelSum / (double)hongCount, 0, 'f', 2, QChar(' ')), LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+        m_labels.append(pLabelHongAvg);
+        ui->hLayoutGem2->addWidget(pLabelHongAvg);
+    }
+
 }

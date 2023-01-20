@@ -34,7 +34,11 @@
        </layout>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="vLayoutRight"/>
+       <layout class="QVBoxLayout" name="vLayoutRight">
+        <property name="spacing">
+         <number>1</number>
+        </property>
+       </layout>
       </item>
      </layout>
     </widget>

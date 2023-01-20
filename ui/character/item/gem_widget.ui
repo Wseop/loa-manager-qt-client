@@ -26,11 +26,18 @@
       <string/>
      </property>
      <layout class="QVBoxLayout" name="vLayoutGroupGem">
+      <property name="spacing">
+       <number>1</number>
+      </property>
       <item>
        <layout class="QVBoxLayout" name="vLayoutIcon"/>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="vLayoutInfo"/>
+       <layout class="QVBoxLayout" name="vLayoutInfo">
+        <property name="spacing">
+         <number>1</number>
+        </property>
+       </layout>
       </item>
      </layout>
     </widget>

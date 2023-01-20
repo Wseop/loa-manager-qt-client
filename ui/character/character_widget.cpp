@@ -272,13 +272,13 @@ void CharacterWidget::addGemWidgets()
     const int LABEL_HEIGHT = 50;
     if (myulCount > 0)
     {
-        QLabel* pLabelMyulAvg = WidgetManager::createLabel(QString("멸화 평균 Lv.\n%1").arg(myulLevelSum / (double)myulCount, 0, 'f', 2, QChar(' ')), LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+        QLabel* pLabelMyulAvg = WidgetManager::createLabel(QString("멸화 평균 레벨\n%1").arg(myulLevelSum / (double)myulCount, 0, 'f', 2, QChar(' ')), LABEL_WIDTH, LABEL_HEIGHT, 10, this);
         m_labels.append(pLabelMyulAvg);
         ui->hLayoutGem1->addWidget(pLabelMyulAvg);
     }
     if (hongCount > 0)
     {
-        QLabel* pLabelHongAvg = WidgetManager::createLabel(QString("홍염 평균 Lv.\n%1").arg(hongLevelSum / (double)hongCount, 0, 'f', 2, QChar(' ')), LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+        QLabel* pLabelHongAvg = WidgetManager::createLabel(QString("홍염 평균 레벨\n%1").arg(hongLevelSum / (double)hongCount, 0, 'f', 2, QChar(' ')), LABEL_WIDTH, LABEL_HEIGHT, 10, this);
         m_labels.append(pLabelHongAvg);
         ui->hLayoutGem2->addWidget(pLabelHongAvg);
     }

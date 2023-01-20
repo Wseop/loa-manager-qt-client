@@ -17,6 +17,7 @@ public:
 
 private:
     void setFonts();
+    void setLayoutAlignments();
     void setStyleSheets();
     void addProfileWidget();
     void addEquipWidgets();

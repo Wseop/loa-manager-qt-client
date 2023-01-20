@@ -31,6 +31,7 @@ QLabel* WidgetManager::createIcon(QString iconPath, QNetworkAccessManager* pNetw
 {
     QLabel* pIcon = new QLabel(pParent);
     pIcon->setFixedSize(width, height);
+    pIcon->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
     if (pNetworkManager == nullptr)
     {

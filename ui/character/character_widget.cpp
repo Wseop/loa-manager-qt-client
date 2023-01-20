@@ -27,12 +27,9 @@ CharacterWidget::CharacterWidget(QWidget* pParent, const Character* pCharacter) 
     m_pEngraveWidget(nullptr)
 {
     ui->setupUi(this);
-    ui->vLayoutCharacter->setAlignment(Qt::AlignHCenter);
-    ui->hLayoutEquip->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    ui->hLayoutAccessory->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    ui->hLayoutStoneBraceletEngrave->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
     setFonts();
+    setLayoutAlignments();
     setStyleSheets();
     addProfileWidget();
     addEquipWidgets();
@@ -77,6 +74,14 @@ void CharacterWidget::setFonts()
     ui->groupAbility->setFont(nanumBold10);
     ui->groupCard->setFont(nanumBold10);
     ui->groupCollectible->setFont(nanumBold10);
+}
+
+void CharacterWidget::setLayoutAlignments()
+{
+    ui->vLayoutCharacter->setAlignment(Qt::AlignHCenter);
+    ui->hLayoutEquip->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    ui->hLayoutAccessory->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    ui->hLayoutStoneBraceletEngrave->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 }
 
 void CharacterWidget::setStyleSheets()
@@ -148,6 +153,7 @@ void CharacterWidget::addProfileWidget()
         const Collectible* pCollectible = collectibles[i];
 
         QLabel* pIcon = WidgetManager::createIcon(iconPath.arg(static_cast<int>(pCollectible->getType())), nullptr, 25, 25, this);
+        pIcon->setStyleSheet("QLabel { background-color: black }");
         m_labels.append(pIcon);
         ui->gridGroupCollectible->addWidget(pIcon, row, col);
 

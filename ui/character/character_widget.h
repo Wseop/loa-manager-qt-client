@@ -27,6 +27,7 @@ private:
     void addEngraveWidget();
     void addGemWidgets();
     void addSkillWidgets();
+    void setSiblingWidget();
 
 private:
     Ui::CharacterWidget *ui;
@@ -47,6 +48,7 @@ private:
     class EngraveWidget* m_pEngraveWidget;
     QList<class GemWidget*> m_gemWidgets;
     QList<class SkillWidget*> m_skillWidgets;
+    class SiblingWidget* m_pSiblingWidget;
 };
 
 #endif // CHARACTER_WIDGET_H

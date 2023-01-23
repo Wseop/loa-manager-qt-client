@@ -19,6 +19,7 @@
 #include "ui/character/item/gem_widget.h"
 #include "ui/character/engrave/engrave_widget.h"
 #include "ui/character/skill/skill_widget.h"
+#include "ui/character/sibling/sibling_widget.h"
 #include "ui/font_manager.h"
 #include <QHBoxLayout>
 
@@ -28,7 +29,8 @@ CharacterWidget::CharacterWidget(QWidget* pParent, const Character* pCharacter) 
     m_pCharacter(pCharacter),
     m_pAbilityStoneWidget(nullptr),
     m_pBraceletWidget(nullptr),
-    m_pEngraveWidget(nullptr)
+    m_pEngraveWidget(nullptr),
+    m_pSiblingWidget(nullptr)
 {
     ui->setupUi(this);
 
@@ -43,6 +45,7 @@ CharacterWidget::CharacterWidget(QWidget* pParent, const Character* pCharacter) 
     addEngraveWidget();
     addGemWidgets();
     addSkillWidgets();
+    setSiblingWidget();
 }
 
 CharacterWidget::~CharacterWidget()
@@ -65,6 +68,8 @@ CharacterWidget::~CharacterWidget()
         delete pGemWidget;
     for (SkillWidget* pSkillWidget : m_skillWidgets)
         delete pSkillWidget;
+    if (m_pSiblingWidget != nullptr)
+        delete m_pSiblingWidget;
     delete ui;
 }
 
@@ -349,4 +354,12 @@ void CharacterWidget::addSkillWidgets()
         m_labels.append(pLabelTripodLevel);
         ui->gridTabSkill->addWidget(pLabelTripodLevel, i + 1, 0);
     }
+}
+
+void CharacterWidget::setSiblingWidget()
+{
+    m_pSiblingWidget = new SiblingWidget(nullptr, m_pCharacter->getOthers());
+    connect(ui->pbSibling, &QPushButton::pressed, this, [&](){
+        m_pSiblingWidget->show();
+    });
 }

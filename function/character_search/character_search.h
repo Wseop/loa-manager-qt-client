@@ -24,6 +24,8 @@ public:
     static CharacterSearch* getInstance();
     static void destroyInstance();
 
+    void changeCharacter(QString characterName);
+
 private:
     Ui::CharacterSearch *ui;
 

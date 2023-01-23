@@ -90,3 +90,9 @@ void CharacterSearch::destroyInstance()
     delete m_pInstance;
     m_pInstance = nullptr;
 }
+
+void CharacterSearch::changeCharacter(QString characterName)
+{
+    ui->leCharacterName->setText(characterName);
+    searchCharacter();
+}

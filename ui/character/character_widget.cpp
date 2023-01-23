@@ -10,6 +10,7 @@
 #include "game_data/character/item/gem.h"
 #include "game_data/character/engrave/engrave.h"
 #include "game_data/character/collectible/collectible.h"
+#include "game_data/character/skill/skill.h"
 #include "ui/widget_manager.h"
 #include "ui/character/item/equip_widget.h"
 #include "ui/character/item/accessory_widget.h"
@@ -17,6 +18,7 @@
 #include "ui/character/item/bracelet_widget.h"
 #include "ui/character/item/gem_widget.h"
 #include "ui/character/engrave/engrave_widget.h"
+#include "ui/character/skill/skill_widget.h"
 #include "ui/font_manager.h"
 #include <QHBoxLayout>
 
@@ -40,6 +42,7 @@ CharacterWidget::CharacterWidget(QWidget* pParent, const Character* pCharacter) 
     addBraceletWidget();
     addEngraveWidget();
     addGemWidgets();
+    addSkillWidgets();
 }
 
 CharacterWidget::~CharacterWidget()
@@ -60,6 +63,8 @@ CharacterWidget::~CharacterWidget()
         delete m_pEngraveWidget;
     for (GemWidget* pGemWidget : m_gemWidgets)
         delete pGemWidget;
+    for (SkillWidget* pSkillWidget : m_skillWidgets)
+        delete pSkillWidget;
     delete ui;
 }
 
@@ -94,9 +99,8 @@ void CharacterWidget::setFonts()
 
 void CharacterWidget::setLayoutAlignments()
 {
-    ui->vLayoutCharacter->setAlignment(Qt::AlignHCenter);
-    ui->vLayoutTabProfileEquip->setAlignment(Qt::AlignHCenter);
-    ui->vLayoutTabSkill->setAlignment(Qt::AlignHCenter);
+    ui->gridTabSkill->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
+    ui->vLayoutTabProfileEquip->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     ui->hLayoutEquip->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     ui->hLayoutAccessory->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     ui->hLayoutStoneBraceletEngrave->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
@@ -298,5 +302,47 @@ void CharacterWidget::addGemWidgets()
         m_labels.append(pLabelHongAvg);
         ui->hLayoutGem2->addWidget(pLabelHongAvg);
     }
+}
 
+void CharacterWidget::addSkillWidgets()
+{
+    const QList<Skill*>& skills = m_pCharacter->getSkills();
+    int tripodLevels[2] = {0, 0};
+
+    // SkillWidget 추가
+    for (int i = 0; i < skills.size(); i++)
+    {
+        const Skill* pSkill = skills[i];
+
+        SkillWidget* pSkillWidget = new SkillWidget(this, pSkill);
+        m_skillWidgets.append(pSkillWidget);
+        ui->gridTabSkill->addWidget(pSkillWidget, (i / 3) + 3, i % 3);
+
+        const QList<Tripod>& tripods = pSkill->getTripods();
+        for (const Tripod& tripod : tripods)
+        {
+            int tripodLevel = tripod.level;
+            if (tripodLevel == 4)
+                tripodLevels[0]++;
+            else if (tripodLevel == 5)
+                tripodLevels[1]++;
+        }
+    }
+
+    // 트라이포드 활성화 정보 추가
+    const int LABEL_WIDTH = 250;
+    const int LABEL_HEIGHT = 25;
+
+    QString tripodText = "트라이포드 활성화 (4레벨 이상) : (%1 / 18)";
+    QLabel* pLabelTripod = WidgetManager::createLabel(tripodText.arg(tripodLevels[0] + tripodLevels[1]), LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+    m_labels.append(pLabelTripod);
+    ui->gridTabSkill->addWidget(pLabelTripod, 0, 0);
+
+    for (int i = 0; i < 2; i++)
+    {
+        QString tripodLevel = "Lv.%1 (%2개)";
+        QLabel* pLabelTripodLevel = WidgetManager::createLabel(tripodLevel.arg(i + 4).arg(tripodLevels[i]), LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+        m_labels.append(pLabelTripodLevel);
+        ui->gridTabSkill->addWidget(pLabelTripodLevel, i + 1, 0);
+    }
 }

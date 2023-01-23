@@ -557,11 +557,7 @@
       <attribute name="title">
        <string>스킬</string>
       </attribute>
-      <layout class="QVBoxLayout" name="vLayoutTabSkill">
-       <property name="spacing">
-        <number>1</number>
-       </property>
-      </layout>
+      <layout class="QGridLayout" name="gridTabSkill"/>
      </widget>
     </widget>
    </item>

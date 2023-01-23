@@ -26,6 +26,7 @@ private:
     void addBraceletWidget();
     void addEngraveWidget();
     void addGemWidgets();
+    void addSkillWidgets();
 
 private:
     Ui::CharacterWidget *ui;
@@ -45,6 +46,7 @@ private:
     class BraceletWidget* m_pBraceletWidget;
     class EngraveWidget* m_pEngraveWidget;
     QList<class GemWidget*> m_gemWidgets;
+    QList<class SkillWidget*> m_skillWidgets;
 };
 
 #endif // CHARACTER_WIDGET_H

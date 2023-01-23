@@ -30,9 +30,9 @@ CharacterWidget::CharacterWidget(QWidget* pParent, const Character* pCharacter) 
 {
     ui->setupUi(this);
 
-    setFonts();
     setLayoutAlignments();
     setStyleSheets();
+    setFonts();
     addProfileWidget();
     addEquipWidgets();
     addAccessoryWidgets();
@@ -72,18 +72,31 @@ void CharacterWidget::setFonts()
     ui->pbSibling->setFont(nanumBold10);
     ui->lbName->setFont(nanumBold10);
     ui->groupTitleGuild->setFont(nanumBold10);
+    ui->lbTitle->setFont(nanumBold10);
+    ui->lbGuild->setFont(nanumBold10);
     ui->groupServerClass->setFont(nanumBold10);
+    ui->lbServer->setFont(nanumBold10);
+    ui->lbClass->setFont(nanumBold10);
     ui->lbBattleLevel->setFont(nanumBold10);
     ui->lbExpLevel->setFont(nanumBold10);
     ui->lbItemLevel->setFont(nanumBold10);
     ui->groupAbility->setFont(nanumBold10);
+    ui->lbCritical->setFont(nanumBold10);
+    ui->lbSpecification->setFont(nanumBold10);
+    ui->lbSwiftness->setFont(nanumBold10);
+    ui->lbDomination->setFont(nanumBold10);
+    ui->lbEndurance->setFont(nanumBold10);
+    ui->lbExpertise->setFont(nanumBold10);
     ui->groupCard->setFont(nanumBold10);
     ui->groupCollectible->setFont(nanumBold10);
+    ui->tabWidget->setFont(nanumBold10);
 }
 
 void CharacterWidget::setLayoutAlignments()
 {
     ui->vLayoutCharacter->setAlignment(Qt::AlignHCenter);
+    ui->vLayoutTabProfileEquip->setAlignment(Qt::AlignHCenter);
+    ui->vLayoutTabSkill->setAlignment(Qt::AlignHCenter);
     ui->hLayoutEquip->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     ui->hLayoutAccessory->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     ui->hLayoutStoneBraceletEngrave->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
@@ -94,10 +107,13 @@ void CharacterWidget::setLayoutAlignments()
 void CharacterWidget::setStyleSheets()
 {
     QString labelColor = "QLabel { color: %1 }";
+    QString tabBackgroundColor = "QWidget { background-color: rgb(240, 240, 240) }";
 
     ui->lbGuild->setStyleSheet(labelColor.arg(COLOR_GUILD));
     ui->lbServer->setStyleSheet(labelColor.arg(COLOR_SERVER));
     ui->lbItemLevel->setStyleSheet(labelColor.arg(COLOR_ITEMLEVEL));
+    ui->tabProfileEquip->setStyleSheet(tabBackgroundColor);
+    ui->tabSkill->setStyleSheet(tabBackgroundColor);
 }
 
 void CharacterWidget::addProfileWidget()
@@ -164,7 +180,7 @@ void CharacterWidget::addProfileWidget()
         m_labels.append(pIcon);
         ui->gridGroupCollectible->addWidget(pIcon, row, col);
 
-        QLabel* pLabelPoint = WidgetManager::createLabel(pointText.arg(pCollectible->getPoint()).arg(pCollectible->getMaxPoint()), 100, 25, 10, this);
+        QLabel* pLabelPoint = WidgetManager::createLabel(pointText.arg(pCollectible->getPoint()).arg(pCollectible->getMaxPoint()), 75, 25, 10, this);
         pLabelPoint->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         m_labels.append(pLabelPoint);
         ui->gridGroupCollectible->addWidget(pLabelPoint, row, col + 1);

@@ -29,7 +29,7 @@ private:
 
     const int ICON_WIDTH = 50;
     const int ICON_HEIGHT = 50;
-    const int LABEL_WIDTH = 100;
+    const int LABEL_WIDTH = 125;
     const int LABEL_HEIGHT = 25;
 
     const Gem* m_pGem;

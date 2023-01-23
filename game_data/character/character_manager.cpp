@@ -593,6 +593,8 @@ void CharacterManager::handleGem(QNetworkReply* pReply)
             pGem->setGemType(GemType::멸화);
         else if (pGem->getName().contains("홍염"))
             pGem->setGemType(GemType::홍염);
+        else
+            pGem->setGemType(GemType::Size);
         slotToGem[slot] = pGem;
     }
 

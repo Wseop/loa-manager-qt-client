@@ -286,6 +286,10 @@ void CharacterWidget::addGemWidgets()
             hongLevelSum += pGem->getLevel();
             hongCount++;
         }
+        else
+        {
+            ui->hLayoutGem2->addWidget(pGemWidget);
+        }
     }
 
     const int LABEL_WIDTH = 100;

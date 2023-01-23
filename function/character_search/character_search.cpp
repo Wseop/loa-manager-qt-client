@@ -1,8 +1,10 @@
 #include "character_search.h"
 #include "ui_character_search.h"
 #include "game_data/character/character_manager.h"
+#include "game_data/character/character.h"
 #include "ui/character/character_widget.h"
 #include "ui/font_manager.h"
+#include <QMessageBox>
 
 CharacterSearch* CharacterSearch::m_pInstance = nullptr;
 
@@ -42,13 +44,26 @@ void CharacterSearch::setFonts()
 
 void CharacterSearch::searchCharacter()
 {
+    ui->pbSearch->setDisabled(true);
+
     m_pCharacter = CharacterManager::getInstance()->getCharacter(ui->leCharacterName->text());
     if (m_pCharacter != nullptr)
     {
         ui->leCharacterName->clear();
         clearCharacterWidget();
-        m_pCharacterWidget = new CharacterWidget(this, m_pCharacter);
-        ui->vLayoutCharacterSearch->addWidget(m_pCharacterWidget);
+        if (m_pCharacter->getProfile() == nullptr)
+        {
+            QMessageBox msgBox;
+            msgBox.setText("존재하지 않는 캐릭터입니다.");
+            msgBox.exec();
+        }
+        else
+        {
+            m_pCharacterWidget = new CharacterWidget(this, m_pCharacter);
+            ui->vLayoutCharacterSearch->addWidget(m_pCharacterWidget);
+        }
+
+        ui->pbSearch->setEnabled(true);
     }
 }
 

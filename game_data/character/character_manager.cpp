@@ -653,6 +653,7 @@ void CharacterManager::setHandlerStatus(uint8_t bit)
     if (m_handlerStatus == HANDLER_STATUS_FINISH)
     {        
         emit CharacterSearch::getInstance()->updateCharacter();
+        m_handlerStatus = 0x00;
     }
 }
 

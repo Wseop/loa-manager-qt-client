@@ -2,6 +2,7 @@
 #include "ui_character_search.h"
 #include "game_data/character/character_manager.h"
 #include "game_data/character/character.h"
+#include "game_data/character/profile/profile.h"
 #include "ui/character/character_widget.h"
 #include "ui/font_manager.h"
 #include <QMessageBox>
@@ -9,13 +10,12 @@
 CharacterSearch* CharacterSearch::m_pInstance = nullptr;
 
 CharacterSearch::CharacterSearch() :
-    ui(new Ui::CharacterSearch),
-    m_pCharacter(nullptr),
-    m_pCharacterWidget(nullptr)
+    ui(new Ui::CharacterSearch)
 {
     ui->setupUi(this);
     ui->vLayoutCharacterSearch->setAlignment(Qt::AlignHCenter);
     ui->hLayoutSearchBar->setAlignment(Qt::AlignHCenter);
+    ui->tabWidget->setStyleSheet("QWidget { background-color: rgb(240, 240, 240) }");
 
     initConnects();
     setFonts();
@@ -23,6 +23,8 @@ CharacterSearch::CharacterSearch() :
 
 CharacterSearch::~CharacterSearch()
 {
+    for (CharacterWidget* pCharacterWidget : m_characterWidgets)
+        delete pCharacterWidget;
     delete ui;
 }
 
@@ -31,6 +33,13 @@ void CharacterSearch::initConnects()
     connect(ui->leCharacterName, &QLineEdit::returnPressed, this, &CharacterSearch::searchCharacter);
     connect(ui->pbSearch, &QPushButton::pressed, this, &CharacterSearch::searchCharacter);
     connect(this, &CharacterSearch::updateCharacter, this, &CharacterSearch::searchCharacter);
+    connect(ui->tabWidget, &QTabWidget::tabCloseRequested, this, [&](int index){
+        QString tabText = ui->tabWidget->tabText(index);
+        ui->tabWidget->removeTab(index);
+        delete m_characterWidgets[index];
+        m_characterWidgets.remove(index);
+        CharacterManager::getInstance()->removeCharacter(tabText);
+    });
 }
 
 void CharacterSearch::setFonts()
@@ -46,33 +55,26 @@ void CharacterSearch::searchCharacter()
 {
     ui->pbSearch->setDisabled(true);
 
-    m_pCharacter = CharacterManager::getInstance()->getCharacter(ui->leCharacterName->text());
-    if (m_pCharacter != nullptr)
+    const Character* pCharacter = CharacterManager::getInstance()->getCharacter(ui->leCharacterName->text());
+    if (pCharacter != nullptr)
     {
-        ui->leCharacterName->clear();
-        clearCharacterWidget();
-        if (m_pCharacter->getProfile() == nullptr)
+        if (pCharacter->getProfile() == nullptr)
         {
             QMessageBox msgBox;
             msgBox.setText("존재하지 않는 캐릭터입니다.");
             msgBox.exec();
+            CharacterManager::getInstance()->removeCharacter(ui->leCharacterName->text());
         }
         else
         {
-            m_pCharacterWidget = new CharacterWidget(this, m_pCharacter);
-            ui->vLayoutCharacterSearch->addWidget(m_pCharacterWidget);
+            CharacterWidget* pCharacterWidget = new CharacterWidget(this, pCharacter);
+            int widgetIndex = ui->tabWidget->addTab(pCharacterWidget, pCharacter->getProfile()->getCharacterName());
+            ui->tabWidget->setCurrentIndex(widgetIndex);
+            m_characterWidgets[widgetIndex] = pCharacterWidget;
         }
 
+        ui->leCharacterName->clear();
         ui->pbSearch->setEnabled(true);
-    }
-}
-
-void CharacterSearch::clearCharacterWidget()
-{
-    if (m_pCharacterWidget != nullptr)
-    {
-        delete m_pCharacterWidget;
-        m_pCharacterWidget = nullptr;
     }
 }
 

@@ -36,6 +36,7 @@ public:
     static void destroyInstance();
 
     Character* getCharacter(QString name);
+    void removeCharacter(QString name);
 
 private:
     static CharacterManager* m_pInstance;

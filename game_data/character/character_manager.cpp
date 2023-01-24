@@ -685,3 +685,9 @@ Character* CharacterManager::getCharacter(QString name)
     requestCharacterInfo();
     return nullptr;
 }
+
+void CharacterManager::removeCharacter(QString name)
+{
+    delete m_nameToCharacter[name];
+    m_nameToCharacter.remove(name);
+}

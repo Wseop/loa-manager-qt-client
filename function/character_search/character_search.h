@@ -18,7 +18,6 @@ private:
     void initConnects();
     void setFonts();
     void searchCharacter();
-    void clearCharacterWidget();
 
 public:
     static CharacterSearch* getInstance();
@@ -31,8 +30,7 @@ private:
 
     static CharacterSearch* m_pInstance;
 
-    class Character* m_pCharacter;
-    class CharacterWidget* m_pCharacterWidget;
+    QMap<int, class CharacterWidget*> m_characterWidgets;
 
 signals:
     void updateCharacter();

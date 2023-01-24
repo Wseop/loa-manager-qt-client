@@ -14,11 +14,27 @@
 #include "game_data/character/card/card.h"
 #include "game_data/character/collectible/collectible.h"
 #include "function/character_search/character_search.h"
+#include "db/db_manager.h"
+#include "db/document_builder.h"
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QThread>
+
+static void tDbInsertCharacter(QString name, QString server, Class cls, double level)
+{
+    bsoncxx::builder::stream::document doc = DocumentBuilder::buildDocumentCharacter(name, server, cls, level);
+
+    bsoncxx::builder::stream::document filter{};
+    filter << "Name" << name.toStdString();
+
+    DbManager* pDbManager = DbManager::getInstance();
+    pDbManager->lock();
+    DbManager::getInstance()->insertDocument(Collection::Character, doc.extract(), filter.extract());
+    pDbManager->unlock();
+}
 
 CharacterManager* CharacterManager::m_pInstance = nullptr;
 
@@ -653,7 +669,16 @@ void CharacterManager::setHandlerStatus(uint8_t bit)
     m_handlerStatus |= bit;
 
     if (m_handlerStatus == HANDLER_STATUS_FINISH)
-    {        
+    {
+        Character* pCharacter = m_nameToCharacter[m_requestedCharacterName];
+        const Profile* pProfile = pCharacter->getProfile();
+        if (pProfile != nullptr)
+        {
+            // insert to db
+            QThread* pThread = QThread::create(tDbInsertCharacter, pProfile->getCharacterName(), pProfile->getServer(), pProfile->getClass(), pProfile->getItemLevel());
+            pThread->start();
+        }
+
         emit CharacterSearch::getInstance()->updateCharacter();
         m_handlerStatus = 0x00;
     }

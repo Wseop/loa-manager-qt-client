@@ -26,6 +26,7 @@ EngraveManager::EngraveManager()
         bool isPenalty = engraveObj.find("Penalty")->toBool();
 
         m_engraveToCode[text] = code;
+        m_codeToEngrave[code] = text;
         if (isPenalty)
             m_penalties << text;
         else if (cls.isEmpty())
@@ -81,4 +82,19 @@ QString EngraveManager::iconPath(const QString& engrave)
 {
     QString iconPath = ":/engrave/image/engrave/%1.png";
     return iconPath.arg(m_engraveToCode[engrave]);
+}
+
+bool EngraveManager::isClassEngrave(QString engrave)
+{
+    return m_classEngraves.contains(engrave);
+}
+
+int EngraveManager::getEngraveCode(QString engrave)
+{
+    return m_engraveToCode[engrave];
+}
+
+QString EngraveManager::getEngraveByCode(int code)
+{
+    return m_codeToEngrave[code];
 }

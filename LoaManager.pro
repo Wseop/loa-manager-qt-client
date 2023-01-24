@@ -26,6 +26,7 @@ SOURCES += \
     game_data/character/item/gem.cpp \
     game_data/character/item/item.cpp \
     game_data/character/profile/profile.cpp \
+    game_data/character/settingcode_builder.cpp \
     game_data/character/skill/skill.cpp \
     game_data/character/skill/skillrune.cpp \
     main.cpp \
@@ -71,6 +72,7 @@ HEADERS += \
     game_data/character/profile/enum/ability.h \
     game_data/character/profile/enum/class.h \
     game_data/character/profile/profile.h \
+    game_data/character/settingcode_builder.h \
     game_data/character/skill/skill.h \
     game_data/character/skill/skillrune.h \
     loamanager.h \

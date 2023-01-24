@@ -302,3 +302,45 @@ void Character::addCollectible(Collectible* pCollectible)
 {
     m_collectibles.append(pCollectible);
 }
+
+QList<Ability> Character::getAccessoryAbilities()
+{
+    QList<Accessory*> accessories = {m_pNeck, m_pEar1, m_pEar2, m_pRing1, m_pRing2};
+    QList<Ability> ret;
+
+    for (const Accessory* pAccessory : accessories)
+    {
+        if (pAccessory == nullptr)
+            continue;
+
+        const QMap<Ability, int>& abilities = pAccessory->getAbilities();
+        for (auto iter = abilities.begin(); iter != abilities.end(); iter++)
+        {
+            ret.append(iter.key());
+        }
+    }
+
+    return ret;
+}
+
+QList<SetEffect> Character::getSetEffects()
+{
+    QList<Equip*> equipments = {m_pWeapon, m_pHead, m_pTop, m_pBottom, m_pHand, m_pShoulder};
+    QList<SetEffect> setEffects;
+
+    for (const Equip* pEquip : equipments)
+    {
+        if (pEquip == nullptr)
+            continue;
+
+        SetEffect setEffect = pEquip->getSetEffect();
+        if (setEffect == SetEffect::에스더)
+            setEffect = m_pHand->getSetEffect();
+        if (setEffect == SetEffect::Size)
+            continue;
+
+        setEffects.append(setEffect);
+    }
+
+    return setEffects;
+}

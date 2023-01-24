@@ -2,7 +2,9 @@
 #define CHARACTER_H
 
 #include "game_data/character/profile/enum/class.h"
+#include "game_data/character/profile/enum/ability.h"
 #include "game_data/character/item/enum/item_type.h"
+#include "game_data/character/item/enum/set_effect.h"
 #include <QString>
 #include <QList>
 
@@ -55,6 +57,9 @@ public:
     void addCard(Card* pCard);
     void addSkill(Skill* pSkill);
     void addCollectible(Collectible* pCollectible);
+
+    QList<Ability> getAccessoryAbilities();
+    QList<SetEffect> getSetEffects();
 
 private:
     QList<Other> m_others;

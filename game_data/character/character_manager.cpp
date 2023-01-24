@@ -13,6 +13,7 @@
 #include "game_data/character/skill/skillrune.h"
 #include "game_data/character/card/card.h"
 #include "game_data/character/collectible/collectible.h"
+#include "game_data/character/settingcode_builder.h"
 #include "function/character_search/character_search.h"
 #include "db/db_manager.h"
 #include "db/document_builder.h"
@@ -32,7 +33,21 @@ static void tDbInsertCharacter(QString name, QString server, Class cls, double l
 
     DbManager* pDbManager = DbManager::getInstance();
     pDbManager->lock();
-    DbManager::getInstance()->insertDocument(Collection::Character, doc.extract(), filter.extract());
+    pDbManager->insertDocument(Collection::Character, doc.extract(), filter.extract());
+    pDbManager->unlock();
+}
+
+static void tDbInsertSetting(QString name, Class cls, double level, QList<Ability> abilities, QList<SetEffect> setEffects, QList<PairEngraveValue> engraves)
+{
+    QString settingCode = SettingcodeBuilder::buildSettingCode(abilities, setEffects, engraves);
+    bsoncxx::builder::stream::document doc = DocumentBuilder::buildDocumentSetting(name, cls, level, settingCode);
+
+    bsoncxx::builder::stream::document filter{};
+    filter << "Name" << name.toStdString();
+
+    DbManager* pDbManager = DbManager::getInstance();
+    pDbManager->lock();
+    pDbManager->insertDocument(Collection::Setting, doc.extract(), filter.extract());
     pDbManager->unlock();
 }
 
@@ -47,7 +62,7 @@ CharacterManager::CharacterManager() :
 
 CharacterManager::~CharacterManager()
 {
-    destroyInstance();
+
 }
 
 void CharacterManager::initNetworkManagers()
@@ -674,9 +689,21 @@ void CharacterManager::setHandlerStatus(uint8_t bit)
         const Profile* pProfile = pCharacter->getProfile();
         if (pProfile != nullptr)
         {
-            // insert to db
-            QThread* pThread = QThread::create(tDbInsertCharacter, pProfile->getCharacterName(), pProfile->getServer(), pProfile->getClass(), pProfile->getItemLevel());
-            pThread->start();
+            // insert Character document to db
+            QThread* pThreadInsertCharacter = QThread::create(tDbInsertCharacter, pProfile->getCharacterName(), pProfile->getServer(), pProfile->getClass(), pProfile->getItemLevel());
+            pThreadInsertCharacter->start();
+            connect(pThreadInsertCharacter, &QThread::finished, pThreadInsertCharacter, &QThread::deleteLater);
+
+            // insert Setting document to db
+            QList<Ability> abilities = pCharacter->getAccessoryAbilities();
+            QList<SetEffect> setEffects = pCharacter->getSetEffects();
+            if (abilities.size() == 6 && setEffects.size() == 6)
+            {
+                QThread* pThreadInsertSetting = QThread::create(tDbInsertSetting, pProfile->getCharacterName(), pProfile->getClass(), pProfile->getItemLevel(),
+                                                                abilities, setEffects, pCharacter->getEngrave()->getEngraves());
+                pThreadInsertSetting->start();
+                connect(pThreadInsertSetting, &QThread::finished, pThreadInsertSetting, &QThread::deleteLater);
+            }
         }
 
         emit CharacterSearch::getInstance()->updateCharacter();

@@ -111,6 +111,7 @@ void CharacterWidget::setLayoutAlignments()
     ui->hLayoutStoneBraceletEngrave->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     ui->hLayoutGem1->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     ui->hLayoutGem2->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    ui->hLayoutGem3->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 }
 
 void CharacterWidget::setStyleSheets()
@@ -293,7 +294,7 @@ void CharacterWidget::addGemWidgets()
         }
         else
         {
-            ui->hLayoutGem2->addWidget(pGemWidget);
+            ui->hLayoutGem3->addWidget(pGemWidget);
         }
     }
 
@@ -315,6 +316,8 @@ void CharacterWidget::addGemWidgets()
 
 void CharacterWidget::addSkillWidgets()
 {
+    const int MAX_COL = 3;
+    const int SKILL_ROW = 3;
     const QList<Skill*>& skills = m_pCharacter->getSkills();
     int tripodLevels[2] = {0, 0};
 
@@ -325,7 +328,7 @@ void CharacterWidget::addSkillWidgets()
 
         SkillWidget* pSkillWidget = new SkillWidget(this, pSkill);
         m_skillWidgets.append(pSkillWidget);
-        ui->gridTabSkill->addWidget(pSkillWidget, (i / 3) + 3, i % 3);
+        ui->gridTabSkill->addWidget(pSkillWidget, (i / MAX_COL) + SKILL_ROW, i % MAX_COL);
 
         const QList<Tripod>& tripods = pSkill->getTripods();
         for (const Tripod& tripod : tripods)
@@ -339,20 +342,21 @@ void CharacterWidget::addSkillWidgets()
     }
 
     // 트라이포드 활성화 정보 추가
-    const int LABEL_WIDTH = 250;
+    const int LABEL_WIDTH = 500;
     const int LABEL_HEIGHT = 25;
+    const int TRIPOD_INFO_COL = 1;
 
     QString tripodText = "트라이포드 활성화 (4레벨 이상) : (%1 / 18)";
     QLabel* pLabelTripod = WidgetManager::createLabel(tripodText.arg(tripodLevels[0] + tripodLevels[1]), LABEL_WIDTH, LABEL_HEIGHT, 10, this);
     m_labels.append(pLabelTripod);
-    ui->gridTabSkill->addWidget(pLabelTripod, 0, 0);
+    ui->gridTabSkill->addWidget(pLabelTripod, 0, TRIPOD_INFO_COL);
 
     for (int i = 0; i < 2; i++)
     {
         QString tripodLevel = "Lv.%1 (%2개)";
         QLabel* pLabelTripodLevel = WidgetManager::createLabel(tripodLevel.arg(i + 4).arg(tripodLevels[i]), LABEL_WIDTH, LABEL_HEIGHT, 10, this);
         m_labels.append(pLabelTripodLevel);
-        ui->gridTabSkill->addWidget(pLabelTripodLevel, i + 1, 0);
+        ui->gridTabSkill->addWidget(pLabelTripodLevel, i + 1, TRIPOD_INFO_COL);
     }
 }
 

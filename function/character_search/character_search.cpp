@@ -31,7 +31,7 @@ CharacterSearch::~CharacterSearch()
 void CharacterSearch::initConnects()
 {
     connect(ui->leCharacterName, &QLineEdit::returnPressed, this, &CharacterSearch::searchCharacter);
-    connect(ui->pbSearch, &QPushButton::pressed, this, &CharacterSearch::searchCharacter);
+    connect(ui->pbSearch, &QPushButton::released, this, &CharacterSearch::searchCharacter);
     connect(this, &CharacterSearch::updateCharacter, this, &CharacterSearch::searchCharacter);
     connect(ui->tabWidget, &QTabWidget::tabCloseRequested, this, [&](int index){
         QString tabText = ui->tabWidget->tabText(index);

@@ -363,7 +363,7 @@ void CharacterWidget::addSkillWidgets()
 void CharacterWidget::setSiblingWidget()
 {
     m_pSiblingWidget = new SiblingWidget(nullptr, m_pCharacter->getOthers());
-    connect(ui->pbSibling, &QPushButton::pressed, this, [&](){
+    connect(ui->pbSibling, &QPushButton::released, this, [&](){
         m_pSiblingWidget->show();
     });
 }

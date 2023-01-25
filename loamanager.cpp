@@ -48,7 +48,7 @@ void LoaManager::createMenuButtons()
     // create back button
     m_pBackButton = WidgetManager::createPushButton("", MENU_BUTTON_WIDTH, MENU_BUTTON_HEIGHT, 10, this);
     m_pBackButton->setIcon(QPixmap(":/icon/image/back.png"));
-    connect(m_pBackButton, &QPushButton::pressed, this, [&](){
+    connect(m_pBackButton, &QPushButton::released, this, [&](){
         // hide child menu & show parent menu
         for (QPushButton* pButton : m_childMenuButtons)
             pButton->hide();
@@ -66,7 +66,7 @@ void LoaManager::createMenuButtons()
         const QJsonObject& menuObj = menu.toObject();
         // create parent_menu button
         QPushButton* pParentButton = WidgetManager::createPushButton(menuObj.find("Title")->toString(), MENU_BUTTON_WIDTH, MENU_BUTTON_HEIGHT, 10, this);
-        connect(pParentButton, &QPushButton::pressed, this, [&, pParentButton](){
+        connect(pParentButton, &QPushButton::released, this, [&, pParentButton](){
             // show child buttons & hide parent buttons
             const auto childButtons = m_parentToChildButtons[pParentButton];
             for (QPushButton* pButton : childButtons)
@@ -94,7 +94,7 @@ void LoaManager::createMenuButtons()
 
 void LoaManager::initConnects()
 {
-    connect(m_childMenuButtons["캐릭터 조회"], &QPushButton::pressed, this, [&](){
+    connect(m_childMenuButtons["캐릭터 조회"], &QPushButton::released, this, [&](){
         for (QWidget* pWidget : m_functions)
             pWidget->hide();
         CharacterSearch::getInstance()->show();

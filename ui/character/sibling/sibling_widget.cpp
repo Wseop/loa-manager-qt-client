@@ -85,7 +85,7 @@ void SiblingWidget::addSiblingToGrid()
             m_buttons.append(pButton);
             m_serverToGridLayout[server]->addWidget(pButton, (i / MAX_COL) + 1, i % MAX_COL);
 
-            connect(pButton, &QPushButton::pressed, this, [&, other](){
+            connect(pButton, &QPushButton::released, this, [&, other](){
                 CharacterSearch::getInstance()->changeCharacter(other.characterName);
                 this->close();
             });

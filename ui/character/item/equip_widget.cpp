@@ -73,7 +73,8 @@ void EquipWidget::addLabels()
     else
     {
         setEffect += setEffectToStr(m_pEquip->getSetEffect());
-        setEffect += QString(" Lv. %1").arg(m_pEquip->getSetLevel());
+        if (m_pEquip->getSetEffect() != SetEffect::에스더)
+            setEffect += QString(" Lv. %1").arg(m_pEquip->getSetLevel());
     }
     QLabel* pSetEffectLabel = WidgetManager::createLabel(setEffect, LABEL_WIDTH, LABEL_HEIGHT, 10, this);
     m_labels.append(pSetEffectLabel);

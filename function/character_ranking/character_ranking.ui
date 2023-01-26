@@ -145,6 +145,25 @@
    <item>
     <layout class="QVBoxLayout" name="vLayoutRankingData"/>
    </item>
+   <item>
+    <widget class="QPushButton" name="pbRenderMore">
+     <property name="minimumSize">
+      <size>
+       <width>750</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>750</width>
+       <height>25</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>더보기</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources/>

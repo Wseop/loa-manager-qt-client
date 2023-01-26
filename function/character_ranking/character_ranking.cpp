@@ -45,6 +45,7 @@ void CharacterRanking::setFonts()
     ui->pbSelectClass->setFont(nanumBold10);
     ui->lbSelectedClass->setFont(nanumBold10);
     ui->lbSelectedItemLevel->setFont(nanumBold10);
+    ui->pbRenderMore->setFont(nanumBold10);
 }
 
 void CharacterRanking::initConnects()
@@ -53,7 +54,8 @@ void CharacterRanking::initConnects()
     connect(this, &CharacterRanking::refresh, this, &CharacterRanking::getRankingData);
 
     connect(ui->hSliderItemLevel, &QSlider::valueChanged, this, [&](int value){
-        emit refresh();
+        clearRankingData();
+        updateUI();
     });
     connect(ui->hSliderItemLevel, &QSlider::sliderMoved, this, [&](int value){
         ui->lbSelectedItemLevel->setText(QString("아이템 레벨\n%1").arg(value));
@@ -86,6 +88,8 @@ void CharacterRanking::initConnects()
             m_pClassSelector->hide();
         });
     }
+
+    connect(ui->pbRenderMore, &QPushButton::released, this, &CharacterRanking::updateUI);
 }
 
 void CharacterRanking::getRankingData()
@@ -140,13 +144,16 @@ void CharacterRanking::addCharacterData(int index, QString server, QString cls, 
 
 void CharacterRanking::updateUI()
 {
-    for (const QJsonValue& jValData : m_jArrRankingData)
+    const int NUMBER_PER_RENDER = 100;
+
+    for (int i = 0; (i < NUMBER_PER_RENDER) && (m_renderCount < m_jArrRankingData.size()); i++)
     {
-        const QJsonObject& jObjData = jValData.toObject();
+        const QJsonObject& jObjData = m_jArrRankingData[m_renderCount].toObject();
         QString server = jObjData.find("Server")->toString();
         QString cls = jObjData.find("Class")->toString();
         QString name = jObjData.find("Name")->toString();
         double itemLevel = jObjData.find("Level")->toDouble();
+
         if (static_cast<int>(itemLevel) >= ui->hSliderItemLevel->value())
             addCharacterData(++m_renderCount, server, cls, name, itemLevel);
     }

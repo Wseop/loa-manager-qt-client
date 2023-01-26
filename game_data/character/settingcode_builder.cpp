@@ -7,6 +7,116 @@ QString SettingcodeBuilder::buildSettingCode(QList<Ability> abilities, QList<Set
     return buildAbilityCode(abilities) + buildSetEffectCode(setEffects) + buildEngraveCode(engraves);
 }
 
+QList<Ability> SettingcodeBuilder::parseAbility(QString settingCode)
+{
+    QList<Ability> result;
+
+    int startIndex = settingCode.indexOf("A");
+    int endIndex = settingCode.indexOf("S");
+    if (startIndex == -1 || endIndex == -1)
+        return result;
+
+    startIndex += 1;
+    QString abilityCode = settingCode.sliced(startIndex, endIndex - startIndex);
+    for (const QChar& ability : abilityCode)
+    {
+        result.append(static_cast<Ability>(ability.digitValue()));
+    }
+
+    return result;
+}
+
+QList<SetEffect> SettingcodeBuilder::parseSetEffect(QString settingCode)
+{
+    QList<SetEffect> result;
+
+    int startIndex = settingCode.indexOf("S");
+    int endIndex = settingCode.indexOf("C");
+    if (startIndex == -1 || endIndex == -1)
+        return result;
+
+    startIndex += 1;
+    QString setEffectCode = settingCode.sliced(startIndex, endIndex - startIndex);
+    for (const QChar& setEffect : setEffectCode)
+    {
+        result.append(static_cast<SetEffect>(setEffect.digitValue()));
+    }
+
+    return result;
+}
+
+QList<QList<PairEngraveValue>> SettingcodeBuilder::parseClassEngrave(QString settingCode)
+{
+    // index + 1 == level
+    QList<QList<PairEngraveValue>> classEngraves(3);
+
+    int startIndex, endIndex;
+    QString classEngraveCode, classEngraveLevelCode;
+
+    // slice class engrave code
+    startIndex = settingCode.indexOf("C");
+    endIndex = settingCode.indexOf("CL");
+    if (startIndex == -1 || endIndex == -1)
+        return classEngraves;
+    startIndex += 1;
+    classEngraveCode = settingCode.sliced(startIndex, endIndex - startIndex);
+    // slice class engrave level code
+    startIndex = settingCode.indexOf("CL");
+    endIndex = settingCode.indexOf("N");
+    if (startIndex == -1 || endIndex == -1)
+        return classEngraves;
+    startIndex += 2;
+    classEngraveLevelCode = settingCode.sliced(startIndex, endIndex - startIndex);
+
+    // parse
+    EngraveManager* pEngraveManager = EngraveManager::getInstance();
+    for (int i = 0; i < classEngraveLevelCode.size(); i++)
+    {
+        int engraveCode = classEngraveCode.sliced(i * 3, 3).toInt();
+        int engraveLevel = classEngraveLevelCode[i].digitValue();
+        QString engrave = pEngraveManager->getEngraveByCode(engraveCode);
+
+        classEngraves[engraveLevel - 1].append({engrave, engraveLevel});
+    }
+
+    return classEngraves;
+}
+
+QList<QList<PairEngraveValue>> SettingcodeBuilder::parseNormalEngrave(QString settingCode)
+{
+    QList<QList<PairEngraveValue>> normalEngraves(3);
+
+    int startIndex, endIndex;
+    QString normalEngraveCode, normalEngraveLevelCode;
+
+    // slice normal engrave code
+    startIndex = settingCode.indexOf("N");
+    endIndex = settingCode.indexOf("NL");
+    if (startIndex == -1 || endIndex == -1)
+        return normalEngraves;
+    startIndex += 1;
+    normalEngraveCode = settingCode.sliced(startIndex, endIndex - startIndex);
+    // slice normal engrave level code
+    startIndex = settingCode.indexOf("NL");
+    endIndex = settingCode.size();
+    if (startIndex == -1)
+        return normalEngraves;
+    startIndex += 2;
+    normalEngraveLevelCode = settingCode.sliced(startIndex, endIndex - startIndex);
+
+    EngraveManager* pEngraveManager = EngraveManager::getInstance();
+    for (int i = 0; i < normalEngraveLevelCode.size(); i++)
+    {
+        int engraveCode = normalEngraveCode.sliced(i * 3, 3).toInt();
+        int engraveLevel = normalEngraveLevelCode[i].digitValue();
+        QString engrave = pEngraveManager->getEngraveByCode(engraveCode);
+
+        normalEngraves[engraveLevel - 1].append({engrave, engraveLevel});
+    }
+
+    return normalEngraves;
+}
+
 QString SettingcodeBuilder::buildAbilityCode(const QList<Ability>& abilities)
 {
     QString abilityCode;

@@ -12,6 +12,10 @@ class SettingcodeBuilder : public QObject
 
 public:
     static QString buildSettingCode(QList<Ability> abilities, QList<SetEffect> setEffects, QList<PairEngraveValue> engraves);
+    static QList<Ability> parseAbility(QString settingCode);
+    static QList<SetEffect> parseSetEffect(QString settingCode);
+    static QList<QList<PairEngraveValue>> parseClassEngrave(QString settingCode);
+    static QList<QList<PairEngraveValue>> parseNormalEngrave(QString settingCode);
 
 private:
     static QString buildAbilityCode(const QList<Ability>& abilities);

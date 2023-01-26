@@ -19,10 +19,13 @@ private:
     void setAlignments();
     void setFonts();
     void initConnects();
-    void getRankingData();
+//    void getRankingData();
     void addCharacterData(int index, QString server, QString cls, QString name, double itemLevel);
     void updateUI();
     void clearRankingData();
+    void setEnable(bool enable);
+
+    static void tGetRankingData();
 
 public:
     static CharacterRanking* getInstance();
@@ -33,12 +36,9 @@ public:
 private:
     Ui::CharacterRanking *ui;
 
-    const int WIDGET_WIDTH = 150;
-    const int WIDGET_HEIGHT = 25;
-
     static CharacterRanking* m_pInstance;
 
-    bool m_bLoaded;
+    bool m_bLoaded; // always true after load of rank_data
     class ClassSelector* m_pClassSelector;
     QJsonArray m_jArrRankingData;
     QList<class QHBoxLayout*> m_hLayouts;

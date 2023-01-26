@@ -9,6 +9,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QHBoxLayout>
+#include <QThread>
 
 CharacterRanking* CharacterRanking::m_pInstance = nullptr;
 
@@ -51,7 +52,17 @@ void CharacterRanking::setFonts()
 void CharacterRanking::initConnects()
 {
     connect(this, &CharacterRanking::refresh, this, &CharacterRanking::clearRankingData);
-    connect(this, &CharacterRanking::refresh, this, &CharacterRanking::getRankingData);
+    connect(this, &CharacterRanking::refresh, this, [&](){
+        setEnabled(false);
+
+        QThread* pThread = QThread::create(tGetRankingData);
+        connect(pThread, &QThread::finished, this, &CharacterRanking::updateUI);
+        connect(pThread, &QThread::finished, this, [&](){
+            setEnabled(true);
+        });
+        connect(pThread, &QThread::finished, pThread, &QThread::deleteLater);
+        pThread->start();
+    });
 
     connect(ui->hSliderItemLevel, &QSlider::valueChanged, this, [&](int value){
         clearRankingData();
@@ -92,26 +103,11 @@ void CharacterRanking::initConnects()
     connect(ui->pbRenderMore, &QPushButton::released, this, &CharacterRanking::updateUI);
 }
 
-void CharacterRanking::getRankingData()
-{
-    m_bLoaded = true;
-
-    DbManager* pDbManager = DbManager::getInstance();
-    bsoncxx::builder::stream::document filter{};
-
-    Class cls = strToClass(ui->lbSelectedClass->text());
-    if (cls != Class::Size)
-        filter << "Class" << classToStr(cls).toStdString();
-
-    pDbManager->lock();
-    m_jArrRankingData = pDbManager->findDocuments(Collection::Character, SortOrder::Desc, "Level", filter.extract());
-    pDbManager->unlock();
-
-    updateUI();
-}
-
 void CharacterRanking::addCharacterData(int index, QString server, QString cls, QString name, double itemLevel)
 {
+    const int WIDGET_WIDTH = 150;
+    const int WIDGET_HEIGHT = 25;
+
     QHBoxLayout* pHLayout = new QHBoxLayout();
     ui->vLayoutRankingData->addLayout(pHLayout);
     m_hLayouts.append(pHLayout);
@@ -174,6 +170,30 @@ void CharacterRanking::clearRankingData()
     for (QHBoxLayout* pLayout : m_hLayouts)
         delete pLayout;
     m_hLayouts.clear();
+}
+
+void CharacterRanking::setEnable(bool enable)
+{
+    ui->pbSelectAllClass->setEnabled(enable);
+    ui->pbSelectClass->setEnabled(enable);
+    ui->pbRenderMore->setEnabled(enable);
+}
+
+void CharacterRanking::tGetRankingData()
+{
+    CharacterRanking* pInstance = CharacterRanking::getInstance();
+    pInstance->m_bLoaded = true;
+
+    DbManager* pDbManager = DbManager::getInstance();
+    bsoncxx::builder::stream::document filter{};
+
+    Class cls = strToClass(pInstance->ui->lbSelectedClass->text());
+    if (cls != Class::Size)
+        filter << "Class" << classToStr(cls).toStdString();
+
+    pDbManager->lock();
+    pInstance->m_jArrRankingData = pDbManager->findDocuments(Collection::Character, SortOrder::Desc, "Level", filter.extract());
+    pDbManager->unlock();
 }
 
 CharacterRanking* CharacterRanking::getInstance()

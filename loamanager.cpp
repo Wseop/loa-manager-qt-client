@@ -3,6 +3,7 @@
 #include "ui/widget_manager.h"
 #include "function/character_search/character_search.h"
 #include "function/character_ranking/character_ranking.h"
+#include "function/setting_ranking/setting_ranking.h"
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -100,12 +101,17 @@ void LoaManager::initConnects()
             pWidget->hide();
         CharacterSearch::getInstance()->show();
     });
-    connect(m_childMenuButtons["캐릭터 랭킹"], &QPushButton::released, this, [&](){
+    connect(m_childMenuButtons["캐릭터 순위"], &QPushButton::released, this, [&](){
         for (QWidget* pWidget : m_functions)
             pWidget->hide();
         CharacterRanking::getInstance()->show();
         if (!CharacterRanking::getInstance()->loaded())
             emit CharacterRanking::getInstance()->refresh();
+    });
+    connect(m_childMenuButtons["세팅 순위"], &QPushButton::released, this, [&](){
+        for (QWidget* pWidget : m_functions)
+            pWidget->hide();
+        SettingRanking::getInstance()->show();
     });
 }
 
@@ -113,6 +119,7 @@ void LoaManager::addFunctions()
 {
     m_functions.append(CharacterSearch::getInstance());
     m_functions.append(CharacterRanking::getInstance());
+    m_functions.append(SettingRanking::getInstance());
 
     for (QWidget* pWidget : m_functions)
     {

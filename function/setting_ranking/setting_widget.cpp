@@ -89,7 +89,7 @@ void SettingWidget::setAbility(const SettingCode& settingCode)
         if (ability.second != 0)
             abilityText += abilityToStr(ability.first).at(0);
     }
-    QLabel* pLabelAbility = WidgetManager::createLabel(abilityText, LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+    QLabel* pLabelAbility = WidgetManager::createLabel(abilityText, LABEL_WIDTH, LABEL_HEIGHT, 12, this);
     m_labels.append(pLabelAbility);
     ui->vLayoutAbility->addWidget(pLabelAbility);
 
@@ -133,7 +133,7 @@ void SettingWidget::setSetEffect(const SettingCode& settingCode)
         setEffectText += QString("%1%2 ").arg(setEffectCount).arg(setEffectToStr(static_cast<SetEffect>(i)));
     }
     setEffectText.chop(1);
-    QLabel* pLabelSetEffect = WidgetManager::createLabel(setEffectText, LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+    QLabel* pLabelSetEffect = WidgetManager::createLabel(setEffectText, LABEL_WIDTH, LABEL_HEIGHT, 12, this);
     m_labels.append(pLabelSetEffect);
     ui->vLayoutSetEffect->addWidget(pLabelSetEffect);
 }

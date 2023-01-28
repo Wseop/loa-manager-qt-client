@@ -130,7 +130,7 @@ void SettingRanking::tLoadSettingData(QString cls)
     // process data (init m_settingCodeCounts)
     QList<QPair<SettingCode, int>>& settingCodeCounts = pInstance->m_settingCodeCounts;
     int& total = pInstance->m_total;
-    const QStringList& settingCodes = settingCodeToCharacterInfos.keys();
+    const QStringList& settingCodes = settingCodeToCharacterInfos.uniqueKeys();
     for (const QString& settingCode : settingCodes)
     {
         int count = settingCodeToCharacterInfos.values(settingCode).size();

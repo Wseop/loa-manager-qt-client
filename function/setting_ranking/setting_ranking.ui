@@ -69,6 +69,13 @@
    <item>
     <layout class="QVBoxLayout" name="vLayoutSettingData"/>
    </item>
+   <item>
+    <widget class="QPushButton" name="pbShowMore">
+     <property name="text">
+      <string>더보기</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources/>

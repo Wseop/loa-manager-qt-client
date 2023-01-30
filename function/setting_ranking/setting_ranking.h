@@ -47,6 +47,7 @@ private:
     QList<QPair<SettingCode, int>> m_settingCodeCounts;
     int m_total;
     QList<class SettingWidget*> m_settingWidgets;
+    int m_renderCount;
 
 signals:
     void refresh();

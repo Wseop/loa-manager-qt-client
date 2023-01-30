@@ -13,7 +13,8 @@ SettingRanking* SettingRanking::m_pInstance = nullptr;
 SettingRanking::SettingRanking() :
     ui(new Ui::SettingRanking),
     m_pClassSelector(new ClassSelector()),
-    m_total(0)
+    m_total(0),
+    m_renderCount(0)
 {
     ui->setupUi(this);
 
@@ -55,6 +56,7 @@ void SettingRanking::initConnects()
     }
 
     connect(this, &SettingRanking::refresh, this, &SettingRanking::updateUI);
+    connect(ui->pbShowMore, &QPushButton::released, this, &SettingRanking::updateUI);
 }
 
 void SettingRanking::setAlignments()
@@ -75,14 +77,16 @@ void SettingRanking::setFonts()
 
 void SettingRanking::updateUI()
 {
+    const int NUMBER_PER_RENDER = 100;
+
     ui->lbInfo->setText(QString("등록된 캐릭터 수 : %1").arg(m_total));
 
-    for (int i = 0; i < m_settingCodeCounts.size(); i++)
+    for (int i = 0; (i < NUMBER_PER_RENDER) && (m_renderCount < m_settingCodeCounts.size()); i++)
     {
-        const QPair<SettingCode, int>& settingCodeCount = m_settingCodeCounts[i];
+        const QPair<SettingCode, int>& settingCodeCount = m_settingCodeCounts[m_renderCount++];
         const SettingCode& settingCode = settingCodeCount.first;
         const QList<CharacterInfo>& characterInfos = m_settingCodeToCharacterInfos.values(settingCode);
-        SettingWidget* pSettingWidget = new SettingWidget(this, i + 1, settingCode, characterInfos, m_total);
+        SettingWidget* pSettingWidget = new SettingWidget(this, m_renderCount, settingCode, characterInfos, m_total);
         m_settingWidgets.append(pSettingWidget);
         ui->vLayoutSettingData->addWidget(pSettingWidget);
     }
@@ -95,6 +99,7 @@ void SettingRanking::clear()
     m_settingCodeToCharacterInfos.clear();
     m_settingCodeCounts.clear();
     m_total = 0;
+    m_renderCount = 0;
     for (SettingWidget* pSettingWidget : m_settingWidgets)
         delete pSettingWidget;
     m_settingWidgets.clear();

@@ -13,11 +13,11 @@ class CharacterListWidget : public QWidget
     Q_OBJECT
 
 public:
-    CharacterListWidget(QWidget* pParent, const QList<CharacterInfo>& characterInfos);
+    CharacterListWidget(QWidget* pParent, QList<CharacterInfo> characterInfos);
     ~CharacterListWidget();
 
 private:
-    void addCharacterButtons(const QList<CharacterInfo>& characterInfos);
+    void addCharacterButtons(QList<CharacterInfo> characterInfos);
 
 private:
     Ui::CharacterListWidget *ui;

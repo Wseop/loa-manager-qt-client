@@ -9,7 +9,7 @@
 #include <functional>
 #include <QLabel>
 
-SettingWidget::SettingWidget(QWidget* pParent, int index, const SettingCode& settingCode, const QList<CharacterInfo>& characterInfos, int total) :
+SettingWidget::SettingWidget(QWidget* pParent, int index, const SettingCode& settingCode, QList<CharacterInfo> characterInfos, int total) :
     QWidget(pParent),
     ui(new Ui::SettingWidget),
     m_pCharacterListWidget(nullptr)
@@ -193,7 +193,7 @@ void SettingWidget::setEngrave(const SettingCode& settingCode)
     }
 }
 
-void SettingWidget::setCharacterInfos(const QList<CharacterInfo>& characterInfos)
+void SettingWidget::setCharacterInfos(QList<CharacterInfo>& characterInfos)
 {
     m_pCharacterListWidget = new CharacterListWidget(nullptr, characterInfos);
     connect(ui->pbRatio, &QPushButton::released, this, [&](){

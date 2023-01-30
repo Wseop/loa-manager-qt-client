@@ -73,6 +73,7 @@ void SettingRanking::setFonts()
 
     ui->pbSelectClass->setFont(nanumBold10);
     ui->lbInfo->setFont(nanumBold10);
+    ui->pbShowMore->setFont(nanumBold10);
 }
 
 void SettingRanking::updateUI()

@@ -13,7 +13,7 @@ class SettingWidget : public QWidget
     Q_OBJECT
 
 public:
-    SettingWidget(QWidget* pParent, int index, const SettingCode& settingCode, const QList<CharacterInfo>& characterInfos, int total);
+    SettingWidget(QWidget* pParent, int index, const SettingCode& settingCode, QList<CharacterInfo> characterInfos, int total);
     ~SettingWidget();
 
 private:
@@ -23,7 +23,7 @@ private:
     void setAbility(const SettingCode& settingCode);
     void setSetEffect(const SettingCode& settingCode);
     void setEngrave(const SettingCode& settingCode);
-    void setCharacterInfos(const QList<CharacterInfo>& characterInfos);
+    void setCharacterInfos(QList<CharacterInfo>& characterInfos);
 
 private:
     Ui::SettingWidget *ui;

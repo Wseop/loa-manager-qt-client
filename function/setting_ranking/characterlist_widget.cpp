@@ -4,8 +4,9 @@
 #include "function/character_search/character_search.h"
 #include "function/setting_ranking/setting_ranking.h"
 #include <QPushButton>
+#include <functional>
 
-CharacterListWidget::CharacterListWidget(QWidget* pParent, const QList<CharacterInfo>& characterInfos) :
+CharacterListWidget::CharacterListWidget(QWidget* pParent, QList<CharacterInfo> characterInfos) :
     QWidget(pParent),
     ui(new Ui::CharacterListWidget)
 {
@@ -23,10 +24,14 @@ CharacterListWidget::~CharacterListWidget()
     delete ui;
 }
 
-void CharacterListWidget::addCharacterButtons(const QList<CharacterInfo>& characterInfos)
+void CharacterListWidget::addCharacterButtons(QList<CharacterInfo> characterInfos)
 {
     const int BUTTON_WIDTH = 200;
     const int BUTTON_HEIGHT = 50;
+
+    std::sort(characterInfos.begin(), characterInfos.end(), [&](CharacterInfo& a, CharacterInfo& b){
+        return a.itemLevel > b.itemLevel;
+    });
 
     for (int i = 0; i < characterInfos.size(); i++)
     {

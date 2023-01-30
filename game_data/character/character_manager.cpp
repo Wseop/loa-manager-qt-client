@@ -51,6 +51,17 @@ static void tDbInsertSetting(QString name, Class cls, double level, QList<Abilit
     pDbManager->unlock();
 }
 
+static void tDbDeleteCharacter(QString name)
+{
+    bsoncxx::builder::stream::document filter{};
+    filter << "Name" << name.toStdString();
+
+    DbManager* pDbManager = DbManager::getInstance();
+    pDbManager->lock();
+    pDbManager->deleteDocument(Collection::Character, filter.extract());
+    pDbManager->unlock();
+}
+
 CharacterManager* CharacterManager::m_pInstance = nullptr;
 
 CharacterManager::CharacterManager() :
@@ -122,6 +133,10 @@ void CharacterManager::handleProfile(QNetworkReply* pReply)
     QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
     if (response.isNull())
     {
+        QThread* pThread = QThread::create(tDbDeleteCharacter, m_requestedCharacterName);
+        pThread->start();
+        connect(pThread, &QThread::finished, pThread, &QThread::deleteLater);
+
         setHandlerStatus(1 << static_cast<int>(LostarkApi::Profile));
         return;
     }

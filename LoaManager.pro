@@ -12,6 +12,7 @@ SOURCES += \
     api/api_manager.cpp \
     db/db_manager.cpp \
     db/document_builder.cpp \
+    function/auction_calculator/auction_calculator.cpp \
     function/character_ranking/character_ranking.cpp \
     function/character_search/character_search.cpp \
     function/setting_ranking/characterlist_widget.cpp \
@@ -56,6 +57,7 @@ HEADERS += \
     db/db_manager.h \
     db/document_builder.h \
     db/enum/db_enums.h \
+    function/auction_calculator/auction_calculator.h \
     function/character_ranking/character_ranking.h \
     function/character_search/character_search.h \
     function/setting_ranking/characterlist_widget.h \
@@ -101,6 +103,7 @@ HEADERS += \
     ui/widget_manager.h
 
 FORMS += \
+    function/auction_calculator/auction_calculator.ui \
     function/character_ranking/character_ranking.ui \
     function/character_search/character_search.ui \
     function/setting_ranking/characterlist_widget.ui \

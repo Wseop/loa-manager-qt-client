@@ -17,14 +17,16 @@ private:
     void loadApiKey();
     void loadRequestUrl();
 
-    const QString& getApiKey(LostarkApi api) const;
+    const QString& getApiKey(int index) const;
 
 public:
     static ApiManager* getInstance();
     static void destroyInstance();
 
-    void get(QNetworkAccessManager* pNetworkManager, LostarkApi api, QString param);
-    void post(QNetworkAccessManager* pNetworkManager, LostarkApi api, QByteArray data);
+    const int MAX_API_KEY = 5;
+
+    void get(QNetworkAccessManager* pNetworkManager, int apiKeyIndex, LostarkApi api, QString param);
+    void post(QNetworkAccessManager* pNetworkManager, int apiKeyIndex, LostarkApi api, QByteArray data);
 
 private:
     static ApiManager* m_pInstance;

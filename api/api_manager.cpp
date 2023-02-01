@@ -62,28 +62,11 @@ void ApiManager::loadRequestUrl()
     }
 }
 
-const QString& ApiManager::getApiKey(LostarkApi api) const
+const QString& ApiManager::getApiKey(int index) const
 {
-    switch (api)
-    {
-    case LostarkApi::Sibling:
-    case LostarkApi::Profile:
-        return m_apiKeys[0];
-    case LostarkApi::Equipment:
-    case LostarkApi::Skill:
-        return m_apiKeys[1];
-    case LostarkApi::Engrave:
-    case LostarkApi::Card:
-        return m_apiKeys[2];
-    case LostarkApi::Gem:
-    case LostarkApi::Collectible:
-        return m_apiKeys[3];
-    case LostarkApi::Auction:
-    case LostarkApi::Market:
-        return m_apiKeys[4];
-    default:
-        return m_apiKeys.back();
-    }
+    if (index >= MAX_API_KEY)
+        return INVALID_KEY;
+    return m_apiKeys[index];
 }
 
 ApiManager* ApiManager::getInstance()
@@ -101,9 +84,9 @@ void ApiManager::destroyInstance()
     m_pInstance = nullptr;
 }
 
-void ApiManager::get(QNetworkAccessManager* pNetworkManager, LostarkApi api, QString param)
+void ApiManager::get(QNetworkAccessManager* pNetworkManager, int apiKeyIndex, LostarkApi api, QString param)
 {
-    const QString& apiKey = getApiKey(api);
+    const QString& apiKey = getApiKey(apiKeyIndex);
     if (apiKey == INVALID_KEY)
     {
         qDebug() << Q_FUNC_INFO << ": invalid api";
@@ -118,9 +101,9 @@ void ApiManager::get(QNetworkAccessManager* pNetworkManager, LostarkApi api, QSt
     pNetworkManager->get(request);
 }
 
-void ApiManager::post(QNetworkAccessManager* pNetworkManager, LostarkApi api, QByteArray data)
+void ApiManager::post(QNetworkAccessManager* pNetworkManager, int apiKeyIndex, LostarkApi api, QByteArray data)
 {
-    const QString& apiKey = getApiKey(api);
+    const QString& apiKey = getApiKey(apiKeyIndex);
     if (apiKey == INVALID_KEY)
     {
         qDebug() << Q_FUNC_INFO << ": invalid api";

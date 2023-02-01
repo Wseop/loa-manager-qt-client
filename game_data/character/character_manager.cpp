@@ -98,7 +98,7 @@ void CharacterManager::requestCharacterInfo()
     ApiManager* pApiManager = ApiManager::getInstance();
 
     for (int i = 0; i < CHARACTER_API_COUNT; i++)
-        pApiManager->get(m_networkManagers[i], static_cast<LostarkApi>(i), m_requestedCharacterName);
+        pApiManager->get(m_networkManagers[i], i % pApiManager->MAX_API_KEY, static_cast<LostarkApi>(i), m_requestedCharacterName);
 }
 
 void CharacterManager::handleSibling(QNetworkReply* pReply)

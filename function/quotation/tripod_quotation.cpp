@@ -12,7 +12,8 @@ TripodQuotation* TripodQuotation::m_pInstance = nullptr;
 
 TripodQuotation::TripodQuotation() :
     ui(new Ui::TripodQuotation),
-    m_pClassSelector(new ClassSelector())
+    m_pClassSelector(new ClassSelector()),
+    m_skillInfoWidgets(0)
 {
     ui->setupUi(this);
 

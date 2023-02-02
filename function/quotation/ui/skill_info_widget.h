@@ -3,6 +3,7 @@
 
 #include "function/quotation/tripod_quotation.h"
 #include <QWidget>
+#include <QJsonObject>
 
 namespace Ui {
 class SkillInfoWidget;
@@ -19,8 +20,10 @@ public:
 private:
     void setFonts();
     void setAlignments();
-    void addSkill(const SkillInfo& skill);
-    void addTripods(const QList<TripodInfo>& tripods);
+    void addSkill();
+    void addTripods();
+    void setTripodPrice(int tripodCode, class QLabel* pLabelPrice);
+    QJsonObject buildTripodSearchOption(int tripodCode);
 
 private:
     Ui::SkillInfoWidget *ui;
@@ -30,7 +33,9 @@ private:
     const int LABEL_WIDTH = 125;
     const int LABEL_HEIGHT = 25;
 
-    QList<class QLabel*> m_labels;
+    const SkillInfo& m_skillInfo;
+    const QList<TripodInfo>& m_tripods;
+    QList<QLabel*> m_labels;
     QList<class QBoxLayout*> m_layouts;
 };
 

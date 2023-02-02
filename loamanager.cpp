@@ -5,6 +5,7 @@
 #include "function/character_ranking/character_ranking.h"
 #include "function/setting_ranking/setting_ranking.h"
 #include "function/auction_calculator/auction_calculator.h"
+#include "function/quotation/tripod_quotation.h"
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -119,6 +120,11 @@ void LoaManager::initConnects()
             pWidget->hide();
         AuctionCalculator::getInstance()->show();
     });
+    connect(m_childMenuButtons["트라이포드\n시세"], &QPushButton::released, this, [&](){
+        for (QWidget* pWidget : m_functions)
+            pWidget->hide();
+        TripodQuotation::getInstance()->show();
+    });
 }
 
 void LoaManager::addFunctions()
@@ -127,6 +133,7 @@ void LoaManager::addFunctions()
     m_functions.append(CharacterRanking::getInstance());
     m_functions.append(SettingRanking::getInstance());
     m_functions.append(AuctionCalculator::getInstance());
+    m_functions.append(TripodQuotation::getInstance());
 
     for (QWidget* pWidget : m_functions)
     {

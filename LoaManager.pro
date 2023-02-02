@@ -15,6 +15,8 @@ SOURCES += \
     function/auction_calculator/auction_calculator.cpp \
     function/character_ranking/character_ranking.cpp \
     function/character_search/character_search.cpp \
+    function/quotation/tripod_quotation.cpp \
+    function/quotation/ui/skill_info_widget.cpp \
     function/setting_ranking/characterlist_widget.cpp \
     function/setting_ranking/setting_ranking.cpp \
     function/setting_ranking/setting_widget.cpp \
@@ -60,6 +62,8 @@ HEADERS += \
     function/auction_calculator/auction_calculator.h \
     function/character_ranking/character_ranking.h \
     function/character_search/character_search.h \
+    function/quotation/tripod_quotation.h \
+    function/quotation/ui/skill_info_widget.h \
     function/setting_ranking/characterlist_widget.h \
     function/setting_ranking/setting_ranking.h \
     function/setting_ranking/setting_widget.h \
@@ -106,6 +110,8 @@ FORMS += \
     function/auction_calculator/auction_calculator.ui \
     function/character_ranking/character_ranking.ui \
     function/character_search/character_search.ui \
+    function/quotation/tripod_quotation.ui \
+    function/quotation/ui/skill_info_widget.ui \
     function/setting_ranking/characterlist_widget.ui \
     function/setting_ranking/setting_ranking.ui \
     function/setting_ranking/setting_widget.ui \

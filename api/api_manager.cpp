@@ -6,11 +6,10 @@
 #include <QNetworkRequest>
 #include <QNetworkAccessManager>
 
-const QString INVALID_KEY = "INVALID_KEY";
-
 ApiManager* ApiManager::m_pInstance = nullptr;
 
 ApiManager::ApiManager() :
+    m_keyIndex(MAX_API_KEY),
     m_requestUrls(static_cast<int>(LostarkApi::Size))
 {
     loadApiKey();
@@ -36,9 +35,6 @@ void ApiManager::loadApiKey()
         const QJsonObject& keyObj = key.toObject();
         m_apiKeys << keyObj.find("Key")->toString();
     }
-
-    // add invalid key to handle exception case
-    m_apiKeys << INVALID_KEY;
 }
 
 void ApiManager::loadRequestUrl()
@@ -62,11 +58,12 @@ void ApiManager::loadRequestUrl()
     }
 }
 
-const QString& ApiManager::getApiKey(int index) const
+const QString& ApiManager::getApiKey()
 {
-    if (index >= MAX_API_KEY)
-        return INVALID_KEY;
-    return m_apiKeys[index];
+    m_keyIndex++;
+    if (m_keyIndex >= MAX_API_KEY)
+        m_keyIndex = 0;
+    return m_apiKeys[m_keyIndex];
 }
 
 ApiManager* ApiManager::getInstance()
@@ -84,14 +81,9 @@ void ApiManager::destroyInstance()
     m_pInstance = nullptr;
 }
 
-void ApiManager::get(QNetworkAccessManager* pNetworkManager, int apiKeyIndex, LostarkApi api, QString param)
+void ApiManager::get(QNetworkAccessManager* pNetworkManager, LostarkApi api, QString param)
 {
-    const QString& apiKey = getApiKey(apiKeyIndex);
-    if (apiKey == INVALID_KEY)
-    {
-        qDebug() << Q_FUNC_INFO << ": invalid api";
-        return;
-    }
+    const QString& apiKey = getApiKey();
 
     QString url = m_requestUrls[static_cast<int>(api)].arg(param);
     QNetworkRequest request;
@@ -101,14 +93,9 @@ void ApiManager::get(QNetworkAccessManager* pNetworkManager, int apiKeyIndex, Lo
     pNetworkManager->get(request);
 }
 
-void ApiManager::post(QNetworkAccessManager* pNetworkManager, int apiKeyIndex, LostarkApi api, QByteArray data)
+void ApiManager::post(QNetworkAccessManager* pNetworkManager, LostarkApi api, QByteArray data)
 {
-    const QString& apiKey = getApiKey(apiKeyIndex);
-    if (apiKey == INVALID_KEY)
-    {
-        qDebug() << Q_FUNC_INFO << ": invalid api";
-        return;
-    }
+    const QString& apiKey = getApiKey();
 
     QString url = m_requestUrls[static_cast<int>(api)];
     QNetworkRequest request;

@@ -198,8 +198,15 @@ void SkillInfoWidget::setTripodPrice(int tripodCode, QLabel* pLabelPrice)
 {
     QNetworkAccessManager* pNetworkManager = new QNetworkAccessManager();
     connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, pLabelPrice](QNetworkReply* pReply){
-        QJsonObject result = QJsonDocument::fromJson(pReply->readAll()).object();
-        QJsonArray items = result.find("Items")->toArray();
+        QJsonDocument result = QJsonDocument::fromJson(pReply->readAll());
+        if (result.isNull())
+        {
+            pLabelPrice->setText("[ ? ]");
+            return;
+        }
+        QJsonObject jObjresult = result.object();
+
+        QJsonArray items = jObjresult.find("Items")->toArray();
         if (items.size() == 0)
         {
             pLabelPrice->setText("[ - ]");

@@ -52,10 +52,10 @@ void TripodQuotation::loadSkillData()
         for (const QJsonValue& jValSkill : jArrSkill)
         {
             const QJsonObject& jObjSkill = jValSkill.toObject();
-            const QString& skillName = jObjSkill.find("Text")->toString();
+            const int& skillValue = jObjSkill.find("Value")->toInt();
             m_classToSkills[cls].append({
-                                            skillName,
-                                            jObjSkill.find("Value")->toInt(),
+                                            jObjSkill.find("Text")->toString(),
+                                            skillValue,
                                             jObjSkill.find("IconPath")->toString()
                                         });
             const QJsonArray& jArrTripod = jObjSkill.find("Tripods")->toArray();
@@ -63,7 +63,7 @@ void TripodQuotation::loadSkillData()
             for (const QJsonValue& jValTripod : jArrTripod)
             {
                 const QJsonObject& jObjTripod = jValTripod.toObject();
-                m_skillToTripods[skillName].append({
+                m_skillValueToTripods[skillValue].append({
                                                        jObjTripod.find("Text")->toString(),
                                                        jObjTripod.find("Value")->toInt(),
                                                        jObjTripod.find("IconIndex")->toInt()
@@ -82,6 +82,7 @@ void TripodQuotation::setFonts()
     ui->groupPrice->setFont(nanumBold10);
     ui->lePrice->setFont(nanumBold10);
     ui->lbOver->setFont(nanumBold10);
+    ui->lbExplain->setFont(nanumBold10);
 }
 
 void TripodQuotation::setAlignments()
@@ -120,6 +121,7 @@ void TripodQuotation::initConnects()
 
 void TripodQuotation::clear()
 {
+    ui->lePrice->clear();
     for (SkillInfoWidget* pSkillInfoWidget : m_skillInfoWidgets)
         delete pSkillInfoWidget;
     m_skillInfoWidgets.clear();
@@ -130,7 +132,7 @@ void TripodQuotation::addSkillInfoWidgets(QString cls)
     const QList<SkillInfo>& skillInfos = m_classToSkills[cls];
     for (const SkillInfo& skillInfo : skillInfos)
     {
-        SkillInfoWidget* pSkillInfoWidget = new SkillInfoWidget(this, skillInfo, m_skillToTripods[skillInfo.name]);
+        SkillInfoWidget* pSkillInfoWidget = new SkillInfoWidget(this, skillInfo, m_skillValueToTripods[skillInfo.auctionCode]);
         m_skillInfoWidgets.append(pSkillInfoWidget);
         ui->vLayoutResult->addWidget(pSkillInfoWidget);
     }

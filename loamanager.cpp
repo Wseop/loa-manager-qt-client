@@ -120,7 +120,7 @@ void LoaManager::initConnects()
             pWidget->hide();
         AuctionCalculator::getInstance()->show();
     });
-    connect(m_childMenuButtons["트라이포드\n시세"], &QPushButton::released, this, [&](){
+    connect(m_childMenuButtons["트라이포드\n시세 (5레벨)"], &QPushButton::released, this, [&](){
         for (QWidget* pWidget : m_functions)
             pWidget->hide();
         TripodQuotation::getInstance()->show();

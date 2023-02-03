@@ -512,6 +512,7 @@
         <file>image/tripod/Tripod_Tier_3_149.png</file>
         <file>image/tripod/Tripod_Tier_3_150.png</file>
         <file>image/tripod/Tripod_Tier_3_157.png</file>
+        <file>image/tripod/Tripod_Tier_3_130.png</file>
     </qresource>
     <qresource prefix="/skill">
         <file>image/skill/AC_Skill_01_1.png</file>

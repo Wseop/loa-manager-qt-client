@@ -7,15 +7,18 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonDocument>
+#include <QIntValidator>
 
 TripodQuotation* TripodQuotation::m_pInstance = nullptr;
 
 TripodQuotation::TripodQuotation() :
     ui(new Ui::TripodQuotation),
     m_pClassSelector(new ClassSelector()),
-    m_skillInfoWidgets(0)
+    m_skillInfoWidgets(0),
+    m_pPriceValidator(new QIntValidator())
 {
     ui->setupUi(this);
+    ui->lePrice->setValidator(m_pPriceValidator);
 
     loadSkillData();
     setFonts();
@@ -76,10 +79,14 @@ void TripodQuotation::setFonts()
     QFont nanumBold10 = pFontManager->getFont(FontFamily::NanumSquareNeoBold, 10);
 
     ui->pbSelectClass->setFont(nanumBold10);
+    ui->groupPrice->setFont(nanumBold10);
+    ui->lePrice->setFont(nanumBold10);
+    ui->lbOver->setFont(nanumBold10);
 }
 
 void TripodQuotation::setAlignments()
 {
+    ui->hLayoutInput->setAlignment(Qt::AlignHCenter);
     ui->vLayoutResult->setAlignment(Qt::AlignHCenter);
 }
 
@@ -104,6 +111,11 @@ void TripodQuotation::initConnects()
             m_pClassSelector->hide();
         });
     }
+
+    connect(ui->lePrice, &QLineEdit::returnPressed, this, [&](){
+        for (SkillInfoWidget* pSkillInfoWidget : m_skillInfoWidgets)
+            pSkillInfoWidget->setPriceEmphasis(ui->lePrice->text().toInt());
+    });
 }
 
 void TripodQuotation::clear()

@@ -17,6 +17,8 @@ public:
     SkillInfoWidget(QWidget* pParent, const SkillInfo& skill, const QList<TripodInfo>& tripods);
     ~SkillInfoWidget();
 
+    void setPriceEmphasis(int price);
+
 private:
     void setFonts();
     void setAlignments();
@@ -36,6 +38,7 @@ private:
     const SkillInfo& m_skillInfo;
     const QList<TripodInfo>& m_tripods;
     QList<QLabel*> m_labels;
+    QList<QLabel*> m_priceLabels;
     QList<class QBoxLayout*> m_layouts;
 };
 

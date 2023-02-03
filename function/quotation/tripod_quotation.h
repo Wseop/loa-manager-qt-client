@@ -49,6 +49,7 @@ private:
     QMap<QString, QList<SkillInfo>> m_classToSkills;
     QMap<QString, QList<TripodInfo>> m_skillToTripods;
     QList<class SkillInfoWidget*> m_skillInfoWidgets;
+    class QIntValidator* m_pPriceValidator;
 };
 
 #endif // TRIPOD_QUOTATION_H

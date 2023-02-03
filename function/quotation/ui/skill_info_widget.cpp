@@ -30,9 +30,29 @@ SkillInfoWidget::~SkillInfoWidget()
 {
     for (QLabel* pLabel : m_labels)
         delete pLabel;
+    for (QLabel* pLabel : m_priceLabels)
+        delete pLabel;
     for (QBoxLayout* pLayout : m_layouts)
         delete pLayout;
     delete ui;
+}
+
+void SkillInfoWidget::setPriceEmphasis(int price)
+{
+    QString emphasisStyle = "QLabel { color: %1 }";
+
+    for (QLabel* pPriceLabel : m_priceLabels)
+    {
+        QString priceText = pPriceLabel->text().remove(",");
+        if (price <= priceText.sliced(1, priceText.size() - 3).toInt())
+        {
+            pPriceLabel->setStyleSheet(emphasisStyle.arg("red"));
+        }
+        else
+        {
+            pPriceLabel->setStyleSheet(emphasisStyle.arg("black"));
+        }
+    }
 }
 
 void SkillInfoWidget::setFonts()
@@ -89,16 +109,17 @@ void SkillInfoWidget::addTripods()
         pVLayout->addWidget(pTripodName);
 
         QLabel* pTripodPrice = WidgetManager::createLabel("-", LABEL_WIDTH, LABEL_HEIGHT, 10, this);
-        m_labels.append(pTripodPrice);
         pVLayout->addWidget(pTripodPrice);
 
         if (tripod.auctionCode == -1)
         {
             pTripodPrice->setText("[1레벨 MAX]");
+            m_labels.append(pTripodPrice);
         }
         else
         {
             setTripodPrice(tripod.auctionCode, pTripodPrice);
+            m_priceLabels.append(pTripodPrice);
         }
     }
 
@@ -123,16 +144,17 @@ void SkillInfoWidget::addTripods()
         pVLayout->addWidget(pTripodName);
 
         QLabel* pTripodPrice = WidgetManager::createLabel("-", LABEL_WIDTH, LABEL_HEIGHT, 10, this);
-        m_labels.append(pTripodPrice);
         pVLayout->addWidget(pTripodPrice);
 
         if (tripod.auctionCode == -1)
         {
             pTripodPrice->setText("[1레벨 MAX]");
+            m_labels.append(pTripodPrice);
         }
         else
         {
             setTripodPrice(tripod.auctionCode, pTripodPrice);
+            m_priceLabels.append(pTripodPrice);
         }
     }
 
@@ -157,16 +179,17 @@ void SkillInfoWidget::addTripods()
         pVLayout->addWidget(pTripodName);
 
         QLabel* pTripodPrice = WidgetManager::createLabel("-", LABEL_WIDTH, LABEL_HEIGHT, 10, this);
-        m_labels.append(pTripodPrice);
         pVLayout->addWidget(pTripodPrice);
 
         if (tripod.auctionCode == -1)
         {
             pTripodPrice->setText("[1레벨 MAX]");
+            m_labels.append(pTripodPrice);
         }
         else
         {
             setTripodPrice(tripod.auctionCode, pTripodPrice);
+            m_priceLabels.append(pTripodPrice);
         }
     }
 }

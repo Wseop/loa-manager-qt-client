@@ -5,7 +5,7 @@
 #include "function/character_ranking/character_ranking.h"
 #include "function/setting_ranking/setting_ranking.h"
 #include "function/auction_calculator/auction_calculator.h"
-#include "function/quotation/tripod_quotation.h"
+#include "function/quotation/tripod/tripod_quotation.h"
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>

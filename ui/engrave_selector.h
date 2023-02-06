@@ -12,7 +12,7 @@ class EngraveSelector : public QWidget
     Q_OBJECT
 
 public:
-    EngraveSelector();
+    EngraveSelector(bool bClassEnable);
     ~EngraveSelector();
 
     QList<class QPushButton*>& getButtons();
@@ -20,7 +20,7 @@ public:
 private:
     void setFonts();
     void setAlignments();
-    void addSelectButtons();
+    void addSelectButtons(bool bClassEnable);
     void addBattleEngraveButtons();
     void addClassEngraveButtons();
 

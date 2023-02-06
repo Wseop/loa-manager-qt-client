@@ -7,16 +7,22 @@
 #include <QScreen>
 #include <functional>
 
-EngraveSelector::EngraveSelector() :
+EngraveSelector::EngraveSelector(bool bClassEnable) :
     ui(new Ui::EngraveSelector)
 {
     ui->setupUi(this);
     this->setWindowIcon(QIcon(":/icon/Home.ico"));
     this->setWindowTitle("각인 선택");
 
+    if (!bClassEnable)
+    {
+        ui->line->hide();
+        ui->lbClass->hide();
+    }
+
     setFonts();
     setAlignments();
-    addSelectButtons();
+    addSelectButtons(bClassEnable);
 }
 
 EngraveSelector::~EngraveSelector()
@@ -44,10 +50,11 @@ void EngraveSelector::setAlignments()
     ui->vLayoutClassEngrave->setAlignment(Qt::AlignTop);
 }
 
-void EngraveSelector::addSelectButtons()
+void EngraveSelector::addSelectButtons(bool bClassEnable)
 {
     addBattleEngraveButtons();
-    addClassEngraveButtons();
+    if (bClassEnable)
+        addClassEngraveButtons();
 }
 
 void EngraveSelector::addBattleEngraveButtons()

@@ -17,6 +17,7 @@
         <file>json/api.json</file>
         <file>json/class.json</file>
         <file>json/skill.json</file>
+        <file>json/reforge.json</file>
     </qresource>
     <qresource prefix="/engrave">
         <file>image/engrave/107.png</file>
@@ -908,5 +909,27 @@
         <file>image/skill/YY_Skill_01_18.png</file>
         <file>image/skill/YY_Skill_01_19.png</file>
         <file>image/skill/YY_Skill_01_20.png</file>
+    </qresource>
+    <qresource prefix="/reforge">
+        <file>image/reforge/reforge_0_0.png</file>
+        <file>image/reforge/reforge_0_1.png</file>
+        <file>image/reforge/reforge_0_2.png</file>
+        <file>image/reforge/reforge_1_0.png</file>
+        <file>image/reforge/reforge_1_1.png</file>
+        <file>image/reforge/reforge_1_2.png</file>
+        <file>image/reforge/reforge_2_0.png</file>
+        <file>image/reforge/reforge_2_1.png</file>
+        <file>image/reforge/reforge_2_2.png</file>
+        <file>image/reforge/reforge_3_0.png</file>
+        <file>image/reforge/reforge_3_1.png</file>
+        <file>image/reforge/reforge_3_2.png</file>
+        <file>image/reforge/reforge_3_3.png</file>
+        <file>image/reforge/reforge_4_0.png</file>
+        <file>image/reforge/reforge_4_1.png</file>
+        <file>image/reforge/reforge_4_2.png</file>
+        <file>image/reforge/reforge_4_3.png</file>
+        <file>image/reforge/reforge_5_0.png</file>
+        <file>image/reforge/reforge_5_1.png</file>
+        <file>image/reforge/reforge_5_2.png</file>
     </qresource>
 </RCC>

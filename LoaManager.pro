@@ -17,6 +17,8 @@ SOURCES += \
     function/character_search/character_search.cpp \
     function/quotation/abilitystone/abilitystone_price.cpp \
     function/quotation/abilitystone/abilitystone_quotation.cpp \
+    function/quotation/reforge/reforge_item.cpp \
+    function/quotation/reforge/reforge_quotation.cpp \
     function/quotation/tripod/skill_info_widget.cpp \
     function/quotation/tripod/tripod_quotation.cpp \
     function/setting_ranking/characterlist_widget.cpp \
@@ -67,6 +69,8 @@ HEADERS += \
     function/character_search/character_search.h \
     function/quotation/abilitystone/abilitystone_price.h \
     function/quotation/abilitystone/abilitystone_quotation.h \
+    function/quotation/reforge/reforge_item.h \
+    function/quotation/reforge/reforge_quotation.h \
     function/quotation/tripod/skill_info_widget.h \
     function/quotation/tripod/tripod_quotation.h \
     function/setting_ranking/characterlist_widget.h \
@@ -118,6 +122,8 @@ FORMS += \
     function/character_search/character_search.ui \
     function/quotation/abilitystone/abilitystone_price.ui \
     function/quotation/abilitystone/abilitystone_quotation.ui \
+    function/quotation/reforge/reforge_item.ui \
+    function/quotation/reforge/reforge_quotation.ui \
     function/quotation/tripod/skill_info_widget.ui \
     function/quotation/tripod/tripod_quotation.ui \
     function/setting_ranking/characterlist_widget.ui \

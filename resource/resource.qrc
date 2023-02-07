@@ -3,6 +3,7 @@
         <file>Home.ico</file>
         <file>image/back.png</file>
         <file>image/cancle.png</file>
+        <file>image/refresh.png</file>
     </qresource>
     <qresource prefix="/font">
         <file>font/NanumSquareNeo-aLt.ttf</file>

@@ -170,7 +170,7 @@ void CharacterWidget::addProfileWidget()
             cardEffectText = cardEffectName;
         }
 
-        QLabel* pCardLabel = WidgetManager::createLabel(cardEffectText, 300, 25, 10, this);
+        QLabel* pCardLabel = WidgetManager::createLabel(cardEffectText, 10, "", 300, 25);
         m_labels.append(pCardLabel);
         ui->vLayoutCard->addWidget(pCardLabel);
     }
@@ -185,12 +185,11 @@ void CharacterWidget::addProfileWidget()
         int col = (i % 5) * 2;
         const Collectible* pCollectible = collectibles[i];
 
-        QLabel* pIcon = WidgetManager::createIcon(iconPath.arg(static_cast<int>(pCollectible->getType())), nullptr, 25, 25, this);
-        pIcon->setStyleSheet("QLabel { background-color: black }");
+        QLabel* pIcon = WidgetManager::createIcon(iconPath.arg(static_cast<int>(pCollectible->getType())), nullptr, "black", 25, 25);
         m_labels.append(pIcon);
         ui->gridGroupCollectible->addWidget(pIcon, row, col);
 
-        QLabel* pLabelPoint = WidgetManager::createLabel(pointText.arg(pCollectible->getPoint()).arg(pCollectible->getMaxPoint()), 75, 25, 10, this);
+        QLabel* pLabelPoint = WidgetManager::createLabel(pointText.arg(pCollectible->getPoint()).arg(pCollectible->getMaxPoint()), 10, "", 75, 25);
         pLabelPoint->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         m_labels.append(pLabelPoint);
         ui->gridGroupCollectible->addWidget(pLabelPoint, row, col + 1);
@@ -302,13 +301,13 @@ void CharacterWidget::addGemWidgets()
     const int LABEL_HEIGHT = 50;
     if (myulCount > 0)
     {
-        QLabel* pLabelMyulAvg = WidgetManager::createLabel(QString("멸화 평균 레벨\n%1").arg(myulLevelSum / (double)myulCount, 0, 'f', 2, QChar(' ')), LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+        QLabel* pLabelMyulAvg = WidgetManager::createLabel(QString("멸화 평균 레벨\n%1").arg(myulLevelSum / (double)myulCount, 0, 'f', 2, QChar(' ')), 10, "", LABEL_WIDTH, LABEL_HEIGHT);
         m_labels.append(pLabelMyulAvg);
         ui->hLayoutGem1->addWidget(pLabelMyulAvg);
     }
     if (hongCount > 0)
     {
-        QLabel* pLabelHongAvg = WidgetManager::createLabel(QString("홍염 평균 레벨\n%1").arg(hongLevelSum / (double)hongCount, 0, 'f', 2, QChar(' ')), LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+        QLabel* pLabelHongAvg = WidgetManager::createLabel(QString("홍염 평균 레벨\n%1").arg(hongLevelSum / (double)hongCount, 0, 'f', 2, QChar(' ')), 10, "", LABEL_WIDTH, LABEL_HEIGHT);
         m_labels.append(pLabelHongAvg);
         ui->hLayoutGem2->addWidget(pLabelHongAvg);
     }
@@ -347,14 +346,14 @@ void CharacterWidget::addSkillWidgets()
     const int TRIPOD_INFO_COL = 1;
 
     QString tripodText = "트라이포드 활성화 (4레벨 이상) : (%1 / 18)";
-    QLabel* pLabelTripod = WidgetManager::createLabel(tripodText.arg(tripodLevels[0] + tripodLevels[1]), LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+    QLabel* pLabelTripod = WidgetManager::createLabel(tripodText.arg(tripodLevels[0] + tripodLevels[1]), 10, "", LABEL_WIDTH, LABEL_HEIGHT);
     m_labels.append(pLabelTripod);
     ui->gridTabSkill->addWidget(pLabelTripod, 0, TRIPOD_INFO_COL);
 
     for (int i = 0; i < 2; i++)
     {
         QString tripodLevel = "Lv.%1 (%2개)";
-        QLabel* pLabelTripodLevel = WidgetManager::createLabel(tripodLevel.arg(i + 4).arg(tripodLevels[i]), LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+        QLabel* pLabelTripodLevel = WidgetManager::createLabel(tripodLevel.arg(i + 4).arg(tripodLevels[i]), 10, "", LABEL_WIDTH, LABEL_HEIGHT);
         m_labels.append(pLabelTripodLevel);
         ui->gridTabSkill->addWidget(pLabelTripodLevel, i + 1, TRIPOD_INFO_COL);
     }

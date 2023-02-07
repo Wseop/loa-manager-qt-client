@@ -9,17 +9,17 @@
 #include <QUrl>
 #include <QPixmap>
 
-QPushButton* WidgetManager::createPushButton(QString text, int width, int height, int fontSize, QWidget* pParent)
+QPushButton* WidgetManager::createPushButton(QString text, int fontSize, int width, int height)
 {
-    QPushButton* pButton = new QPushButton(text, pParent);
+    QPushButton* pButton = new QPushButton(text);
     pButton->setFixedSize(width, height);
     pButton->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
     return pButton;
 }
 
-QLabel* WidgetManager::createLabel(QString text, int width, int height, int fontSize, QWidget *pParent, QString color)
+QLabel* WidgetManager::createLabel(QString text, int fontSize, QString color, int width, int height)
 {
-    QLabel* pLabel = new QLabel(text, pParent);
+    QLabel* pLabel = new QLabel(text);
     pLabel->setFixedSize(width, height);
     pLabel->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
     pLabel->setStyleSheet(QString("QLabel { color: %1 }").arg(color));
@@ -27,11 +27,13 @@ QLabel* WidgetManager::createLabel(QString text, int width, int height, int font
     return pLabel;
 }
 
-QLabel* WidgetManager::createIcon(QString iconPath, QNetworkAccessManager* pNetworkManager, int width, int height, QWidget* pParent)
+QLabel* WidgetManager::createIcon(QString iconPath, QNetworkAccessManager* pNetworkManager, QString backgroundColor, int width, int height)
 {
-    QLabel* pIcon = new QLabel(pParent);
+    QLabel* pIcon = new QLabel();
     pIcon->setFixedSize(width, height);
     pIcon->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+
+    QString style = "QLabel { background-color: %1 }";
 
     if (pNetworkManager == nullptr)
     {
@@ -40,19 +42,19 @@ QLabel* WidgetManager::createIcon(QString iconPath, QNetworkAccessManager* pNetw
         if (iconImage.load(iconPath))
         {
             pIcon->setPixmap(iconImage.scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-            pIcon->setStyleSheet("QLabel { border: 1px solid black }");
+            pIcon->setStyleSheet(style.arg(backgroundColor));
         }
     }
     else
     {
         QNetworkRequest request;
         request.setUrl(QUrl(iconPath));
-        connect(pNetworkManager, &QNetworkAccessManager::finished, [&, pIcon, width, height](QNetworkReply* pReply){
+        connect(pNetworkManager, &QNetworkAccessManager::finished, [&, pIcon, width, height, style, backgroundColor](QNetworkReply* pReply){
             QPixmap iconImage;
             if (iconImage.loadFromData(pReply->readAll(), "PNG"))
             {
                 pIcon->setPixmap(iconImage.scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-                pIcon->setStyleSheet("QLabel { border: 1px solid black }");
+                pIcon->setStyleSheet(style.arg(backgroundColor));
             }
         });
         pNetworkManager->get(request);
@@ -61,9 +63,9 @@ QLabel* WidgetManager::createIcon(QString iconPath, QNetworkAccessManager* pNetw
     return pIcon;
 }
 
-QProgressBar* WidgetManager::createQualityBar(int quality, int width, int height, int fontSize, QWidget* pParent)
+QProgressBar* WidgetManager::createQualityBar(int quality, int width, int height, int fontSize)
 {
-    QProgressBar* pQualityBar = new QProgressBar(pParent);
+    QProgressBar* pQualityBar = new QProgressBar();
     pQualityBar->setValue(quality);
     pQualityBar->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     pQualityBar->setFormat("%p");

@@ -59,7 +59,7 @@ void SiblingWidget::addServerGridLayouts()
         m_serverToGridLayout[server] = pGridLayout;
         ui->vLayoutSiblingScrollArea->addLayout(pGridLayout);
 
-        QLabel* pServerLabel = WidgetManager::createLabel("@" + server, 100, 25, 12, this, "#B178EA");
+        QLabel* pServerLabel = WidgetManager::createLabel("@" + server, 12, "#B178EA");
         m_labels.append(pServerLabel);
         pGridLayout->addWidget(pServerLabel, 0, 0, 1, 5);
     }
@@ -81,7 +81,7 @@ void SiblingWidget::addSiblingToGrid()
             buttonText += QString("%1 Lv.%2 [%3]\n").arg(classToStr(other.cls)).arg(other.characterLevel).arg(other.itemLevel);
             buttonText += other.characterName;
 
-            QPushButton* pButton = WidgetManager::createPushButton(buttonText, 200, 50, 10, this);
+            QPushButton* pButton = WidgetManager::createPushButton(buttonText, 10, 200, 50);
             m_buttons.append(pButton);
             m_serverToGridLayout[server]->addWidget(pButton, (i / MAX_COL) + 1, i % MAX_COL);
 

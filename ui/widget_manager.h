@@ -13,10 +13,10 @@ class WidgetManager : public QObject
     Q_OBJECT
 
 public:
-    static QPushButton* createPushButton(QString text, int width, int height, int fontSize = 10, QWidget* pParent = nullptr);
-    static QLabel* createLabel(QString text, int width, int height, int fontSize = 10, QWidget* pParent = nullptr, QString color = "");
-    static QLabel* createIcon(QString iconPath, QNetworkAccessManager* pNetworkManager, int width, int height, QWidget* pParent = nullptr);
-    static QProgressBar* createQualityBar(int quality, int width, int height, int fontSize = 10, QWidget* pParent = nullptr);
+    static QPushButton* createPushButton(QString text, int fontSize = 10, int width = 100, int height = 50);
+    static QLabel* createLabel(QString text, int fontSize = 10, QString color = "", int width = 100, int height = 25);
+    static QLabel* createIcon(QString iconPath, QNetworkAccessManager* pNetworkManager, QString backgroundColor = "", int width = 50, int height = 50);
+    static QProgressBar* createQualityBar(int quality, int width, int height, int fontSize = 10);
 
 private:
     static QString getQualityColor(int quality);

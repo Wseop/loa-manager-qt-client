@@ -35,14 +35,14 @@ EquipWidget::~EquipWidget()
 
 void EquipWidget::addIcon()
 {
-    QLabel* pIcon = WidgetManager::createIcon(m_pEquip->getIconPath(), m_pNetworkManager, ICON_WIDTH, ICON_HEIGHT, this);
+    QLabel* pIcon = WidgetManager::createIcon(m_pEquip->getIconPath(), m_pNetworkManager, backgroundColorCode(m_pEquip->getGrade()));
     m_labels.append(pIcon);
     ui->vLayoutLeft->addWidget(pIcon);
 }
 
 void EquipWidget::addQualityBar()
 {
-    m_pQualityBar = WidgetManager::createQualityBar(m_pEquip->getQuality(), QUALITYBAR_WIDTH, QUALITYBAR_HEIGHT, 10, nullptr);
+    m_pQualityBar = WidgetManager::createQualityBar(m_pEquip->getQuality(), QUALITYBAR_WIDTH, QUALITYBAR_HEIGHT);
     ui->vLayoutLeft->addWidget(m_pQualityBar);
 }
 
@@ -62,7 +62,7 @@ void EquipWidget::addLabels()
     {
         equipTitle = "";
     }
-    QLabel* pEquipTitleLabel = WidgetManager::createLabel(equipTitle, LABEL_WIDTH, LABEL_HEIGHT, 10, this, colorCode(m_pEquip->getGrade()));
+    QLabel* pEquipTitleLabel = WidgetManager::createLabel(equipTitle, 10, colorCode(m_pEquip->getGrade()), LABEL_WIDTH, LABEL_HEIGHT);
     m_labels.append(pEquipTitleLabel);
     ui->vLayoutRight->addWidget(pEquipTitleLabel);
 
@@ -76,7 +76,7 @@ void EquipWidget::addLabels()
         if (m_pEquip->getSetEffect() != SetEffect::에스더)
             setEffect += QString(" Lv. %1").arg(m_pEquip->getSetLevel());
     }
-    QLabel* pSetEffectLabel = WidgetManager::createLabel(setEffect, LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+    QLabel* pSetEffectLabel = WidgetManager::createLabel(setEffect, 10, "", LABEL_WIDTH, LABEL_HEIGHT);
     m_labels.append(pSetEffectLabel);
     ui->vLayoutRight->addWidget(pSetEffectLabel);
 }

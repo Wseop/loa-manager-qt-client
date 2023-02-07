@@ -30,9 +30,6 @@ public:
 private:
     Ui::AbilityStoneQuotation *ui;
 
-    const int BUTTON_WIDTH = 100;
-    const int BUTTON_HEIGHT = 50;
-
     static AbilityStoneQuotation* m_pInstance;
 
     QList<class EngraveSelector*> m_engraveSelectors;

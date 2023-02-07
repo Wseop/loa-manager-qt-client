@@ -29,14 +29,14 @@ SkillRuneWidget::~SkillRuneWidget()
 
 void SkillRuneWidget::addIcon()
 {
-    QLabel* pIcon = WidgetManager::createIcon(m_pSkillRune->getIconPath(), m_pNetworkManager, ICON_WIDTH, ICON_HEIGHT, this);
+    QLabel* pIcon = WidgetManager::createIcon(m_pSkillRune->getIconPath(), m_pNetworkManager, backgroundColorCode(m_pSkillRune->getGrade()));
     m_labels.append(pIcon);
     ui->hLayoutGroupSkillRune->addWidget(pIcon);
 }
 
 void SkillRuneWidget::addLabels()
 {
-    QLabel* pLabelName = WidgetManager::createLabel(m_pSkillRune->getName(), LABEL_WIDTH, LABEL_HEIGHT, 10, this, colorCode(m_pSkillRune->getGrade()));
+    QLabel* pLabelName = WidgetManager::createLabel(m_pSkillRune->getName(), 10, colorCode(m_pSkillRune->getGrade()), LABEL_WIDTH, LABEL_HEIGHT);
     m_labels.append(pLabelName);
     ui->hLayoutGroupSkillRune->addWidget(pLabelName);
 }

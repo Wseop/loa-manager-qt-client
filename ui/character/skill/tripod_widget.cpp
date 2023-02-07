@@ -28,7 +28,7 @@ void TripodWidget::addLabels()
     {
         const Tripod& tripod = m_tripods[i];
         QString labelText = QString("%1. %2 Lv.%3").arg(i + 1).arg(tripod.name).arg(tripod.level);
-        QLabel* pLabelTripod = WidgetManager::createLabel(labelText, LABEL_WIDTH, LABEL_HEIGHT, 10, this, tripodColorCode(i));
+        QLabel* pLabelTripod = WidgetManager::createLabel(labelText, 10, tripodColorCode(i), LABEL_WIDTH, LABEL_HEIGHT);
         m_labels.append(pLabelTripod);
         ui->vLayoutGroupTripod->addWidget(pLabelTripod);
     }

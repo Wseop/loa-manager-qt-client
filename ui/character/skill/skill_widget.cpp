@@ -37,7 +37,7 @@ SkillWidget::~SkillWidget()
 
 void SkillWidget::addIcon()
 {
-    QLabel* pIcon = WidgetManager::createIcon(m_pSkill->getIconPath(), m_pNetworkManager, ICON_WIDTH, ICON_HEIGHT, this);
+    QLabel* pIcon = WidgetManager::createIcon(m_pSkill->getIconPath(), m_pNetworkManager);
     m_labels.append(pIcon);
     ui->hLayoutGroupSkill->addWidget(pIcon);
 }
@@ -45,7 +45,7 @@ void SkillWidget::addIcon()
 void SkillWidget::addLabels()
 {
     QString nameLevel = QString("%1 Lv.%2").arg(m_pSkill->getName()).arg(m_pSkill->getLevel());
-    QLabel* pLabelNameLevel = WidgetManager::createLabel(nameLevel, LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+    QLabel* pLabelNameLevel = WidgetManager::createLabel(nameLevel, 10, "", LABEL_WIDTH, LABEL_HEIGHT);
     m_labels.append(pLabelNameLevel);
     ui->hLayoutGroupSkill->addWidget(pLabelNameLevel);
 }

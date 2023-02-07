@@ -37,7 +37,7 @@ void CharacterListWidget::addCharacterButtons(QList<CharacterInfo> characterInfo
     {
         const CharacterInfo& characterInfo = characterInfos[i];
         QString buttonText = QString("[%1] %2").arg(characterInfo.itemLevel).arg(characterInfo.name);
-        QPushButton* pButton = WidgetManager::createPushButton(buttonText, BUTTON_WIDTH, BUTTON_HEIGHT, 10, this);
+        QPushButton* pButton = WidgetManager::createPushButton(buttonText, 10, BUTTON_WIDTH, BUTTON_HEIGHT);
         m_buttons.append(pButton);
         ui->gridCharacterList->addWidget(pButton, i / MAX_COL, i % MAX_COL);
 

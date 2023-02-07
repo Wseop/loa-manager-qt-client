@@ -88,4 +88,29 @@ static inline QString colorCode(ItemGrade grade)
     }
 }
 
+static inline QString backgroundColorCode(ItemGrade grade)
+{
+    switch (grade)
+    {
+    case ItemGrade::일반:
+        return "#000000";
+    case ItemGrade::고급:
+        return "#2C4310";
+    case ItemGrade::희귀:
+        return "#113855";
+    case ItemGrade::영웅:
+        return "#361046";
+    case ItemGrade::전설:
+        return "#432803";
+    case ItemGrade::유물:
+        return "#401E08";
+    case ItemGrade::고대:
+        return "#493F2E";
+    case ItemGrade::에스더:
+        return "#0F3937";
+    default:
+        return "#000000";
+    }
+}
+
 #endif // ITEM_GRADE_H

@@ -29,14 +29,14 @@ BraceletWidget::~BraceletWidget()
 
 void BraceletWidget::addIcon()
 {
-    QLabel* pIcon = WidgetManager::createIcon(m_pBracelet->getIconPath(), m_pNetworkManager, ICON_WIDTH, ICON_HEIGHT, this);
+    QLabel* pIcon = WidgetManager::createIcon(m_pBracelet->getIconPath(), m_pNetworkManager, backgroundColorCode(m_pBracelet->getGrade()));
     m_labels.append(pIcon);
     ui->vLayoutIcon->addWidget(pIcon);
 }
 
 void BraceletWidget::addLabels()
 {
-    QLabel* pLabelName = WidgetManager::createLabel(m_pBracelet->getName(), LABEL_WIDTH, LABEL_HEIGHT, 10, this, colorCode(m_pBracelet->getGrade()));
+    QLabel* pLabelName = WidgetManager::createLabel(m_pBracelet->getName(), 10, colorCode(m_pBracelet->getGrade()), LABEL_WIDTH, LABEL_HEIGHT);
     m_labels.append(pLabelName);
     ui->vLayoutInfo->addWidget(pLabelName);
 
@@ -48,7 +48,7 @@ void BraceletWidget::addLabels()
         if (i & 1)
         {
             effectText += effects[i];
-            QLabel* pLabelEffect = WidgetManager::createLabel(effectText, LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+            QLabel* pLabelEffect = WidgetManager::createLabel(effectText, 10, "", LABEL_WIDTH, LABEL_HEIGHT);
             m_labels.append(pLabelEffect);
             ui->vLayoutInfo->addWidget(pLabelEffect);
             effectText = "";
@@ -61,7 +61,7 @@ void BraceletWidget::addLabels()
     if (effectText != "")
     {
         effectText.chop(2);
-        QLabel* pLabelEffect = WidgetManager::createLabel(effectText, LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+        QLabel* pLabelEffect = WidgetManager::createLabel(effectText, 10, "", LABEL_WIDTH, LABEL_HEIGHT);
         m_labels.append(pLabelEffect);
         ui->vLayoutInfo->addWidget(pLabelEffect);
     }
@@ -76,7 +76,7 @@ void BraceletWidget::addLabels()
     if (specialEffectText != "")
     {
         specialEffectText.chop(1);
-        QLabel* pLabelEffect = WidgetManager::createLabel(specialEffectText, LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+        QLabel* pLabelEffect = WidgetManager::createLabel(specialEffectText, 10, "", LABEL_WIDTH, LABEL_HEIGHT);
         m_labels.append(pLabelEffect);
         ui->vLayoutInfo->addWidget(pLabelEffect);
     }

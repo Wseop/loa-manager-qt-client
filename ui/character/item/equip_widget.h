@@ -29,8 +29,6 @@ private:
 private:
     Ui::EquipWidget *ui;
 
-    const int ICON_WIDTH = 50;
-    const int ICON_HEIGHT = 50;
     const int QUALITYBAR_WIDTH = 50;
     const int QUALITYBAR_HEIGHT = 20;
     const int LABEL_WIDTH = 75;

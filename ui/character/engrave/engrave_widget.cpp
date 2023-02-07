@@ -48,11 +48,11 @@ void EngraveWidget::addEngraveLayouts()
         m_vLayouts.append(pVLayout);
         ui->hLayoutGroupEngrave->addLayout(pVLayout);
 
-        QLabel* pIcon = WidgetManager::createIcon(pEngraveManager->iconPath(pairEngraveValue.first), nullptr, ICON_WIDTH, ICON_HEIGHT, this);
+        QLabel* pIcon = WidgetManager::createIcon(pEngraveManager->iconPath(pairEngraveValue.first), nullptr);
         m_labels.append(pIcon);
         pVLayout->addWidget(pIcon);
 
-        QLabel* pLabelLevel = WidgetManager::createLabel("Lv. " + QString::number(pairEngraveValue.second / 5), LABEL_WIDTH, LABEL_HEIGHT, 10, this, "");
+        QLabel* pLabelLevel = WidgetManager::createLabel("Lv. " + QString::number(pairEngraveValue.second / 5), 10, "", LABEL_WIDTH, LABEL_HEIGHT);
         m_labels.append(pLabelLevel);
         pVLayout->addWidget(pLabelLevel);
     }
@@ -65,11 +65,11 @@ void EngraveWidget::addEngraveLayouts()
         m_vLayouts.append(pVLayout);
         ui->hLayoutGroupEngrave->addLayout(pVLayout);
 
-        QLabel* pIcon = WidgetManager::createIcon(pEngraveManager->iconPath(pairEngraveValue.first), nullptr, ICON_WIDTH, ICON_HEIGHT, this);
+        QLabel* pIcon = WidgetManager::createIcon(pEngraveManager->iconPath(pairEngraveValue.first), nullptr);
         m_labels.append(pIcon);
         pVLayout->addWidget(pIcon);
 
-        QLabel* pLabelLevel = WidgetManager::createLabel("Lv. " + QString::number(pairEngraveValue.second / 5), LABEL_WIDTH, LABEL_HEIGHT, 10, this, "red");
+        QLabel* pLabelLevel = WidgetManager::createLabel("Lv. " + QString::number(pairEngraveValue.second / 5), 10, "red", LABEL_WIDTH, LABEL_HEIGHT);
         m_labels.append(pLabelLevel);
         pVLayout->addWidget(pLabelLevel);
     }

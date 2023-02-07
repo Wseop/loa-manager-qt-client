@@ -74,12 +74,12 @@ void SkillInfoWidget::addSkill()
 {
     const QString iconPath = ":/skill/image/skill/" + m_skillInfo.iconPath;
 
-    QLabel* pSkillIcon = WidgetManager::createIcon(iconPath, nullptr, ICON_WIDTH, ICON_HEIGHT, this);
+    QLabel* pSkillIcon = WidgetManager::createIcon(iconPath, nullptr, "#000000");
     m_labels.append(pSkillIcon);
     ui->vLayoutSkill->addWidget(pSkillIcon);
     ui->vLayoutSkill->setAlignment(pSkillIcon, Qt::AlignHCenter);
 
-    QLabel* pSkillName = WidgetManager::createLabel(m_skillInfo.name, LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+    QLabel* pSkillName = WidgetManager::createLabel(m_skillInfo.name, 10, "", LABEL_WIDTH, LABEL_HEIGHT);
     m_labels.append(pSkillName);
     ui->vLayoutSkill->addWidget(pSkillName);
 }
@@ -87,7 +87,6 @@ void SkillInfoWidget::addSkill()
 void SkillInfoWidget::addTripods()
 {
     QString iconPath = ":/tripod/image/tripod/Tripod_Tier_%1_%2.png";
-    QString iconBackground = "QLabel { background-color: black }";
 
     // 1트포
     for (int i = 0; i < 3; i++)
@@ -98,17 +97,16 @@ void SkillInfoWidget::addTripods()
         m_layouts.append(pVLayout);
         ui->hLayoutTripod1->addLayout(pVLayout);
 
-        QLabel* pTripodIcon = WidgetManager::createIcon(iconPath.arg(1).arg(tripod.iconIndex), nullptr, ICON_WIDTH, ICON_HEIGHT, this);
-        pTripodIcon->setStyleSheet(iconBackground);
+        QLabel* pTripodIcon = WidgetManager::createIcon(iconPath.arg(1).arg(tripod.iconIndex), nullptr, "#000000");
         m_labels.append(pTripodIcon);
         pVLayout->addWidget(pTripodIcon);
         pVLayout->setAlignment(pTripodIcon, Qt::AlignHCenter);
 
-        QLabel* pTripodName = WidgetManager::createLabel(tripod.name, LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+        QLabel* pTripodName = WidgetManager::createLabel(tripod.name, 10, "", LABEL_WIDTH, LABEL_HEIGHT);
         m_labels.append(pTripodName);
         pVLayout->addWidget(pTripodName);
 
-        QLabel* pTripodPrice = WidgetManager::createLabel("-", LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+        QLabel* pTripodPrice = WidgetManager::createLabel("-", 10, "", LABEL_WIDTH, LABEL_HEIGHT);
         pVLayout->addWidget(pTripodPrice);
 
         if (tripod.auctionCode == -1)
@@ -133,17 +131,16 @@ void SkillInfoWidget::addTripods()
         m_layouts.append(pVLayout);
         ui->hLayoutTripod2->addLayout(pVLayout);
 
-        QLabel* pTripodIcon = WidgetManager::createIcon(iconPath.arg(2).arg(tripod.iconIndex), nullptr, ICON_WIDTH, ICON_HEIGHT, this);
-        pTripodIcon->setStyleSheet(iconBackground);
+        QLabel* pTripodIcon = WidgetManager::createIcon(iconPath.arg(2).arg(tripod.iconIndex), nullptr, "#000000");
         m_labels.append(pTripodIcon);
         pVLayout->addWidget(pTripodIcon);
         pVLayout->setAlignment(pTripodIcon, Qt::AlignHCenter);
 
-        QLabel* pTripodName = WidgetManager::createLabel(tripod.name, LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+        QLabel* pTripodName = WidgetManager::createLabel(tripod.name, 10, "", LABEL_WIDTH, LABEL_HEIGHT);
         m_labels.append(pTripodName);
         pVLayout->addWidget(pTripodName);
 
-        QLabel* pTripodPrice = WidgetManager::createLabel("-", LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+        QLabel* pTripodPrice = WidgetManager::createLabel("-", 10, "", LABEL_WIDTH, LABEL_HEIGHT);
         pVLayout->addWidget(pTripodPrice);
 
         if (tripod.auctionCode == -1)
@@ -168,17 +165,16 @@ void SkillInfoWidget::addTripods()
         m_layouts.append(pVLayout);
         ui->hLayoutTripod3->addLayout(pVLayout);
 
-        QLabel* pTripodIcon = WidgetManager::createIcon(iconPath.arg(3).arg(tripod.iconIndex), nullptr, ICON_WIDTH, ICON_HEIGHT, this);
-        pTripodIcon->setStyleSheet(iconBackground);
+        QLabel* pTripodIcon = WidgetManager::createIcon(iconPath.arg(3).arg(tripod.iconIndex), nullptr, "#000000");
         m_labels.append(pTripodIcon);
         pVLayout->addWidget(pTripodIcon);
         pVLayout->setAlignment(pTripodIcon, Qt::AlignHCenter);
 
-        QLabel* pTripodName = WidgetManager::createLabel(tripod.name, LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+        QLabel* pTripodName = WidgetManager::createLabel(tripod.name, 10, "", LABEL_WIDTH, LABEL_HEIGHT);
         m_labels.append(pTripodName);
         pVLayout->addWidget(pTripodName);
 
-        QLabel* pTripodPrice = WidgetManager::createLabel("-", LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+        QLabel* pTripodPrice = WidgetManager::createLabel("-", 10, "", LABEL_WIDTH, LABEL_HEIGHT);
         pVLayout->addWidget(pTripodPrice);
 
         if (tripod.auctionCode == -1)

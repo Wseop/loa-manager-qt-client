@@ -89,7 +89,7 @@ void SettingWidget::setAbility(const SettingCode& settingCode)
         if (ability.second != 0)
             abilityText += abilityToStr(ability.first).at(0);
     }
-    QLabel* pLabelAbility = WidgetManager::createLabel(abilityText, LABEL_WIDTH, LABEL_HEIGHT, 12, this);
+    QLabel* pLabelAbility = WidgetManager::createLabel(abilityText, 12);
     m_labels.append(pLabelAbility);
     ui->vLayoutAbility->addWidget(pLabelAbility);
 
@@ -101,12 +101,12 @@ void SettingWidget::setAbility(const SettingCode& settingCode)
         m_hLayouts.append(pHLayout);
         ui->vLayoutAccessory->addLayout(pHLayout);
 
-        QLabel* pLabelPart = WidgetManager::createLabel(parts[i], LABEL_WIDTH, LABEL_HEIGHT, 12, this);
+        QLabel* pLabelPart = WidgetManager::createLabel(parts[i], 12);
         m_labels.append(pLabelPart);
         pHLayout->addWidget(pLabelPart);
 
         QString accAbilityText = QString("%1 %2").arg(abilityToStr(abilities[i * 2]), abilityToStr(abilities[(i * 2) + 1]));
-        QLabel* pLabelAccAbility = WidgetManager::createLabel(accAbilityText, LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+        QLabel* pLabelAccAbility = WidgetManager::createLabel(accAbilityText);
         m_labels.append(pLabelAccAbility);
         pHLayout->addWidget(pLabelAccAbility);
     }
@@ -133,15 +133,13 @@ void SettingWidget::setSetEffect(const SettingCode& settingCode)
         setEffectText += QString("%1%2 ").arg(setEffectCount).arg(setEffectToStr(static_cast<SetEffect>(i)));
     }
     setEffectText.chop(1);
-    QLabel* pLabelSetEffect = WidgetManager::createLabel(setEffectText, LABEL_WIDTH, LABEL_HEIGHT, 12, this);
+    QLabel* pLabelSetEffect = WidgetManager::createLabel(setEffectText, 12);
     m_labels.append(pLabelSetEffect);
     ui->vLayoutSetEffect->addWidget(pLabelSetEffect);
 }
 
 void SettingWidget::setEngrave(const SettingCode& settingCode)
 {
-    const int ICON_WIDTH = 50;
-    const int ICON_HEIGHT = 50;
     EngraveManager* pEngraveManager = EngraveManager::getInstance();
 
     // index + 1 == engrave level
@@ -153,7 +151,7 @@ void SettingWidget::setEngrave(const SettingCode& settingCode)
     {
         for (const PairEngraveValue& classEngrave : classEngravesList[i])
         {
-            QLabel* pIcon = WidgetManager::createIcon(pEngraveManager->iconPath(classEngrave.first), nullptr, ICON_WIDTH, ICON_HEIGHT, this);
+            QLabel* pIcon = WidgetManager::createIcon(pEngraveManager->iconPath(classEngrave.first), nullptr);
             m_labels.append(pIcon);
             ui->hLayoutClassEngrave->addWidget(pIcon);
         }
@@ -168,11 +166,11 @@ void SettingWidget::setEngrave(const SettingCode& settingCode)
             m_vLayouts.append(pVLayout);
             ui->hLayoutEngrave->addLayout(pVLayout);
 
-            QLabel* pIcon = WidgetManager::createIcon(pEngraveManager->iconPath(normalEngrave.first), nullptr, ICON_WIDTH, ICON_HEIGHT, this);
+            QLabel* pIcon = WidgetManager::createIcon(pEngraveManager->iconPath(normalEngrave.first), nullptr);
             m_labels.append(pIcon);
             pVLayout->addWidget(pIcon);
 
-            QLabel* pLabelLevel = WidgetManager::createLabel(QString::number(i + 1), 50, 25, 10, this);
+            QLabel* pLabelLevel = WidgetManager::createLabel(QString::number(i + 1), 10, "", 50, 25);
             m_labels.append(pLabelLevel);
             pVLayout->addWidget(pLabelLevel);
         }
@@ -182,11 +180,11 @@ void SettingWidget::setEngrave(const SettingCode& settingCode)
             m_vLayouts.append(pVLayout);
             ui->hLayoutEngrave->addLayout(pVLayout);
 
-            QLabel* pIcon = WidgetManager::createIcon(pEngraveManager->iconPath(classEngrave.first), nullptr, ICON_WIDTH, ICON_HEIGHT, this);
+            QLabel* pIcon = WidgetManager::createIcon(pEngraveManager->iconPath(classEngrave.first), nullptr);
             m_labels.append(pIcon);
             pVLayout->addWidget(pIcon);
 
-            QLabel* pLabelLevel = WidgetManager::createLabel(QString::number(i + 1), 50, 25, 10, this);
+            QLabel* pLabelLevel = WidgetManager::createLabel(QString::number(i + 1), 10, "", 50, 25);
             m_labels.append(pLabelLevel);
             pVLayout->addWidget(pLabelLevel);
         }

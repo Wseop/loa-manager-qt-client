@@ -66,7 +66,7 @@ void EngraveSelector::addBattleEngraveButtons()
     for (int i = 0; i < battleEngraves.size(); i++)
     {
         const QString& engrave = battleEngraves[i];
-        QPushButton* pButton = WidgetManager::createPushButton(engrave, BUTTON_WIDTH, BUTTON_HEIGHT, 10, this);
+        QPushButton* pButton = WidgetManager::createPushButton(engrave, 10, BUTTON_WIDTH, BUTTON_HEIGHT);
         m_buttons.append(pButton);
         ui->gridBattleEngrave->addWidget(pButton, i / MAX_COL, i % MAX_COL);
     }
@@ -80,7 +80,7 @@ void EngraveSelector::addClassEngraveButtons()
     for (int i = 0; i < classEngraves.size(); i++)
     {
         const QString& engrave = classEngraves[i];
-        QPushButton* pButton = WidgetManager::createPushButton(engrave, BUTTON_WIDTH, BUTTON_HEIGHT, 10, this);
+        QPushButton* pButton = WidgetManager::createPushButton(engrave, 10, BUTTON_WIDTH, BUTTON_HEIGHT);
         m_buttons.append(pButton);
         ui->gridClassEngrave->addWidget(pButton, i / MAX_COL, i % MAX_COL);
     }

@@ -44,7 +44,7 @@ void AbilityStoneQuotation::addEngraveSelectors()
                                         "}";
 
     // 초기화 버튼 추가
-    QPushButton* pInitButton = WidgetManager::createPushButton("초기화", BUTTON_WIDTH, BUTTON_HEIGHT, 10, this);
+    QPushButton* pInitButton = WidgetManager::createPushButton("초기화");
     pInitButton->setStyleSheet("QPushButton { color: red }");
     ui->hLayoutInput->addWidget(pInitButton);
     connect(pInitButton, &QPushButton::released, this, [&](){
@@ -64,7 +64,7 @@ void AbilityStoneQuotation::addEngraveSelectors()
 
         EngraveSelector* pEngraveSelector = new EngraveSelector(false);
         m_engraveSelectors.append(pEngraveSelector);
-        QPushButton* pButton = WidgetManager::createPushButton(QString("각인 선택 %1").arg(i + 1), BUTTON_WIDTH, BUTTON_HEIGHT, 10, this);
+        QPushButton* pButton = WidgetManager::createPushButton(QString("각인 선택 %1").arg(i + 1));
         m_engraveSelectButtons.append(pButton);
         pHLayout->addWidget(pButton);
 
@@ -83,7 +83,7 @@ void AbilityStoneQuotation::addEngraveSelectors()
     }
 
     // 검색 버튼 추가
-    QPushButton* pSearchButton = WidgetManager::createPushButton("검색", BUTTON_WIDTH, BUTTON_HEIGHT, 10, this);
+    QPushButton* pSearchButton = WidgetManager::createPushButton("검색");
     ui->hLayoutInput->addWidget(pSearchButton);
     connect(pSearchButton, &QPushButton::released, this, &AbilityStoneQuotation::search);
 }
@@ -182,7 +182,7 @@ void AbilityStoneQuotation::addResult(QString engrave1, QString engrave2, int pr
     QHBoxLayout* pHLayout = new QHBoxLayout();
     ui->vLayoutOutput->addLayout(pHLayout);
 
-    QPushButton* pRemoveButton = WidgetManager::createPushButton("", 25, 25, 10, this);
+    QPushButton* pRemoveButton = WidgetManager::createPushButton("", 10, 25, 25);
     pRemoveButton->setIcon(QPixmap(":/icon/image/cancle.png"));
     pHLayout->addWidget(pRemoveButton);
 

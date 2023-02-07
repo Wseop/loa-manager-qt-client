@@ -58,7 +58,7 @@ void ClassSelector::addWidgets()
 
         // 뿌리클래스 label 추가
         const QString& parentClass = jObjClass.find("Parent")->toString();
-        QLabel* pLabelParentClass = WidgetManager::createLabel(parentClass, WIDGET_WIDTH, WIDGET_HEIGHT, 12, this);
+        QLabel* pLabelParentClass = WidgetManager::createLabel(parentClass, 12, "", WIDGET_WIDTH, WIDGET_HEIGHT);
         m_labels.append(pLabelParentClass);
         pHLayout->addWidget(pLabelParentClass);
 
@@ -67,7 +67,7 @@ void ClassSelector::addWidgets()
         for (const QJsonValue& jValChildClass : jArrChildClass)
         {
             const QString& childClass = jValChildClass.toString();
-            QPushButton* pBtnChildClass = WidgetManager::createPushButton(childClass, WIDGET_WIDTH, WIDGET_HEIGHT, 10, this);
+            QPushButton* pBtnChildClass = WidgetManager::createPushButton(childClass, 10);
             m_buttons.append(pBtnChildClass);
             pHLayout->addWidget(pBtnChildClass);
         }

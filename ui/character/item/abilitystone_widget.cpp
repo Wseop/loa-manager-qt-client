@@ -29,14 +29,14 @@ AbilityStoneWidget::~AbilityStoneWidget()
 
 void AbilityStoneWidget::addIcon()
 {
-    QLabel* pIcon = WidgetManager::createIcon(m_pAbilityStone->getIconPath(), m_pNetworkManager, ICON_WIDTH, ICON_HEIGHT, this);
+    QLabel* pIcon = WidgetManager::createIcon(m_pAbilityStone->getIconPath(), m_pNetworkManager, backgroundColorCode(m_pAbilityStone->getGrade()));
     m_labels.append(pIcon);
     ui->vLayoutIcon->addWidget(pIcon);
 }
 
 void AbilityStoneWidget::addLabels()
 {
-    QLabel* pNameLabel = WidgetManager::createLabel(m_pAbilityStone->getName(), LABEL_WIDTH, LABEL_HEIGHT, 10, this, colorCode(m_pAbilityStone->getGrade()));
+    QLabel* pNameLabel = WidgetManager::createLabel(m_pAbilityStone->getName(), 10, colorCode(m_pAbilityStone->getGrade()), LABEL_WIDTH, LABEL_HEIGHT);
     m_labels.append(pNameLabel);
     ui->vLayoutInfo->addWidget(pNameLabel);
 
@@ -44,7 +44,7 @@ void AbilityStoneWidget::addLabels()
     for (const PairEngraveValue& pairEngraveValue : engraves)
     {
         QString labelText = QString("[%1] +%2").arg(pairEngraveValue.first).arg(pairEngraveValue.second);
-        QLabel* pEngraveLabel = WidgetManager::createLabel(labelText, LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+        QLabel* pEngraveLabel = WidgetManager::createLabel(labelText, 10, "", LABEL_WIDTH, LABEL_HEIGHT);
         m_labels.append(pEngraveLabel);
         ui->vLayoutInfo->addWidget(pEngraveLabel);
     }
@@ -53,7 +53,7 @@ void AbilityStoneWidget::addLabels()
     for (const PairEngraveValue& pairEngraveValue : penalties)
     {
         QString labelText = QString("[%1] +%2").arg(pairEngraveValue.first).arg(pairEngraveValue.second);
-        QLabel* pPenaltyLabel = WidgetManager::createLabel(labelText, LABEL_WIDTH, LABEL_HEIGHT, 10, this, "red");
+        QLabel* pPenaltyLabel = WidgetManager::createLabel(labelText, 10, "red", LABEL_WIDTH, LABEL_HEIGHT);
         m_labels.append(pPenaltyLabel);
         ui->vLayoutInfo->addWidget(pPenaltyLabel);
     }

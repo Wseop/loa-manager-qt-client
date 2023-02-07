@@ -112,19 +112,19 @@ void CharacterRanking::addCharacterData(int index, QString server, QString cls, 
     ui->vLayoutRankingData->addLayout(pHLayout);
     m_hLayouts.append(pHLayout);
 
-    QLabel* pLabelIndex = WidgetManager::createLabel(QString::number(index), WIDGET_WIDTH, WIDGET_HEIGHT, 10, this);
+    QLabel* pLabelIndex = WidgetManager::createLabel(QString::number(index), 10, "", WIDGET_WIDTH, WIDGET_HEIGHT);
     pHLayout->addWidget(pLabelIndex);
     m_labels.append(pLabelIndex);
 
-    QLabel* pLabelServer = WidgetManager::createLabel(server, WIDGET_WIDTH, WIDGET_HEIGHT, 10, this);
+    QLabel* pLabelServer = WidgetManager::createLabel(server, 10, "", WIDGET_WIDTH, WIDGET_HEIGHT);
     pHLayout->addWidget(pLabelServer);
     m_labels.append(pLabelServer);
 
-    QLabel* pLabelClass = WidgetManager::createLabel(cls, WIDGET_WIDTH, WIDGET_HEIGHT, 10, this);
+    QLabel* pLabelClass = WidgetManager::createLabel(cls, 10, "", WIDGET_WIDTH, WIDGET_HEIGHT);
     pHLayout->addWidget(pLabelClass);
     m_labels.append(pLabelClass);
 
-    QPushButton* pButtonName = WidgetManager::createPushButton(name, WIDGET_WIDTH, WIDGET_HEIGHT, 10, this);
+    QPushButton* pButtonName = WidgetManager::createPushButton(name, 10, WIDGET_WIDTH, WIDGET_HEIGHT);
     pHLayout->addWidget(pButtonName);
     m_buttons.append(pButtonName);
     connect(pButtonName, &QPushButton::pressed, this, [&, pButtonName](){
@@ -133,7 +133,7 @@ void CharacterRanking::addCharacterData(int index, QString server, QString cls, 
         CharacterSearch::getInstance()->show();
     });
 
-    QLabel* pLabelItemLevel = WidgetManager::createLabel(QString::number(itemLevel), WIDGET_WIDTH, WIDGET_HEIGHT, 10, this);
+    QLabel* pLabelItemLevel = WidgetManager::createLabel(QString::number(itemLevel), 10, "", WIDGET_WIDTH, WIDGET_HEIGHT);
     pHLayout->addWidget(pLabelItemLevel);
     m_labels.append(pLabelItemLevel);
 }

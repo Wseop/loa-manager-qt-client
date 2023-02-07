@@ -51,7 +51,7 @@ void LoaManager::setLayoutAlignment()
 void LoaManager::createMenuButtons()
 {
     // create back button
-    m_pBackButton = WidgetManager::createPushButton("", MENU_BUTTON_WIDTH, MENU_BUTTON_HEIGHT, 10, this);
+    m_pBackButton = WidgetManager::createPushButton("");
     m_pBackButton->setIcon(QPixmap(":/icon/image/back.png"));
     connect(m_pBackButton, &QPushButton::released, this, [&](){
         // hide child menu & show parent menu
@@ -70,7 +70,7 @@ void LoaManager::createMenuButtons()
     {
         const QJsonObject& menuObj = menu.toObject();
         // create parent_menu button
-        QPushButton* pParentButton = WidgetManager::createPushButton(menuObj.find("Title")->toString(), MENU_BUTTON_WIDTH, MENU_BUTTON_HEIGHT, 10, this);
+        QPushButton* pParentButton = WidgetManager::createPushButton(menuObj.find("Title")->toString());
         connect(pParentButton, &QPushButton::released, this, [&, pParentButton](){
             // show child buttons & hide parent buttons
             const auto childButtons = m_parentToChildButtons[pParentButton];
@@ -88,7 +88,7 @@ void LoaManager::createMenuButtons()
         for (const QJsonValue& childMenu : childMenus)
         {
             const QString& menuName = childMenu.toString();
-            QPushButton* pChildButton = WidgetManager::createPushButton(menuName, MENU_BUTTON_WIDTH, MENU_BUTTON_HEIGHT, 10, pParentButton);
+            QPushButton* pChildButton = WidgetManager::createPushButton(menuName);
             ui->hLayoutMenu->addWidget(pChildButton);
             pChildButton->hide();
             m_childMenuButtons[menuName] = pChildButton;

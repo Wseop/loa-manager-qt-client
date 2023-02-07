@@ -28,9 +28,6 @@ private:
 private:
     Ui::SettingWidget *ui;
 
-    const int LABEL_WIDTH = 100;
-    const int LABEL_HEIGHT = 25;
-
     class CharacterListWidget* m_pCharacterListWidget;
     QList<class QLabel*> m_labels;
     QList<class QHBoxLayout*> m_hLayouts;

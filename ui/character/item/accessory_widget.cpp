@@ -35,14 +35,14 @@ AccessoryWidget::~AccessoryWidget()
 
 void AccessoryWidget::addIcon()
 {
-    QLabel* pIcon = WidgetManager::createIcon(m_pAccessory->getIconPath(), m_pNetworkManager, ICON_WIDTH, ICON_HEIGHT, this);
+    QLabel* pIcon = WidgetManager::createIcon(m_pAccessory->getIconPath(), m_pNetworkManager, backgroundColorCode(m_pAccessory->getGrade()));
     m_labels.append(pIcon);
     ui->vLayoutLeft->addWidget(pIcon);
 }
 
 void AccessoryWidget::addQualityBar()
 {
-    m_pQualityBar = WidgetManager::createQualityBar(m_pAccessory->getQuality(), QUALITYBAR_WIDTH, QUALITYBAR_HEIGHT, 10, this);
+    m_pQualityBar = WidgetManager::createQualityBar(m_pAccessory->getQuality(), QUALITYBAR_WIDTH, QUALITYBAR_HEIGHT);
     ui->vLayoutLeft->addWidget(m_pQualityBar);
 }
 
@@ -56,7 +56,7 @@ void AccessoryWidget::addLabels()
         abilityText += QString("%1 +%2,  ").arg(abilityToStr(iter.key())).arg(iter.value());
     }
     abilityText.chop(3);
-    QLabel* pLabelAbility = WidgetManager::createLabel(abilityText, LABEL_WIDTH, LABEL_HEIGHT, 10, this, colorCode(m_pAccessory->getGrade()));
+    QLabel* pLabelAbility = WidgetManager::createLabel(abilityText, 10, colorCode(m_pAccessory->getGrade()), LABEL_WIDTH, LABEL_HEIGHT);
     m_labels.append(pLabelAbility);
     ui->vLayoutRight->addWidget(pLabelAbility);
 
@@ -65,7 +65,7 @@ void AccessoryWidget::addLabels()
     for (const PairEngraveValue& pairEngraveValue : engraves)
     {
         QString engraveText = QString("[%1] +%2").arg(pairEngraveValue.first).arg(pairEngraveValue.second);
-        QLabel* pEngraveLabel = WidgetManager::createLabel(engraveText, LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+        QLabel* pEngraveLabel = WidgetManager::createLabel(engraveText, 10, "", LABEL_WIDTH, LABEL_HEIGHT);
         m_labels.append(pEngraveLabel);
         ui->vLayoutRight->addWidget(pEngraveLabel);
     }
@@ -73,7 +73,7 @@ void AccessoryWidget::addLabels()
     for (const PairEngraveValue& pairEngraveValue : penalties)
     {
         QString penaltyText = QString("[%1] +%2").arg(pairEngraveValue.first).arg(pairEngraveValue.second);
-        QLabel* pPenaltyLabel = WidgetManager::createLabel(penaltyText, LABEL_WIDTH, LABEL_HEIGHT, 10, this, "red");
+        QLabel* pPenaltyLabel = WidgetManager::createLabel(penaltyText, 10, "red", LABEL_WIDTH, LABEL_HEIGHT);
         m_labels.append(pPenaltyLabel);
         ui->vLayoutRight->addWidget(pPenaltyLabel);
     }

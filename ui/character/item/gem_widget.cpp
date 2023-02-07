@@ -31,18 +31,18 @@ GemWidget::~GemWidget()
 
 void GemWidget::addIcon()
 {
-    QLabel* pIcon = WidgetManager::createIcon(m_pGem->getIconPath(), m_pNetworkManager, ICON_WIDTH, ICON_HEIGHT, this);
+    QLabel* pIcon = WidgetManager::createIcon(m_pGem->getIconPath(), m_pNetworkManager, backgroundColorCode(m_pGem->getGrade()));
     m_labels.append(pIcon);
     ui->vLayoutIcon->addWidget(pIcon);
 }
 
 void GemWidget::addLabels()
 {
-    QLabel* pLabelLevel = WidgetManager::createLabel(QString("Lv. %1").arg(m_pGem->getLevel()), LABEL_WIDTH, LABEL_HEIGHT, 10, this, colorCode(m_pGem->getGrade()));
+    QLabel* pLabelLevel = WidgetManager::createLabel(QString("Lv. %1").arg(m_pGem->getLevel()), 10, colorCode(m_pGem->getGrade()), LABEL_WIDTH, LABEL_HEIGHT);
     m_labels.append(pLabelLevel);
     ui->vLayoutInfo->addWidget(pLabelLevel);
 
-    QLabel* pLabelEffect = WidgetManager::createLabel(m_pGem->getEffect(), LABEL_WIDTH, LABEL_HEIGHT, 10, this);
+    QLabel* pLabelEffect = WidgetManager::createLabel(m_pGem->getEffect(), 10, "", LABEL_WIDTH, LABEL_HEIGHT);
     m_labels.append(pLabelEffect);
     ui->vLayoutInfo->addWidget(pLabelEffect);
 }

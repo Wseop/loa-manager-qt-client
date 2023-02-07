@@ -2,6 +2,7 @@
     <qresource prefix="/icon">
         <file>Home.ico</file>
         <file>image/back.png</file>
+        <file>image/cancle.png</file>
     </qresource>
     <qresource prefix="/font">
         <file>font/NanumSquareNeo-aLt.ttf</file>

@@ -1,7 +1,7 @@
 #ifndef SKILL_INFO_WIDGET_H
 #define SKILL_INFO_WIDGET_H
 
-#include "function/quotation/tripod_quotation.h"
+#include "function/quotation/tripod/tripod_quotation.h"
 #include <QWidget>
 #include <QJsonObject>
 

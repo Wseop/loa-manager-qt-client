@@ -6,6 +6,7 @@
 #include "function/setting_ranking/setting_ranking.h"
 #include "function/auction_calculator/auction_calculator.h"
 #include "function/quotation/tripod/tripod_quotation.h"
+#include "function/quotation/abilitystone/abilitystone_quotation.h"
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -120,10 +121,15 @@ void LoaManager::initConnects()
             pWidget->hide();
         AuctionCalculator::getInstance()->show();
     });
-    connect(m_childMenuButtons["트라이포드\n시세 (5레벨)"], &QPushButton::released, this, [&](){
+    connect(m_childMenuButtons["트라이포드\n조회 (5레벨)"], &QPushButton::released, this, [&](){
         for (QWidget* pWidget : m_functions)
             pWidget->hide();
         TripodQuotation::getInstance()->show();
+    });
+    connect(m_childMenuButtons["어빌리티 스톤\n조회"], &QPushButton::released, this, [&](){
+        for (QWidget* pWidget : m_functions)
+            pWidget->hide();
+        AbilityStoneQuotation::getInstance()->show();
     });
 }
 
@@ -134,6 +140,7 @@ void LoaManager::addFunctions()
     m_functions.append(SettingRanking::getInstance());
     m_functions.append(AuctionCalculator::getInstance());
     m_functions.append(TripodQuotation::getInstance());
+    m_functions.append(AbilityStoneQuotation::getInstance());
 
     for (QWidget* pWidget : m_functions)
     {

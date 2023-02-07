@@ -2,7 +2,7 @@
 #include "ui_tripod_quotation.h"
 #include "ui/font_manager.h"
 #include "ui/class_selector.h"
-#include "function/quotation/ui/skill_info_widget.h"
+#include "function/quotation/tripod/skill_info_widget.h"
 #include <QFile>
 #include <QJsonObject>
 #include <QJsonArray>

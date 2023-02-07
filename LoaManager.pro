@@ -15,6 +15,8 @@ SOURCES += \
     function/auction_calculator/auction_calculator.cpp \
     function/character_ranking/character_ranking.cpp \
     function/character_search/character_search.cpp \
+    function/quotation/abilitystone/abilitystone_price.cpp \
+    function/quotation/abilitystone/abilitystone_quotation.cpp \
     function/quotation/tripod/skill_info_widget.cpp \
     function/quotation/tripod/tripod_quotation.cpp \
     function/setting_ranking/characterlist_widget.cpp \
@@ -50,6 +52,7 @@ SOURCES += \
     ui/character/skill/skillrune_widget.cpp \
     ui/character/skill/tripod_widget.cpp \
     ui/class_selector.cpp \
+    ui/engrave_selector.cpp \
     ui/font_manager.cpp \
     ui/widget_manager.cpp
 
@@ -62,6 +65,8 @@ HEADERS += \
     function/auction_calculator/auction_calculator.h \
     function/character_ranking/character_ranking.h \
     function/character_search/character_search.h \
+    function/quotation/abilitystone/abilitystone_price.h \
+    function/quotation/abilitystone/abilitystone_quotation.h \
     function/quotation/tripod/skill_info_widget.h \
     function/quotation/tripod/tripod_quotation.h \
     function/setting_ranking/characterlist_widget.h \
@@ -103,6 +108,7 @@ HEADERS += \
     ui/character/skill/skillrune_widget.h \
     ui/character/skill/tripod_widget.h \
     ui/class_selector.h \
+    ui/engrave_selector.h \
     ui/font_manager.h \
     ui/widget_manager.h
 
@@ -110,6 +116,8 @@ FORMS += \
     function/auction_calculator/auction_calculator.ui \
     function/character_ranking/character_ranking.ui \
     function/character_search/character_search.ui \
+    function/quotation/abilitystone/abilitystone_price.ui \
+    function/quotation/abilitystone/abilitystone_quotation.ui \
     function/quotation/tripod/skill_info_widget.ui \
     function/quotation/tripod/tripod_quotation.ui \
     function/setting_ranking/characterlist_widget.ui \
@@ -127,7 +135,8 @@ FORMS += \
     ui/character/skill/skill_widget.ui \
     ui/character/skill/skillrune_widget.ui \
     ui/character/skill/tripod_widget.ui \
-    ui/class_selector.ui
+    ui/class_selector.ui \
+    ui/engrave_selector.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

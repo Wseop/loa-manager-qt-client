@@ -18,11 +18,13 @@ ReforgeQuotation::ReforgeQuotation() :
     ui(new Ui::ReforgeQuotation)
 {
     ui->setupUi(this);
-    ui->vLayoutReforgeQuotation->setAlignment(Qt::AlignHCenter);
+    ui->vLayoutReforgeQuotation->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
+    ui->vLayoutEfficiency->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 
     loadReforgeData();
     addRefreshButton();
     addReforgeItemWidgets();
+    addEfficiencyWidgets();
 }
 
 ReforgeQuotation::~ReforgeQuotation()
@@ -105,6 +107,50 @@ void ReforgeQuotation::addReforgeItemWidgets()
     }
 }
 
+void ReforgeQuotation::addEfficiencyWidgets()
+{
+    QLabel* pLabelEfficiencyTitle = WidgetManager::createLabel("[효율]", 14, "", 100, 50);
+    m_labels.append(pLabelEfficiencyTitle);
+    ui->vLayoutEfficiency->addWidget(pLabelEfficiencyTitle);
+    ui->vLayoutEfficiency->setAlignment(pLabelEfficiencyTitle, Qt::AlignHCenter);
+
+    // 명예의 파편 효율 Layout 추가
+    {
+        QGroupBox* pGroupBox = new QGroupBox();
+        m_groupBoxes.append(pGroupBox);
+        ui->vLayoutEfficiency->addWidget(pGroupBox);
+
+        QVBoxLayout* pVLayout = new QVBoxLayout();
+        m_layouts.append(pVLayout);
+        pGroupBox->setLayout(pVLayout);
+
+        QLabel* pLabelCategory = WidgetManager::createLabel("명예의 파편 1개당 가격", 12, "", 200, 50);
+        m_labels.append(pLabelCategory);
+        pVLayout->addWidget(pLabelCategory);
+        pVLayout->setAlignment(pLabelCategory, Qt::AlignHCenter);
+
+        QHBoxLayout* pHLayout = new QHBoxLayout();
+        m_layouts.append(pHLayout);
+        pVLayout->addLayout(pHLayout);
+
+        QStringList itemNames = {"(소)", "(중)", "(대)"};
+        QList<ItemGrade> itemGrades = {ItemGrade::고급, ItemGrade::희귀, ItemGrade::영웅};
+        QList<QLabel*> efficiencyLabels;
+        for (int i = 0; i < itemNames.size(); i++)
+        {
+            QLabel* pLabelItemName = WidgetManager::createLabel(itemNames[i], 10, colorCode(itemGrades[i]), 50);
+            m_labels.append(pLabelItemName);
+            pHLayout->addWidget(pLabelItemName);
+
+            QLabel* pLabelEfficiency = WidgetManager::createLabel("[-]", 10, "", 100);
+            pLabelEfficiency->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+            efficiencyLabels.append(pLabelEfficiency);
+            pHLayout->addWidget(pLabelEfficiency);
+        }
+        m_efficiencyLabels.append(efficiencyLabels);
+    }
+}
+
 void ReforgeQuotation::refreshPrice()
 {
     for (int i = 0; i < m_reforgeItems.size(); i++)
@@ -112,7 +158,27 @@ void ReforgeQuotation::refreshPrice()
         for (int j = 0; j < m_reforgeItems[i].size(); j++)
         {
             const Item& reforgeItem = m_reforgeItems[i][j];
-            sendRequest(m_reforgeItemWidgets[i][j], reforgeItem.getName());
+            if (i == 0)
+                sendRequest(m_reforgeItemWidgets[i][j], m_efficiencyLabels[i][j], reforgeItem.getName());
+            else
+                sendRequest(m_reforgeItemWidgets[i][j], nullptr, reforgeItem.getName());
+        }
+    }
+}
+
+void ReforgeQuotation::refreshEfficiency(QLabel* pLabelEfficiency, QString itemName, int price)
+{
+    // 명예의 파편 소, 중, 대 효율 갱신
+    {
+        QStringList contains = {"(소)", "(중)", "(대)"};
+        QList<double> itemVolumes = {500, 1000, 1500};
+        for (int i = 0; i < contains.size(); i++)
+        {
+            if (itemName.contains(contains[i]))
+            {
+                double pricePerPiece = price / itemVolumes[i];
+                pLabelEfficiency->setText(QString("[%L1골]").arg(pricePerPiece, 0, 'f', 2, QChar(' ')));
+            }
         }
     }
 }
@@ -131,10 +197,10 @@ QJsonObject ReforgeQuotation::buildSearchOption(QString itemName)
     return searchOption;
 }
 
-void ReforgeQuotation::sendRequest(ReforgeItem* pReforgeItemWidget, QString itemName)
+void ReforgeQuotation::sendRequest(ReforgeItem* pReforgeItemWidget, QLabel* pLabelEfficiency, QString itemName)
 {
     QNetworkAccessManager* pNetworkManager = new QNetworkAccessManager();
-    connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, pReforgeItemWidget](QNetworkReply* pReply){
+    connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, pReforgeItemWidget, pLabelEfficiency, itemName](QNetworkReply* pReply){
         QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
         if (response.isNull())
             return;
@@ -145,6 +211,9 @@ void ReforgeQuotation::sendRequest(ReforgeItem* pReforgeItemWidget, QString item
         // update price
         int price = items[0].toObject().find("CurrentMinPrice")->toInt();
         pReforgeItemWidget->setPrice(price);
+        // update efficiency
+        if (pLabelEfficiency != nullptr)
+            refreshEfficiency(pLabelEfficiency, itemName, price);
     });
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 

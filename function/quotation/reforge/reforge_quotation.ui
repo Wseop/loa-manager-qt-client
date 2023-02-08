@@ -6,14 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>91</width>
-    <height>75</height>
+    <width>202</width>
+    <height>127</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="vLayoutReforgeQuotation"/>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <layout class="QVBoxLayout" name="vLayoutReforgeQuotation"/>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="vLayoutEfficiency"/>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

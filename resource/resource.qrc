@@ -19,7 +19,7 @@
         <file>json/class.json</file>
         <file>json/skill.json</file>
         <file>json/reforge.json</file>
-        <file>json/raid_reward.json</file>
+        <file>json/raid_reward_more.json</file>
     </qresource>
     <qresource prefix="/engrave">
         <file>image/engrave/107.png</file>

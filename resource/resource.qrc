@@ -19,6 +19,7 @@
         <file>json/class.json</file>
         <file>json/skill.json</file>
         <file>json/reforge.json</file>
+        <file>json/raid_reward.json</file>
     </qresource>
     <qresource prefix="/engrave">
         <file>image/engrave/107.png</file>
@@ -932,5 +933,6 @@
         <file>image/reforge/reforge_5_0.png</file>
         <file>image/reforge/reforge_5_1.png</file>
         <file>image/reforge/reforge_5_2.png</file>
+        <file>image/reforge/reforge_0_3.png</file>
     </qresource>
 </RCC>

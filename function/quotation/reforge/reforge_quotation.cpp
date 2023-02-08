@@ -56,6 +56,9 @@ void ReforgeQuotation::loadReforgeData()
             Item reforgeItem(ItemType::Size);
             reforgeItem.setName(jObjItem.find("Name")->toString());
             reforgeItem.setGrade(strToItemGrade(jObjItem.find("Grade")->toString()));
+            // "명예의 파편"은 제외
+            if (reforgeItem.getName() == "명예의 파편")
+                continue;
             items.append(reforgeItem);
         }
         m_reforgeItems.append(items);
@@ -99,7 +102,12 @@ void ReforgeQuotation::addReforgeItemWidgets()
         for (int j = 0; j < m_reforgeItems[i].size(); j++)
         {
             const Item& reforgeItem = m_reforgeItems[i][j];
-            ReforgeItem* pReforgeItemWidget = new ReforgeItem(reforgeItem.getName(), iconPath.arg(i).arg(j), reforgeItem.getGrade());
+            // 파괴석, 수호석은 10개 단위로 거래 (아이템명에 표기)
+            QString name = reforgeItem.getName();
+            if (m_categories[i] == "파괴석" || m_categories[i] == "수호석")
+                name += " x10";
+
+            ReforgeItem* pReforgeItemWidget = new ReforgeItem(name, iconPath.arg(i).arg(j), reforgeItem.getGrade());
             reforgeItemWidgets.append(pReforgeItemWidget);
             pGroupHLayout->addWidget(pReforgeItemWidget);
         }

@@ -8,6 +8,7 @@
 #include "function/quotation/tripod/tripod_quotation.h"
 #include "function/quotation/abilitystone/abilitystone_quotation.h"
 #include "function/quotation/reforge/reforge_quotation.h"
+#include "function/raid/raidreward_profit.h"
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -137,6 +138,11 @@ void LoaManager::initConnects()
             pWidget->hide();
         AbilityStoneQuotation::getInstance()->show();
     });
+    connect(m_childMenuButtons["더보기 손익"], &QPushButton::released, this, [&](){
+        for (QWidget* pWidget : m_functions)
+            pWidget->hide();
+        RaidRewardProfit::getInstance()->show();
+    });
 }
 
 void LoaManager::addFunctions()
@@ -148,6 +154,7 @@ void LoaManager::addFunctions()
     m_functions.append(TripodQuotation::getInstance());
     m_functions.append(AbilityStoneQuotation::getInstance());
     m_functions.append(ReforgeQuotation::getInstance());
+    m_functions.append(RaidRewardProfit::getInstance());
 
     for (QWidget* pWidget : m_functions)
     {

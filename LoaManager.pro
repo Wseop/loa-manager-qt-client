@@ -21,6 +21,8 @@ SOURCES += \
     function/quotation/reforge/reforge_quotation.cpp \
     function/quotation/tripod/skill_info_widget.cpp \
     function/quotation/tripod/tripod_quotation.cpp \
+    function/raid/raidreward.cpp \
+    function/raid/raidreward_profit.cpp \
     function/setting_ranking/characterlist_widget.cpp \
     function/setting_ranking/setting_ranking.cpp \
     function/setting_ranking/setting_widget.cpp \
@@ -73,6 +75,8 @@ HEADERS += \
     function/quotation/reforge/reforge_quotation.h \
     function/quotation/tripod/skill_info_widget.h \
     function/quotation/tripod/tripod_quotation.h \
+    function/raid/raidreward.h \
+    function/raid/raidreward_profit.h \
     function/setting_ranking/characterlist_widget.h \
     function/setting_ranking/setting_ranking.h \
     function/setting_ranking/setting_widget.h \
@@ -126,6 +130,8 @@ FORMS += \
     function/quotation/reforge/reforge_quotation.ui \
     function/quotation/tripod/skill_info_widget.ui \
     function/quotation/tripod/tripod_quotation.ui \
+    function/raid/raidreward.ui \
+    function/raid/raidreward_profit.ui \
     function/setting_ranking/characterlist_widget.ui \
     function/setting_ranking/setting_ranking.ui \
     function/setting_ranking/setting_widget.ui \

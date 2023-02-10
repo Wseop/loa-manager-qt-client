@@ -185,7 +185,7 @@ void ReforgeQuotation::refreshEfficiency(QLabel* pLabelEfficiency, QString itemN
             if (itemName.contains(contains[i]))
             {
                 double pricePerPiece = price / itemVolumes[i];
-                pLabelEfficiency->setText(QString("[%L1골]").arg(pricePerPiece, 0, 'f', 2, QChar(' ')));
+                pLabelEfficiency->setText(QString("[%L1골]").arg(pricePerPiece, 0, 'f', 3, QChar(' ')));
             }
         }
     }

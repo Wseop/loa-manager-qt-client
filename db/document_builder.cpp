@@ -1,4 +1,5 @@
 #include "document_builder.h"
+#include <QJsonObject>
 
 bsoncxx::builder::stream::document DocumentBuilder::buildDocumentCharacter(QString name, QString server, Class cls, double level)
 {
@@ -20,6 +21,19 @@ bsoncxx::builder::stream::document DocumentBuilder::buildDocumentSetting(QString
         << "Class" << classToStr(cls).toStdString()
         << "Level" << level
         << "SettingCode" << settingCode.toStdString();
+
+    return doc;
+}
+
+bsoncxx::builder::stream::document DocumentBuilder::buildDocumentRewardChaos(QString level, QStringList items, QList<int> itemCounts)
+{
+    bsoncxx::builder::stream::document doc{};
+
+    doc << "Level" << level;
+    for (int i = 0; i < items.size(); i++)
+    {
+        doc << items[i].toStdString() << itemCounts[i];
+    }
 
     return doc;
 }

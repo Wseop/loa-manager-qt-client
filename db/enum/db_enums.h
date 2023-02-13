@@ -6,6 +6,7 @@ enum class Collection
     ApiKey,
     Character,
     Setting,
+    Reward_Chaos
 };
 
 enum class SortOrder

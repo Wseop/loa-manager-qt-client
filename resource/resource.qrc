@@ -942,4 +942,7 @@
         <file>image/money/money_0.png</file>
         <file>image/money/money_1.png</file>
     </qresource>
+    <qresource prefix="/item">
+        <file>image/item/gem_0.png</file>
+    </qresource>
 </RCC>

@@ -101,48 +101,44 @@ void LoaManager::createMenuButtons()
 
 void LoaManager::initConnects()
 {
-    connect(m_childMenuButtons["캐릭터 조회"], &QPushButton::released, this, [&](){
-        for (QWidget* pWidget : m_functions)
-            pWidget->hide();
-        CharacterSearch::getInstance()->show();
-    });
-    connect(m_childMenuButtons["캐릭터 순위"], &QPushButton::released, this, [&](){
-        for (QWidget* pWidget : m_functions)
-            pWidget->hide();
-        CharacterRanking::getInstance()->show();
-        if (!CharacterRanking::getInstance()->loaded())
-            emit CharacterRanking::getInstance()->refresh();
-    });
-    connect(m_childMenuButtons["세팅 순위"], &QPushButton::released, this, [&](){
-        for (QWidget* pWidget : m_functions)
-            pWidget->hide();
-        SettingRanking::getInstance()->show();
-    });
-    connect(m_childMenuButtons["경매 손익\n계산기"], &QPushButton::released, this, [&](){
-        for (QWidget* pWidget : m_functions)
-            pWidget->hide();
-        AuctionCalculator::getInstance()->show();
-    });
-    connect(m_childMenuButtons["강화 재료"], &QPushButton::released, this, [&](){
-        for (QWidget* pWidget : m_functions)
-            pWidget->hide();
-        ReforgeQuotation::getInstance()->show();
-    });
-    connect(m_childMenuButtons["트라이포드\n(5레벨)"], &QPushButton::released, this, [&](){
-        for (QWidget* pWidget : m_functions)
-            pWidget->hide();
-        TripodQuotation::getInstance()->show();
-    });
-    connect(m_childMenuButtons["어빌리티 스톤"], &QPushButton::released, this, [&](){
-        for (QWidget* pWidget : m_functions)
-            pWidget->hide();
-        AbilityStoneQuotation::getInstance()->show();
-    });
-    connect(m_childMenuButtons["더보기 손익"], &QPushButton::released, this, [&](){
-        for (QWidget* pWidget : m_functions)
-            pWidget->hide();
-        RaidRewardProfit::getInstance()->show();
-    });
+    QStringList menuList;
+    const QJsonArray& menuObjs = m_mainSetting.find("Menu")->toArray();
+    for (int i = 0; i < menuObjs.size(); i++)
+    {
+        const QJsonArray& menuNames = menuObjs[i].toObject().find("List")->toArray();
+        for (const QJsonValue& menuName : menuNames)
+            menuList << menuName.toString();
+    }
+
+    for (int i = 0; i < menuList.size(); i++)
+    {
+        const QString& menuName = menuList[i];
+
+        if (menuName == "캐릭터 순위")
+        {
+            connect(m_childMenuButtons[menuName], &QPushButton::released, this, [&](){
+                for (QWidget* pWidget : m_functions)
+                    pWidget->hide();
+                CharacterRanking::getInstance()->show();
+                if (!CharacterRanking::getInstance()->loaded())
+                    emit CharacterRanking::getInstance()->refresh();
+            });
+        }
+        else
+        {
+            connect(m_childMenuButtons[menuName], &QPushButton::released, this, [&, i](){
+                for (int index = 0; index < m_functions.size(); index++)
+                {
+                    QWidget* pWidget = m_functions[index];
+
+                    if (index == i)
+                        pWidget->show();
+                    else
+                        pWidget->hide();
+                }
+            });
+        }
+    }
 }
 
 void LoaManager::addFunctions()
@@ -151,9 +147,9 @@ void LoaManager::addFunctions()
     m_functions.append(CharacterRanking::getInstance());
     m_functions.append(SettingRanking::getInstance());
     m_functions.append(AuctionCalculator::getInstance());
+    m_functions.append(ReforgeQuotation::getInstance());
     m_functions.append(TripodQuotation::getInstance());
     m_functions.append(AbilityStoneQuotation::getInstance());
-    m_functions.append(ReforgeQuotation::getInstance());
     m_functions.append(RaidRewardProfit::getInstance());
 
     for (QWidget* pWidget : m_functions)

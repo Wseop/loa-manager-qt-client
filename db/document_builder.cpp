@@ -29,7 +29,7 @@ bsoncxx::builder::stream::document DocumentBuilder::buildDocumentRewardChaos(QSt
 {
     bsoncxx::builder::stream::document doc{};
 
-    doc << "Level" << level;
+    doc << "Level" << level.toStdString();
     for (int i = 0; i < items.size(); i++)
     {
         doc << items[i].toStdString() << itemCounts[i];

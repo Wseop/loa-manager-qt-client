@@ -36,12 +36,16 @@ mongocxx::collection DbManager::getCollection(Collection collection)
 {
     switch (collection)
     {
+    case Collection::Admin:
+        return m_db["Admin"];
     case Collection::ApiKey:
         return m_db["ApiKey"];
     case Collection::Character:
         return m_db["Character"];
     case Collection::Setting:
         return m_db["Setting"];
+    case Collection::Reward_Chaos:
+        return m_db["Reward_Chaos"];
     }
 }
 

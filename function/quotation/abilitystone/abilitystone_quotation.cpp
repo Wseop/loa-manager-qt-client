@@ -182,8 +182,7 @@ void AbilityStoneQuotation::addResult(QString engrave1, QString engrave2, int pr
     QHBoxLayout* pHLayout = new QHBoxLayout();
     ui->vLayoutOutput->addLayout(pHLayout);
 
-    QPushButton* pRemoveButton = WidgetManager::createPushButton("", 10, 25, 25);
-    pRemoveButton->setIcon(QPixmap(":/icon/image/cancle.png"));
+    QPushButton* pRemoveButton = WidgetManager::createPushButton(QPixmap(":/icon/image/cancle.png"), 10, 25, 25);
     pHLayout->addWidget(pRemoveButton);
 
     AbilityStonePrice* pResult = new AbilityStonePrice(engrave1, engrave2, price);

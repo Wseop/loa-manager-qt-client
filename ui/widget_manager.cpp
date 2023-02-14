@@ -3,6 +3,7 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QProgressBar>
+#include <QComboBox>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
@@ -12,6 +13,15 @@
 QPushButton* WidgetManager::createPushButton(QString text, int fontSize, int width, int height)
 {
     QPushButton* pButton = new QPushButton(text);
+    pButton->setFixedSize(width, height);
+    pButton->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
+    return pButton;
+}
+
+QPushButton* WidgetManager::createPushButton(QPixmap icon, int fontSize, int width, int height)
+{
+    QPushButton* pButton = new QPushButton();
+    pButton->setIcon(icon);
     pButton->setFixedSize(width, height);
     pButton->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
     return pButton;
@@ -73,6 +83,15 @@ QProgressBar* WidgetManager::createQualityBar(int quality, int width, int height
     pQualityBar->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
     pQualityBar->setStyleSheet(QString("QProgressBar::chunk { background-color: %1 }").arg(getQualityColor(quality)));
     return pQualityBar;
+}
+
+QComboBox *WidgetManager::createComboBox(QStringList items, int fontSize, int width, int height)
+{
+    QComboBox* pComboBox = new QComboBox();
+    pComboBox->addItems(items);
+    pComboBox->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
+    pComboBox->setFixedSize(width, height);
+    return pComboBox;
 }
 
 QString WidgetManager::getQualityColor(int quality)

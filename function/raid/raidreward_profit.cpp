@@ -111,8 +111,7 @@ void RaidRewardProfit::initIconPath()
 
 void RaidRewardProfit::addRefresh()
 {
-    QPushButton* pButtonRefresh = WidgetManager::createPushButton("");
-    pButtonRefresh->setIcon(QPixmap(":/icon/image/refresh.png"));
+    QPushButton* pButtonRefresh = WidgetManager::createPushButton(QPixmap(":/icon/image/refresh.png"));
     m_widgets.append(pButtonRefresh);
     ui->hLayoutInput->addWidget(pButtonRefresh);
     connect(pButtonRefresh, &QPushButton::released, this, &RaidRewardProfit::updatePrice);
@@ -120,9 +119,7 @@ void RaidRewardProfit::addRefresh()
 
 void RaidRewardProfit::addRaidSelector()
 {
-    QComboBox* pRaidSelector = new QComboBox();
-    pRaidSelector->addItems(m_raids);
-    pRaidSelector->setFixedSize(150, 25);
+    QComboBox* pRaidSelector = WidgetManager::createComboBox(m_raids, 10, 150, 25);
     m_widgets.append(pRaidSelector);
     ui->hLayoutInput->addWidget(pRaidSelector);
     connect(pRaidSelector, &QComboBox::currentIndexChanged, this, [&](int index){

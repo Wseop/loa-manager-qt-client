@@ -53,8 +53,7 @@ void LoaManager::setLayoutAlignment()
 void LoaManager::createMenuButtons()
 {
     // create back button
-    m_pBackButton = WidgetManager::createPushButton("");
-    m_pBackButton->setIcon(QPixmap(":/icon/image/back.png"));
+    m_pBackButton = WidgetManager::createPushButton(QPixmap(":/icon/image/back.png"));
     connect(m_pBackButton, &QPushButton::released, this, [&](){
         // hide child menu & show parent menu
         for (QPushButton* pButton : m_childMenuButtons)

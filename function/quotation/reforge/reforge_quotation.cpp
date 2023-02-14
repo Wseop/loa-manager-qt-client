@@ -69,8 +69,7 @@ void ReforgeQuotation::loadReforgeData()
 
 void ReforgeQuotation::addRefreshButton()
 {
-    m_pBtnRefresh = WidgetManager::createPushButton("", 14);
-    m_pBtnRefresh->setIcon(QPixmap(":/icon/image/refresh.png"));
+    m_pBtnRefresh = WidgetManager::createPushButton(QPixmap(":/icon/image/refresh.png"), 14);
     ui->vLayoutReforgeQuotation->addWidget(m_pBtnRefresh);
     ui->vLayoutReforgeQuotation->setAlignment(m_pBtnRefresh, Qt::AlignHCenter);
     connect(m_pBtnRefresh, &QPushButton::released, this, &ReforgeQuotation::refreshPrice);

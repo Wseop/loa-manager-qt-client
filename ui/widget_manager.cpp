@@ -43,7 +43,7 @@ QLabel* WidgetManager::createIcon(QString iconPath, QNetworkAccessManager* pNetw
     pIcon->setFixedSize(width, height);
     pIcon->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
-    QString style = "QLabel { background-color: %1 }";
+    QString style = "QLabel { background-color: %1; border: 1px solid black }";
 
     if (pNetworkManager == nullptr)
     {

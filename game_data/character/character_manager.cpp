@@ -33,7 +33,7 @@ static void tDbInsertCharacter(QString name, QString server, Class cls, double l
 
     DbManager* pDbManager = DbManager::getInstance();
     pDbManager->lock();
-    pDbManager->insertDocument(Collection::Character, doc.extract(), filter.extract());
+    pDbManager->insertDocument(Collection::Character, doc.extract(), filter.extract(), false);
     pDbManager->unlock();
 }
 
@@ -47,7 +47,7 @@ static void tDbInsertSetting(QString name, Class cls, double level, QList<Abilit
 
     DbManager* pDbManager = DbManager::getInstance();
     pDbManager->lock();
-    pDbManager->insertDocument(Collection::Setting, doc.extract(), filter.extract());
+    pDbManager->insertDocument(Collection::Setting, doc.extract(), filter.extract(), false);
     pDbManager->unlock();
 }
 

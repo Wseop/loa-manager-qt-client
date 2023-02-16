@@ -30,7 +30,7 @@ public:
 
     QJsonObject findDocument(Collection collection, bsoncxx::document::value filter);
     QJsonArray findDocuments(Collection collection, SortOrder order, QString orderField, bsoncxx::document::value filter);
-    void insertDocument(Collection collection, bsoncxx::document::value doc, bsoncxx::document::value filter);
+    void insertDocument(Collection collection, bsoncxx::document::value doc, bsoncxx::document::value filter, bool bForceInsert);
     void deleteDocument(Collection collection, bsoncxx::document::value filter);
 
 private:

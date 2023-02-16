@@ -105,12 +105,11 @@ QJsonArray DbManager::findDocuments(Collection collection, SortOrder order, QStr
     return result;
 }
 
-void DbManager::insertDocument(Collection collection, bsoncxx::document::value doc, bsoncxx::document::value filter)
+void DbManager::insertDocument(Collection collection, bsoncxx::document::value doc, bsoncxx::document::value filter, bool bForceInsert)
 {
-
     auto data = getCollection(collection).find_one(filter.view());
     // already exist, update
-    if (data)
+    if (!bForceInsert && data)
         getCollection(collection).update_one(filter.view(), document{} << "$set" << doc << finalize);
     // if new data, insert
     else

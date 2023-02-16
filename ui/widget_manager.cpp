@@ -4,6 +4,7 @@
 #include <QLabel>
 #include <QProgressBar>
 #include <QComboBox>
+#include <QLineEdit>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
@@ -92,6 +93,17 @@ QComboBox *WidgetManager::createComboBox(QStringList items, int fontSize, int wi
     pComboBox->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
     pComboBox->setFixedSize(width, height);
     return pComboBox;
+}
+
+QLineEdit* WidgetManager::createLineEdit(QValidator* pValidator, QString placeHolder, int fontSize, int width, int height)
+{
+    QLineEdit* pLineEdit = new QLineEdit();
+    pLineEdit->setValidator(pValidator);
+    pLineEdit->setPlaceholderText(placeHolder);
+    pLineEdit->setAlignment(Qt::AlignHCenter);
+    pLineEdit->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
+    pLineEdit->setFixedSize(width, height);
+    return pLineEdit;
 }
 
 QString WidgetManager::getQualityColor(int quality)

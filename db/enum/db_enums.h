@@ -3,7 +3,6 @@
 
 enum class Collection
 {
-    Admin,
     ApiKey,
     Character,
     Setting,

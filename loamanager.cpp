@@ -1,6 +1,7 @@
 #include "loamanager.h"
 #include "ui_loamanager.h"
 #include "ui/widget_manager.h"
+#include "ui/admin_login.h"
 #include "function/character_search/character_search.h"
 #include "function/character_ranking/character_ranking.h"
 #include "function/setting_ranking/setting_ranking.h"
@@ -14,8 +15,11 @@
 #include <QJsonDocument>
 #include <QPushButton>
 
+QString g_adminKey = "";
+
 LoaManager::LoaManager() :
     ui(new Ui::LoaManager),
+    m_pAdminLogin(new AdminLogin()),
     m_pBackButton(nullptr)
 {
     ui->setupUi(this);
@@ -33,6 +37,7 @@ LoaManager::LoaManager() :
     createMenuButtons();
     addFunctions();
     initConnects();
+    addAdminButton();
 
     this->setWindowIcon(QIcon(":/icon/Home.ico"));
     this->setWindowTitle(m_mainSetting.find("Version")->toString());
@@ -156,5 +161,15 @@ void LoaManager::addFunctions()
         pWidget->hide();
         ui->vLayoutContents->addWidget(pWidget);
     }
+}
+
+void LoaManager::addAdminButton()
+{
+    QPushButton* pAdminButton = WidgetManager::createPushButton("관리자 로그인");
+    ui->hLayoutAdmin->addWidget(pAdminButton);
+    ui->hLayoutAdmin->setAlignment(Qt::AlignRight);
+    connect(pAdminButton, &QPushButton::released, this, [&](){
+        m_pAdminLogin->show();
+    });
 }
 

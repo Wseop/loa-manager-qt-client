@@ -44,6 +44,7 @@ SOURCES += \
     game_data/character/skill/skillrune.cpp \
     main.cpp \
     loamanager.cpp \
+    ui/admin_login.cpp \
     ui/character/character_widget.cpp \
     ui/character/engrave/engrave_widget.cpp \
     ui/character/item/abilitystone_widget.cpp \
@@ -104,6 +105,7 @@ HEADERS += \
     game_data/character/skill/skill.h \
     game_data/character/skill/skillrune.h \
     loamanager.h \
+    ui/admin_login.h \
     ui/character/character_widget.h \
     ui/character/engrave/engrave_widget.h \
     ui/character/item/abilitystone_widget.h \
@@ -136,6 +138,7 @@ FORMS += \
     function/setting_ranking/setting_ranking.ui \
     function/setting_ranking/setting_widget.ui \
     loamanager.ui \
+    ui/admin_login.ui \
     ui/character/character_widget.ui \
     ui/character/engrave/engrave_widget.ui \
     ui/character/item/abilitystone_widget.ui \

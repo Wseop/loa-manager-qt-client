@@ -15,6 +15,9 @@ SOURCES += \
     function/auction_calculator/auction_calculator.cpp \
     function/character_ranking/character_ranking.cpp \
     function/character_search/character_search.cpp \
+    function/contents_reward/contents_reward.cpp \
+    function/contents_reward/reward_adder.cpp \
+    function/contents_reward/reward_widget.cpp \
     function/quotation/abilitystone/abilitystone_price.cpp \
     function/quotation/abilitystone/abilitystone_quotation.cpp \
     function/quotation/reforge/reforge_item.cpp \
@@ -70,6 +73,9 @@ HEADERS += \
     function/auction_calculator/auction_calculator.h \
     function/character_ranking/character_ranking.h \
     function/character_search/character_search.h \
+    function/contents_reward/contents_reward.h \
+    function/contents_reward/reward_adder.h \
+    function/contents_reward/reward_widget.h \
     function/quotation/abilitystone/abilitystone_price.h \
     function/quotation/abilitystone/abilitystone_quotation.h \
     function/quotation/reforge/reforge_item.h \
@@ -126,6 +132,9 @@ FORMS += \
     function/auction_calculator/auction_calculator.ui \
     function/character_ranking/character_ranking.ui \
     function/character_search/character_search.ui \
+    function/contents_reward/contents_reward.ui \
+    function/contents_reward/reward_adder.ui \
+    function/contents_reward/reward_widget.ui \
     function/quotation/abilitystone/abilitystone_price.ui \
     function/quotation/abilitystone/abilitystone_quotation.ui \
     function/quotation/reforge/reforge_item.ui \

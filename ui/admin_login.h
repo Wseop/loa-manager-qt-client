@@ -16,7 +16,12 @@ public:
     ~AdminLogin();
 
 private:
+    void loadAdminKey();
+
+private:
     Ui::AdminLogin *ui;
+
+    QString m_adminKey;
 };
 
 #endif // ADMIN_LOGIN_H

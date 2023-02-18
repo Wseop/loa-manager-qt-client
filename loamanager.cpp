@@ -10,12 +10,13 @@
 #include "function/quotation/abilitystone/abilitystone_quotation.h"
 #include "function/quotation/reforge/reforge_quotation.h"
 #include "function/raid/raidreward_profit.h"
+#include "function/contents_reward/contents_reward.h"
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QPushButton>
 
-QString g_adminKey = "";
+bool g_bAdmin = false;
 
 LoaManager::LoaManager() :
     ui(new Ui::LoaManager),
@@ -155,6 +156,7 @@ void LoaManager::addFunctions()
     m_functions.append(TripodQuotation::getInstance());
     m_functions.append(AbilityStoneQuotation::getInstance());
     m_functions.append(RaidRewardProfit::getInstance());
+    m_functions.append(ContentsReward::getInstance());
 
     for (QWidget* pWidget : m_functions)
     {

@@ -25,7 +25,7 @@ bsoncxx::builder::stream::document DocumentBuilder::buildDocumentSetting(QString
     return doc;
 }
 
-bsoncxx::builder::stream::document DocumentBuilder::buildDocumentRewardChaos(QString level, QStringList items, QList<int> itemCounts, QString remark)
+bsoncxx::builder::stream::document DocumentBuilder::buildDocumentContentsReward(QString level, QStringList items, QList<int> itemCounts, QString remark)
 {
     bsoncxx::builder::stream::document doc{};
 

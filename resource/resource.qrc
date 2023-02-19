@@ -21,6 +21,7 @@
         <file>json/reforge.json</file>
         <file>json/raid_reward_more.json</file>
         <file>json/drop_table/drop_chaos.json</file>
+        <file>json/drop_table/drop_guardian.json</file>
     </qresource>
     <qresource prefix="/engrave">
         <file>image/engrave/107.png</file>

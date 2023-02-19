@@ -46,6 +46,8 @@ mongocxx::collection DbManager::getCollection(Collection collection)
         return m_db["Setting"];
     case Collection::Reward_Chaos:
         return m_db["Reward_Chaos"];
+    case Collection::Reward_Guardian:
+        return m_db["Reward_Guardian"];
     }
 }
 

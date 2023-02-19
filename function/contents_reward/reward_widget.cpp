@@ -29,6 +29,34 @@ RewardWidget::~RewardWidget()
     delete ui;
 }
 
+void RewardWidget::updatePrice(QString item, double price)
+{
+    m_itemPrices[item] = price;
+
+    for (int i = 0; i < m_levelCount; i++)
+    {
+        QString level = m_level;
+        if (m_type == ContentType::Chaos)
+            level += QString::number(i + 1);
+
+        if (m_dataCount[level] == 0)
+            continue;
+
+        const QList<int>& itemCounts = m_data[level];
+        int dataCount = m_dataCount[level];
+        double totalPrice = 0;
+        for (int j = 0; j < m_items.size(); j++)
+        {
+            if (!m_itemPrices.contains(m_items[j]))
+                continue;
+
+            double itemCountAvg = itemCounts[j] / dataCount;
+            totalPrice += itemCountAvg * m_itemPrices[m_items[j]];
+            m_goldLabels[level]->setText(QString("%L1").arg(totalPrice, 0, 'f', 2));
+        }
+    }
+}
+
 void RewardWidget::initIconPath()
 {
     QFile file(":/json/json/reforge.json");
@@ -54,6 +82,7 @@ void RewardWidget::initIconPath()
 
     m_iconPaths["실링"] = ":/money/image/money/money_0.png";
     m_iconPaths["보석"] = ":/item/image/item/gem_0.png";
+    m_iconPaths["골드"] = ":/money/image/money/money_1.png";
 }
 
 void RewardWidget::initTitle()
@@ -78,8 +107,9 @@ void RewardWidget::initTitle()
         m_widgets.append(pLabelItem);
     }
 
-    QLabel* pLabelGold = WidgetManager::createIcon(":/money/image/money/money_1.png", nullptr);
+    QLabel* pLabelGold = WidgetManager::createIcon(m_iconPaths["골드"], nullptr);
     ui->gridMain->addWidget(pLabelGold, 0, col++);
+    ui->gridMain->setAlignment(pLabelGold, Qt::AlignHCenter);
     m_widgets.append(pLabelGold);
 
     QLabel* pLabelDataCount = WidgetManager::createLabel("누적 데이터 수");
@@ -137,6 +167,12 @@ void RewardWidget::initData(const QList<QJsonObject>& data)
             ui->gridMain->addWidget(pLabelItemCount, i + 1, j + 1);
             m_widgets.append(pLabelItemCount);
         }
+
+        QLabel* pLabelGold = WidgetManager::createLabel("-", 10, "", 100);
+        ui->gridMain->addWidget(pLabelGold, i + 1, itemCounts.size() + 1);
+        m_goldLabels[key] = pLabelGold;
+        m_widgets.append(pLabelGold);
+
         QLabel* pLabelTotal = WidgetManager::createLabel(QString::number(total));
         ui->gridMain->addWidget(pLabelTotal, i + 1, itemCounts.size() + 2);
         m_widgets.append(pLabelTotal);

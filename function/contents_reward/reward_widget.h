@@ -21,6 +21,8 @@ public:
     RewardWidget(ContentType type, QString level, int levelCount, QStringList items, QList<QJsonObject> data);
     ~RewardWidget();
 
+    void updatePrice(QString item, double price);
+
 private:
     void initIconPath();
     void initTitle();
@@ -35,9 +37,12 @@ private:
     QStringList m_items;
     QHash<QString, QList<int>> m_data;
     QHash<QString, int> m_dataCount;
+    QHash<QString, double> m_itemPrices;
+
     QHash<QString, QString> m_iconPaths;
 
     // widgets
+    QHash<QString, class QLabel*> m_goldLabels;
     QList<QWidget*> m_widgets;
 };
 

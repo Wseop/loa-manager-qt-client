@@ -28,6 +28,9 @@ private:
     void initRewardAdder();
     void initChaosReward();
 
+    QJsonObject buildSearchOption(QString itemName);
+    void refreshPrice();
+
 public:
     static ContentsReward* getInstance();
     static void destroyInstance();
@@ -43,6 +46,7 @@ private:
     QString m_localKey;
     QStringList m_contents;
     QList<QHash<QString, QStringList>> m_dropTables;
+    QHash<QString, double> m_itemPrices;
 
     // widgets
     class QComboBox* m_pContentsSelector;

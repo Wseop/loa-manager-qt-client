@@ -4,6 +4,7 @@
 #include "function/contents_reward/reward_widget.h"
 #include "function/contents_reward/reward_adder.h"
 #include "db/db_manager.h"
+#include "api/api_manager.h"
 #include <QLabel>
 #include <QPushButton>
 #include <QComboBox>
@@ -13,6 +14,8 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QMessageBox>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
 
 extern bool g_bAdmin;
 
@@ -98,7 +101,7 @@ void ContentsReward::initRefreshButton()
 {
     QPushButton* pButtonRefresh = WidgetManager::createPushButton(QPixmap(":/icon/image/refresh.png"));
     ui->hLayoutInput->addWidget(pButtonRefresh);
-    connect(pButtonRefresh, &QPushButton::released, this, [&](){});
+    connect(pButtonRefresh, &QPushButton::released, this, &ContentsReward::refreshPrice);
 
     m_widgets.append(pButtonRefresh);
 }
@@ -177,8 +180,8 @@ void ContentsReward::initChaosReward()
     const QList<int> levelCounts = {3, 2, 2, 2};
 
     // info label
-    QStringList infoTexts = {"- 2수 기준 평균 획득량 (휴식X)",
-                             "- 골드는 명예의 파편, 파괴석, 수호석, 돌파석, 보석을 골드로 환산한 금액입니다. (거래소 기준)"};
+    QStringList infoTexts = {"※ 2수 기준 평균 획득량 (휴식X)",
+                             "※ 골드는 명예의 파편, 파괴석, 수호석, 돌파석, 보석을 골드로 환산한 금액입니다. (거래소 기준)"};
     for (int i = 0; i < MAX_INFO; i++)
     {
         m_infoLabels[i]->setText(infoTexts[i]);
@@ -215,6 +218,87 @@ void ContentsReward::initChaosReward()
         ui->vLayoutOutput->addWidget(pChaosReward);
         m_rewardWidgets[0].append(pChaosReward);
         m_widgets.append(pChaosReward);
+    }
+}
+
+QJsonObject ContentsReward::buildSearchOption(QString itemName)
+{
+    QJsonObject searchOption;
+
+    searchOption.insert("ItemTier", 3);
+    searchOption.insert("PageNo", 1);
+    searchOption.insert("SortCondition", "ASC");
+
+    if (itemName == "보석")
+    {
+        searchOption.insert("ItemName", "1레벨 멸화");
+        searchOption.insert("Sort", "BUY_PRICE");
+        searchOption.insert("CategoryCode", 210000);
+
+    }
+    else
+    {
+        searchOption.insert("ItemName", itemName);
+        searchOption.insert("Sort", "CURRENT_MIN_PRICE");
+        searchOption.insert("CategoryCode", 50000);
+    }
+
+    return searchOption;
+}
+
+void ContentsReward::refreshPrice()
+{
+    QStringList items = {"명예의 파편 주머니(소)",
+                         "파괴석 결정", "파괴강석", "정제된 파괴강석",
+                         "수호석 결정", "수호강석", "정제된 수호강석",
+                         "위대한 명예의 돌파석", "경이로운 명예의 돌파석", "찬란한 명예의 돌파석",
+                         "보석"};
+
+    for (const QString& item : items)
+    {
+        QJsonObject searchOption = buildSearchOption(item);
+        QNetworkAccessManager* pNetworkManager = new QNetworkAccessManager();
+        connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, item](QNetworkReply* pReply){
+            QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
+            if (response.isNull())
+                return;
+
+            const QJsonArray& jArrItems = response.object().find("Items")->toArray();
+            if (jArrItems.size() == 0)
+                return;
+
+            int price = 0;
+            if (item == "보석")
+                price = jArrItems[0].toObject().find("AuctionInfo")->toObject().find("BuyPrice")->toInt();
+            else
+                price = jArrItems[0].toObject().find("CurrentMinPrice")->toInt();
+
+            if (item.contains("명예의 파편"))
+            {
+                m_itemPrices["명예의 파편"] = price / (double)500;
+            }
+            else if (item.contains("파괴") || item.contains("수호"))
+            {
+                m_itemPrices[item] = price / (double)10;
+            }
+            else
+            {
+                m_itemPrices[item] = price;
+            }
+
+            // update widget
+            for (int i = 0; i < MAX_CONTENTS; i++)
+            {
+                for (RewardWidget* pRewardWidget : m_rewardWidgets[i])
+                    pRewardWidget->updatePrice(item, price);
+            }
+        });
+
+        connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
+        if (item == "보석")
+            ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Auction, QJsonDocument(searchOption).toJson());
+        else
+            ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Market, QJsonDocument(searchOption).toJson());
     }
 }
 

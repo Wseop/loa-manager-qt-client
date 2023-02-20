@@ -156,9 +156,12 @@ void ContentsReward::initInputDataButton()
 
 void ContentsReward::initInfoLabel()
 {
+    const QStringList infoTexts = {"※ 2수 기준 평균 획득량 (휴식X)",
+                                   "※ 골드는 명예의 파편, 파괴석, 수호석, 돌파석, 보석을 골드로 환산한 금액 (거래소 기준)"};
+
     for (int i = 0; i < MAX_INFO; i++)
     {
-        QLabel* pLabelInfo = WidgetManager::createLabel("", 12, "", 1000);
+        QLabel* pLabelInfo = WidgetManager::createLabel(infoTexts[i], 12, "", 1000);
         ui->vLayoutOutput->addWidget(pLabelInfo);
         ui->vLayoutOutput->setAlignment(pLabelInfo, Qt::AlignHCenter);
         m_infoLabels.append(pLabelInfo);
@@ -181,12 +184,6 @@ void ContentsReward::initChaosReward()
     const QHash<QString, QStringList>& dropTable = m_dropTables[0];
     const QStringList& levels = {"타락", "공허", "절망", "천공"};
     const QList<int> levelCounts = {3, 2, 2, 2};
-    const QStringList infoTexts = {"※ 2수 기준 평균 획득량 (휴식X)",
-                                   "※ 골드는 명예의 파편, 파괴석, 수호석, 돌파석, 보석을 골드로 환산한 금액 (거래소 기준)"};
-
-    // set info label text
-    for (int i = 0; i < infoTexts.size(); i++)
-        m_infoLabels[i]->setText(infoTexts[i]);
 
     // load data
     DbManager* pDbManager = DbManager::getInstance();
@@ -226,12 +223,6 @@ void ContentsReward::initGuardianReward()
 {
     const QHash<QString, QStringList>& dropTable = m_dropTables[1];
     const QStringList& levels = {"칼엘리고스", "하누마탄", "소나벨", "가르가디스"};
-    const QStringList infoTexts = {"※ 2수 기준 평균 획득량 (휴식X)",
-                                   "※ 골드는 파괴석, 수호석, 돌파석을 골드로 환산한 금액 (거래소 기준)"};
-
-    // set info label text
-    for (int i = 0; i < infoTexts.size(); i++)
-        m_infoLabels[i]->setText(infoTexts[i]);
 
     // load data
     DbManager* pDbManager = DbManager::getInstance();

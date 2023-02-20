@@ -29,7 +29,7 @@ private:
     QList<class QLabel*> m_labels;
     QList<QPushButton*> m_buttons;
 
-    QJsonArray m_jArrClass;
+    QJsonArray m_arrClass;
 };
 
 #endif // CLASS_SELECTOR_H

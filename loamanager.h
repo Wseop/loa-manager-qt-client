@@ -30,8 +30,8 @@ private:
     const int MENU_BUTTON_WIDTH = 100;
     const int MENU_BUTTON_HEIGHT = 50;
 
-    class AdminLogin* m_pAdminLogin;
     QJsonObject m_mainSetting;
+    class AdminLogin* m_pAdminLogin;
     QPushButton* m_pBackButton;
     QList<QPushButton*> m_parentMenuButtons;
     QMap<QString, QPushButton*> m_childMenuButtons;

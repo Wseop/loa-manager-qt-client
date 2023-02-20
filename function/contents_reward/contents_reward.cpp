@@ -5,11 +5,12 @@
 #include "function/contents_reward/reward_adder.h"
 #include "db/db_manager.h"
 #include "api/api_manager.h"
+#include "resource/resource_manager.h"
+
 #include <QLabel>
 #include <QPushButton>
 #include <QComboBox>
 #include <QFile>
-#include <QSettings>
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -55,42 +56,31 @@ void ContentsReward::initContents()
 
 void ContentsReward::loadDropTable()
 {
-    const QStringList files = {"chaos", "guardian"};
-    QString fileName = ":/json/json/drop_table/drop_%1.json";
+    const QStringList files = {"drop_chaos", "drop_guardian"};
 
     // load drop tables
     for (const QString& file : files)
     {
-        QFile json(fileName.arg(file));
-        if (!json.open(QIODevice::ReadOnly))
-        {
-            qDebug() << Q_FUNC_INFO << file << " open fail";
-            return;
-        }
-
-        QHash<QString, QStringList> dropTable;
+        const QJsonObject json = ResourceManager::getInstance()->loadJson(file);
 
         // parse json file
-        const QJsonArray& arrayDropTable = QJsonDocument::fromJson(json.readAll()).object().find("DropTable")->toArray();
+        const QJsonArray& arrayDropTable = json.find("DropTable")->toArray();
+        QHash<QString, QStringList> dropTable;
         for (const QJsonValue& valueDropTable : arrayDropTable)
         {
             const QJsonObject& objDropTable = valueDropTable.toObject();
-
             // parse Level
             const QString& level = objDropTable.find("Level")->toString();
-
             // parse ItemList
             const QJsonArray& arrayItemList = objDropTable.find("ItemList")->toArray();
             QStringList items;
             for (const QJsonValue& valueItemList : arrayItemList)
                 items << valueItemList.toString();
-
             // add to hash
             dropTable[level] = items;
         }
 
         m_dropTables.append(dropTable);
-        json.close();
     }
 }
 

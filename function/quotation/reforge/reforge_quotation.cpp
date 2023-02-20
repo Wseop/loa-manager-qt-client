@@ -3,6 +3,8 @@
 #include "ui/widget_manager.h"
 #include "function/quotation/reforge/reforge_item.h"
 #include "api/api_manager.h"
+#include "resource/resource_manager.h"
+
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -34,28 +36,23 @@ ReforgeQuotation::~ReforgeQuotation()
 
 void ReforgeQuotation::loadReforgeData()
 {
-    QFile reforgeJson(":/json/json/reforge.json");
-    if (!reforgeJson.open(QIODevice::ReadOnly))
-    {
-        qDebug() << Q_FUNC_INFO << "File open fail";
-        return;
-    }
+    const QJsonObject json = ResourceManager::getInstance()->loadJson("reforge");
 
     // json parsing, 멤버 변수에 할당(초기화)
-    QJsonArray jArrReforge = QJsonDocument::fromJson(reforgeJson.readAll()).array();
-    for (int i = 0; i < jArrReforge.size(); i++)
+    QJsonArray arrReforge = json.find("Reforge")->toArray();
+    for (int i = 0; i < arrReforge.size(); i++)
     {
-        const QJsonObject& jObjReforge = jArrReforge[i].toObject();
-        m_categories.append(jObjReforge.find("Category")->toString());
+        const QJsonObject& objReforge = arrReforge[i].toObject();
+        m_categories.append(objReforge.find("Category")->toString());
 
-        const QJsonArray& jArrItem = jObjReforge.find("Items")->toArray();
+        const QJsonArray& arrItems = objReforge.find("Items")->toArray();
         QList<Item> items;
-        for (int j = 0; j < jArrItem.size(); j++)
+        for (int j = 0; j < arrItems.size(); j++)
         {
-            const QJsonObject& jObjItem = jArrItem[j].toObject();
+            const QJsonObject& objItem = arrItems[j].toObject();
             Item reforgeItem(ItemType::Size);
-            reforgeItem.setName(jObjItem.find("Name")->toString());
-            reforgeItem.setGrade(strToItemGrade(jObjItem.find("Grade")->toString()));
+            reforgeItem.setName(objItem.find("Name")->toString());
+            reforgeItem.setGrade(strToItemGrade(objItem.find("Grade")->toString()));
             // "명예의 파편"은 제외
             if (reforgeItem.getName() == "명예의 파편")
                 continue;
@@ -63,8 +60,6 @@ void ReforgeQuotation::loadReforgeData()
         }
         m_reforgeItems.append(items);
     }
-
-    reforgeJson.close();
 }
 
 void ReforgeQuotation::addRefreshButton()

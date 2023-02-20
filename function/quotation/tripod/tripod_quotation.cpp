@@ -3,6 +3,8 @@
 #include "ui/font_manager.h"
 #include "ui/class_selector.h"
 #include "function/quotation/tripod/skill_info_widget.h"
+#include "resource/resource_manager.h"
+
 #include <QFile>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -33,40 +35,33 @@ TripodQuotation::~TripodQuotation()
 
 void TripodQuotation::loadSkillData()
 {
-    QFile file(":/json/json/skill.json");
-    if (!file.open(QIODevice::ReadOnly))
+    const QJsonObject json = ResourceManager::getInstance()->loadJson("skill");
+
+    const QJsonArray& arrData = json.find("Skill")->toArray();
+    for (const QJsonValue& valueData : arrData)
     {
-        qDebug() << Q_FUNC_INFO << "File open fail";
-        return;
-    }
+        const QJsonObject& objData = valueData.toObject();
+        QString cls = objData.find("Class")->toString();
+        const QJsonArray& arrSkill = objData.find("Skills")->toArray();
 
-    QJsonArray jArrData = QJsonDocument::fromJson(file.readAll()).array();
-    file.close();
-
-    for (const QJsonValue& jValData : jArrData)
-    {
-        const QJsonObject& jObjData = jValData.toObject();
-        QString cls = jObjData.find("Class")->toString();
-        const QJsonArray& jArrSkill = jObjData.find("Skills")->toArray();
-
-        for (const QJsonValue& jValSkill : jArrSkill)
+        for (const QJsonValue& valueSkill : arrSkill)
         {
-            const QJsonObject& jObjSkill = jValSkill.toObject();
-            const int& skillValue = jObjSkill.find("Value")->toInt();
+            const QJsonObject& objSkill = valueSkill.toObject();
+            const int& skillValue = objSkill.find("Value")->toInt();
             m_classToSkills[cls].append({
-                                            jObjSkill.find("Text")->toString(),
+                                            objSkill.find("Text")->toString(),
                                             skillValue,
-                                            jObjSkill.find("IconPath")->toString()
+                                            objSkill.find("IconPath")->toString()
                                         });
-            const QJsonArray& jArrTripod = jObjSkill.find("Tripods")->toArray();
 
-            for (const QJsonValue& jValTripod : jArrTripod)
+            const QJsonArray& arrTripod = objSkill.find("Tripods")->toArray();
+            for (const QJsonValue& valueTripod : arrTripod)
             {
-                const QJsonObject& jObjTripod = jValTripod.toObject();
+                const QJsonObject& objTripod = valueTripod.toObject();
                 m_skillValueToTripods[skillValue].append({
-                                                       jObjTripod.find("Text")->toString(),
-                                                       jObjTripod.find("Value")->toInt(),
-                                                       jObjTripod.find("IconIndex")->toInt()
+                                                       objTripod.find("Text")->toString(),
+                                                       objTripod.find("Value")->toInt(),
+                                                       objTripod.find("IconIndex")->toInt()
                                                    });
             }
         }

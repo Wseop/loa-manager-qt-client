@@ -11,6 +11,8 @@
 #include "function/quotation/reforge/reforge_quotation.h"
 #include "function/raid/raidreward_profit.h"
 #include "function/contents_reward/contents_reward.h"
+#include "resource/resource_manager.h"
+
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -20,19 +22,11 @@ bool g_bAdmin = false;
 
 LoaManager::LoaManager() :
     ui(new Ui::LoaManager),
+    m_mainSetting(ResourceManager::getInstance()->loadJson("main")),
     m_pAdminLogin(new AdminLogin()),
     m_pBackButton(nullptr)
 {
     ui->setupUi(this);
-
-    QFile file(":/json/json/main.json");
-    if (!file.open(QIODevice::ReadOnly))
-    {
-        qDebug() << Q_FUNC_INFO << ": mainSetting read fail";
-        return;
-    }
-    m_mainSetting = QJsonDocument::fromJson(file.readAll()).object();
-    file.close();
 
     setLayoutAlignment();
     createMenuButtons();

@@ -47,6 +47,7 @@ SOURCES += \
     game_data/character/skill/skillrune.cpp \
     main.cpp \
     loamanager.cpp \
+    resource/resource_manager.cpp \
     ui/admin_login.cpp \
     ui/character/character_widget.cpp \
     ui/character/engrave/engrave_widget.cpp \
@@ -111,6 +112,7 @@ HEADERS += \
     game_data/character/skill/skill.h \
     game_data/character/skill/skillrune.h \
     loamanager.h \
+    resource/resource_manager.h \
     ui/admin_login.h \
     ui/character/character_widget.h \
     ui/character/engrave/engrave_widget.h \

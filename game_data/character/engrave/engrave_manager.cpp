@@ -1,4 +1,6 @@
 #include "engrave_manager.h"
+#include "resource/resource_manager.h"
+
 #include <QFile>
 #include <QJsonObject>
 #include <QJsonDocument>
@@ -8,22 +10,16 @@ EngraveManager* EngraveManager::m_pEngrave = nullptr;
 
 EngraveManager::EngraveManager()
 {
-    QFile file(":/json/json/engrave.json");
-    if (!file.open(QIODevice::ReadOnly))
-    {
-        qDebug() << Q_FUNC_INFO << ": engrave.json open fail";
-        return;
-    }
-    QJsonArray engraves = QJsonDocument::fromJson(file.readAll()).array();
-    file.close();
+    const QJsonObject json = ResourceManager::getInstance()->loadJson("engrave");
+    const QJsonArray& arrEngraves = json.find("Engrave")->toArray();
 
-    for (const QJsonValue& engrave : engraves)
+    for (const QJsonValue& valueEngrave : arrEngraves)
     {
-        const QJsonObject& engraveObj = engrave.toObject();
-        const QString& text = engraveObj.find("Text")->toString();
-        int code = engraveObj.find("Code")->toInt();
-        QString cls = engraveObj.find("Class")->toString();
-        bool isPenalty = engraveObj.find("Penalty")->toBool();
+        const QJsonObject& objEngrave = valueEngrave.toObject();
+        const QString& text = objEngrave.find("Text")->toString();
+        int code = objEngrave.find("Code")->toInt();
+        QString cls = objEngrave.find("Class")->toString();
+        bool isPenalty = objEngrave.find("Penalty")->toBool();
 
         m_engraveToCode[text] = code;
         m_codeToEngrave[code] = text;

@@ -1,5 +1,7 @@
 #include "api_manager.h"
 #include "db/db_manager.h"
+#include "resource/resource_manager.h"
+
 #include <QFile>
 #include <QJsonDocument>
 #include <QUrl>
@@ -39,20 +41,14 @@ void ApiManager::loadApiKey()
 
 void ApiManager::loadRequestUrl()
 {
-    QFile file(":/json/json/api.json");
-    if (!file.open(QIODevice::ReadOnly))
-    {
-        qDebug() << Q_FUNC_INFO << ": API load fail";
-        return;
-    }
-    QJsonArray apis = QJsonDocument::fromJson(file.readAll()).array();
-    file.close();
+    const QJsonObject jsonApi = ResourceManager::getInstance()->loadJson("api");
+    const QJsonArray& arrApi = jsonApi.find("Api")->toArray();
 
-    for (const QJsonValue& api : apis)
+    for (const QJsonValue& valueApi : arrApi)
     {
-        const QJsonObject& apiObj = api.toObject();
-        const int& index = apiObj.find("Index")->toInt();
-        const QString& requestUrl = apiObj.find("RequestURL")->toString();
+        const QJsonObject& api = valueApi.toObject();
+        const int& index = api.find("Index")->toInt();
+        const QString& requestUrl = api.find("RequestURL")->toString();
 
         m_requestUrls[index] = requestUrl;
     }

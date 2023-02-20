@@ -3,6 +3,8 @@
 #include "ui/widget_manager.h"
 #include "function/raid/raidreward.h"
 #include "api/api_manager.h"
+#include "resource/resource_manager.h"
+
 #include <QPushButton>
 #include <QComboBox>
 #include <QLabel>
@@ -46,67 +48,55 @@ void RaidRewardProfit::setAlignments()
 
 void RaidRewardProfit::loadRewardData()
 {
-    QFile file(":/json/json/raid_reward_more.json");
-    if (!file.open(QIODevice::ReadOnly))
-    {
-        qDebug() << Q_FUNC_INFO << "File open fail";
-        return;
-    }
+    const QJsonObject json = ResourceManager::getInstance()->loadJson("raid_reward_more");
 
-    QJsonArray jArrRaidReward = QJsonDocument::fromJson(file.readAll()).array();
-    for (int i = 0; i < jArrRaidReward.size(); i++)
+    const QJsonArray& arrRaidReward = json.find("RaidRewardMore")->toArray();
+    for (int i = 0; i < arrRaidReward.size(); i++)
     {
-        const QJsonObject& jObjRaidReward = jArrRaidReward[i].toObject();
-        const QJsonArray& jArrReward = jObjRaidReward.find("Rewards")->toArray();
+        const QJsonObject& objRaidReward = arrRaidReward[i].toObject();
 
-        m_raids << jObjRaidReward.find("Category")->toString();
+        m_raids << objRaidReward.find("Category")->toString();
+
+        const QJsonArray& arrReward = objRaidReward.find("Rewards")->toArray();
         QList<Reward> rewards;
-        for (int j = 0; j < jArrReward.size(); j++)
+        for (int j = 0; j < arrReward.size(); j++)
         {
-            const QJsonObject& jObjReward = jArrReward[j].toObject();
+            const QJsonObject& objReward = arrReward[j].toObject();
 
-            QString gate = jObjReward.find("Gate")->toString();
-            int cost = jObjReward.find("Cost")->toInt();
+            QString gate = objReward.find("Gate")->toString();
+            int cost = objReward.find("Cost")->toInt();
+
+            const QJsonArray& arrItem = objReward.find("Items")->toArray();
             QList<QPair<QString, int>> items;
-            const QJsonArray& jArrItem = jObjReward.find("Items")->toArray();
-            for (int k = 0; k < jArrItem.size(); k++)
+            for (int k = 0; k < arrItem.size(); k++)
             {
-                const QJsonObject& jObjItem = jArrItem[k].toObject();
+                const QJsonObject& objItem = arrItem[k].toObject();
 
-                QString name = jObjItem.find("Name")->toString();
-                int count = jObjItem.find("Count")->toInt();
+                QString name = objItem.find("Name")->toString();
+                int count = objItem.find("Count")->toInt();
                 items.append({name, count});
             }
             rewards.append({gate, cost, items});
         }
         m_rewards.append(rewards);
     }
-
-    file.close();
 }
 
 void RaidRewardProfit::initIconPath()
 {
-    QFile file(":/json/json/reforge.json");
-    if (!file.open(QIODevice::ReadOnly))
-    {
-        qDebug() << Q_FUNC_INFO << "File open fail";
-        return;
-    }
+    const QJsonObject json = ResourceManager::getInstance()->loadJson("reforge");
 
     QString iconPath = ":/reforge/image/reforge/reforge_%1_%2.png";
-    QJsonArray jArrReforge = QJsonDocument::fromJson(file.readAll()).array();
-    for (int i = 0; i < jArrReforge.size(); i++)
+    const QJsonArray& arrReforge = json.find("Reforge")->toArray();
+    for (int i = 0; i < arrReforge.size(); i++)
     {
-        const QJsonArray& jArrItems = jArrReforge[i].toObject().find("Items")->toArray();
-        for (int j = 0; j < jArrItems.size(); j++)
+        const QJsonArray& arrItems = arrReforge[i].toObject().find("Items")->toArray();
+        for (int j = 0; j < arrItems.size(); j++)
         {
-            const QJsonObject& jObjItem = jArrItems[j].toObject();
-            m_iconPaths[jObjItem.find("Name")->toString()] = iconPath.arg(i).arg(j);
+            const QJsonObject& objItem = arrItems[j].toObject();
+            m_iconPaths[objItem.find("Name")->toString()] = iconPath.arg(i).arg(j);
         }
     }
-
-    file.close();
 }
 
 void RaidRewardProfit::addRefresh()

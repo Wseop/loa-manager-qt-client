@@ -2,6 +2,8 @@
 #include "ui_reward_widget.h"
 #include "ui/widget_manager.h"
 #include "game_data/character/item/enum/item_grade.h"
+#include "resource/resource_manager.h"
+
 #include <QLabel>
 #include <QFile>
 #include <QJsonDocument>
@@ -59,26 +61,19 @@ void RewardWidget::updatePrice(QString item, double price)
 
 void RewardWidget::initIconPath()
 {
-    QFile file(":/json/json/reforge.json");
-    if (!file.open(QIODevice::ReadOnly))
-    {
-        qDebug() << Q_FUNC_INFO << "File open fail";
-        return;
-    }
+    const QJsonObject json = ResourceManager::getInstance()->loadJson("reforge");
 
     QString iconPath = ":/reforge/image/reforge/reforge_%1_%2.png";
-    QJsonArray jArrReforge = QJsonDocument::fromJson(file.readAll()).array();
-    for (int i = 0; i < jArrReforge.size(); i++)
+    QJsonArray arrReforge = json.find("Reforge")->toArray();
+    for (int i = 0; i < arrReforge.size(); i++)
     {
-        const QJsonArray& jArrItems = jArrReforge[i].toObject().find("Items")->toArray();
-        for (int j = 0; j < jArrItems.size(); j++)
+        const QJsonArray& arrItems = arrReforge[i].toObject().find("Items")->toArray();
+        for (int j = 0; j < arrItems.size(); j++)
         {
-            const QJsonObject& jObjItem = jArrItems[j].toObject();
-            m_iconPaths[jObjItem.find("Name")->toString()] = iconPath.arg(i).arg(j);
+            const QJsonObject& objItem = arrItems[j].toObject();
+            m_iconPaths[objItem.find("Name")->toString()] = iconPath.arg(i).arg(j);
         }
     }
-
-    file.close();
 
     m_iconPaths["실링"] = ":/money/image/money/money_0.png";
     m_iconPaths["보석"] = ":/item/image/item/gem_0.png";

@@ -38,6 +38,7 @@ ContentsReward::ContentsReward() :
 
     initRewardAdder();
     initChaosReward();
+    initGuardianReward();
 }
 
 ContentsReward::~ContentsReward()
@@ -54,40 +55,42 @@ void ContentsReward::initContents()
 
 void ContentsReward::loadDropTable()
 {
-    // load 카오스 던전 drop table
+    const QStringList files = {"chaos", "guardian"};
+    QString fileName = ":/json/json/drop_table/drop_%1.json";
+
+    // load drop tables
+    for (const QString& file : files)
     {
-        QFile file(":/json/json/drop_table/drop_chaos.json");
-        if (!file.open(QIODevice::ReadOnly))
+        QFile json(fileName.arg(file));
+        if (!json.open(QIODevice::ReadOnly))
         {
-            qDebug() << Q_FUNC_INFO << "drop_chaos.json load fail";
+            qDebug() << Q_FUNC_INFO << file << " open fail";
             return;
         }
 
-        QJsonObject dropChaos = QJsonDocument::fromJson(file.readAll()).object();
-        const QJsonArray& dropTables = dropChaos.find("DropTable")->toArray();
         QHash<QString, QStringList> dropTable;
-        for (int i = 0; i < dropTables.size(); i++)
+
+        // parse json file
+        const QJsonArray& arrayDropTable = QJsonDocument::fromJson(json.readAll()).object().find("DropTable")->toArray();
+        for (const QJsonValue& valueDropTable : arrayDropTable)
         {
-            const QJsonObject& objDropTable = dropTables[i].toObject();
+            const QJsonObject& objDropTable = valueDropTable.toObject();
+
+            // parse Level
             const QString& level = objDropTable.find("Level")->toString();
-            const QJsonArray& jArrItemList = objDropTable.find("ItemList")->toArray();
 
-            QStringList itemList;
-            for (int j = 0; j < jArrItemList.size(); j++)
-                itemList << jArrItemList[j].toString();
+            // parse ItemList
+            const QJsonArray& arrayItemList = objDropTable.find("ItemList")->toArray();
+            QStringList items;
+            for (const QJsonValue& valueItemList : arrayItemList)
+                items << valueItemList.toString();
 
-            dropTable[level] = itemList;
+            // add to hash
+            dropTable[level] = items;
         }
 
         m_dropTables.append(dropTable);
-        file.close();
-    }
-
-    // load 가디언 토벌 drop table
-    {
-        // dummy
-        QHash<QString, QStringList> dropTable;
-        m_dropTables.append(dropTable);
+        json.close();
     }
 }
 
@@ -178,34 +181,32 @@ void ContentsReward::initChaosReward()
     const QHash<QString, QStringList>& dropTable = m_dropTables[0];
     const QStringList& levels = {"타락", "공허", "절망", "천공"};
     const QList<int> levelCounts = {3, 2, 2, 2};
+    const QStringList infoTexts = {"※ 2수 기준 평균 획득량 (휴식X)",
+                                   "※ 골드는 명예의 파편, 파괴석, 수호석, 돌파석, 보석을 골드로 환산한 금액 (거래소 기준)"};
 
-    // info label
-    QStringList infoTexts = {"※ 2수 기준 평균 획득량 (휴식X)",
-                             "※ 골드는 명예의 파편, 파괴석, 수호석, 돌파석, 보석을 골드로 환산한 금액입니다. (거래소 기준)"};
-    for (int i = 0; i < MAX_INFO; i++)
-    {
+    // set info label text
+    for (int i = 0; i < infoTexts.size(); i++)
         m_infoLabels[i]->setText(infoTexts[i]);
-    }
 
     // load data
-    QHash<QString, QList<QJsonObject>> rewardData;
     DbManager* pDbManager = DbManager::getInstance();
     bsoncxx::builder::stream::document filter{};
     filter << "Remark" << "";
 
     pDbManager->lock();
-    QJsonArray data = pDbManager->findDocuments(Collection::Reward_Chaos, SortOrder::None, "", filter.extract());
+    QJsonArray arrayData = pDbManager->findDocuments(Collection::Reward_Chaos, SortOrder::None, "", filter.extract());
     pDbManager->unlock();
 
-    for (int i = 0 ;i < data.size(); i++)
+    QHash<QString, QList<QJsonObject>> rewardData;
+    for (const QJsonValue& valueData : arrayData)
     {
-        const QJsonObject& reward = data[i].toObject();
-        const QString& level = reward.find("Level")->toString();
+        const QJsonObject& objData = valueData.toObject();
+        const QString& level = objData.find("Level")->toString();
         for (const QString& key : levels)
         {
             if (level.contains(key))
             {
-                rewardData[key].append(reward);
+                rewardData[key].append(objData);
                 break;
             }
         }
@@ -218,6 +219,46 @@ void ContentsReward::initChaosReward()
         ui->vLayoutOutput->addWidget(pChaosReward);
         m_rewardWidgets[0].append(pChaosReward);
         m_widgets.append(pChaosReward);
+    }
+}
+
+void ContentsReward::initGuardianReward()
+{
+    const QHash<QString, QStringList>& dropTable = m_dropTables[1];
+    const QStringList& levels = {"칼엘리고스", "하누마탄", "소나벨", "가르가디스"};
+    const QStringList infoTexts = {"※ 2수 기준 평균 획득량 (휴식X)",
+                                   "※ 골드는 파괴석, 수호석, 돌파석을 골드로 환산한 금액 (거래소 기준)"};
+
+    // set info label text
+    for (int i = 0; i < infoTexts.size(); i++)
+        m_infoLabels[i]->setText(infoTexts[i]);
+
+    // load data
+    DbManager* pDbManager = DbManager::getInstance();
+    bsoncxx::builder::stream::document filter{};
+    filter << "Remark" << "";
+
+    pDbManager->lock();
+    QJsonArray arrayData = pDbManager->findDocuments(Collection::Reward_Guardian, SortOrder::None, "", filter.extract());
+    pDbManager->unlock();
+
+    QHash<QString, QList<QJsonObject>> rewardData;
+    for (const QJsonValue& valueData : arrayData)
+    {
+        const QJsonObject& objData = valueData.toObject();
+        const QString& level = objData.find("Level")->toString();
+        rewardData[level].append(objData);
+    }
+
+    // add widgets
+    for (const QString& level : levels)
+    {
+        RewardWidget* pGuardianWidget = new RewardWidget(ContentType::Guardian, level, 1, dropTable[level], rewardData[level]);
+        ui->vLayoutOutput->addWidget(pGuardianWidget);
+        m_rewardWidgets[1].append(pGuardianWidget);
+        m_widgets.append(pGuardianWidget);
+
+        pGuardianWidget->hide();
     }
 }
 
@@ -290,7 +331,12 @@ void ContentsReward::refreshPrice()
             for (int i = 0; i < MAX_CONTENTS; i++)
             {
                 for (RewardWidget* pRewardWidget : m_rewardWidgets[i])
-                    pRewardWidget->updatePrice(item, price);
+                {
+                    if (item.contains("명예의 파편"))
+                        pRewardWidget->updatePrice("명예의 파편", m_itemPrices["명예의 파편"]);
+                    else
+                        pRewardWidget->updatePrice(item, m_itemPrices[item]);
+                }
             }
         });
 

@@ -39,11 +39,11 @@ void RewardWidget::updatePrice(QString item, double price)
         if (m_type == ContentType::Chaos)
             level += QString::number(i + 1);
 
-        if (m_dataCount[level] == 0)
+        int dataCount = m_dataCount[level];
+        if (dataCount == 0)
             continue;
 
         const QList<int>& itemCounts = m_data[level];
-        int dataCount = m_dataCount[level];
         double totalPrice = 0;
         for (int j = 0; j < m_items.size(); j++)
         {
@@ -52,8 +52,8 @@ void RewardWidget::updatePrice(QString item, double price)
 
             double itemCountAvg = itemCounts[j] / dataCount;
             totalPrice += itemCountAvg * m_itemPrices[m_items[j]];
-            m_goldLabels[level]->setText(QString("%L1").arg(totalPrice, 0, 'f', 2));
         }
+        m_goldLabels[level]->setText(QString("%L1").arg(totalPrice, 0, 'f', 2));
     }
 }
 

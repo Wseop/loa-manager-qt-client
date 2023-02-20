@@ -153,6 +153,7 @@ void RewardAdder::initInputList(QString level)
     m_pGridLayout->addWidget(pAddButton, 2, 0, 1, -1);
     connect(pAddButton, &QPushButton::released, this, &RewardAdder::addInputData);
     m_pGridLayout->setAlignment(pAddButton, Qt::AlignHCenter);
+    m_inputWidgets.append(pAddButton);
 }
 
 void RewardAdder::addInputData()
@@ -201,8 +202,9 @@ void RewardAdder::tInsertData(QString content, QString level, QStringList items,
 
     pDbManager->lock();
     if (content == "카오스 던전")
-    {
-        pDbManager->insertDocument(Collection::Reward_Chaos, DocumentBuilder::buildDocumentRewardChaos(level, items, itemCounts, remark).extract(), dummyFilter.extract(), true);
-    }
+        pDbManager->insertDocument(Collection::Reward_Chaos, DocumentBuilder::buildDocumentContentsReward(level, items, itemCounts, remark).extract(), dummyFilter.extract(), true);
+    else if (content == "가디언 토벌")
+        pDbManager->insertDocument(Collection::Reward_Guardian, DocumentBuilder::buildDocumentContentsReward(level, items, itemCounts, remark).extract(), dummyFilter.extract(), true);
+
     pDbManager->unlock();
 }

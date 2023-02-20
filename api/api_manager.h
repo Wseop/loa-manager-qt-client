@@ -2,6 +2,7 @@
 #define APIMANAGER_H
 
 #include "api/enum/lostark_api.h"
+
 #include <QObject>
 
 class QNetworkAccessManager;
@@ -19,6 +20,8 @@ private:
 
     const QString& getApiKey();
 
+    void buildDefaultSearchOption(QJsonObject& searchOption, SearchType type, CategoryCode category);
+
 public:
     static ApiManager* getInstance();
     static void destroyInstance();
@@ -27,6 +30,9 @@ public:
 
     void get(QNetworkAccessManager* pNetworkManager, LostarkApi api, QString param);
     void post(QNetworkAccessManager* pNetworkManager, LostarkApi api, QByteArray data);
+
+    QJsonObject buildSearchOption(SearchType type, CategoryCode category, QString itemName);
+    QJsonObject buildSearchOption(SearchType type, CategoryCode category, QList<int> firstOptionCodes, QList<int> secondOptionCodes);
 
 private:
     static ApiManager* m_pInstance;

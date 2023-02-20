@@ -16,4 +16,18 @@ enum class LostarkApi
     Size
 };
 
+enum class CategoryCode
+{
+    AbilityStone = 30000,
+    Reforge = 50000,
+    Tripod = 170300,
+    Gem = 210000
+};
+
+enum class SearchType
+{
+    Auction,
+    Market
+};
+
 #endif // LOSTARK_API_H

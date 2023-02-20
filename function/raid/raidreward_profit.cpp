@@ -148,7 +148,7 @@ void RaidRewardProfit::updatePrice()
 
     for (const QString& item : items)
     {
-        QJsonObject searchOption = buildSearchOption(item);
+        QJsonObject searchOption = ApiManager::getInstance()->buildSearchOption(SearchType::Market, CategoryCode::Reforge, item);
         QNetworkAccessManager* pNetworkManager = new QNetworkAccessManager();
         connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, item](QNetworkReply* pReply){
             QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
@@ -184,20 +184,6 @@ void RaidRewardProfit::updatePrice()
         connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
         ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Market, QJsonDocument(searchOption).toJson());
     }
-}
-
-QJsonObject RaidRewardProfit::buildSearchOption(QString itemName)
-{
-    QJsonObject searchOption;
-
-    searchOption.insert("Sort", "CURRENT_MIN_PRICE");
-    searchOption.insert("CategoryCode", 50000);
-    searchOption.insert("ItemTier", 3);
-    searchOption.insert("ItemName", itemName);
-    searchOption.insert("PageNo", 1);
-    searchOption.insert("SortCondition", "ASC");
-
-    return searchOption;
 }
 
 RaidRewardProfit* RaidRewardProfit::getInstance()

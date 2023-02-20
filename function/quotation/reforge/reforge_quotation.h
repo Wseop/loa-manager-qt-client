@@ -3,7 +3,6 @@
 
 #include "game_data/character/item/item.h"
 #include <QWidget>
-#include <QJsonObject>
 
 namespace Ui {
 class ReforgeQuotation;
@@ -25,7 +24,6 @@ private:
 
     void refreshPrice();
     void refreshEfficiency(class QLabel* pLabelEfficiency, QString itemName, int price);
-    QJsonObject buildSearchOption(QString itemName);
     void sendRequest(class ReforgeItem* pReforgeItemWidget, QLabel* pLabelEfficiency, QString itemName);
 
 public:

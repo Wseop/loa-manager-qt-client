@@ -2,7 +2,6 @@
 #define ABILITYSTONE_QUOTATION_H
 
 #include <QWidget>
-#include <QJsonObject>
 
 namespace Ui {
 class AbilityStoneQuotation;
@@ -20,7 +19,6 @@ private:
     void addEngraveSelectors();
     void search();
     void sendRequest(QString engrave1, QString engrave2);
-    QJsonObject buildAbilityStoneSearchOption(int engraveCode1, int engraveCode2);
     void addResult(QString engrave1, QString engrave2, int price);
 
 public:

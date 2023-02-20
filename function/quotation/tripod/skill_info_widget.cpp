@@ -3,8 +3,10 @@
 #include "ui/font_manager.h"
 #include "ui/widget_manager.h"
 #include "api/api_manager.h"
+
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QNetworkAccessManager>
@@ -215,28 +217,6 @@ void SkillInfoWidget::setTripodPrice(int tripodCode, QLabel* pLabelPrice)
     });
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    QJsonObject searchOption = buildTripodSearchOption(tripodCode);
+    QJsonObject searchOption = ApiManager::getInstance()->buildSearchOption(SearchType::Auction, CategoryCode::Tripod, {m_skillInfo.auctionCode}, {tripodCode});
     ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Auction, QJsonDocument(searchOption).toJson());
-}
-
-QJsonObject SkillInfoWidget::buildTripodSearchOption(int tripodCode)
-{
-    QJsonObject searchOption;
-
-    searchOption.insert("Sort", "BUY_PRICE");
-    searchOption.insert("CategoryCode", 170300);
-    searchOption.insert("ItemTier", 3);
-    searchOption.insert("PageNo", 1);
-    searchOption.insert("SortCondition", "ASC");
-
-    QJsonObject tripodOption;
-    tripodOption.insert("FirstOption", m_skillInfo.auctionCode);
-    tripodOption.insert("SecondOption", tripodCode);
-    tripodOption.insert("MinValue", 5);
-    QJsonArray skillOptions;
-    skillOptions.append(tripodOption);
-
-    searchOption.insert("SkillOptions", skillOptions);
-
-    return searchOption;
 }

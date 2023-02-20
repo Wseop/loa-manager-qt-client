@@ -243,31 +243,6 @@ void ContentsReward::initGuardianReward()
     }
 }
 
-QJsonObject ContentsReward::buildSearchOption(QString itemName)
-{
-    QJsonObject searchOption;
-
-    searchOption.insert("ItemTier", 3);
-    searchOption.insert("PageNo", 1);
-    searchOption.insert("SortCondition", "ASC");
-
-    if (itemName == "보석")
-    {
-        searchOption.insert("ItemName", "1레벨 멸화");
-        searchOption.insert("Sort", "BUY_PRICE");
-        searchOption.insert("CategoryCode", 210000);
-
-    }
-    else
-    {
-        searchOption.insert("ItemName", itemName);
-        searchOption.insert("Sort", "CURRENT_MIN_PRICE");
-        searchOption.insert("CategoryCode", 50000);
-    }
-
-    return searchOption;
-}
-
 void ContentsReward::refreshPrice()
 {
     QStringList items = {"명예의 파편 주머니(소)",
@@ -278,7 +253,12 @@ void ContentsReward::refreshPrice()
 
     for (const QString& item : items)
     {
-        QJsonObject searchOption = buildSearchOption(item);
+        QJsonObject searchOption;
+        if (item == "보석")
+            searchOption = ApiManager::getInstance()->buildSearchOption(SearchType::Auction, CategoryCode::Gem, "1레벨 멸화");
+        else
+            searchOption = ApiManager::getInstance()->buildSearchOption(SearchType::Market, CategoryCode::Reforge, item);
+
         QNetworkAccessManager* pNetworkManager = new QNetworkAccessManager();
         connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, item](QNetworkReply* pReply){
             QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());

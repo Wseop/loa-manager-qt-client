@@ -29,7 +29,6 @@ private:
     void initChaosReward();
     void initGuardianReward();
 
-    QJsonObject buildSearchOption(QString itemName);
     void refreshPrice();
 
 public:

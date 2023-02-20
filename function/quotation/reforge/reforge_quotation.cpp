@@ -6,6 +6,7 @@
 #include "resource/resource_manager.h"
 
 #include <QFile>
+#include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QLabel>
@@ -185,20 +186,6 @@ void ReforgeQuotation::refreshEfficiency(QLabel* pLabelEfficiency, QString itemN
     }
 }
 
-QJsonObject ReforgeQuotation::buildSearchOption(QString itemName)
-{
-    QJsonObject searchOption;
-
-    searchOption.insert("Sort", "CURRENT_MIN_PRICE");
-    searchOption.insert("CategoryCode", 50000);
-    searchOption.insert("ItemTier", 3);
-    searchOption.insert("ItemName", itemName);
-    searchOption.insert("PageNo", 1);
-    searchOption.insert("SortCondition", "ASC");
-
-    return searchOption;
-}
-
 void ReforgeQuotation::sendRequest(ReforgeItem* pReforgeItemWidget, QLabel* pLabelEfficiency, QString itemName)
 {
     QNetworkAccessManager* pNetworkManager = new QNetworkAccessManager();
@@ -219,8 +206,8 @@ void ReforgeQuotation::sendRequest(ReforgeItem* pReforgeItemWidget, QLabel* pLab
     });
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    QByteArray data = QJsonDocument(buildSearchOption(itemName)).toJson();
-    ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Market, data);
+    QJsonObject searchOption = ApiManager::getInstance()->buildSearchOption(SearchType::Market, CategoryCode::Reforge, itemName);
+    ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Market, QJsonDocument(searchOption).toJson());
 }
 
 ReforgeQuotation* ReforgeQuotation::getInstance()

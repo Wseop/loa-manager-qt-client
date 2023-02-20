@@ -2,7 +2,6 @@
 #define RAIDREWARD_PROFIT_H
 
 #include <QWidget>
-#include <QJsonObject>
 
 namespace Ui {
 class RaidRewardProfit;
@@ -34,7 +33,6 @@ private:
     void addRaidRewardWidgets();
 
     void updatePrice();
-    QJsonObject buildSearchOption(QString itemName);
 
 public:
     static RaidRewardProfit* getInstance();

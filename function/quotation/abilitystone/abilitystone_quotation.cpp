@@ -7,6 +7,7 @@
 #include "function/quotation/abilitystone/abilitystone_price.h"
 #include <QPushButton>
 #include <QMessageBox>
+#include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QNetworkAccessManager>
@@ -124,6 +125,9 @@ void AbilityStoneQuotation::search()
 
 void AbilityStoneQuotation::sendRequest(QString engrave1, QString engrave2)
 {
+    ApiManager* pApiManager = ApiManager::getInstance();
+    EngraveManager* pEngraveManager = EngraveManager::getInstance();
+
     QNetworkAccessManager* pNetworkManager = new QNetworkAccessManager();
     connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&](QNetworkReply* pReply){
         QJsonDocument result = QJsonDocument::fromJson(pReply->readAll());
@@ -144,37 +148,9 @@ void AbilityStoneQuotation::sendRequest(QString engrave1, QString engrave2)
     });
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    ApiManager* pApiManager = ApiManager::getInstance();
-    EngraveManager* pEngraveManager = EngraveManager::getInstance();
-    QByteArray data = QJsonDocument(buildAbilityStoneSearchOption(pEngraveManager->getEngraveCode(engrave1), pEngraveManager->getEngraveCode(engrave2))).toJson();
-    pApiManager->post(pNetworkManager, LostarkApi::Auction, data);
-}
-
-QJsonObject AbilityStoneQuotation::buildAbilityStoneSearchOption(int engraveCode1, int engraveCode2)
-{
-    QJsonObject searchOption;
-
-    // 검색 기본 옵션 추가
-    searchOption.insert("Sort", "BUY_PRICE");
-    searchOption.insert("CategoryCode", 30000);
-    searchOption.insert("ItemTier", 3);
-    searchOption.insert("ItemGrade", "유물");
-    searchOption.insert("PageNo", 1);
-    searchOption.insert("SortCondition", "ASC");
-
-    // 각인 옵션 추가
-    QJsonObject etcOption1;
-    etcOption1.insert("FirstOption", 3);
-    etcOption1.insert("SecondOption", engraveCode1);
-    QJsonObject etcOption2;
-    etcOption2.insert("FirstOption", 3);
-    etcOption2.insert("SecondOption", engraveCode2);
-    QJsonArray etcOptions;
-    etcOptions.append(etcOption1);
-    etcOptions.append(etcOption2);
-    searchOption.insert("EtcOptions", etcOptions);
-
-    return searchOption;
+    QList<int> engraveCodes = {pEngraveManager->getEngraveCode(engrave1), pEngraveManager->getEngraveCode(engrave2)};
+    QJsonObject searchOption = pApiManager->buildSearchOption(SearchType::Auction, CategoryCode::AbilityStone, {3, 3}, engraveCodes);
+    pApiManager->post(pNetworkManager, LostarkApi::Auction, QJsonDocument(searchOption).toJson());
 }
 
 void AbilityStoneQuotation::addResult(QString engrave1, QString engrave2, int price)

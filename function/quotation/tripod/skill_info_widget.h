@@ -2,8 +2,8 @@
 #define SKILL_INFO_WIDGET_H
 
 #include "function/quotation/tripod/tripod_quotation.h"
+
 #include <QWidget>
-#include <QJsonObject>
 
 namespace Ui {
 class SkillInfoWidget;
@@ -25,7 +25,6 @@ private:
     void addSkill();
     void addTripods();
     void setTripodPrice(int tripodCode, class QLabel* pLabelPrice);
-    QJsonObject buildTripodSearchOption(int tripodCode);
 
 private:
     Ui::SkillInfoWidget *ui;

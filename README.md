@@ -15,5 +15,6 @@ Lostark OpenAPI를 활용한 편의기능 제공 앱
 - **[강화 재료 가격 조회](https://github.com/Wseop/QT_LoaManager/tree/main/function/quotation/reforge)** - 강화 재료 및 명예의 파편 주머니 효율 제공
 - **[어빌리티 스톤 가격 조회](https://github.com/Wseop/QT_LoaManager/tree/main/function/quotation/abilitystone)** - 선택한 각인으로 가능한 모든 조합별 어빌리티 스톤 가격 제공
 - **[더보기 손익](https://github.com/Wseop/QT_LoaManager/tree/main/function/raid)** - 모든 레이드 더보기 보상 손익 제공
+- **[컨텐츠 보상](https://github.com/Wseop/QT_LoaManager/tree/main/function/contents_reward)** - 카오스 던전, 가디언 토벌 시 획득할 수 있는 보상의 평균량을 제공, 골드 가치로 환산한 데이터 추가 제공
 ## 다운로드 및 실행
 - **[여기](https://github.com/Wseop/QT_LoaManager/releases/tag/LoaManager_v0.2.0) 혹은 화면 우측의 Releases 탭**에서 zip파일 다운 및 압축해제 후 exe파일 실행

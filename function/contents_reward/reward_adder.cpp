@@ -69,7 +69,7 @@ void RewardAdder::initIconPath()
 void RewardAdder::initLevels()
 {
     if (m_content == "카오스 던전")
-        m_levels = {"타락1", "타락2", "타락3", "공허1", "공허2", "절망1", "절망2", "천공1", "천공2"};
+        m_levels = {"타락1", "타락2", "타락3", "공허1", "공허2", "절망1", "절망2", "천공1", "천공2", "계몽1"};
     else if (m_content == "가디언 토벌")
         m_levels = {"칼엘리고스", "하누마탄", "소나벨", "가르가디스"};
 }

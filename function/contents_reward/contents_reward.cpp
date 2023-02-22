@@ -172,8 +172,8 @@ void ContentsReward::initRewardAdder()
 void ContentsReward::initChaosReward()
 {
     const QHash<QString, QStringList>& dropTable = m_dropTables[0];
-    const QStringList& levels = {"타락", "공허", "절망", "천공"};
-    const QList<int> levelCounts = {3, 2, 2, 2};
+    const QStringList& levels = {"타락", "공허", "절망", "천공", "계몽"};
+    const QList<int> levelCounts = {3, 2, 2, 2, 1};
 
     // load data
     DbManager* pDbManager = DbManager::getInstance();

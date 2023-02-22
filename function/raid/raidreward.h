@@ -34,7 +34,7 @@ private:
     QList<QMap<QString, int>> m_itemCounts;
     QList<QMap<QString, class QLabel*>> m_itemPriceLabels;
     QList<int> m_costs;
-    QList<QMap<QString, int>> m_itemTotalPrices;
+    QList<QMap<QString, double>> m_itemTotalPrices;
     QList<class QLabel*> m_profitLabels;
 
     QList<QWidget*> m_widgets;

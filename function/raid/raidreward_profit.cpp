@@ -97,6 +97,8 @@ void RaidRewardProfit::initIconPath()
             m_iconPaths[objItem.find("Name")->toString()] = iconPath.arg(i).arg(j);
         }
     }
+    m_iconPaths["선명한 지혜의 기운"] = ":/item/image/item/vigor_0.png";
+    m_iconPaths["빛나는 지혜의 기운"] = ":/item/image/item/vigor_1.png";
 }
 
 void RaidRewardProfit::addRefresh()
@@ -145,7 +147,8 @@ void RaidRewardProfit::updatePrice()
     QStringList items = {"명예의 파편 주머니(소)",
                          "파괴석 결정", "파괴강석", "정제된 파괴강석",
                          "수호석 결정", "수호강석", "정제된 수호강석",
-                         "위대한 명예의 돌파석", "경이로운 명예의 돌파석", "찬란한 명예의 돌파석"};
+                         "위대한 명예의 돌파석", "경이로운 명예의 돌파석", "찬란한 명예의 돌파석",
+                         "선명한 지혜의 정수", "빛나는 지혜의 정수"};
 
     for (const QString& item : items)
     {
@@ -162,22 +165,24 @@ void RaidRewardProfit::updatePrice()
 
             int price = jArrItems[0].toObject().find("CurrentMinPrice")->toInt();
             if (item.contains("명예의 파편"))
-            {
                 m_itemPrices["명예의 파편"] = price / (double)500;
-            }
             else if (item.contains("파괴") || item.contains("수호"))
-            {
                 m_itemPrices[item] = price / (double)10;
-            }
+            else if (item == "선명한 지혜의 정수")
+                m_itemPrices["선명한 지혜의 기운"] = price * (65 / (double)4);
+            else if (item == "빛나는 지혜의 정수")
+                m_itemPrices["빛나는 지혜의 기운"] = price * (75 / (double)4);
             else
-            {
                 m_itemPrices[item] = price;
-            }
 
             for (RaidReward* pRaidRewardWidget : m_raidRewardWidgets)
             {
                 if (item.contains("명예의 파편"))
                     pRaidRewardWidget->updateItemPrice("명예의 파편");
+                else if (item == "선명한 지혜의 정수")
+                    pRaidRewardWidget->updateItemPrice("선명한 지혜의 기운");
+                else if (item == "빛나는 지혜의 정수")
+                    pRaidRewardWidget->updateItemPrice("빛나는 지혜의 기운");
                 else
                     pRaidRewardWidget->updateItemPrice(item);
             }

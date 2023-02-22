@@ -3,6 +3,7 @@
 #include "ui/widget_manager.h"
 #include "game_data/character/item/enum/item_grade.h"
 #include "function/raid/raidreward_profit.h"
+
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLabel>
@@ -58,7 +59,7 @@ void RaidReward::updateItemPrice(QString item)
 
         for (int i = 0; i < m_itemPriceLabels.size(); i++)
         {
-            int totalPrice = m_itemPrices[item] * m_itemCounts[i][item];
+            double totalPrice = m_itemPrices[item] * m_itemCounts[i][item];
             m_itemPriceLabels[i][item]->setText(priceText.arg(totalPrice));
             m_itemTotalPrices[i][item] = totalPrice;
         }
@@ -124,7 +125,7 @@ void RaidReward::addCostLabel(QHBoxLayout* pLayout, int cost)
     QLabel* pLabelCost = WidgetManager::createLabel(QString("더보기 비용 : [%1골]").arg(cost), 10, "", 150);
     pVLayout->addWidget(pLabelCost);
 
-    QLabel* pLabelProfit = WidgetManager::createLabel("[-]");
+    QLabel* pLabelProfit = WidgetManager::createLabel("[-]", 10, "", 150);
     m_profitLabels.append(pLabelProfit);
     pVLayout->addWidget(pLabelProfit);
     pVLayout->setAlignment(pLabelProfit, Qt::AlignHCenter);
@@ -140,20 +141,20 @@ void RaidReward::updateProfit()
 
     for (int i = 0; i < m_costs.size(); i++)
     {
-        int cost = m_costs[i];
-        int totalPrice = 0;
+        double cost = (double)m_costs[i];
+        double totalPrice = 0;
         for (auto iter = m_itemTotalPrices[i].begin(); iter != m_itemTotalPrices[i].end(); iter++)
             totalPrice += iter.value();
 
-        int diff = totalPrice - cost;
+        double diff = totalPrice - cost;
         if (diff >= 0)
         {
-            m_profitLabels[i]->setText(QString("%L1골 이득").arg(diff));
+            m_profitLabels[i]->setText(QString("%L1골 이득").arg(diff, 0, 'f', 2));
             m_profitLabels[i]->setStyleSheet(labelStyle.arg("blue"));
         }
         else
         {
-            m_profitLabels[i]->setText(QString("%L1골 손해").arg(-diff));
+            m_profitLabels[i]->setText(QString("%L1골 손해").arg(-diff, 0, 'f', 2));
             m_profitLabels[i]->setStyleSheet(labelStyle.arg("red"));
         }
     }

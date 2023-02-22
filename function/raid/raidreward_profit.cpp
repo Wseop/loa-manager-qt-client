@@ -121,10 +121,11 @@ void RaidRewardProfit::addRaidSelector()
 
 void RaidRewardProfit::addInfo()
 {
-    QString infoText = "수호석의 경우 거래소 가격 기준이므로\n실제 가격은 더 낮을 수 있습니다.";
-    QLabel* pLabelInfo = WidgetManager::createLabel(infoText, 10, "", 250, 50);
+    QString infoText = "수호석의 경우 거래소 가격 기준이므로 실제 가격은 더 낮을 수 있으며, \n순수 강화 재료만 포함한 금액입니다.";
+    QLabel* pLabelInfo = WidgetManager::createLabel(infoText, 10, "", 500, 50);
     m_widgets.append(pLabelInfo);
-    ui->hLayoutInput->addWidget(pLabelInfo);
+    ui->vLayoutRaidRewardProfit->addWidget(pLabelInfo);
+    ui->vLayoutRaidRewardProfit->setAlignment(pLabelInfo, Qt::AlignHCenter);
 }
 
 void RaidRewardProfit::addRaidRewardWidgets()

@@ -123,7 +123,8 @@ void RaidRewardProfit::addRaidSelector()
 
 void RaidRewardProfit::addInfo()
 {
-    QString infoText = "수호석의 경우 거래소 가격 기준이므로 실제 가격은 더 낮을 수 있음";
+    QString infoText = "수호석의 경우 거래소 가격 기준이므로 실제 가격은 더 낮을 수 있음\n"
+                       "지혜의 기운은 엘릭서 제작 후 분해 시 얻을 수 있는 정수의 갯수로 계산";
     QLabel* pLabelInfo = WidgetManager::createLabel(infoText, 10, "", 500, 50);
     m_widgets.append(pLabelInfo);
     ui->vLayoutRaidRewardProfit->addWidget(pLabelInfo);
@@ -169,9 +170,9 @@ void RaidRewardProfit::updatePrice()
             else if (item.contains("파괴") || item.contains("수호"))
                 m_itemPrices[item] = price / (double)10;
             else if (item == "선명한 지혜의 정수")
-                m_itemPrices["선명한 지혜의 기운"] = price * (65 / (double)4);
+                m_itemPrices["선명한 지혜의 기운"] = price * (3 / (double)2);
             else if (item == "빛나는 지혜의 정수")
-                m_itemPrices["빛나는 지혜의 기운"] = price * (75 / (double)4);
+                m_itemPrices["빛나는 지혜의 기운"] = price * (3 / (double)2);
             else
                 m_itemPrices[item] = price;
 

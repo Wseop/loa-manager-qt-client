@@ -17,4 +17,4 @@ Lostark OpenAPI를 활용한 편의기능 제공 앱
 - **[더보기 손익](https://github.com/Wseop/QT_LoaManager/tree/main/function/raid)** - 모든 레이드 더보기 보상 손익 제공
 - **[컨텐츠 보상](https://github.com/Wseop/QT_LoaManager/tree/main/function/contents_reward)** - 카오스 던전, 가디언 토벌 시 획득할 수 있는 보상의 평균량을 제공, 골드 가치로 환산한 데이터 추가 제공
 ## 다운로드 및 실행
-- **[여기](https://github.com/Wseop/QT_LoaManager/releases/tag/LoaManager_v0.2.0) 혹은 화면 우측의 Releases 탭**에서 zip파일 다운 및 압축해제 후 exe파일 실행
+- 우측의 [Releases 탭](https://github.com/Wseop/QT_LoaManager/releases)에서 zip파일 다운 및 압축해제 후 exe파일 실행

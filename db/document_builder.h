@@ -2,7 +2,9 @@
 #define DOCUMENTBUILDER_H
 
 #include "game_data/character/profile/enum/class.h"
+
 #include <bsoncxx/builder/stream/document.hpp>
+
 #include <QObject>
 
 class DocumentBuilder : public QObject

@@ -1,6 +1,7 @@
 #include "auction_calculator.h"
 #include "ui_auction_calculator.h"
 #include "ui/font_manager.h"
+
 #include <QIntValidator>
 
 AuctionCalculator* AuctionCalculator::m_pInstance = nullptr;
@@ -71,16 +72,14 @@ void AuctionCalculator::initConnects()
 
 void AuctionCalculator::calculatePrice()
 {
-    int resultBreakEven4, resultBreakEven8;
-    int resultLowest4, resultLowest8;
     double inputPrice = ui->lePrice->text().toDouble();
+
+    int resultBreakEven4 = inputPrice * DISTRIBUTE_BALANCE_4;
+    int resultBreakEven8 = inputPrice * DISTRIBUTE_BALANCE_8;
+    int resultLowest4 = inputPrice * DISTRIBUTE_LOWPRICE_4;
+    int resultLowest8 = inputPrice * DISTRIBUTE_LOWPRICE_8;
+
     QString resultText = "%L1";
-
-    resultBreakEven4 = inputPrice * DISTRIBUTE_BALANCE_4;
-    resultBreakEven8 = inputPrice * DISTRIBUTE_BALANCE_8;
-    resultLowest4 = inputPrice * DISTRIBUTE_LOWPRICE_4;
-    resultLowest8 = inputPrice * DISTRIBUTE_LOWPRICE_8;
-
     ui->resultBreakEven4->setText(resultText.arg(resultBreakEven4));
     ui->resultBreakEven8->setText(resultText.arg(resultBreakEven8));
     ui->resultLowest4->setText(resultText.arg(resultLowest4));

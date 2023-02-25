@@ -2,9 +2,11 @@
 #define DBMANAGER_H
 
 #include "db/enum/db_enums.h"
+
 #include <mongocxx/client.hpp>
 #include <mongocxx/instance.hpp>
 #include <bsoncxx/builder/stream/document.hpp>
+
 #include <QObject>
 #include <QMutex>
 #include <QJsonObject>

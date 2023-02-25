@@ -24,8 +24,6 @@ public:
     static ApiManager* getInstance();
     static void destroyInstance();
 
-    const int MAX_API_KEY = 10;
-
     void get(QNetworkAccessManager* pNetworkManager, LostarkApi api, QString param);
     void post(QNetworkAccessManager* pNetworkManager, LostarkApi api, QByteArray data);
 

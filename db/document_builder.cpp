@@ -1,4 +1,5 @@
 #include "document_builder.h"
+
 #include <QJsonObject>
 
 bsoncxx::builder::stream::document DocumentBuilder::buildDocumentCharacter(QString name, QString server, Class cls, double level)

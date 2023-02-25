@@ -1,9 +1,11 @@
 #include "db_manager.h"
+
 #include <mongocxx/uri.hpp>
 #include <mongocxx/collection.hpp>
 #include <mongocxx/cursor.hpp>
 #include <mongocxx/options/find.hpp>
 #include <bsoncxx/json.hpp>
+
 #include <QSettings>
 #include <QJsonDocument>
 

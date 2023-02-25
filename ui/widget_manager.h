@@ -9,6 +9,7 @@ class QProgressBar;
 class QComboBox;
 class QNetworkAccessManager;
 class QLineEdit;
+class QGroupBox;
 
 class WidgetManager : public QObject
 {
@@ -22,6 +23,7 @@ public:
     static QProgressBar* createQualityBar(int quality, int width, int height, int fontSize = 10);
     static QComboBox* createComboBox(QStringList items, int fontSize = 10, int width = 100, int height = 25);
     static QLineEdit* createLineEdit(class QValidator* pValidator, QString placeHolder = "", int fontSize = 10, int width = 100, int height = 25);
+    static QGroupBox* createGroupBox(QString title, int fontSize = 10);
 
 private:
     static QString getQualityColor(int quality);

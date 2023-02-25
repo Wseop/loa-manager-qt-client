@@ -1,10 +1,12 @@
 #include "widget_manager.h"
 #include "ui/font_manager.h"
+
 #include <QPushButton>
 #include <QLabel>
 #include <QProgressBar>
 #include <QComboBox>
 #include <QLineEdit>
+#include <QGroupBox>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
@@ -104,6 +106,13 @@ QLineEdit* WidgetManager::createLineEdit(QValidator* pValidator, QString placeHo
     pLineEdit->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
     pLineEdit->setFixedSize(width, height);
     return pLineEdit;
+}
+
+QGroupBox* WidgetManager::createGroupBox(QString title, int fontSize)
+{
+    QGroupBox* pGroupBox = new QGroupBox(title);
+    pGroupBox->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
+    return pGroupBox;
 }
 
 QString WidgetManager::getQualityColor(int quality)

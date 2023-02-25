@@ -4,7 +4,9 @@
 #include "ui/engrave_selector.h"
 #include "game_data/character/engrave/engrave_manager.h"
 #include "api/api_manager.h"
+#include "api/search_option.h"
 #include "function/quotation/abilitystone/abilitystone_price.h"
+
 #include <QPushButton>
 #include <QMessageBox>
 #include <QJsonObject>
@@ -148,9 +150,17 @@ void AbilityStoneQuotation::sendRequest(QString engrave1, QString engrave2)
     });
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    QList<int> engraveCodes = {pEngraveManager->getEngraveCode(engrave1), pEngraveManager->getEngraveCode(engrave2)};
-    QJsonObject searchOption = pApiManager->buildSearchOption(SearchType::Auction, CategoryCode::AbilityStone, {3, 3}, engraveCodes);
-    pApiManager->post(pNetworkManager, LostarkApi::Auction, QJsonDocument(searchOption).toJson());
+    // build search option
+    SearchOption searchOption(SearchType::Auction);
+    searchOption.setCategoryCode(CategoryCode::AbilityStone);
+    searchOption.setItemTier(3);
+    searchOption.setItemGrade(ItemGrade::유물);
+    searchOption.setPageNo(1);
+    searchOption.setSortCondition("ASC");
+    searchOption.setEtcOption(3, pEngraveManager->getEngraveCode(engrave1));
+    searchOption.setEtcOption(3, pEngraveManager->getEngraveCode(engrave2));
+
+    pApiManager->post(pNetworkManager, LostarkApi::Auction, QJsonDocument(searchOption.toJsonObject()).toJson());
 }
 
 void AbilityStoneQuotation::addResult(QString engrave1, QString engrave2, int price)

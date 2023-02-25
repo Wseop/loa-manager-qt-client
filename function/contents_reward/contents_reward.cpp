@@ -5,6 +5,7 @@
 #include "function/contents_reward/reward_adder.h"
 #include "db/db_manager.h"
 #include "api/api_manager.h"
+#include "api/search_option.h"
 #include "resource/resource_manager.h"
 
 #include <QLabel>
@@ -250,14 +251,25 @@ void ContentsReward::refreshPrice()
                          "수호석 결정", "수호강석", "정제된 수호강석",
                          "위대한 명예의 돌파석", "경이로운 명예의 돌파석", "찬란한 명예의 돌파석",
                          "보석"};
+    SearchOption searchOption(SearchType::Market);
+    searchOption.setItemTier(3);
+    searchOption.setPageNo(1);
+    searchOption.setSortCondition("ASC");
 
     for (const QString& item : items)
     {
-        QJsonObject searchOption;
         if (item == "보석")
-            searchOption = ApiManager::getInstance()->buildSearchOption(SearchType::Auction, CategoryCode::Gem, "1레벨 멸화");
+        {
+            searchOption.setSearchType(SearchType::Auction);
+            searchOption.setCategoryCode(CategoryCode::Gem);
+            searchOption.setItemName("1레벨 멸화");
+        }
         else
-            searchOption = ApiManager::getInstance()->buildSearchOption(SearchType::Market, CategoryCode::Reforge, item);
+        {
+            searchOption.setSearchType(SearchType::Market);
+            searchOption.setCategoryCode(CategoryCode::Reforge);
+            searchOption.setItemName(item);
+        }
 
         QNetworkAccessManager* pNetworkManager = new QNetworkAccessManager();
         connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, item](QNetworkReply* pReply){
@@ -303,9 +315,9 @@ void ContentsReward::refreshPrice()
 
         connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
         if (item == "보석")
-            ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Auction, QJsonDocument(searchOption).toJson());
+            ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Auction, QJsonDocument(searchOption.toJsonObject()).toJson());
         else
-            ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Market, QJsonDocument(searchOption).toJson());
+            ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Market, QJsonDocument(searchOption.toJsonObject()).toJson());
     }
 }
 

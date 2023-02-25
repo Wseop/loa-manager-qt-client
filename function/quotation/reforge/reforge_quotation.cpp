@@ -3,6 +3,7 @@
 #include "ui/widget_manager.h"
 #include "function/quotation/reforge/reforge_item.h"
 #include "api/api_manager.h"
+#include "api/search_option.h"
 #include "resource/resource_manager.h"
 
 #include <QFile>
@@ -206,8 +207,15 @@ void ReforgeQuotation::sendRequest(ReforgeItem* pReforgeItemWidget, QLabel* pLab
     });
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    QJsonObject searchOption = ApiManager::getInstance()->buildSearchOption(SearchType::Market, CategoryCode::Reforge, itemName);
-    ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Market, QJsonDocument(searchOption).toJson());
+    // build search option
+    SearchOption searchOption(SearchType::Market);
+    searchOption.setCategoryCode(CategoryCode::Reforge);
+    searchOption.setItemTier(3);
+    searchOption.setItemName(itemName);
+    searchOption.setPageNo(1);
+    searchOption.setSortCondition("ASC");
+
+    ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Market, QJsonDocument(searchOption.toJsonObject()).toJson());
 }
 
 ReforgeQuotation* ReforgeQuotation::getInstance()

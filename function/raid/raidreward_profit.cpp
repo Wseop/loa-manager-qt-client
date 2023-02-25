@@ -3,6 +3,7 @@
 #include "ui/widget_manager.h"
 #include "function/raid/raidreward.h"
 #include "api/api_manager.h"
+#include "api/search_option.h"
 #include "resource/resource_manager.h"
 
 #include <QPushButton>
@@ -151,9 +152,14 @@ void RaidRewardProfit::updatePrice()
                          "위대한 명예의 돌파석", "경이로운 명예의 돌파석", "찬란한 명예의 돌파석",
                          "선명한 지혜의 정수", "빛나는 지혜의 정수"};
 
+    SearchOption searchOption(SearchType::Market);
+    searchOption.setCategoryCode(CategoryCode::Reforge);
+    searchOption.setItemTier(3);
+    searchOption.setPageNo(1);
+    searchOption.setSortCondition("ASC");
+
     for (const QString& item : items)
     {
-        QJsonObject searchOption = ApiManager::getInstance()->buildSearchOption(SearchType::Market, CategoryCode::Reforge, item);
         QNetworkAccessManager* pNetworkManager = new QNetworkAccessManager();
         connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, item](QNetworkReply* pReply){
             QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
@@ -189,7 +195,9 @@ void RaidRewardProfit::updatePrice()
             }
         });
         connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
-        ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Market, QJsonDocument(searchOption).toJson());
+
+        searchOption.setItemName(item);
+        ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Market, QJsonDocument(searchOption.toJsonObject()).toJson());
     }
 }
 

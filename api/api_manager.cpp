@@ -62,22 +62,6 @@ const QString& ApiManager::getApiKey()
     return m_apiKeys[m_keyIndex];
 }
 
-void ApiManager::buildDefaultSearchOption(QJsonObject& searchOption, SearchType type, CategoryCode category)
-{
-    // set sort option
-    if (type == SearchType::Auction)
-        searchOption.insert("Sort", "BUY_PRICE");
-    else if (type == SearchType::Market)
-        searchOption.insert("Sort", "CURRENT_MIN_PRICE");
-
-    // set category code
-    searchOption.insert("CategoryCode", static_cast<int>(category));
-    // set others
-    searchOption.insert("ItemTier", 3);
-    searchOption.insert("SortCondition", "ASC");
-    searchOption.insert("PageNo", 1);
-}
-
 ApiManager* ApiManager::getInstance()
 {
     if (m_pInstance == nullptr)
@@ -116,52 +100,4 @@ void ApiManager::post(QNetworkAccessManager* pNetworkManager, LostarkApi api, QB
     request.setRawHeader("Content-Type", "application/json");
     request.setUrl(QUrl(url));
     pNetworkManager->post(request, data);
-}
-
-QJsonObject ApiManager::buildSearchOption(SearchType type, CategoryCode category, QString itemName)
-{
-    QJsonObject searchOption;
-    buildDefaultSearchOption(searchOption, type, category);
-
-    // set itemName
-    searchOption.insert("ItemName", itemName);
-
-    return searchOption;
-}
-
-QJsonObject ApiManager::buildSearchOption(SearchType type, CategoryCode category, QList<int> firstOptionCodes, QList<int> secondOptionCodes)
-{
-    QJsonObject searchOption;
-    buildDefaultSearchOption(searchOption, type, category);
-
-    // set options
-    if (category == CategoryCode::AbilityStone)
-    {
-        searchOption.insert("ItemGrade", "유물");
-        // set engrave code options
-        QJsonArray etcOptions;
-        for (int i = 0; i < firstOptionCodes.size(); i++)
-        {
-            QJsonObject etcOption;
-            etcOption.insert("FirstOption", firstOptionCodes[i]);
-            etcOption.insert("SecondOption", secondOptionCodes[i]);
-            etcOptions.append(etcOption);
-        }
-        searchOption.insert("EtcOptions", etcOptions);
-    }
-    else if (category == CategoryCode::Tripod)
-    {
-        QJsonArray skillOptions;
-        for (int i = 0; i < firstOptionCodes.size(); i++)
-        {
-            QJsonObject skillOption;
-            skillOption.insert("FirstOption", firstOptionCodes[i]);
-            skillOption.insert("SecondOption", secondOptionCodes[i]);
-            skillOption.insert("MinValue", 5);
-            skillOptions.append(skillOption);
-        }
-        searchOption.insert("SkillOptions", skillOptions);
-    }
-
-    return searchOption;
 }

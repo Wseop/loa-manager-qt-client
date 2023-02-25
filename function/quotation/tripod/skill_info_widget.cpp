@@ -3,6 +3,7 @@
 #include "ui/font_manager.h"
 #include "ui/widget_manager.h"
 #include "api/api_manager.h"
+#include "api/search_option.h"
 
 #include <QLabel>
 #include <QVBoxLayout>
@@ -217,6 +218,14 @@ void SkillInfoWidget::setTripodPrice(int tripodCode, QLabel* pLabelPrice)
     });
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    QJsonObject searchOption = ApiManager::getInstance()->buildSearchOption(SearchType::Auction, CategoryCode::Tripod, {m_skillInfo.auctionCode}, {tripodCode});
-    ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Auction, QJsonDocument(searchOption).toJson());
+    // build search option
+    SearchOption searchOption(SearchType::Auction);
+    searchOption.setCategoryCode(CategoryCode::Tripod);
+    searchOption.setItemTier(3);
+    searchOption.setItemGrade(ItemGrade::유물);
+    searchOption.setPageNo(1);
+    searchOption.setSortCondition("ASC");
+    searchOption.setSkillOption(m_skillInfo.auctionCode, tripodCode, 5);
+
+    ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Auction, QJsonDocument(searchOption.toJsonObject()).toJson());
 }

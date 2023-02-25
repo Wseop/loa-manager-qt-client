@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     api/api_manager.cpp \
+    api/search_option.cpp \
     db/db_manager.cpp \
     db/document_builder.cpp \
     function/auction_calculator/auction_calculator.cpp \
@@ -68,6 +69,7 @@ SOURCES += \
 HEADERS += \
     api/api_manager.h \
     api/enum/lostark_api.h \
+    api/search_option.h \
     db/db_manager.h \
     db/document_builder.h \
     db/enum/db_enums.h \

@@ -11,12 +11,15 @@
 #include "function/quotation/reforge/reforge_quotation.h"
 #include "function/raid/raidreward_profit.h"
 #include "function/contents_reward/contents_reward.h"
+#include "function/smart_search/smart_search.h"
 #include "resource/resource_manager.h"
 
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QPushButton>
+#include <QGroupBox>
+#include <QHBoxLayout>
 
 bool g_bAdmin = false;
 
@@ -24,15 +27,15 @@ LoaManager::LoaManager() :
     ui(new Ui::LoaManager),
     m_mainSetting(ResourceManager::getInstance()->loadJson("main")),
     m_pAdminLogin(new AdminLogin()),
-    m_pBackButton(nullptr)
+    m_pAdminButton(nullptr)
 {
     ui->setupUi(this);
+    ui->hLayoutMenu->setAlignment(Qt::AlignLeft);
+    ui->vLayoutContents->setAlignment(Qt::AlignTop);
 
-    setLayoutAlignment();
-    createMenuButtons();
-    addFunctions();
-    initConnects();
-    addAdminButton();
+    initFunction();
+    initMenuButton();
+    initAdminButton();
 
     this->setWindowIcon(QIcon(":/icon/Home.ico"));
     this->setWindowTitle(m_mainSetting.find("Version")->toString());
@@ -41,107 +44,16 @@ LoaManager::LoaManager() :
 
 LoaManager::~LoaManager()
 {
+    delete m_pAdminLogin;
+    delete m_pAdminButton;
+    for (QWidget* pWidget : m_widgets)
+        delete pWidget;
     delete ui;
 }
 
-void LoaManager::setLayoutAlignment()
+void LoaManager::initFunction()
 {
-    ui->hLayoutMenu->setAlignment(Qt::AlignLeft);
-    ui->vLayoutContents->setAlignment(Qt::AlignTop);
-}
-
-void LoaManager::createMenuButtons()
-{
-    // create back button
-    m_pBackButton = WidgetManager::createPushButton(QPixmap(":/icon/image/back.png"));
-    connect(m_pBackButton, &QPushButton::released, this, [&](){
-        // hide child menu & show parent menu
-        for (QPushButton* pButton : m_childMenuButtons)
-            pButton->hide();
-        for (QPushButton* pButton : m_parentMenuButtons)
-            pButton->show();
-        m_pBackButton->hide();
-    });
-    ui->hLayoutMenu->addWidget(m_pBackButton);
-    m_pBackButton->hide();
-
-    // create menu buttons
-    const QJsonArray& menus = m_mainSetting.find("Menu")->toArray();
-    for (const QJsonValue& menu : menus)
-    {
-        const QJsonObject& menuObj = menu.toObject();
-        // create parent_menu button
-        QPushButton* pParentButton = WidgetManager::createPushButton(menuObj.find("Title")->toString());
-        connect(pParentButton, &QPushButton::released, this, [&, pParentButton](){
-            // show child buttons & hide parent buttons
-            const auto childButtons = m_parentToChildButtons[pParentButton];
-            for (QPushButton* pButton : childButtons)
-                pButton->show();
-            for (QPushButton* pButton : m_parentMenuButtons)
-                pButton->hide();
-            m_pBackButton->show();
-        });
-        ui->hLayoutMenu->addWidget(pParentButton);
-        m_parentMenuButtons.append(pParentButton);
-
-        // create child_menu button
-        const QJsonArray& childMenus = menuObj.find("List")->toArray();
-        for (const QJsonValue& childMenu : childMenus)
-        {
-            const QString& menuName = childMenu.toString();
-            QPushButton* pChildButton = WidgetManager::createPushButton(menuName);
-            ui->hLayoutMenu->addWidget(pChildButton);
-            pChildButton->hide();
-            m_childMenuButtons[menuName] = pChildButton;
-            m_parentToChildButtons[pParentButton].append(pChildButton);
-        }
-    }
-}
-
-void LoaManager::initConnects()
-{
-    QStringList menuList;
-    const QJsonArray& menuObjs = m_mainSetting.find("Menu")->toArray();
-    for (int i = 0; i < menuObjs.size(); i++)
-    {
-        const QJsonArray& menuNames = menuObjs[i].toObject().find("List")->toArray();
-        for (const QJsonValue& menuName : menuNames)
-            menuList << menuName.toString();
-    }
-
-    for (int i = 0; i < menuList.size(); i++)
-    {
-        const QString& menuName = menuList[i];
-
-        if (menuName == "캐릭터 순위")
-        {
-            connect(m_childMenuButtons[menuName], &QPushButton::released, this, [&](){
-                for (QWidget* pWidget : m_functions)
-                    pWidget->hide();
-                CharacterRanking::getInstance()->show();
-                if (!CharacterRanking::getInstance()->loaded())
-                    emit CharacterRanking::getInstance()->refresh();
-            });
-        }
-        else
-        {
-            connect(m_childMenuButtons[menuName], &QPushButton::released, this, [&, i](){
-                for (int index = 0; index < m_functions.size(); index++)
-                {
-                    QWidget* pWidget = m_functions[index];
-
-                    if (index == i)
-                        pWidget->show();
-                    else
-                        pWidget->hide();
-                }
-            });
-        }
-    }
-}
-
-void LoaManager::addFunctions()
-{
+    // main.json의 메뉴 list 순서에 맞게 등록
     m_functions.append(CharacterSearch::getInstance());
     m_functions.append(CharacterRanking::getInstance());
     m_functions.append(SettingRanking::getInstance());
@@ -151,6 +63,7 @@ void LoaManager::addFunctions()
     m_functions.append(AbilityStoneQuotation::getInstance());
     m_functions.append(RaidRewardProfit::getInstance());
     m_functions.append(ContentsReward::getInstance());
+    m_functions.append(SmartSearch::getInstace());
 
     for (QWidget* pWidget : m_functions)
     {
@@ -159,12 +72,50 @@ void LoaManager::addFunctions()
     }
 }
 
-void LoaManager::addAdminButton()
+void LoaManager::initMenuButton()
 {
-    QPushButton* pAdminButton = WidgetManager::createPushButton("관리자 로그인");
-    ui->hLayoutAdmin->addWidget(pAdminButton);
+    int menuIndex = 0;
+    const QJsonArray& menus = m_mainSetting.find("Menu")->toArray();
+
+    for (int i = 0; i < menus.size(); i++)
+    {
+        const QJsonObject& menu = menus[i].toObject();
+        const QString& title = menu.find("Title")->toString();
+        const QStringList& menuList = menu.find("List")->toVariant().toStringList();
+
+        QGroupBox* pMenuGroup = WidgetManager::createGroupBox(title);
+        ui->hLayoutMenu->addWidget(pMenuGroup);
+        m_widgets.append(pMenuGroup);
+        QHBoxLayout* pLayout = new QHBoxLayout();
+        pMenuGroup->setLayout(pLayout);
+
+        for (const QString& menuName : menuList)
+        {
+            QPushButton* pMenuButton = WidgetManager::createPushButton(menuName);
+            pLayout->addWidget(pMenuButton);
+            m_widgets.append(pMenuButton);
+
+            connect(pMenuButton, &QPushButton::released, this, [&, menuIndex](){
+                for (int i = 0; i < m_functions.size(); i++)
+                {
+                    if (i == menuIndex)
+                        m_functions[i]->show();
+                    else
+                        m_functions[i]->hide();
+                }
+            });
+
+            menuIndex++;
+        }
+    }
+}
+
+void LoaManager::initAdminButton()
+{
+    m_pAdminButton = WidgetManager::createPushButton("관리자 로그인");
+    ui->hLayoutAdmin->addWidget(m_pAdminButton);
     ui->hLayoutAdmin->setAlignment(Qt::AlignRight);
-    connect(pAdminButton, &QPushButton::released, this, [&](){
+    connect(m_pAdminButton, &QPushButton::released, this, [&](){
         m_pAdminLogin->show();
     });
 }

@@ -18,24 +18,21 @@ public:
     ~LoaManager();
 
 private:
-    void setLayoutAlignment();
-    void createMenuButtons();
-    void initConnects();
-    void addFunctions();
-    void addAdminButton();
+    void initFunction();
+    void initMenuButton();
+    void initAdminButton();
 
 private:
     Ui::LoaManager *ui;
 
-    const int MENU_BUTTON_WIDTH = 100;
-    const int MENU_BUTTON_HEIGHT = 50;
-
     QJsonObject m_mainSetting;
-    class AdminLogin* m_pAdminLogin;
-    QPushButton* m_pBackButton;
-    QList<QPushButton*> m_parentMenuButtons;
-    QMap<QString, QPushButton*> m_childMenuButtons;
-    QMap<QPushButton*, QList<QPushButton*>> m_parentToChildButtons;
+
+    // function
     QList<QWidget*> m_functions;
+    // admin button
+    class AdminLogin* m_pAdminLogin;
+    QPushButton* m_pAdminButton;
+
+    QList<QWidget*> m_widgets;
 };
 #endif // LOAMANAGER_H

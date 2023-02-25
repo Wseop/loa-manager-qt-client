@@ -24,6 +24,8 @@ CharacterRanking::CharacterRanking() :
     setAlignments();
     setFonts();
     initConnects();
+
+    emit refresh();
 }
 
 CharacterRanking::~CharacterRanking()

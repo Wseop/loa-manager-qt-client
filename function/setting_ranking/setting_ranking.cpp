@@ -17,10 +17,14 @@ SettingRanking::SettingRanking() :
     m_renderCount(0)
 {
     ui->setupUi(this);
+    ui->vLayoutSettingRanking->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
+    ui->hLayoutTop->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
+    ui->vLayoutSettingData->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
 
-    initConnects();
-    setAlignments();
-    setFonts();
+    initFont();
+    initClassSelector();
+    initRefresh();
+    initShowMore();
 }
 
 SettingRanking::~SettingRanking()
@@ -28,7 +32,17 @@ SettingRanking::~SettingRanking()
     delete ui;
 }
 
-void SettingRanking::initConnects()
+void SettingRanking::initFont()
+{
+    FontManager* pFontManager = FontManager::getInstance();
+    QFont nanumBold10 = pFontManager->getFont(FontFamily::NanumSquareNeoBold, 10);
+
+    ui->pbSelectClass->setFont(nanumBold10);
+    ui->lbInfo->setFont(nanumBold10);
+    ui->pbShowMore->setFont(nanumBold10);
+}
+
+void SettingRanking::initClassSelector()
 {
     connect(ui->pbSelectClass, &QPushButton::released, this, [&](){
         m_pClassSelector->show();
@@ -54,26 +68,16 @@ void SettingRanking::initConnects()
             m_pClassSelector->hide();
         });
     }
+}
 
+void SettingRanking::initRefresh()
+{
     connect(this, &SettingRanking::refresh, this, &SettingRanking::updateUI);
+}
+
+void SettingRanking::initShowMore()
+{
     connect(ui->pbShowMore, &QPushButton::released, this, &SettingRanking::updateUI);
-}
-
-void SettingRanking::setAlignments()
-{
-    ui->vLayoutSettingRanking->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
-    ui->hLayoutTop->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
-    ui->vLayoutSettingData->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
-}
-
-void SettingRanking::setFonts()
-{
-    FontManager* pFontManager = FontManager::getInstance();
-    QFont nanumBold10 = pFontManager->getFont(FontFamily::NanumSquareNeoBold, 10);
-
-    ui->pbSelectClass->setFont(nanumBold10);
-    ui->lbInfo->setFont(nanumBold10);
-    ui->pbShowMore->setFont(nanumBold10);
 }
 
 void SettingRanking::updateUI()

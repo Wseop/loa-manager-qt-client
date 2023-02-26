@@ -6,6 +6,7 @@
 #include "ui/widget_manager.h"
 #include "ui/font_manager.h"
 #include "function/setting_ranking/characterlist_widget.h"
+
 #include <functional>
 #include <QLabel>
 
@@ -15,9 +16,10 @@ SettingWidget::SettingWidget(QWidget* pParent, int index, const SettingCode& set
     m_pCharacterListWidget(nullptr)
 {
     ui->setupUi(this);
+    ui->vLayoutAbility->setAlignment(Qt::AlignHCenter);
+    ui->vLayoutSetEffect->setAlignment(Qt::AlignHCenter);
 
-    setFonts();
-    setAlignments();
+    initFont();
     setRatio(index, characterInfos.size(), total);
     setAbility(settingCode);
     setSetEffect(settingCode);
@@ -37,7 +39,7 @@ SettingWidget::~SettingWidget()
     delete ui;
 }
 
-void SettingWidget::setFonts()
+void SettingWidget::initFont()
 {
     FontManager* pFontManager = FontManager::getInstance();
     QFont nanumBold10 = pFontManager->getFont(FontFamily::NanumSquareNeoBold, 10);
@@ -49,12 +51,6 @@ void SettingWidget::setFonts()
     ui->groupSetEffect->setFont(nanumBold10);
     ui->groupClassEngrave->setFont(nanumBold10);
     ui->groupEngrave->setFont(nanumBold10);
-}
-
-void SettingWidget::setAlignments()
-{
-    ui->vLayoutAbility->setAlignment(Qt::AlignHCenter);
-    ui->vLayoutSetEffect->setAlignment(Qt::AlignHCenter);
 }
 
 void SettingWidget::setRatio(int index, int count, int total)

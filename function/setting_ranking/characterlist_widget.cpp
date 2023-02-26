@@ -3,6 +3,7 @@
 #include "ui/widget_manager.h"
 #include "function/character_search/character_search.h"
 #include "function/setting_ranking/setting_ranking.h"
+
 #include <QPushButton>
 #include <functional>
 

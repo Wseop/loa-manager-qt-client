@@ -25,9 +25,11 @@ private:
     SettingRanking();
     ~SettingRanking();
 
-    void initConnects();
-    void setAlignments();
-    void setFonts();
+    void initFont();
+    void initClassSelector();
+    void initRefresh();
+    void initShowMore();
+
     void updateUI();
     void clear();
 

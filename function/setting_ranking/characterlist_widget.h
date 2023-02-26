@@ -2,6 +2,7 @@
 #define CHARACTERLIST_WIDGET_H
 
 #include "function/setting_ranking/setting_ranking.h"
+
 #include <QWidget>
 
 namespace Ui {

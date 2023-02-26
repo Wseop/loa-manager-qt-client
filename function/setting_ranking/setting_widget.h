@@ -2,6 +2,7 @@
 #define SETTING_WIDGET_H
 
 #include "function/setting_ranking/setting_ranking.h"
+
 #include <QWidget>
 
 namespace Ui {
@@ -17,8 +18,7 @@ public:
     ~SettingWidget();
 
 private:
-    void setFonts();
-    void setAlignments();
+    void initFont();
     void setRatio(int index, int count, int total);
     void setAbility(const SettingCode& settingCode);
     void setSetEffect(const SettingCode& settingCode);

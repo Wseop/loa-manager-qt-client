@@ -6,6 +6,7 @@
 #include "game_data/character/profile/enum/class.h"
 #include "db/db_manager.h"
 #include "function/character_search/character_search.h"
+
 #include <QLabel>
 #include <QPushButton>
 #include <QHBoxLayout>
@@ -15,17 +16,20 @@ CharacterRanking* CharacterRanking::m_pInstance = nullptr;
 
 CharacterRanking::CharacterRanking() :
     ui(new Ui::CharacterRanking),
-    m_bLoaded(false),
     m_pClassSelector(new ClassSelector()),
     m_renderCount(0)
 {
     ui->setupUi(this);
+    ui->vLayoutCharacterRanking->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
+    ui->vLayoutRankingData->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 
-    setAlignments();
-    setFonts();
-    initConnects();
+    // 더보기 버튼 기능 초기화
+    connect(ui->pbRenderMore, &QPushButton::released, this, &CharacterRanking::updateUI);
 
-    emit refresh();
+    initFont();
+    initClassSelector();
+    initLevelSelector();
+    initRefresh();
 }
 
 CharacterRanking::~CharacterRanking()
@@ -33,13 +37,7 @@ CharacterRanking::~CharacterRanking()
     delete ui;
 }
 
-void CharacterRanking::setAlignments()
-{
-    ui->vLayoutCharacterRanking->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-    ui->vLayoutRankingData->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-}
-
-void CharacterRanking::setFonts()
+void CharacterRanking::initFont()
 {
     FontManager* pFontManager = FontManager::getInstance();
     QFont nanumBold10 = pFontManager->getFont(FontFamily::NanumSquareNeoBold, 10);
@@ -51,42 +49,25 @@ void CharacterRanking::setFonts()
     ui->pbRenderMore->setFont(nanumBold10);
 }
 
-void CharacterRanking::initConnects()
+// 직업 선택 버튼 기능 초기화
+void CharacterRanking::initClassSelector()
 {
-    connect(this, &CharacterRanking::refresh, this, &CharacterRanking::clearRankingData);
-    connect(this, &CharacterRanking::refresh, this, [&](){
-        setEnabled(false);
-
-        QThread* pThread = QThread::create(tGetRankingData);
-        connect(pThread, &QThread::finished, this, &CharacterRanking::updateUI);
-        connect(pThread, &QThread::finished, this, [&](){
-            setEnabled(true);
-        });
-        connect(pThread, &QThread::finished, pThread, &QThread::deleteLater);
-        pThread->start();
-    });
-
-    connect(ui->hSliderItemLevel, &QSlider::valueChanged, this, [&](int value){
-        clearRankingData();
-        updateUI();
-    });
-    connect(ui->hSliderItemLevel, &QSlider::sliderMoved, this, [&](int value){
-        ui->lbSelectedItemLevel->setText(QString("아이템 레벨\n%1").arg(value));
-    });
+    // 전체 직업 선택
     connect(ui->pbSelectAllClass, &QPushButton::released, this, [&](){
         QString oldClass = ui->lbSelectedClass->text();
         QString newClass = ui->pbSelectAllClass->text();
         if (oldClass != newClass)
         {
+            // 선택된 직업명 변경 후 새로고침
             ui->lbSelectedClass->setText(newClass);
             emit refresh();
         }
     });
+
+    // 1개 직업 선택 - ClassSelector popup
     connect(ui->pbSelectClass, &QPushButton::released, this, [&](){
         m_pClassSelector->show();
     });
-
-    // init ClassSelector's button action
     QList<QPushButton*>& pClassButtons = m_pClassSelector->getButtons();
     for (QPushButton* pClassButton : pClassButtons)
     {
@@ -95,14 +76,50 @@ void CharacterRanking::initConnects()
             QString newClass = pClassButton->text();
             if (oldClass != newClass)
             {
+                // 선택된 직업명 변경 후 새로고침
                 ui->lbSelectedClass->setText(newClass);
                 emit refresh();
             }
             m_pClassSelector->hide();
         });
     }
+}
 
-    connect(ui->pbRenderMore, &QPushButton::released, this, &CharacterRanking::updateUI);
+// 아이템 레벨 선택 슬라이더 기능 초기화
+void CharacterRanking::initLevelSelector()
+{
+    // 레벨 값 변경 시 ui 업데이트
+    connect(ui->hSliderItemLevel, &QSlider::valueChanged, this, [&](int value){
+        clearRankData();
+        updateUI();
+    });
+
+    // 드래그 중에는 레벨 표기만 변경
+    connect(ui->hSliderItemLevel, &QSlider::sliderMoved, this, [&](int value){
+        ui->lbSelectedItemLevel->setText(QString("아이템 레벨\n%1").arg(value));
+    });
+}
+
+// 새로고침 signal 동작 세팅
+void CharacterRanking::initRefresh()
+{
+    // 기존 데이터 clear
+    connect(this, &CharacterRanking::refresh, this, &CharacterRanking::clearRankData);
+
+    connect(this, &CharacterRanking::refresh, this, [&](){
+        setEnabled(false);
+        // load rank data
+        QThread* pThread = QThread::create(tGetRankData);
+        // load 완료 시 ui에 반영
+        connect(pThread, &QThread::finished, this, &CharacterRanking::updateUI);
+        connect(pThread, &QThread::finished, this, [&](){
+            setEnabled(true);
+        });
+        connect(pThread, &QThread::finished, pThread, &QThread::deleteLater);
+        pThread->start();
+    });
+
+    emit refresh();
 }
 
 void CharacterRanking::addCharacterData(int index, QString server, QString cls, QString name, double itemLevel)
@@ -110,6 +127,7 @@ void CharacterRanking::addCharacterData(int index, QString server, QString cls, 
     const int WIDGET_WIDTH = 150;
     const int WIDGET_HEIGHT = 25;
 
+    // 캐릭터 정보 ui 추가
     QHBoxLayout* pHLayout = new QHBoxLayout();
     ui->vLayoutRankingData->addLayout(pHLayout);
     m_hLayouts.append(pHLayout);
@@ -129,6 +147,8 @@ void CharacterRanking::addCharacterData(int index, QString server, QString cls, 
     QPushButton* pButtonName = WidgetManager::createPushButton(name, 10, WIDGET_WIDTH, WIDGET_HEIGHT);
     pHLayout->addWidget(pButtonName);
     m_buttons.append(pButtonName);
+
+    // 캐릭터명 클릭 시 해당 캐릭터 조회 및 화면 전환
     connect(pButtonName, &QPushButton::pressed, this, [&, pButtonName](){
         CharacterSearch::getInstance()->changeCharacter(pButtonName->text());
         this->hide();
@@ -144,9 +164,9 @@ void CharacterRanking::updateUI()
 {
     const int NUMBER_PER_RENDER = 100;
 
-    for (int i = 0; (i < NUMBER_PER_RENDER) && (m_renderCount < m_jArrRankingData.size()); i++)
+    for (int i = 0; (i < NUMBER_PER_RENDER) && (m_renderCount < m_rankData.size()); i++)
     {
-        const QJsonObject& jObjData = m_jArrRankingData[m_renderCount].toObject();
+        const QJsonObject& jObjData = m_rankData[m_renderCount].toObject();
         QString server = jObjData.find("Server")->toString();
         QString cls = jObjData.find("Class")->toString();
         QString name = jObjData.find("Name")->toString();
@@ -157,7 +177,7 @@ void CharacterRanking::updateUI()
     }
 }
 
-void CharacterRanking::clearRankingData()
+void CharacterRanking::clearRankData()
 {
     m_renderCount = 0;
 
@@ -178,13 +198,13 @@ void CharacterRanking::setEnable(bool enable)
 {
     ui->pbSelectAllClass->setEnabled(enable);
     ui->pbSelectClass->setEnabled(enable);
+    ui->hSliderItemLevel->setEnabled(enable);
     ui->pbRenderMore->setEnabled(enable);
 }
 
-void CharacterRanking::tGetRankingData()
+void CharacterRanking::tGetRankData()
 {
     CharacterRanking* pInstance = CharacterRanking::getInstance();
-    pInstance->m_bLoaded = true;
 
     DbManager* pDbManager = DbManager::getInstance();
     bsoncxx::builder::stream::document filter{};
@@ -194,7 +214,7 @@ void CharacterRanking::tGetRankingData()
         filter << "Class" << classToStr(cls).toStdString();
 
     pDbManager->lock();
-    pInstance->m_jArrRankingData = pDbManager->findDocuments(Collection::Character, SortOrder::Desc, "Level", filter.extract());
+    pInstance->m_rankData = pDbManager->findDocuments(Collection::Character, SortOrder::Desc, "Level", filter.extract());
     pDbManager->unlock();
 }
 
@@ -211,9 +231,4 @@ void CharacterRanking::destroyInstance()
         return;
     delete m_pInstance;
     m_pInstance = nullptr;
-}
-
-bool CharacterRanking::loaded()
-{
-    return m_bLoaded;
 }

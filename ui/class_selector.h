@@ -19,17 +19,16 @@ public:
     QList<class QPushButton*>& getButtons();
 
 private:
-    void loadClass();
-    void addWidgets();
+    void initUI();
 
 private:
     Ui::ClassSelector *ui;
 
-    QList<class QHBoxLayout*> m_hLayouts;
-    QList<class QLabel*> m_labels;
+    const QJsonArray m_classes;
     QList<QPushButton*> m_buttons;
 
-    QJsonArray m_arrClass;
+    QList<QWidget*> m_widgets;
+    QList<QLayout*> m_layouts;
 };
 
 #endif // CLASS_SELECTOR_H

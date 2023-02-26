@@ -16,20 +16,24 @@ TripodQuotation* TripodQuotation::m_pInstance = nullptr;
 TripodQuotation::TripodQuotation() :
     ui(new Ui::TripodQuotation),
     m_pClassSelector(new ClassSelector()),
-    m_skillInfoWidgets(0),
     m_pPriceValidator(new QIntValidator())
 {
     ui->setupUi(this);
     ui->lePrice->setValidator(m_pPriceValidator);
+    ui->hLayoutInput->setAlignment(Qt::AlignHCenter);
+    ui->vLayoutResult->setAlignment(Qt::AlignHCenter);
 
     loadSkillData();
-    setFonts();
-    setAlignments();
-    initConnects();
+    initFont();
+    initClassSelector();
+    initPriceEmphasis();
 }
 
 TripodQuotation::~TripodQuotation()
 {
+    delete m_pClassSelector;
+    delete m_pPriceValidator;
+    clear();
     delete ui;
 }
 
@@ -37,38 +41,40 @@ void TripodQuotation::loadSkillData()
 {
     const QJsonObject json = ResourceManager::getInstance()->loadJson("skill");
 
-    const QJsonArray& arrData = json.find("Skill")->toArray();
-    for (const QJsonValue& valueData : arrData)
+    const QJsonArray& jsonArrSkill = json.find("Skill")->toArray();
+    for (const QJsonValue& value : jsonArrSkill)
     {
-        const QJsonObject& objData = valueData.toObject();
-        QString cls = objData.find("Class")->toString();
-        const QJsonArray& arrSkill = objData.find("Skills")->toArray();
+        const QJsonObject& object = value.toObject();
 
-        for (const QJsonValue& valueSkill : arrSkill)
+        const QString& cls = object.find("Class")->toString();
+
+        const QJsonArray& skills = object.find("Skills")->toArray();
+        for (const QJsonValue& value : skills)
         {
-            const QJsonObject& objSkill = valueSkill.toObject();
-            const int& skillValue = objSkill.find("Value")->toInt();
+            const QJsonObject& skill = value.toObject();
+
+            const int& skillValue = skill.find("Value")->toInt();
             m_classToSkills[cls].append({
-                                            objSkill.find("Text")->toString(),
+                                            skill.find("Text")->toString(),
                                             skillValue,
-                                            objSkill.find("IconPath")->toString()
+                                            skill.find("IconPath")->toString()
                                         });
 
-            const QJsonArray& arrTripod = objSkill.find("Tripods")->toArray();
-            for (const QJsonValue& valueTripod : arrTripod)
+            const QJsonArray& tripods = skill.find("Tripods")->toArray();
+            for (const QJsonValue& value : tripods)
             {
-                const QJsonObject& objTripod = valueTripod.toObject();
+                const QJsonObject& tripod = value.toObject();
                 m_skillValueToTripods[skillValue].append({
-                                                       objTripod.find("Text")->toString(),
-                                                       objTripod.find("Value")->toInt(),
-                                                       objTripod.find("IconIndex")->toInt()
+                                                       tripod.find("Text")->toString(),
+                                                       tripod.find("Value")->toInt(),
+                                                       tripod.find("IconIndex")->toInt()
                                                    });
             }
         }
     }
 }
 
-void TripodQuotation::setFonts()
+void TripodQuotation::initFont()
 {
     FontManager* pFontManager = FontManager::getInstance();
     QFont nanumBold10 = pFontManager->getFont(FontFamily::NanumSquareNeoBold, 10);
@@ -80,19 +86,13 @@ void TripodQuotation::setFonts()
     ui->lbExplain->setFont(nanumBold10);
 }
 
-void TripodQuotation::setAlignments()
-{
-    ui->hLayoutInput->setAlignment(Qt::AlignHCenter);
-    ui->vLayoutResult->setAlignment(Qt::AlignHCenter);
-}
-
-void TripodQuotation::initConnects()
+void TripodQuotation::initClassSelector()
 {
     connect(ui->pbSelectClass, &QPushButton::released, this, [&](){
         m_pClassSelector->show();
     });
 
-    QList<QPushButton*> classSelectBtns = m_pClassSelector->getButtons();
+    const QList<QPushButton*>& classSelectBtns = m_pClassSelector->getButtons();
     for (QPushButton* pButton : classSelectBtns)
     {
         connect(pButton, &QPushButton::released, this, [&, pButton](){
@@ -107,7 +107,10 @@ void TripodQuotation::initConnects()
             m_pClassSelector->hide();
         });
     }
+}
 
+void TripodQuotation::initPriceEmphasis()
+{
     connect(ui->lePrice, &QLineEdit::returnPressed, this, [&](){
         for (SkillInfoWidget* pSkillInfoWidget : m_skillInfoWidgets)
             pSkillInfoWidget->setPriceEmphasis(ui->lePrice->text().toInt());
@@ -117,6 +120,7 @@ void TripodQuotation::initConnects()
 void TripodQuotation::clear()
 {
     ui->lePrice->clear();
+
     for (SkillInfoWidget* pSkillInfoWidget : m_skillInfoWidgets)
         delete pSkillInfoWidget;
     m_skillInfoWidgets.clear();

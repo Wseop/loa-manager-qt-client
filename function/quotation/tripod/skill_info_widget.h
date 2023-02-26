@@ -20,8 +20,7 @@ public:
     void setPriceEmphasis(int price);
 
 private:
-    void setFonts();
-    void setAlignments();
+    void initFont();
     void addSkill();
     void addTripods();
     void setTripodPrice(int tripodCode, class QLabel* pLabelPrice);
@@ -34,6 +33,7 @@ private:
 
     const SkillInfo& m_skillInfo;
     const QList<TripodInfo>& m_tripods;
+
     QList<QLabel*> m_labels;
     QList<QLabel*> m_priceLabels;
     QList<class QBoxLayout*> m_layouts;

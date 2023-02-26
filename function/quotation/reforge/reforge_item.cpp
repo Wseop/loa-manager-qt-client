@@ -1,6 +1,7 @@
 #include "reforge_item.h"
 #include "ui_reforge_item.h"
 #include "ui/widget_manager.h"
+
 #include <QLabel>
 
 ReforgeItem::ReforgeItem(QString name, QString iconPath, ItemGrade grade) :

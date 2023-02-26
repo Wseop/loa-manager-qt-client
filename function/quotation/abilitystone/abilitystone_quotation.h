@@ -15,10 +15,10 @@ private:
     AbilityStoneQuotation();
     ~AbilityStoneQuotation();
 
-    void setAlignments();
-    void addEngraveSelectors();
+    void initEngraveSelectors();
+
     void search();
-    void sendRequest(QString engrave1, QString engrave2);
+    void sendApiRequest(QString engrave1, QString engrave2);
     void addResult(QString engrave1, QString engrave2, int price);
 
 public:
@@ -32,7 +32,9 @@ private:
 
     QList<class EngraveSelector*> m_engraveSelectors;
     QList<class QPushButton*> m_engraveSelectButtons;
-    QSet<QString> m_selectedEngraves;
+
+    QList<QWidget*> m_widgets;
+    QList<QLayout*> m_layouts;
 };
 
 #endif // ABILITYSTONE_QUOTATION_H

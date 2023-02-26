@@ -2,6 +2,7 @@
 #define REFORGE_QUOTATION_H
 
 #include "game_data/character/item/item.h"
+
 #include <QWidget>
 
 namespace Ui {
@@ -18,13 +19,13 @@ private:
 
     void loadReforgeData();
 
-    void addRefreshButton();
-    void addReforgeItemWidgets();
-    void addEfficiencyWidgets();
+    void initRefreshButton();
+    void initReforgeItemWidget();
+    void initEfficiencyWidget();
 
     void refreshPrice();
     void refreshEfficiency(class QLabel* pLabelEfficiency, QString itemName, int price);
-    void sendRequest(class ReforgeItem* pReforgeItemWidget, QLabel* pLabelEfficiency, QString itemName);
+    void sendApiRequest(class ReforgeItem* pReforgeItemWidget, QLabel* pLabelEfficiency, QString itemName);
 
 public:
     static ReforgeQuotation* getInstance();
@@ -37,13 +38,12 @@ private:
 
     QStringList m_categories;
     QList<QList<Item>> m_reforgeItems;
-    class QPushButton* m_pBtnRefresh;
+
     QList<QList<ReforgeItem*>> m_reforgeItemWidgets;
     QList<QList<QLabel*>> m_efficiencyLabels;
 
-    QList<QLabel*> m_labels;
-    QList<class QLayout*> m_layouts;
-    QList<class QGroupBox*> m_groupBoxes;
+    QList<QWidget*> m_widgets;
+    QList<QLayout*> m_layouts;
 };
 
 #endif // REFORGE_QUOTATION_H

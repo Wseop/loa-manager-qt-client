@@ -2,6 +2,7 @@
 #define REFORGE_ITEM_H
 
 #include "game_data/character/item/enum/item_grade.h"
+
 #include <QWidget>
 
 namespace Ui {

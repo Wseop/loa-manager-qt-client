@@ -21,23 +21,22 @@ AbilityStoneQuotation::AbilityStoneQuotation() :
     ui(new Ui::AbilityStoneQuotation)
 {
     ui->setupUi(this);
+    ui->hLayoutInput->setAlignment(Qt::AlignHCenter);
+    ui->vLayoutOutput->setAlignment(Qt::AlignHCenter);
 
-    setAlignments();
-    addEngraveSelectors();
+    initEngraveSelectors();
 }
 
 AbilityStoneQuotation::~AbilityStoneQuotation()
 {
+    for (QWidget* pWidget : m_widgets)
+        delete pWidget;
+    for (QLayout* pLayout : m_layouts)
+        delete pLayout;
     delete ui;
 }
 
-void AbilityStoneQuotation::setAlignments()
-{
-    ui->hLayoutInput->setAlignment(Qt::AlignHCenter);
-    ui->vLayoutOutput->setAlignment(Qt::AlignHCenter);
-}
-
-void AbilityStoneQuotation::addEngraveSelectors()
+void AbilityStoneQuotation::initEngraveSelectors()
 {
     const int MAX_SELECT_BUTTON = 5;
     const QString selectedButtonStyle = "QPushButton {"
@@ -58,22 +57,27 @@ void AbilityStoneQuotation::addEngraveSelectors()
             pButton->setStyleSheet("");
         }
     });
+    m_widgets.append(pInitButton);
 
-    // 각인 선택 버튼 추가
+    // 각인선택 버튼 추가
     for (int i = 0; i < MAX_SELECT_BUTTON; i++)
     {
         QHBoxLayout* pHLayout = new QHBoxLayout();
         ui->hLayoutInput->addLayout(pHLayout);
+        m_layouts.append(pHLayout);
 
         EngraveSelector* pEngraveSelector = new EngraveSelector(false);
         m_engraveSelectors.append(pEngraveSelector);
+        m_widgets.append(pEngraveSelector);
+
         QPushButton* pButton = WidgetManager::createPushButton(QString("각인 선택 %1").arg(i + 1));
         m_engraveSelectButtons.append(pButton);
         pHLayout->addWidget(pButton);
-
         connect(pButton, &QPushButton::released, this, [&, pEngraveSelector](){
             pEngraveSelector->show();
         });
+        m_widgets.append(pButton);
+
         QList<QPushButton*> engraveButtons = pEngraveSelector->getButtons();
         for (QPushButton* pEngraveButton : engraveButtons)
         {
@@ -89,11 +93,12 @@ void AbilityStoneQuotation::addEngraveSelectors()
     QPushButton* pSearchButton = WidgetManager::createPushButton("검색");
     ui->hLayoutInput->addWidget(pSearchButton);
     connect(pSearchButton, &QPushButton::released, this, &AbilityStoneQuotation::search);
+    m_widgets.append(pSearchButton);
 }
 
 void AbilityStoneQuotation::search()
 {
-    m_selectedEngraves.clear();
+    QSet<QString> selectedEngraves;
 
     // 선택된 각인 탐색
     for (QPushButton* pButton : m_engraveSelectButtons)
@@ -101,11 +106,12 @@ void AbilityStoneQuotation::search()
         const QString& text = pButton->text();
         if (text.contains("각인 선택"))
             continue;
-        m_selectedEngraves.insert(pButton->text());
+
+        selectedEngraves.insert(pButton->text());
     }
 
     // 선택한 각인이 2개 미만이면 알람을 띄우고 탐색 중지
-    if (m_selectedEngraves.size() < 2)
+    if (selectedEngraves.size() < 2)
     {
         QMessageBox msgBox;
         msgBox.setText("각인을 2개 이상 선택해주세요.");
@@ -114,18 +120,14 @@ void AbilityStoneQuotation::search()
     else
     {
         // 가능한 모든 조합으로 조회
-        QStringList selectedEngraves(m_selectedEngraves.begin(), m_selectedEngraves.end());
-        for (int i = 0; i < selectedEngraves.size() - 1; i++)
-        {
-            for (int j = i + 1; j < selectedEngraves.size(); j++)
-            {
-                sendRequest(selectedEngraves[i], selectedEngraves[j]);
-            }
-        }
+        const QStringList& engraves = selectedEngraves.values();
+        for (int i = 0; i < engraves.size() - 1; i++)
+            for (int j = i + 1; j < engraves.size(); j++)
+                sendApiRequest(engraves[i], engraves[j]);
     }
 }
 
-void AbilityStoneQuotation::sendRequest(QString engrave1, QString engrave2)
+void AbilityStoneQuotation::sendApiRequest(QString engrave1, QString engrave2)
 {
     ApiManager* pApiManager = ApiManager::getInstance();
     EngraveManager* pEngraveManager = EngraveManager::getInstance();
@@ -136,10 +138,11 @@ void AbilityStoneQuotation::sendRequest(QString engrave1, QString engrave2)
         if (result.isNull())
             return;
 
-        // 최저가로 등록된 아이템 1개만 parsing
+        // 최저가로 등록된 아이템 parsing
         QJsonArray items = result.object().find("Items")->toArray();
         if (items.size() == 0)
             return;
+
         QJsonObject item = items[0].toObject();
         QJsonArray itemOptions = item.find("Options")->toArray();
         QString engrave1 = itemOptions[0].toObject().find("OptionName")->toString();

@@ -7,6 +7,7 @@
 
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -22,9 +23,9 @@ SkillInfoWidget::SkillInfoWidget(QWidget* pParent, const SkillInfo& skill, const
     m_layouts(0)
 {
     ui->setupUi(this);
+    ui->vLayoutSkill->setAlignment(Qt::AlignVCenter);
 
-    setFonts();
-    setAlignments();
+    initFont();
     addSkill();
     addTripods();
 }
@@ -58,7 +59,7 @@ void SkillInfoWidget::setPriceEmphasis(int price)
     }
 }
 
-void SkillInfoWidget::setFonts()
+void SkillInfoWidget::initFont()
 {
     FontManager* pFontManager = FontManager::getInstance();
     QFont nanumBold10 = pFontManager->getFont(FontFamily::NanumSquareNeoBold, 10);
@@ -66,11 +67,6 @@ void SkillInfoWidget::setFonts()
     ui->groupTripod1->setFont(nanumBold10);
     ui->groupTripod2->setFont(nanumBold10);
     ui->groupTripod3->setFont(nanumBold10);
-}
-
-void SkillInfoWidget::setAlignments()
-{
-    ui->vLayoutSkill->setAlignment(Qt::AlignVCenter);
 }
 
 void SkillInfoWidget::addSkill()
@@ -89,86 +85,20 @@ void SkillInfoWidget::addSkill()
 
 void SkillInfoWidget::addTripods()
 {
-    QString iconPath = ":/tripod/image/tripod/Tripod_Tier_%1_%2.png";
+    const QString iconPath = ":/tripod/image/tripod/Tripod_Tier_%1_%2.png";
+    const int tripodCount = 8;
+    const QList<QHBoxLayout*> tripodLayouts = {ui->hLayoutTripod1, ui->hLayoutTripod2, ui->hLayoutTripod3};
 
-    // 1트포
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < tripodCount; i++)
     {
+        int tripodGroup = i / 3;
         const TripodInfo& tripod = m_tripods[i];
 
         QVBoxLayout* pVLayout = new QVBoxLayout();
         m_layouts.append(pVLayout);
-        ui->hLayoutTripod1->addLayout(pVLayout);
+        tripodLayouts[tripodGroup]->addLayout(pVLayout);
 
-        QLabel* pTripodIcon = WidgetManager::createIcon(iconPath.arg(1).arg(tripod.iconIndex), nullptr, "#000000");
-        m_labels.append(pTripodIcon);
-        pVLayout->addWidget(pTripodIcon);
-        pVLayout->setAlignment(pTripodIcon, Qt::AlignHCenter);
-
-        QLabel* pTripodName = WidgetManager::createLabel(tripod.name, 10, "", LABEL_WIDTH, LABEL_HEIGHT);
-        m_labels.append(pTripodName);
-        pVLayout->addWidget(pTripodName);
-
-        QLabel* pTripodPrice = WidgetManager::createLabel("-", 10, "", LABEL_WIDTH, LABEL_HEIGHT);
-        pVLayout->addWidget(pTripodPrice);
-
-        if (tripod.auctionCode == -1)
-        {
-            pTripodPrice->setText("[1레벨 MAX]");
-            m_labels.append(pTripodPrice);
-        }
-        else
-        {
-            setTripodPrice(tripod.auctionCode, pTripodPrice);
-            m_priceLabels.append(pTripodPrice);
-        }
-    }
-
-    // 2트포
-    for (int i = 3; i < 6; i++)
-    {
-        const TripodInfo& tripod = m_tripods[i];
-
-        QVBoxLayout* pVLayout = new QVBoxLayout();
-        pVLayout->setAlignment(Qt::AlignHCenter);
-        m_layouts.append(pVLayout);
-        ui->hLayoutTripod2->addLayout(pVLayout);
-
-        QLabel* pTripodIcon = WidgetManager::createIcon(iconPath.arg(2).arg(tripod.iconIndex), nullptr, "#000000");
-        m_labels.append(pTripodIcon);
-        pVLayout->addWidget(pTripodIcon);
-        pVLayout->setAlignment(pTripodIcon, Qt::AlignHCenter);
-
-        QLabel* pTripodName = WidgetManager::createLabel(tripod.name, 10, "", LABEL_WIDTH, LABEL_HEIGHT);
-        m_labels.append(pTripodName);
-        pVLayout->addWidget(pTripodName);
-
-        QLabel* pTripodPrice = WidgetManager::createLabel("-", 10, "", LABEL_WIDTH, LABEL_HEIGHT);
-        pVLayout->addWidget(pTripodPrice);
-
-        if (tripod.auctionCode == -1)
-        {
-            pTripodPrice->setText("[1레벨 MAX]");
-            m_labels.append(pTripodPrice);
-        }
-        else
-        {
-            setTripodPrice(tripod.auctionCode, pTripodPrice);
-            m_priceLabels.append(pTripodPrice);
-        }
-    }
-
-    // 3트포
-    for (int i = 6; i < 8; i++)
-    {
-        const TripodInfo& tripod = m_tripods[i];
-
-        QVBoxLayout* pVLayout = new QVBoxLayout();
-        pVLayout->setAlignment(Qt::AlignHCenter);
-        m_layouts.append(pVLayout);
-        ui->hLayoutTripod3->addLayout(pVLayout);
-
-        QLabel* pTripodIcon = WidgetManager::createIcon(iconPath.arg(3).arg(tripod.iconIndex), nullptr, "#000000");
+        QLabel* pTripodIcon = WidgetManager::createIcon(iconPath.arg(tripodGroup + 1).arg(tripod.iconIndex), nullptr, "#000000");
         m_labels.append(pTripodIcon);
         pVLayout->addWidget(pTripodIcon);
         pVLayout->setAlignment(pTripodIcon, Qt::AlignHCenter);
@@ -203,9 +133,8 @@ void SkillInfoWidget::setTripodPrice(int tripodCode, QLabel* pLabelPrice)
             pLabelPrice->setText("[ ? ]");
             return;
         }
-        QJsonObject jObjresult = result.object();
 
-        QJsonArray items = jObjresult.find("Items")->toArray();
+        const QJsonArray& items = result.object().find("Items")->toArray();
         if (items.size() == 0)
         {
             pLabelPrice->setText("[ - ]");

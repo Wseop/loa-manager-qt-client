@@ -10,7 +10,7 @@ AbilityStonePrice::AbilityStonePrice(QString engrave1, QString engrave2, int pri
     ui->lbEngrave2->setText(engrave2);
     ui->lbPrice->setText(QString("%L1골").arg(price));
 
-    setFonts();
+    initFont();
 }
 
 AbilityStonePrice::~AbilityStonePrice()
@@ -18,7 +18,7 @@ AbilityStonePrice::~AbilityStonePrice()
     delete ui;
 }
 
-void AbilityStonePrice::setFonts()
+void AbilityStonePrice::initFont()
 {
     FontManager* pFontManager = FontManager::getInstance();
     QFont nanumBold10 = pFontManager->getFont(FontFamily::NanumSquareNeoBold, 10);

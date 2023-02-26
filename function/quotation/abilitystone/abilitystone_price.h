@@ -16,7 +16,7 @@ public:
     ~AbilityStonePrice();
 
 private:
-    void setFonts();
+    void initFont();
 
 private:
     Ui::AbilityStonePrice *ui;

@@ -30,9 +30,10 @@ private:
     ~TripodQuotation();
 
     void loadSkillData();
-    void setFonts();
-    void setAlignments();
-    void initConnects();
+    void initFont();
+    void initClassSelector();
+    void initPriceEmphasis();
+
     void clear();
     void addSkillInfoWidgets(QString cls);
 
@@ -46,10 +47,12 @@ private:
     static TripodQuotation* m_pInstance;
 
     class ClassSelector* m_pClassSelector;
+    class QIntValidator* m_pPriceValidator;
+
     QMap<QString, QList<SkillInfo>> m_classToSkills;
     QMap<int, QList<TripodInfo>> m_skillValueToTripods;
+
     QList<class SkillInfoWidget*> m_skillInfoWidgets;
-    class QIntValidator* m_pPriceValidator;
 };
 
 #endif // TRIPOD_QUOTATION_H

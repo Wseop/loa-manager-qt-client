@@ -16,16 +16,15 @@ private:
     ContentsReward();
     ~ContentsReward();
 
-    void initContents();
     void loadDropTable();
 
-    void setAlignments();
     void initRefreshButton();
     void initContentsSelector();
-    void initInputDataButton();
+    void initInsertDataButton();
+    void initRewardAdder();
     void initInfoLabel();
 
-    void initRewardAdder();
+    // 컨텐츠별 reward ui 초기화
     void initChaosReward();
     void initGuardianReward();
 
@@ -41,18 +40,16 @@ private:
     static ContentsReward* m_pInstance;
 
     const int MAX_INFO = 2;
-    const int MAX_CONTENTS = 2;
 
-    QString m_localKey;
     QStringList m_contents;
     QList<QHash<QString, QStringList>> m_dropTables;
-    QHash<QString, double> m_itemPrices;
-
-    // widgets
     class QComboBox* m_pContentsSelector;
-    QList<class QLabel*> m_infoLabels;
+
     QList<QList<class RewardWidget*>> m_rewardWidgets;
     QList<class RewardAdder*> m_rewardAdders;
+
+    QHash<QString, double> m_itemPrices;
+
     QList<QWidget*> m_widgets;
 };
 

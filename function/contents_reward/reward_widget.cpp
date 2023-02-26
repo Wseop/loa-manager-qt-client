@@ -64,14 +64,14 @@ void RewardWidget::initIconPath()
     const QJsonObject json = ResourceManager::getInstance()->loadJson("reforge");
 
     QString iconPath = ":/reforge/image/reforge/reforge_%1_%2.png";
-    QJsonArray arrReforge = json.find("Reforge")->toArray();
-    for (int i = 0; i < arrReforge.size(); i++)
+    QJsonArray reforges = json.find("Reforge")->toArray();
+    for (int i = 0; i < reforges.size(); i++)
     {
-        const QJsonArray& arrItems = arrReforge[i].toObject().find("Items")->toArray();
-        for (int j = 0; j < arrItems.size(); j++)
+        const QJsonArray& items = reforges[i].toObject().find("Items")->toArray();
+        for (int j = 0; j < items.size(); j++)
         {
-            const QJsonObject& objItem = arrItems[j].toObject();
-            m_iconPaths[objItem.find("Name")->toString()] = iconPath.arg(i).arg(j);
+            const QJsonObject& item = items[j].toObject();
+            m_iconPaths[item.find("Name")->toString()] = iconPath.arg(i).arg(j);
         }
     }
 
@@ -144,6 +144,7 @@ void RewardWidget::initData(const QList<QJsonObject>& data)
         QString key = m_level;
         if (m_type == ContentType::Chaos)
             key += QString::number(i + 1);
+
         QLabel* pLabelLevel = WidgetManager::createLabel(key);
         ui->gridMain->addWidget(pLabelLevel, i + 1, 0);
         m_widgets.append(pLabelLevel);

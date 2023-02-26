@@ -25,20 +25,20 @@ ContentsReward* ContentsReward::m_pInstance = nullptr;
 
 ContentsReward::ContentsReward() :
     ui(new Ui::ContentsReward),
-    m_rewardWidgets(MAX_CONTENTS)
+    m_pContentsSelector(nullptr)
 {
     ui->setupUi(this);
+    ui->hLayoutInput->setAlignment(Qt::AlignHCenter);
+    ui->vLayoutOutput->setAlignment(Qt::AlignHCenter);
 
-    initContents();
     loadDropTable();
 
-    setAlignments();
     initRefreshButton();
     initContentsSelector();
-    initInputDataButton();
+    initInsertDataButton();
+    initRewardAdder();
     initInfoLabel();
 
-    initRewardAdder();
     initChaosReward();
     initGuardianReward();
 }
@@ -50,11 +50,6 @@ ContentsReward::~ContentsReward()
     delete ui;
 }
 
-void ContentsReward::initContents()
-{
-    m_contents = {"카오스 던전", "가디언 토벌"};
-}
-
 void ContentsReward::loadDropTable()
 {
     const QStringList files = {"drop_chaos", "drop_guardian"};
@@ -64,37 +59,30 @@ void ContentsReward::loadDropTable()
     {
         const QJsonObject json = ResourceManager::getInstance()->loadJson(file);
 
-        // parse json file
-        const QJsonArray& arrayDropTable = json.find("DropTable")->toArray();
-        QHash<QString, QStringList> dropTable;
-        for (const QJsonValue& valueDropTable : arrayDropTable)
-        {
-            const QJsonObject& objDropTable = valueDropTable.toObject();
-            // parse Level
-            const QString& level = objDropTable.find("Level")->toString();
-            // parse ItemList
-            const QJsonArray& arrayItemList = objDropTable.find("ItemList")->toArray();
-            QStringList items;
-            for (const QJsonValue& valueItemList : arrayItemList)
-                items << valueItemList.toString();
-            // add to hash
-            dropTable[level] = items;
-        }
+        // add content name
+        m_contents << json.find("Content")->toString();
 
+        // add drop table
+        QHash<QString, QStringList> dropTable;
+        const QJsonArray& jsonDropTable = json.find("DropTable")->toArray();
+        for (const QJsonValue& value : jsonDropTable)
+        {
+            const QJsonObject& obj = value.toObject();
+            const QString& level = obj.find("Level")->toString();
+            dropTable[level] = obj.find("ItemList")->toVariant().toStringList();
+        }
         m_dropTables.append(dropTable);
     }
-}
 
-void ContentsReward::setAlignments()
-{
-    ui->hLayoutInput->setAlignment(Qt::AlignHCenter);
-    ui->vLayoutOutput->setAlignment(Qt::AlignHCenter);
+    m_rewardWidgets.resize(m_contents.size());
 }
 
 void ContentsReward::initRefreshButton()
 {
     QPushButton* pButtonRefresh = WidgetManager::createPushButton(QPixmap(":/icon/image/refresh.png"));
     ui->hLayoutInput->addWidget(pButtonRefresh);
+
+    // 클릭 시 가격정보 새로고침
     connect(pButtonRefresh, &QPushButton::released, this, &ContentsReward::refreshPrice);
 
     m_widgets.append(pButtonRefresh);
@@ -104,32 +92,32 @@ void ContentsReward::initContentsSelector()
 {
     m_pContentsSelector = WidgetManager::createComboBox(m_contents);
     ui->hLayoutInput->addWidget(m_pContentsSelector);
+
+    // 선택한 컨텐츠로 출력 내용 변경
     connect(m_pContentsSelector, &QComboBox::currentIndexChanged, this, [&](int index){
         for (int i = 0; i < m_rewardWidgets.size(); i++)
         {
-            QList<RewardWidget*>& rewardWidgets = m_rewardWidgets[i];
+            const QList<RewardWidget*>& rewardWidgets = m_rewardWidgets[i];
 
             if (i == index)
-            {
                 for (RewardWidget* pRewardWidget : rewardWidgets)
                     pRewardWidget->show();
-            }
             else
-            {
                 for (RewardWidget* pRewardWidget : rewardWidgets)
                     pRewardWidget->hide();
-            }
         }
     });
 
     m_widgets.append(m_pContentsSelector);
 }
 
-void ContentsReward::initInputDataButton()
+void ContentsReward::initInsertDataButton()
 {
-    QPushButton* pButtonInputData = WidgetManager::createPushButton("데이터 추가");
-    ui->hLayoutInput->addWidget(pButtonInputData);
-    connect(pButtonInputData, &QPushButton::released, this, [&](){
+    QPushButton* pButtonInsertData = WidgetManager::createPushButton("데이터 추가");
+    ui->hLayoutInput->addWidget(pButtonInsertData);
+
+    // 선택된 컨텐츠에 해당하는 widget(RewardAdder) popup
+    connect(pButtonInsertData, &QPushButton::released, this, [&](){
         int currentIndex = m_pContentsSelector->currentIndex();
 
         if (!g_bAdmin)
@@ -143,26 +131,13 @@ void ContentsReward::initInputDataButton()
             m_rewardAdders[currentIndex]->show();
         }
     });
-}
 
-void ContentsReward::initInfoLabel()
-{
-    const QStringList infoTexts = {"※ 2수 기준 평균 획득량 (휴식X)",
-                                   "※ 골드는 명예의 파편, 파괴석, 수호석, 돌파석, 보석을 골드로 환산한 금액 (거래소 기준)"};
-
-    for (int i = 0; i < MAX_INFO; i++)
-    {
-        QLabel* pLabelInfo = WidgetManager::createLabel(infoTexts[i], 12, "", 1000);
-        ui->vLayoutOutput->addWidget(pLabelInfo);
-        ui->vLayoutOutput->setAlignment(pLabelInfo, Qt::AlignHCenter);
-        m_infoLabels.append(pLabelInfo);
-        m_widgets.append(pLabelInfo);
-    }
+    m_widgets.append(pButtonInsertData);
 }
 
 void ContentsReward::initRewardAdder()
 {
-    for (int i = 0; i < MAX_CONTENTS; i++)
+    for (int i = 0; i < m_contents.size(); i++)
     {
         RewardAdder* pRewardAdder = new RewardAdder(m_contents[i], m_dropTables[i]);
         m_rewardAdders.append(pRewardAdder);
@@ -170,74 +145,91 @@ void ContentsReward::initRewardAdder()
     }
 }
 
+void ContentsReward::initInfoLabel()
+{
+    const QStringList infoTexts = {"※ 2수 기준 평균 획득량 (휴식 게이지X)",
+                                   "※ 골드는 명예의 파편, 파괴석, 수호석, 돌파석, 보석을 골드로 환산한 금액 (거래소 기준)"};
+
+    for (int i = 0; i < MAX_INFO; i++)
+    {
+        QLabel* pLabelInfo = WidgetManager::createLabel(infoTexts[i], 12, "", 1000);
+        ui->vLayoutOutput->addWidget(pLabelInfo);
+        ui->vLayoutOutput->setAlignment(pLabelInfo, Qt::AlignHCenter);
+        m_widgets.append(pLabelInfo);
+    }
+}
+
 void ContentsReward::initChaosReward()
 {
-    const QHash<QString, QStringList>& dropTable = m_dropTables[0];
+    const int contentIndex = 0;
+    const QHash<QString, QStringList>& dropTable = m_dropTables[contentIndex];
     const QStringList& levels = {"타락", "공허", "절망", "천공", "계몽"};
     const QList<int> levelCounts = {3, 2, 2, 2, 1};
 
-    // load data
+    // db에서 카오스 던전 reward data 로드
     DbManager* pDbManager = DbManager::getInstance();
     bsoncxx::builder::stream::document filter{};
     filter << "Remark" << "";
 
     pDbManager->lock();
-    QJsonArray arrayData = pDbManager->findDocuments(Collection::Reward_Chaos, SortOrder::None, "", filter.extract());
+    const QJsonArray data = pDbManager->findDocuments(Collection::Reward_Chaos, SortOrder::None, "", filter.extract());
     pDbManager->unlock();
 
-    QHash<QString, QList<QJsonObject>> rewardData;
-    for (const QJsonValue& valueData : arrayData)
+    // reward data를 level별로 취합
+    QHash<QString, QList<QJsonObject>> rewardDatas;
+    for (const QJsonValue& value : data)
     {
-        const QJsonObject& objData = valueData.toObject();
-        const QString& level = objData.find("Level")->toString();
-        for (const QString& key : levels)
+        const QJsonObject& rewardData = value.toObject();
+
+        for (const QString& level : levels)
         {
-            if (level.contains(key))
+            if (rewardData.find("Level")->toString().contains(level))
             {
-                rewardData[key].append(objData);
+                rewardDatas[level].append(rewardData);
                 break;
             }
         }
     }
 
-    // add widgets
+    // reward data를 RewardWidget형식으로 화면에 출력
     for (int i = 0; i < levels.size(); i++)
     {
-        RewardWidget* pChaosReward = new RewardWidget(ContentType::Chaos, levels[i], levelCounts[i], dropTable[levels[i]], rewardData[levels[i]]);
+        RewardWidget* pChaosReward = new RewardWidget(ContentType::Chaos, levels[i], levelCounts[i], dropTable[levels[i]], rewardDatas[levels[i]]);
         ui->vLayoutOutput->addWidget(pChaosReward);
-        m_rewardWidgets[0].append(pChaosReward);
+        m_rewardWidgets[contentIndex].append(pChaosReward);
         m_widgets.append(pChaosReward);
     }
 }
 
 void ContentsReward::initGuardianReward()
 {
-    const QHash<QString, QStringList>& dropTable = m_dropTables[1];
+    const int contentIndex = 1;
+    const QHash<QString, QStringList>& dropTable = m_dropTables[contentIndex];
     const QStringList& levels = {"칼엘리고스", "하누마탄", "소나벨", "가르가디스"};
 
-    // load data
+    // db에서 가디언 토벌 reward data 로드
     DbManager* pDbManager = DbManager::getInstance();
     bsoncxx::builder::stream::document filter{};
     filter << "Remark" << "";
 
     pDbManager->lock();
-    QJsonArray arrayData = pDbManager->findDocuments(Collection::Reward_Guardian, SortOrder::None, "", filter.extract());
+    QJsonArray data = pDbManager->findDocuments(Collection::Reward_Guardian, SortOrder::None, "", filter.extract());
     pDbManager->unlock();
 
-    QHash<QString, QList<QJsonObject>> rewardData;
-    for (const QJsonValue& valueData : arrayData)
+    // reward data를 level별로 취합
+    QHash<QString, QList<QJsonObject>> rewardDatas;
+    for (const QJsonValue& value : data)
     {
-        const QJsonObject& objData = valueData.toObject();
-        const QString& level = objData.find("Level")->toString();
-        rewardData[level].append(objData);
+        const QJsonObject& rewardData = value.toObject();
+        rewardDatas[rewardData.find("Level")->toString()].append(rewardData);
     }
 
-    // add widgets
+    // reward data를 RewardWidget형식으로 화면에 출력
     for (const QString& level : levels)
     {
-        RewardWidget* pGuardianWidget = new RewardWidget(ContentType::Guardian, level, 1, dropTable[level], rewardData[level]);
+        RewardWidget* pGuardianWidget = new RewardWidget(ContentType::Guardian, level, 1, dropTable[level], rewardDatas[level]);
         ui->vLayoutOutput->addWidget(pGuardianWidget);
-        m_rewardWidgets[1].append(pGuardianWidget);
+        m_rewardWidgets[contentIndex].append(pGuardianWidget);
         m_widgets.append(pGuardianWidget);
 
         pGuardianWidget->hide();
@@ -277,15 +269,16 @@ void ContentsReward::refreshPrice()
             if (response.isNull())
                 return;
 
-            const QJsonArray& jArrItems = response.object().find("Items")->toArray();
-            if (jArrItems.size() == 0)
+            const QJsonArray& jsonItems = response.object().find("Items")->toArray();
+            if (jsonItems.size() == 0)
                 return;
 
+            // parse price
             int price = 0;
             if (item == "보석")
-                price = jArrItems[0].toObject().find("AuctionInfo")->toObject().find("BuyPrice")->toInt();
+                price = jsonItems[0].toObject().find("AuctionInfo")->toObject().find("BuyPrice")->toInt();
             else
-                price = jArrItems[0].toObject().find("CurrentMinPrice")->toInt();
+                price = jsonItems[0].toObject().find("CurrentMinPrice")->toInt();
 
             if (item.contains("명예의 파편"))
             {
@@ -300,8 +293,8 @@ void ContentsReward::refreshPrice()
                 m_itemPrices[item] = price;
             }
 
-            // update widget
-            for (int i = 0; i < MAX_CONTENTS; i++)
+            // RewardWidget의 price 업데이트
+            for (int i = 0; i < m_contents.size(); i++)
             {
                 for (RewardWidget* pRewardWidget : m_rewardWidgets[i])
                 {

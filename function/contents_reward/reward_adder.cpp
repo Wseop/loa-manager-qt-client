@@ -42,7 +42,10 @@ RewardAdder::~RewardAdder()
 {
     for (QWidget* pWidget : m_widgets)
         delete pWidget;
+    for (QWidget* pWidget : m_inputWidgets)
+        delete pWidget;
     delete m_pInputValidator;
+    delete m_pGridLayout;
     delete ui;
 }
 
@@ -51,14 +54,14 @@ void RewardAdder::initIconPath()
     const QJsonObject json = ResourceManager::getInstance()->loadJson("reforge");
 
     QString iconPath = ":/reforge/image/reforge/reforge_%1_%2.png";
-    const QJsonArray& arrReforge = json.find("Reforge")->toArray();
-    for (int i = 0; i < arrReforge.size(); i++)
+    const QJsonArray& reforges = json.find("Reforge")->toArray();
+    for (int i = 0; i < reforges.size(); i++)
     {
-        const QJsonArray& arrItems = arrReforge[i].toObject().find("Items")->toArray();
-        for (int j = 0; j < arrItems.size(); j++)
+        const QJsonArray& items = reforges[i].toObject().find("Items")->toArray();
+        for (int j = 0; j < items.size(); j++)
         {
-            const QJsonObject& objItem = arrItems[j].toObject();
-            m_iconPaths[objItem.find("Name")->toString()] = iconPath.arg(i).arg(j);
+            const QJsonObject& item = items[j].toObject();
+            m_iconPaths[item.find("Name")->toString()] = iconPath.arg(i).arg(j);
         }
     }
 
@@ -81,7 +84,7 @@ void RewardAdder::initLevelSelector()
     ui->hLayoutSelector->addWidget(pLabel);
     m_widgets.append(pLabel);
 
-    // combobox 추가
+    // level selector(combobox) 추가
     m_pLevelSelector = WidgetManager::createComboBox(m_levels);
     ui->hLayoutSelector->addWidget(m_pLevelSelector);
     connect(m_pLevelSelector, &QComboBox::currentIndexChanged, this, [&](int index){
@@ -97,9 +100,7 @@ void RewardAdder::initInputList(QString level)
     if (m_content == "카오스 던전")
         level.chop(1);
 
-    const QStringList& items = m_dropTable[level];
-
-    // layout 초기화 및 추가
+    // ui 초기화 및 추가
     if (m_pGridLayout != nullptr)
     {
         for (QWidget* pWidget : m_inputWidgets)
@@ -111,6 +112,7 @@ void RewardAdder::initInputList(QString level)
     m_pGridLayout = new QGridLayout();
     ui->vLayoutMain->addLayout(m_pGridLayout);
 
+    const QStringList& items = m_dropTable[level];
     // 아이템 목록 추가
     int col = 0;
     for (const QString& item : items)
@@ -146,12 +148,12 @@ void RewardAdder::initInputList(QString level)
 
     QPushButton* pAddButton = WidgetManager::createPushButton("추가", 10, 100 * (items.size() + 1) + (9 * items.size()), 50);
     m_pGridLayout->addWidget(pAddButton, 2, 0, 1, -1);
-    connect(pAddButton, &QPushButton::released, this, &RewardAdder::addInputData);
+    connect(pAddButton, &QPushButton::released, this, &RewardAdder::addData);
     m_pGridLayout->setAlignment(pAddButton, Qt::AlignHCenter);
     m_inputWidgets.append(pAddButton);
 }
 
-void RewardAdder::addInputData()
+void RewardAdder::addData()
 {
     bool bDataReady = true;
 
@@ -171,11 +173,13 @@ void RewardAdder::addInputData()
     {
         // db에 추가할 데이터 초기화
         QString level = m_levels[m_pLevelSelector->currentIndex()];
+
         QStringList items;
         if (m_content == "카오스 던전")
             items = m_dropTable[level.chopped(1)];
         else
             items = m_dropTable[level];
+
         QList<int> itemCounts;
         for (int i = 0; i < m_lineEdits.size() - 1; i++)
             itemCounts.append(m_lineEdits[i]->text().toInt());
@@ -196,6 +200,7 @@ void RewardAdder::tInsertData(QString content, QString level, QStringList items,
     bsoncxx::builder::stream::document dummyFilter{};
 
     pDbManager->lock();
+
     if (content == "카오스 던전")
         pDbManager->insertDocument(Collection::Reward_Chaos, DocumentBuilder::buildDocumentContentsReward(level, items, itemCounts, remark).extract(), dummyFilter.extract(), true);
     else if (content == "가디언 토벌")

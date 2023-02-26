@@ -41,7 +41,6 @@ private:
 
     QHash<QString, QString> m_iconPaths;
 
-    // widgets
     QHash<QString, class QLabel*> m_goldLabels;
     QList<QWidget*> m_widgets;
 };

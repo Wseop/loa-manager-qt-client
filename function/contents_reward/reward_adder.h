@@ -21,7 +21,7 @@ private:
     void initLevelSelector();
     void initInputList(QString level);
 
-    void addInputData();
+    void addData();
 
     static void tInsertData(QString content, QString level, QStringList items, QList<int> itemCounts, QString remark);
 
@@ -35,11 +35,12 @@ private:
 
     class QIntValidator* m_pInputValidator;
 
-    QList<QWidget*> m_widgets;
     class QComboBox* m_pLevelSelector;
     class QGridLayout* m_pGridLayout;
     QList<QWidget*> m_inputWidgets;
     QList<class QLineEdit*> m_lineEdits;
+
+    QList<QWidget*> m_widgets;
 };
 
 #endif // REWARD_ADDER_H

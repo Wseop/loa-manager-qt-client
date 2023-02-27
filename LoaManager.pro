@@ -19,10 +19,6 @@ SOURCES += \
     function/contents_reward/contents_reward.cpp \
     function/contents_reward/reward_adder.cpp \
     function/contents_reward/reward_widget.cpp \
-    function/quotation/abilitystone/abilitystone_price.cpp \
-    function/quotation/abilitystone/abilitystone_quotation.cpp \
-    function/quotation/reforge/reforge_item.cpp \
-    function/quotation/reforge/reforge_quotation.cpp \
     function/quotation/tripod/skill_info_widget.cpp \
     function/quotation/tripod/tripod_quotation.cpp \
     function/raid/raidreward.cpp \
@@ -30,6 +26,13 @@ SOURCES += \
     function/setting_ranking/characterlist_widget.cpp \
     function/setting_ranking/setting_ranking.cpp \
     function/setting_ranking/setting_widget.cpp \
+    function/smart_search/smart_search.cpp \
+    function/smart_search/smart_search_abilitystone.cpp \
+    function/smart_search/smart_search_accessory.cpp \
+    function/smart_search/smart_search_bracelet.cpp \
+    function/smart_search/smart_search_engravebook.cpp \
+    function/smart_search/smart_search_gem.cpp \
+    function/smart_search/smart_search_reforge.cpp \
     game_data/character/card/card.cpp \
     game_data/character/character.cpp \
     game_data/character/character_manager.cpp \
@@ -79,10 +82,6 @@ HEADERS += \
     function/contents_reward/contents_reward.h \
     function/contents_reward/reward_adder.h \
     function/contents_reward/reward_widget.h \
-    function/quotation/abilitystone/abilitystone_price.h \
-    function/quotation/abilitystone/abilitystone_quotation.h \
-    function/quotation/reforge/reforge_item.h \
-    function/quotation/reforge/reforge_quotation.h \
     function/quotation/tripod/skill_info_widget.h \
     function/quotation/tripod/tripod_quotation.h \
     function/raid/raidreward.h \
@@ -90,6 +89,14 @@ HEADERS += \
     function/setting_ranking/characterlist_widget.h \
     function/setting_ranking/setting_ranking.h \
     function/setting_ranking/setting_widget.h \
+    function/smart_search/smart_search.h \
+    function/smart_search/smart_search_abilitystone.h \
+    function/smart_search/smart_search_accessory.h \
+    function/smart_search/smart_search_bracelet.h \
+    function/smart_search/smart_search_engravebook.h \
+    function/smart_search/smart_search_gem.h \
+    function/smart_search/smart_search_menu.h \
+    function/smart_search/smart_search_reforge.h \
     game_data/character/card/card.h \
     game_data/character/character.h \
     game_data/character/character_manager.h \
@@ -139,10 +146,6 @@ FORMS += \
     function/contents_reward/contents_reward.ui \
     function/contents_reward/reward_adder.ui \
     function/contents_reward/reward_widget.ui \
-    function/quotation/abilitystone/abilitystone_price.ui \
-    function/quotation/abilitystone/abilitystone_quotation.ui \
-    function/quotation/reforge/reforge_item.ui \
-    function/quotation/reforge/reforge_quotation.ui \
     function/quotation/tripod/skill_info_widget.ui \
     function/quotation/tripod/tripod_quotation.ui \
     function/raid/raidreward.ui \
@@ -150,6 +153,13 @@ FORMS += \
     function/setting_ranking/characterlist_widget.ui \
     function/setting_ranking/setting_ranking.ui \
     function/setting_ranking/setting_widget.ui \
+    function/smart_search/smart_search.ui \
+    function/smart_search/smart_search_abilitystone.ui \
+    function/smart_search/smart_search_accessory.ui \
+    function/smart_search/smart_search_bracelet.ui \
+    function/smart_search/smart_search_engravebook.ui \
+    function/smart_search/smart_search_gem.ui \
+    function/smart_search/smart_search_reforge.ui \
     loamanager.ui \
     ui/admin_login.ui \
     ui/character/character_widget.ui \

@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>AbilityStoneQuotation</class>
- <widget class="QWidget" name="AbilityStoneQuotation">
+ <class>SmartSearchEngraveBook</class>
+ <widget class="QWidget" name="SmartSearchEngraveBook">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>210</width>
-    <height>67</height>
+    <width>246</width>
+    <height>136</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QHBoxLayout" name="hLayoutMain">
    <item>
-    <layout class="QHBoxLayout" name="hLayoutInput"/>
+    <layout class="QGridLayout" name="gridBattleEngrave"/>
    </item>
    <item>
     <widget class="Line" name="line">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Vertical</enum>
      </property>
     </widget>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="vLayoutOutput"/>
+    <layout class="QGridLayout" name="gridClassEngrave"/>
    </item>
   </layout>
  </widget>

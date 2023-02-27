@@ -21,12 +21,11 @@ QPushButton* WidgetManager::createPushButton(QString text, int fontSize, int wid
     return pButton;
 }
 
-QPushButton* WidgetManager::createPushButton(QPixmap icon, int fontSize, int width, int height)
+QPushButton* WidgetManager::createPushButton(QPixmap icon, int width, int height)
 {
     QPushButton* pButton = new QPushButton();
     pButton->setIcon(icon);
     pButton->setFixedSize(width, height);
-    pButton->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
     return pButton;
 }
 

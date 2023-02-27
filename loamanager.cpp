@@ -7,8 +7,6 @@
 #include "function/setting_ranking/setting_ranking.h"
 #include "function/auction_calculator/auction_calculator.h"
 #include "function/quotation/tripod/tripod_quotation.h"
-#include "function/quotation/abilitystone/abilitystone_quotation.h"
-#include "function/quotation/reforge/reforge_quotation.h"
 #include "function/raid/raidreward_profit.h"
 #include "function/contents_reward/contents_reward.h"
 #include "function/smart_search/smart_search.h"
@@ -58,9 +56,7 @@ void LoaManager::initFunction()
     m_functions.append(CharacterRanking::getInstance());
     m_functions.append(SettingRanking::getInstance());
     m_functions.append(AuctionCalculator::getInstance());
-    m_functions.append(ReforgeQuotation::getInstance());
     m_functions.append(TripodQuotation::getInstance());
-    m_functions.append(AbilityStoneQuotation::getInstance());
     m_functions.append(RaidRewardProfit::getInstance());
     m_functions.append(ContentsReward::getInstance());
     m_functions.append(SmartSearch::getInstace());

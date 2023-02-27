@@ -18,9 +18,15 @@ enum class LostarkApi
 
 enum class CategoryCode
 {
+    EngraveBook = 40000,
     AbilityStone = 30000,
     Reforge = 50000,
     Tripod = 170300,
+    Accessory = 200000,
+    Necklace = 200010,
+    Earring = 200020,
+    Ring = 200030,
+    Bracelet = 200040,
     Gem = 210000
 };
 

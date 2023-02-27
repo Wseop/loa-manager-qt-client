@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ReforgeItem</class>
- <widget class="QWidget" name="ReforgeItem">
+ <class>SmartSearchReforge</class>
+ <widget class="QWidget" name="SmartSearchReforge">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>93</width>
-    <height>64</height>
+    <height>94</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="vLayoutReforgeItem"/>
+  <layout class="QGridLayout" name="gridReforge"/>
  </widget>
  <resources/>
  <connections/>

@@ -22,6 +22,7 @@
         <file>json/raid_reward_more.json</file>
         <file>json/drop_chaos.json</file>
         <file>json/drop_guardian.json</file>
+        <file>json/smart_search.json</file>
     </qresource>
     <qresource prefix="/engrave">
         <file>image/engrave/107.png</file>
@@ -949,5 +950,7 @@
         <file>image/item/gem_0.png</file>
         <file>image/item/vigor_0.png</file>
         <file>image/item/vigor_1.png</file>
+        <file>image/item/book_0.png</file>
+        <file>image/item/abilitystone_0.png</file>
     </qresource>
 </RCC>

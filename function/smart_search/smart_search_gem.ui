@@ -6,14 +6,28 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>223</width>
-    <height>212</height>
+    <width>170</width>
+    <height>83</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout"/>
+  <layout class="QHBoxLayout" name="hLayoutMain">
+   <item>
+    <layout class="QGridLayout" name="gridLeft"/>
+   </item>
+   <item>
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QGridLayout" name="gridRight"/>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

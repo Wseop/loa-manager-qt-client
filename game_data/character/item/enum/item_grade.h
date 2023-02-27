@@ -93,7 +93,7 @@ static inline QString backgroundColorCode(ItemGrade grade)
     switch (grade)
     {
     case ItemGrade::일반:
-        return "#000000";
+        return "#2C2A2A";
     case ItemGrade::고급:
         return "#2C4310";
     case ItemGrade::희귀:

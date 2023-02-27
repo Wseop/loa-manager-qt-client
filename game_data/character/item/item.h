@@ -3,6 +3,7 @@
 
 #include "game_data/character/item/enum/item_grade.h"
 #include "game_data/character/item/enum/item_type.h"
+
 #include <QString>
 #include <QStringList>
 

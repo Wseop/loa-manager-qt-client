@@ -17,7 +17,7 @@ public:
     SmartSearchGem(QLayout* pLayout);
     ~SmartSearchGem();
 
-    void updatePrice(bool bResetPageNo) override;
+    void refresh() override;
 
 private:
     void initUI();

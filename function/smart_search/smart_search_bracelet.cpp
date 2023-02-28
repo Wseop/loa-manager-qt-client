@@ -14,7 +14,7 @@ SmartSearchBracelet::~SmartSearchBracelet()
     delete ui;
 }
 
-void SmartSearchBracelet::updatePrice(bool bResetPageNo)
+void SmartSearchBracelet::refresh()
 {
     // Nothing to do
 }

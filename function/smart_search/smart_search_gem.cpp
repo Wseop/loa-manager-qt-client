@@ -36,7 +36,7 @@ SmartSearchGem::~SmartSearchGem()
     delete ui;
 }
 
-void SmartSearchGem::updatePrice(bool bResetPageNo)
+void SmartSearchGem::refresh()
 {
     clearUI();
 

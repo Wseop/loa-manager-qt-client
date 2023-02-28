@@ -7,7 +7,7 @@ public:
     SmartSearchMenu() {}
     virtual ~SmartSearchMenu() {}
 
-    virtual void updatePrice(bool bResetPageNo) = 0;
+    virtual void refresh() = 0;
 };
 
 #endif // SMART_SEARCH_MENU_H

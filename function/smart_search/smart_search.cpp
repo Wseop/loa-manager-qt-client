@@ -71,7 +71,7 @@ void SmartSearch::initMenu()
             dynamic_cast<QWidget*>(m_pSelectedMenu)->show();
 
             // 변경된 메뉴의 가격 정보 갱신
-            m_pSelectedMenu->updatePrice(true);
+            m_pSelectedMenu->refresh();
         });
         m_widgets.append(pMenuButton);
     }

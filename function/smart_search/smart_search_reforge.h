@@ -18,7 +18,7 @@ public:
     SmartSearchReforge(QLayout* pLayout);
     ~SmartSearchReforge();
 
-    void updatePrice(bool bResetPageNo) override;
+    void refresh() override;
 
 private:
     void loadResource();

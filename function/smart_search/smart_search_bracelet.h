@@ -17,7 +17,7 @@ public:
     SmartSearchBracelet(QLayout* pLayout);
     ~SmartSearchBracelet();
 
-    void updatePrice(bool bResetPageNo) override;
+    void refresh() override;
 
 private:
     Ui::SmartSearchBracelet *ui;

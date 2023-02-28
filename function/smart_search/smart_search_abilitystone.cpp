@@ -44,7 +44,7 @@ SmartSearchAbilityStone::~SmartSearchAbilityStone()
     delete ui;
 }
 
-void SmartSearchAbilityStone::updatePrice(bool bResetPageNo)
+void SmartSearchAbilityStone::refresh()
 {
     // Nothing to do
 }

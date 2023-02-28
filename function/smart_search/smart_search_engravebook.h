@@ -17,12 +17,14 @@ public:
     SmartSearchEngraveBook(QLayout* pLayout);
     ~SmartSearchEngraveBook();
 
-    void updatePrice(bool bResetPageNo) override;
+    void refresh() override;
 
 private:
     void initUI();
     void updateUI();
     void clearUI();
+
+    void updatePrice(bool bResetPageNo);
 
 private:
     Ui::SmartSearchEngraveBook *ui;

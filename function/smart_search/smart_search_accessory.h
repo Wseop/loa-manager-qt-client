@@ -24,7 +24,7 @@ public:
     SmartSearchAccessory(QLayout* pLayout);
     ~SmartSearchAccessory();
 
-    void updatePrice(bool bResetPageNo) override;
+    void refresh() override;
 
 private:
     void initOption();

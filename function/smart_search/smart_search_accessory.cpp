@@ -52,7 +52,7 @@ SmartSearchAccessory::~SmartSearchAccessory()
     delete ui;
 }
 
-void SmartSearchAccessory::updatePrice(bool bResetPageNo)
+void SmartSearchAccessory::refresh()
 {
     // Nothing to do
 }

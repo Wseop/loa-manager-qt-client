@@ -35,56 +35,9 @@ SmartSearchEngraveBook::~SmartSearchEngraveBook()
     delete ui;
 }
 
-void SmartSearchEngraveBook::updatePrice(bool bResetPageNo)
+void SmartSearchEngraveBook::refresh()
 {
-    ApiManager* pApiManager = ApiManager::getInstance();
-
-    if (bResetPageNo)
-        m_searchPageNo = 1;
-
-    QNetworkAccessManager* pNetworkManager = new QNetworkAccessManager();
-    connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&](QNetworkReply* pReply){
-        QJsonObject result = QJsonDocument::fromJson(pReply->readAll()).object();
-
-        // 검색 결과 parsing
-        const QJsonArray& items = result.find("Items")->toArray();
-        for (int i = 0; i < items.size(); i++)
-        {
-            const QJsonObject& item = items[i].toObject();
-            const QString& name = item.find("Name")->toString();
-            const int& recentPrice = item.find("RecentPrice")->toInt();
-            const int& minPrice = item.find("CurrentMinPrice")->toInt();
-
-            if (name[0] == '[')
-                m_classEngraveKeys << name;
-            else
-                m_battleEngraveKeys << name;
-
-            m_engravePrices[name] = {recentPrice, minPrice};
-        }
-
-        const int& maxPageSize = result.find("PageSize")->toInt();
-        // 다음 페이지가 있다면 추가 검색
-        if (maxPageSize > m_searchPageNo)
-        {
-            m_searchPageNo++;
-            updatePrice(false);
-        }
-        // 마지막 페이지이면 검색 결과 ui에 반영
-        else
-        {
-            updateUI();
-        }
-    });
-    connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
-
-    SearchOption searchOption(SearchType::Market);
-    searchOption.setCategoryCode(CategoryCode::EngraveBook);
-    searchOption.setItemGrade(ItemGrade::전설);
-    searchOption.setPageNo(m_searchPageNo);
-    searchOption.setSortCondition("DESC");
-
-    pApiManager->post(pNetworkManager, LostarkApi::Market, QJsonDocument(searchOption.toJsonObject()).toJson());
+    updatePrice(true);
 }
 
 void SmartSearchEngraveBook::initUI()
@@ -152,4 +105,56 @@ void SmartSearchEngraveBook::clearUI()
     for (QWidget* pWidget : m_priceWidgets)
         delete pWidget;
     m_priceWidgets.clear();
+}
+
+void SmartSearchEngraveBook::updatePrice(bool bResetPageNo)
+{
+    ApiManager* pApiManager = ApiManager::getInstance();
+
+    if (bResetPageNo)
+        m_searchPageNo = 1;
+
+    QNetworkAccessManager* pNetworkManager = new QNetworkAccessManager();
+    connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&](QNetworkReply* pReply){
+        QJsonObject result = QJsonDocument::fromJson(pReply->readAll()).object();
+
+        // 검색 결과 parsing
+        const QJsonArray& items = result.find("Items")->toArray();
+        for (int i = 0; i < items.size(); i++)
+        {
+            const QJsonObject& item = items[i].toObject();
+            const QString& name = item.find("Name")->toString();
+            const int& recentPrice = item.find("RecentPrice")->toInt();
+            const int& minPrice = item.find("CurrentMinPrice")->toInt();
+
+            if (name[0] == '[')
+                m_classEngraveKeys << name;
+            else
+                m_battleEngraveKeys << name;
+
+            m_engravePrices[name] = {recentPrice, minPrice};
+        }
+
+        const int& maxPageSize = result.find("PageSize")->toInt();
+        // 다음 페이지가 있다면 추가 검색
+        if (maxPageSize > m_searchPageNo)
+        {
+            m_searchPageNo++;
+            updatePrice(false);
+        }
+        // 마지막 페이지이면 검색 결과 ui에 반영
+        else
+        {
+            updateUI();
+        }
+    });
+    connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
+
+    SearchOption searchOption(SearchType::Market);
+    searchOption.setCategoryCode(CategoryCode::EngraveBook);
+    searchOption.setItemGrade(ItemGrade::전설);
+    searchOption.setPageNo(m_searchPageNo);
+    searchOption.setSortCondition("DESC");
+
+    pApiManager->post(pNetworkManager, LostarkApi::Market, QJsonDocument(searchOption.toJsonObject()).toJson());
 }

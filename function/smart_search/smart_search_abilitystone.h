@@ -17,7 +17,7 @@ public:
     SmartSearchAbilityStone(QLayout* pLayout);
     ~SmartSearchAbilityStone();
 
-    void updatePrice(bool bResetPageNo) override;
+    void refresh() override;
 
 private:
     void initMenu();

@@ -41,7 +41,7 @@ SmartSearchReforge::~SmartSearchReforge()
     delete ui;
 }
 
-void SmartSearchReforge::updatePrice(bool bResetPageNo)
+void SmartSearchReforge::refresh()
 {
     int labelIndex = 0;
 

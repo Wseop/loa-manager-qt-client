@@ -16,5 +16,5 @@ SmartSearchBracelet::~SmartSearchBracelet()
 
 void SmartSearchBracelet::updatePrice(bool bResetPageNo)
 {
-
+    // Nothing to do
 }

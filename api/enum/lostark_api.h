@@ -30,6 +30,16 @@ enum class CategoryCode
     Gem = 210000
 };
 
+enum class AbilityCode
+{
+    치명 = 15,
+    특화,
+    제압,
+    신속,
+    인내,
+    숙련
+};
+
 enum class SearchType
 {
     Auction,

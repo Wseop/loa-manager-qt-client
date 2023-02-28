@@ -2,6 +2,7 @@
 #define WIDGETMANAGER_H
 
 #include <QObject>
+#include <QFrame>
 
 class QLabel;
 class QPushButton;
@@ -24,6 +25,7 @@ public:
     static QComboBox* createComboBox(QStringList items, int fontSize = 10, int width = 100, int height = 25);
     static QLineEdit* createLineEdit(class QValidator* pValidator, QString placeHolder = "", int fontSize = 10, int width = 100, int height = 25);
     static QGroupBox* createGroupBox(QString title, int fontSize = 10);
+    static QFrame* createLine(QFrame::Shape direction);
 
 private:
     static QString getQualityColor(int quality);

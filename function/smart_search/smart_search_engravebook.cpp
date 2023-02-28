@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <QLabel>
 #include <QGridLayout>
+#include <QFrame>
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -76,6 +77,10 @@ void SmartSearchEngraveBook::updateUI()
         {
             const int& recentPrice = m_engravePrices[key].first;
             const int& minPrice = m_engravePrices[key].second;
+
+            QFrame* pHLine = WidgetManager::createLine(QFrame::HLine);
+            m_layouts[i]->addWidget(pHLine, row++, 0, 1, -1);
+            m_priceWidgets.append(pHLine);
 
             QLabel* pIcon = WidgetManager::createIcon(":/item/image/item/book_0.png", nullptr);
             m_layouts[i]->addWidget(pIcon, row, 0);

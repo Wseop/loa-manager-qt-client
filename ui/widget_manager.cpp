@@ -114,6 +114,13 @@ QGroupBox* WidgetManager::createGroupBox(QString title, int fontSize)
     return pGroupBox;
 }
 
+QFrame* WidgetManager::createLine(QFrame::Shape direction)
+{
+    QFrame* pLine = new QFrame();
+    pLine->setFrameStyle(direction);
+    return pLine;
+}
+
 QString WidgetManager::getQualityColor(int quality)
 {
     QString color;

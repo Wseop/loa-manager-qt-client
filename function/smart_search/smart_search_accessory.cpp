@@ -336,8 +336,7 @@ void SmartSearchAccessory::addItemToLayout(const Accessory& acc, const int& pric
         layoutIndex -= 1;
 
     // HLine 추가
-    QFrame* pHLine = new QFrame();
-    pHLine->setFrameStyle(QFrame::HLine);
+    QFrame* pHLine = WidgetManager::createLine(QFrame::HLine);
     m_resultLayouts[layoutIndex]->addWidget(pHLine, ++m_currentLayoutRows[layoutIndex], 0, 1, -1);
     m_itemWidgets.append(pHLine);
 

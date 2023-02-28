@@ -151,6 +151,10 @@ void SmartSearchReforge::initUI()
         {
             int col = 0;
 
+            QFrame* pHLine = WidgetManager::createLine(QFrame::HLine);
+            ui->gridReforge->addWidget(pHLine, row++, 0, 1, -1);
+            m_widgets.append(pHLine);
+
             QLabel* pIcon = WidgetManager::createIcon(item.getIconPath(), nullptr, backgroundColorCode(item.getGrade()));
             ui->gridReforge->addWidget(pIcon, row, col++);
             m_widgets.append(pIcon);

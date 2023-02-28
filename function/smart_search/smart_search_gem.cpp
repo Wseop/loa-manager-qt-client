@@ -17,8 +17,7 @@ SmartSearchGem::SmartSearchGem(QLayout* pLayout) :
     m_searchList({
         {"5레벨 멸화", "6레벨 멸화", "7레벨 멸화", "8레벨 멸화", "9레벨 멸화", "10레벨 멸화"},
         {"5레벨 홍염", "6레벨 홍염", "7레벨 홍염", "8레벨 홍염", "9레벨 홍염", "10레벨 홍염"}
-    }),
-    m_currentRow(0)
+    })
 {
     ui->setupUi(this);
     pLayout->addWidget(this);
@@ -111,31 +110,30 @@ void SmartSearchGem::initUI()
 void SmartSearchGem::updateUI(const Gem gem, const int price)
 {
     QGridLayout* pLayout = gem.getGemType() == GemType::멸화 ? ui->gridLeft : ui->gridRight;
+    int row = (2 * gem.getLevel()) - 9;
 
     QNetworkAccessManager* pIconLoader = new QNetworkAccessManager();
     m_iconLoaders.append(pIconLoader);
 
     QFrame* pHLine = WidgetManager::createLine(QFrame::HLine);
-    pLayout->addWidget(pHLine, ++m_currentRow, 0, 1, -1);
+    pLayout->addWidget(pHLine, row++, 0, 1, -1);
     m_gemWidgets.append(pHLine);
 
     QLabel* pIcon = WidgetManager::createIcon(gem.getIconPath(), pIconLoader, backgroundColorCode(gem.getGrade()));
-    pLayout->addWidget(pIcon, ++m_currentRow, 0);
+    pLayout->addWidget(pIcon, row, 0);
     m_gemWidgets.append(pIcon);
 
     QLabel* pLabelName = WidgetManager::createLabel(gem.getName(), 10, colorCode(gem.getGrade()), LABEL_WIDTH[1]);
-    pLayout->addWidget(pLabelName, m_currentRow, 1);
+    pLayout->addWidget(pLabelName, row, 1);
     m_gemWidgets.append(pLabelName);
 
     QLabel* pLabelPrice = WidgetManager::createLabel(QString("%L1").arg(price), 10, "", LABEL_WIDTH[2]);
-    pLayout->addWidget(pLabelPrice, m_currentRow, 2);
+    pLayout->addWidget(pLabelPrice, row, 2);
     m_gemWidgets.append(pLabelPrice);
 }
 
 void SmartSearchGem::clearUI()
 {
-    m_currentRow = 0;
-
     for (QWidget* pWidget : m_gemWidgets)
         delete pWidget;
     for (QNetworkAccessManager* pNetworkManager : m_iconLoaders)

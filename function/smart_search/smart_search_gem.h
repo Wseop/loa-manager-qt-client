@@ -32,8 +32,6 @@ private:
     QList<QStringList> m_searchList;
     QList<class QNetworkAccessManager*> m_iconLoaders;
 
-    int m_currentRow;
-
     QList<QWidget*> m_gemWidgets;
     QList<QWidget*> m_widgets;
 };

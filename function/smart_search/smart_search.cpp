@@ -7,7 +7,6 @@
 #include "function/smart_search/smart_search_reforge.h"
 #include "function/smart_search/smart_search_gem.h"
 #include "function/smart_search/smart_search_accessory.h"
-#include "function/smart_search/smart_search_bracelet.h"
 #include "function/smart_search/smart_search_abilitystone.h"
 
 #include <QJsonObject>
@@ -53,8 +52,6 @@ void SmartSearch::initMenu()
     m_menuWidgets.append(pGem);
     SmartSearchMenu* pAccessory = new SmartSearchAccessory(ui->vLayoutMain);
     m_menuWidgets.append(pAccessory);
-    SmartSearchMenu* pBracelet = new SmartSearchBracelet(ui->hLayoutMenu);
-    m_menuWidgets.append(pBracelet);
     SmartSearchMenu* pAbilityStone = new SmartSearchAbilityStone(ui->vLayoutMain);
     m_menuWidgets.append(pAbilityStone);
 
@@ -70,7 +67,7 @@ void SmartSearch::initMenu()
             m_pSelectedMenu = m_menuWidgets[i];
             dynamic_cast<QWidget*>(m_pSelectedMenu)->show();
 
-            // 변경된 메뉴의 가격 정보 갱신
+            // 변경된 메뉴 갱신
             m_pSelectedMenu->refresh();
         });
         m_widgets.append(pMenuButton);

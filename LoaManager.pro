@@ -29,7 +29,6 @@ SOURCES += \
     function/smart_search/smart_search.cpp \
     function/smart_search/smart_search_abilitystone.cpp \
     function/smart_search/smart_search_accessory.cpp \
-    function/smart_search/smart_search_bracelet.cpp \
     function/smart_search/smart_search_engravebook.cpp \
     function/smart_search/smart_search_gem.cpp \
     function/smart_search/smart_search_reforge.cpp \
@@ -92,7 +91,6 @@ HEADERS += \
     function/smart_search/smart_search.h \
     function/smart_search/smart_search_abilitystone.h \
     function/smart_search/smart_search_accessory.h \
-    function/smart_search/smart_search_bracelet.h \
     function/smart_search/smart_search_engravebook.h \
     function/smart_search/smart_search_gem.h \
     function/smart_search/smart_search_menu.h \
@@ -156,7 +154,6 @@ FORMS += \
     function/smart_search/smart_search.ui \
     function/smart_search/smart_search_abilitystone.ui \
     function/smart_search/smart_search_accessory.ui \
-    function/smart_search/smart_search_bracelet.ui \
     function/smart_search/smart_search_engravebook.ui \
     function/smart_search/smart_search_gem.ui \
     function/smart_search/smart_search_reforge.ui \

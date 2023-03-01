@@ -8,6 +8,7 @@
 
 #include <QLabel>
 #include <QPushButton>
+#include <QFrame>
 #include <QHBoxLayout>
 #include <QMessageBox>
 #include <QJsonObject>
@@ -183,6 +184,10 @@ void SmartSearchAbilityStone::addSearchResult(const QStringList& engraves, const
     const QString iconAbilityStone = ":/item/image/item/abilitystone_0.png";
     const QString iconCancle = ":/icon/image/cancle.png";
 
+    // HLine
+    QFrame* pHLine = WidgetManager::createLine(QFrame::HLine);
+    ui->gridResult->addWidget(pHLine, ++m_addCount, 0, 1, -1);
+
     // 아이콘 추가
     QLabel* pIcon = WidgetManager::createIcon(iconAbilityStone, nullptr, backgroundColorCode(ItemGrade::유물));
     ui->gridResult->addWidget(pIcon, ++m_addCount, 1, Qt::AlignHCenter);
@@ -203,7 +208,8 @@ void SmartSearchAbilityStone::addSearchResult(const QStringList& engraves, const
     // 삭제 버튼 추가
     QPushButton* pButtonDelete = WidgetManager::createPushButton(QPixmap(iconCancle), 25, 25);
     ui->gridResult->addWidget(pButtonDelete, m_addCount, 0);
-    connect(pButtonDelete, &QPushButton::released, this, [&, pIcon, engraveLabels, pLabelPrice, pButtonDelete](){
+    connect(pButtonDelete, &QPushButton::released, this, [&, pHLine, pIcon, engraveLabels, pLabelPrice, pButtonDelete](){
+        delete pHLine;
         delete pIcon;
         for (QLabel* pLabelEngrave : engraveLabels)
             delete pLabelEngrave;

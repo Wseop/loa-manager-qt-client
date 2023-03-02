@@ -15,11 +15,11 @@ FontManager::~FontManager()
 void FontManager::loadFont()
 {
     // load font resources
-    QFontDatabase::addApplicationFont(":/font/font/NanumSquareNeo-aLt.ttf");
-    QFontDatabase::addApplicationFont(":/font/font/NanumSquareNeo-bRg.ttf");
-    QFontDatabase::addApplicationFont(":/font/font/NanumSquareNeo-cBd.ttf");
-    QFontDatabase::addApplicationFont(":/font/font/NanumSquareNeo-dEb.ttf");
-    QFontDatabase::addApplicationFont(":/font/font/NanumSquareNeo-eHv.ttf");
+    QFontDatabase::addApplicationFont(":/font/NanumSquareNeo-aLt.ttf");
+    QFontDatabase::addApplicationFont(":/font/NanumSquareNeo-bRg.ttf");
+    QFontDatabase::addApplicationFont(":/font/NanumSquareNeo-cBd.ttf");
+    QFontDatabase::addApplicationFont(":/font/NanumSquareNeo-dEb.ttf");
+    QFontDatabase::addApplicationFont(":/font/NanumSquareNeo-eHv.ttf");
 
     // initialize fontfamily list
     for (int i = 0; i < static_cast<int>(FontFamily::FontFamilySize); i++)

@@ -14,13 +14,6 @@ SOURCES += \
     db/db_manager.cpp \
     db/document_builder.cpp \
     function/auction_calculator/auction_calculator.cpp \
-    function/contents_reward/contents_reward.cpp \
-    function/contents_reward/reward_adder.cpp \
-    function/contents_reward/reward_widget.cpp \
-    function/quotation/tripod/skill_info_widget.cpp \
-    function/quotation/tripod/tripod_quotation.cpp \
-    function/raid/raidreward.cpp \
-    function/raid/raidreward_profit.cpp \
     function/smart_search/smart_search.cpp \
     function/smart_search/smart_search_abilitystone.cpp \
     function/smart_search/smart_search_accessory.cpp \
@@ -51,13 +44,6 @@ HEADERS += \
     db/document_builder.h \
     db/enum/db_enums.h \
     function/auction_calculator/auction_calculator.h \
-    function/contents_reward/contents_reward.h \
-    function/contents_reward/reward_adder.h \
-    function/contents_reward/reward_widget.h \
-    function/quotation/tripod/skill_info_widget.h \
-    function/quotation/tripod/tripod_quotation.h \
-    function/raid/raidreward.h \
-    function/raid/raidreward_profit.h \
     function/smart_search/smart_search.h \
     function/smart_search/smart_search_abilitystone.h \
     function/smart_search/smart_search_accessory.h \
@@ -86,13 +72,6 @@ HEADERS += \
 
 FORMS += \
     function/auction_calculator/auction_calculator.ui \
-    function/contents_reward/contents_reward.ui \
-    function/contents_reward/reward_adder.ui \
-    function/contents_reward/reward_widget.ui \
-    function/quotation/tripod/skill_info_widget.ui \
-    function/quotation/tripod/tripod_quotation.ui \
-    function/raid/raidreward.ui \
-    function/raid/raidreward_profit.ui \
     function/smart_search/smart_search.ui \
     function/smart_search/smart_search_abilitystone.ui \
     function/smart_search/smart_search_accessory.ui \

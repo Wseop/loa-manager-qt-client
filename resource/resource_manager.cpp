@@ -16,10 +16,11 @@ ResourceManager::~ResourceManager()
 
 }
 
-ResourceManager *ResourceManager::getInstance()
+ResourceManager* ResourceManager::getInstance()
 {
     if (m_pInstance == nullptr)
         m_pInstance = new ResourceManager();
+
     return m_pInstance;
 }
 
@@ -27,13 +28,15 @@ void ResourceManager::destroyInstance()
 {
     if (m_pInstance == nullptr)
         return;
+
     delete m_pInstance;
     m_pInstance = nullptr;
 }
 
 QJsonObject ResourceManager::loadJson(QString fileName)
 {
-    QString filePath = ":/json/json/%1.json";
+    const QString filePath = ":/json/%1.json";
+
     QFile file(filePath.arg(fileName));
     if (!file.open(QIODevice::ReadOnly))
     {
@@ -41,8 +44,8 @@ QJsonObject ResourceManager::loadJson(QString fileName)
         return QJsonObject();
     }
 
-    QJsonObject jsonObj = QJsonDocument::fromJson(file.readAll()).object();
+    QJsonObject json = QJsonDocument::fromJson(file.readAll()).object();
     file.close();
 
-    return jsonObj;
+    return json;
 }

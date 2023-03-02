@@ -15,6 +15,7 @@ public:
     static ResourceManager* getInstance();
     static void destroyInstance();
 
+public:
     QJsonObject loadJson(QString fileName);
 
 private:

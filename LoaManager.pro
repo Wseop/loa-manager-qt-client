@@ -23,12 +23,6 @@ SOURCES += \
     function/smart_search/smart_search_tripod.cpp \
     game/engrave/engrave.cpp \
     game/engrave/engrave_manager.cpp \
-    game/item/abilitystone.cpp \
-    game/item/accessory.cpp \
-    game/item/bracelet.cpp \
-    game/item/equip.cpp \
-    game/item/gem.cpp \
-    game/item/item.cpp \
     main.cpp \
     loamanager.cpp \
     resource/resource_manager.cpp \
@@ -54,16 +48,6 @@ HEADERS += \
     function/smart_search/smart_search_tripod.h \
     game/engrave/engrave.h \
     game/engrave/engrave_manager.h \
-    game/item/abilitystone.h \
-    game/item/accessory.h \
-    game/item/bracelet.h \
-    game/item/enum/gem_type.h \
-    game/item/enum/item_grade.h \
-    game/item/enum/item_type.h \
-    game/item/enum/set_effect.h \
-    game/item/equip.h \
-    game/item/gem.h \
-    game/item/item.h \
     loamanager.h \
     resource/resource_manager.h \
     ui/admin_login.h \

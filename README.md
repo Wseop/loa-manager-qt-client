@@ -4,7 +4,7 @@ Lostark OpenAPI를 활용한 편의기능 제공 앱
 - **Compiler** : MinGW 11.2.0 64-bit for c++
 - **Framework** : Qt 6.4.0
 - **Database** : mongocxx-driver r3.7.0
-## 기능
+## 기능 (Refactoring 진행중...)
 ### 캐릭터 탭
 - **[캐릭터 조회](https://github.com/Wseop/QT_LoaManager/tree/main/function/character_search)**
 - **[캐릭터 순위](https://github.com/Wseop/QT_LoaManager/tree/main/function/character_ranking)** - 전체 혹은 직업별 아이템 레벨 순위

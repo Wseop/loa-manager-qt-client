@@ -3,8 +3,6 @@
 #include "ui/widget_manager.h"
 #include "ui/admin_login.h"
 #include "function/auction_calculator/auction_calculator.h"
-#include "function/raid/raidreward_profit.h"
-#include "function/contents_reward/contents_reward.h"
 #include "function/smart_search/smart_search.h"
 #include "resource/resource_manager.h"
 
@@ -31,7 +29,7 @@ LoaManager::LoaManager() :
     initMenuButton();
     initAdminButton();
 
-    this->setWindowIcon(QIcon(":/icon/Home.ico"));
+    this->setWindowIcon(QIcon(":/Home.ico"));
     this->setWindowTitle(m_mainSetting.find("Version")->toString());
     this->showMaximized();
 }
@@ -50,8 +48,6 @@ void LoaManager::initFunction()
     // main.json의 메뉴 list 순서에 맞게 등록
     m_functions.append(SmartSearch::getInstace());
     m_functions.append(AuctionCalculator::getInstance());
-    m_functions.append(RaidRewardProfit::getInstance());
-    m_functions.append(ContentsReward::getInstance());
 
     for (QWidget* pWidget : m_functions)
     {

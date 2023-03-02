@@ -156,5 +156,6 @@
         <file>back.png</file>
         <file>cancle.png</file>
         <file>refresh.png</file>
+        <file>Home.ico</file>
     </qresource>
 </RCC>

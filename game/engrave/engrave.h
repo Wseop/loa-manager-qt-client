@@ -20,8 +20,6 @@ public:
     void addPenalty(const QString& penalty, int value);
 
 private:
-    const int VALUE_PER_LEVEL = 5;
-
     QHash<QString, int> m_engraveValues;
     QHash<QString, int> m_penaltyValues;
 };

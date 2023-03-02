@@ -1,7 +1,7 @@
 #ifndef DBMANAGER_H
 #define DBMANAGER_H
 
-#include "db/enum/db_enums.h"
+#include "db/db_enums.h"
 
 #include <mongocxx/client.hpp>
 #include <mongocxx/instance.hpp>

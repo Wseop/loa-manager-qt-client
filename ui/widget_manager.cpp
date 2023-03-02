@@ -32,7 +32,7 @@ QPushButton* WidgetManager::createPushButton(QPixmap icon, int width, int height
 QLabel* WidgetManager::createLabel(QString text, int fontSize, QString color, int width, int height)
 {
     QLabel* pLabel = new QLabel(text);
-    pLabel->setFixedSize(width, height);
+    pLabel->setMaximumSize(width, height);
     pLabel->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
     pLabel->setStyleSheet(QString("QLabel { color: %1 }").arg(color));
     pLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -92,7 +92,7 @@ QComboBox *WidgetManager::createComboBox(QStringList items, int fontSize, int wi
     QComboBox* pComboBox = new QComboBox();
     pComboBox->addItems(items);
     pComboBox->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
-    pComboBox->setFixedSize(width, height);
+    pComboBox->setMaximumSize(width, height);
     return pComboBox;
 }
 
@@ -103,7 +103,7 @@ QLineEdit* WidgetManager::createLineEdit(QValidator* pValidator, QString placeHo
     pLineEdit->setPlaceholderText(placeHolder);
     pLineEdit->setAlignment(Qt::AlignHCenter);
     pLineEdit->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
-    pLineEdit->setFixedSize(width, height);
+    pLineEdit->setMaximumSize(width, height);
     return pLineEdit;
 }
 

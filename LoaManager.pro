@@ -23,6 +23,8 @@ SOURCES += \
     function/smart_search/smart_search_tripod.cpp \
     game/engrave/engrave.cpp \
     game/engrave/engrave_manager.cpp \
+    game/item/abilitystone.cpp \
+    game/item/item.cpp \
     main.cpp \
     loamanager.cpp \
     resource/resource_manager.cpp \
@@ -32,11 +34,11 @@ SOURCES += \
 
 HEADERS += \
     api/api_manager.h \
-    api/enum/lostark_api.h \
+    api/lostark_api.h \
     api/search_option.h \
+    db/db_enums.h \
     db/db_manager.h \
     db/document_builder.h \
-    db/enum/db_enums.h \
     function/auction_calculator/auction_calculator.h \
     function/smart_search/smart_search.h \
     function/smart_search/smart_search_abilitystone.h \
@@ -48,11 +50,16 @@ HEADERS += \
     function/smart_search/smart_search_tripod.h \
     game/engrave/engrave.h \
     game/engrave/engrave_manager.h \
+    game/item/abilitystone.h \
+    game/item/item.h \
+    game/item/item_grade.h \
+    game/item/item_type.h \
     loamanager.h \
     resource/resource_manager.h \
     ui/admin_login.h \
     ui/font_manager.h \
-    ui/widget_manager.h
+    ui/widget_manager.h \
+    util/util.h
 
 FORMS += \
     function/auction_calculator/auction_calculator.ui \

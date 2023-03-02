@@ -1,7 +1,7 @@
 #ifndef APIMANAGER_H
 #define APIMANAGER_H
 
-#include "api/enum/lostark_api.h"
+#include "api/lostark_api.h"
 
 #include <QObject>
 

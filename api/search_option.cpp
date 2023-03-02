@@ -27,7 +27,7 @@ void SearchOption::setItemTier(int tier)
 
 void SearchOption::setItemGrade(ItemGrade itemGrade)
 {
-    m_searchOption.insert("ItemGrade", itemGradeToStr(itemGrade));
+    m_searchOption.insert("ItemGrade", itemGradeToQString(itemGrade));
 }
 
 void SearchOption::setItemName(QString itemName)
@@ -67,13 +67,13 @@ void SearchOption::setSkillOption(int firstOption, int secondOption, int minValu
     m_skillOptions.append(skillOption);
 }
 
-void SearchOption::setEtcOption(int firstOption, int secondOption, int minValue, int maxValue)
+void SearchOption::setEtcOption(EtcOptionCode firstOption, int secondOption, int minValue, int maxValue)
 {
     if (m_searchType == SearchType::Market)
         return;
 
     QJsonObject etcOption;
-    etcOption.insert("FirstOption", firstOption);
+    etcOption.insert("FirstOption", static_cast<int>(firstOption));
     etcOption.insert("SecondOption", secondOption);
     if (minValue != -1)
         etcOption.insert("MinValue", minValue);

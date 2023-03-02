@@ -1,5 +1,7 @@
 #include "engrave.h"
 
+const int VALUE_PER_LEVEL = 5;
+
 Engrave::Engrave()
 {
 

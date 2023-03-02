@@ -14,8 +14,6 @@ SOURCES += \
     db/db_manager.cpp \
     db/document_builder.cpp \
     function/auction_calculator/auction_calculator.cpp \
-    function/character_ranking/character_ranking.cpp \
-    function/character_search/character_search.cpp \
     function/contents_reward/contents_reward.cpp \
     function/contents_reward/reward_adder.cpp \
     function/contents_reward/reward_widget.cpp \
@@ -23,48 +21,25 @@ SOURCES += \
     function/quotation/tripod/tripod_quotation.cpp \
     function/raid/raidreward.cpp \
     function/raid/raidreward_profit.cpp \
-    function/setting_ranking/characterlist_widget.cpp \
-    function/setting_ranking/setting_ranking.cpp \
-    function/setting_ranking/setting_widget.cpp \
     function/smart_search/smart_search.cpp \
     function/smart_search/smart_search_abilitystone.cpp \
     function/smart_search/smart_search_accessory.cpp \
     function/smart_search/smart_search_engravebook.cpp \
     function/smart_search/smart_search_gem.cpp \
     function/smart_search/smart_search_reforge.cpp \
-    game_data/character/card/card.cpp \
-    game_data/character/character.cpp \
-    game_data/character/character_manager.cpp \
-    game_data/character/collectible/collectible.cpp \
-    game_data/character/engrave/engrave.cpp \
-    game_data/character/engrave/engrave_manager.cpp \
-    game_data/character/item/abilitystone.cpp \
-    game_data/character/item/accessory.cpp \
-    game_data/character/item/bracelet.cpp \
-    game_data/character/item/equip.cpp \
-    game_data/character/item/gem.cpp \
-    game_data/character/item/item.cpp \
-    game_data/character/profile/profile.cpp \
-    game_data/character/settingcode_builder.cpp \
-    game_data/character/skill/skill.cpp \
-    game_data/character/skill/skillrune.cpp \
+    function/smart_search/smart_search_tripod.cpp \
+    game/engrave/engrave.cpp \
+    game/engrave/engrave_manager.cpp \
+    game/item/abilitystone.cpp \
+    game/item/accessory.cpp \
+    game/item/bracelet.cpp \
+    game/item/equip.cpp \
+    game/item/gem.cpp \
+    game/item/item.cpp \
     main.cpp \
     loamanager.cpp \
     resource/resource_manager.cpp \
     ui/admin_login.cpp \
-    ui/character/character_widget.cpp \
-    ui/character/engrave/engrave_widget.cpp \
-    ui/character/item/abilitystone_widget.cpp \
-    ui/character/item/accessory_widget.cpp \
-    ui/character/item/bracelet_widget.cpp \
-    ui/character/item/equip_widget.cpp \
-    ui/character/item/gem_widget.cpp \
-    ui/character/sibling/sibling_widget.cpp \
-    ui/character/skill/skill_widget.cpp \
-    ui/character/skill/skillrune_widget.cpp \
-    ui/character/skill/tripod_widget.cpp \
-    ui/class_selector.cpp \
-    ui/engrave_selector.cpp \
     ui/font_manager.cpp \
     ui/widget_manager.cpp
 
@@ -76,8 +51,6 @@ HEADERS += \
     db/document_builder.h \
     db/enum/db_enums.h \
     function/auction_calculator/auction_calculator.h \
-    function/character_ranking/character_ranking.h \
-    function/character_search/character_search.h \
     function/contents_reward/contents_reward.h \
     function/contents_reward/reward_adder.h \
     function/contents_reward/reward_widget.h \
@@ -85,9 +58,6 @@ HEADERS += \
     function/quotation/tripod/tripod_quotation.h \
     function/raid/raidreward.h \
     function/raid/raidreward_profit.h \
-    function/setting_ranking/characterlist_widget.h \
-    function/setting_ranking/setting_ranking.h \
-    function/setting_ranking/setting_widget.h \
     function/smart_search/smart_search.h \
     function/smart_search/smart_search_abilitystone.h \
     function/smart_search/smart_search_accessory.h \
@@ -95,52 +65,27 @@ HEADERS += \
     function/smart_search/smart_search_gem.h \
     function/smart_search/smart_search_menu.h \
     function/smart_search/smart_search_reforge.h \
-    game_data/character/card/card.h \
-    game_data/character/character.h \
-    game_data/character/character_manager.h \
-    game_data/character/collectible/collectible.h \
-    game_data/character/collectible/enum/collectible_type.h \
-    game_data/character/engrave/engrave.h \
-    game_data/character/engrave/engrave_manager.h \
-    game_data/character/item/abilitystone.h \
-    game_data/character/item/accessory.h \
-    game_data/character/item/bracelet.h \
-    game_data/character/item/enum/gem_type.h \
-    game_data/character/item/enum/item_grade.h \
-    game_data/character/item/enum/item_type.h \
-    game_data/character/item/enum/set_effect.h \
-    game_data/character/item/equip.h \
-    game_data/character/item/gem.h \
-    game_data/character/item/item.h \
-    game_data/character/profile/enum/ability.h \
-    game_data/character/profile/enum/class.h \
-    game_data/character/profile/profile.h \
-    game_data/character/settingcode_builder.h \
-    game_data/character/skill/skill.h \
-    game_data/character/skill/skillrune.h \
+    function/smart_search/smart_search_tripod.h \
+    game/engrave/engrave.h \
+    game/engrave/engrave_manager.h \
+    game/item/abilitystone.h \
+    game/item/accessory.h \
+    game/item/bracelet.h \
+    game/item/enum/gem_type.h \
+    game/item/enum/item_grade.h \
+    game/item/enum/item_type.h \
+    game/item/enum/set_effect.h \
+    game/item/equip.h \
+    game/item/gem.h \
+    game/item/item.h \
     loamanager.h \
     resource/resource_manager.h \
     ui/admin_login.h \
-    ui/character/character_widget.h \
-    ui/character/engrave/engrave_widget.h \
-    ui/character/item/abilitystone_widget.h \
-    ui/character/item/accessory_widget.h \
-    ui/character/item/bracelet_widget.h \
-    ui/character/item/equip_widget.h \
-    ui/character/item/gem_widget.h \
-    ui/character/sibling/sibling_widget.h \
-    ui/character/skill/skill_widget.h \
-    ui/character/skill/skillrune_widget.h \
-    ui/character/skill/tripod_widget.h \
-    ui/class_selector.h \
-    ui/engrave_selector.h \
     ui/font_manager.h \
     ui/widget_manager.h
 
 FORMS += \
     function/auction_calculator/auction_calculator.ui \
-    function/character_ranking/character_ranking.ui \
-    function/character_search/character_search.ui \
     function/contents_reward/contents_reward.ui \
     function/contents_reward/reward_adder.ui \
     function/contents_reward/reward_widget.ui \
@@ -148,30 +93,15 @@ FORMS += \
     function/quotation/tripod/tripod_quotation.ui \
     function/raid/raidreward.ui \
     function/raid/raidreward_profit.ui \
-    function/setting_ranking/characterlist_widget.ui \
-    function/setting_ranking/setting_ranking.ui \
-    function/setting_ranking/setting_widget.ui \
     function/smart_search/smart_search.ui \
     function/smart_search/smart_search_abilitystone.ui \
     function/smart_search/smart_search_accessory.ui \
     function/smart_search/smart_search_engravebook.ui \
     function/smart_search/smart_search_gem.ui \
     function/smart_search/smart_search_reforge.ui \
+    function/smart_search/smart_search_tripod.ui \
     loamanager.ui \
-    ui/admin_login.ui \
-    ui/character/character_widget.ui \
-    ui/character/engrave/engrave_widget.ui \
-    ui/character/item/abilitystone_widget.ui \
-    ui/character/item/accessory_widget.ui \
-    ui/character/item/bracelet_widget.ui \
-    ui/character/item/equip_widget.ui \
-    ui/character/item/gem_widget.ui \
-    ui/character/sibling/sibling_widget.ui \
-    ui/character/skill/skill_widget.ui \
-    ui/character/skill/skillrune_widget.ui \
-    ui/character/skill/tripod_widget.ui \
-    ui/class_selector.ui \
-    ui/engrave_selector.ui
+    ui/admin_login.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

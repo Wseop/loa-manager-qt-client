@@ -60,7 +60,14 @@ void SmartSearch::initMenu()
     {
         QPushButton* pMenuButton = WidgetManager::createPushButton(m_menuNames[i]);
         ui->hLayoutMenu->addWidget(pMenuButton);
-        connect(pMenuButton, &QPushButton::released, this, [&, i](){
+        m_widgets.append(pMenuButton);
+
+        connect(pMenuButton, &QPushButton::released, this, [&, i, pMenuButton](){
+            if (m_pSelectedMenuButton != nullptr)
+                m_pSelectedMenuButton->setEnabled(true);
+            m_pSelectedMenuButton = pMenuButton;
+            m_pSelectedMenuButton->setDisabled(true);
+
             // 화면에 표시할 메뉴 변경
             if (m_pSelectedMenu != nullptr)
                 dynamic_cast<QWidget*>(m_pSelectedMenu)->hide();
@@ -70,7 +77,6 @@ void SmartSearch::initMenu()
             // 변경된 메뉴 갱신
             m_pSelectedMenu->refresh();
         });
-        m_widgets.append(pMenuButton);
     }
 }
 

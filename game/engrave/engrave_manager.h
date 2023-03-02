@@ -18,7 +18,7 @@ public:
 
 public:
     const QStringList getEngraves() const;
-    const QStringList& getbattleEngraves() const;
+    const QStringList& getBattleEngraves() const;
     const QStringList& getClassEngraves() const;
     const QStringList& getPenalties() const;
 

@@ -20,14 +20,12 @@ public:
     void refresh() override;
 
 private:
-    void initUI();
+    void initializeUI();
     void updateUI(const class Gem gem, const int price);
     void clearUI();
 
 private:
     Ui::SmartSearchGem *ui;
-
-    const int LABEL_WIDTH[3] = {50, 200, 150};
 
     QList<QStringList> m_searchList;
     QList<class QNetworkAccessManager*> m_iconLoaders;

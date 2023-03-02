@@ -24,6 +24,8 @@ SOURCES += \
     game/engrave/engrave.cpp \
     game/engrave/engrave_manager.cpp \
     game/item/abilitystone.cpp \
+    game/item/accessory.cpp \
+    game/item/gem.cpp \
     game/item/item.cpp \
     main.cpp \
     loamanager.cpp \
@@ -48,9 +50,12 @@ HEADERS += \
     function/smart_search/smart_search_menu.h \
     function/smart_search/smart_search_reforge.h \
     function/smart_search/smart_search_tripod.h \
+    game/character/ability.h \
     game/engrave/engrave.h \
     game/engrave/engrave_manager.h \
     game/item/abilitystone.h \
+    game/item/accessory.h \
+    game/item/gem.h \
     game/item/item.h \
     game/item/item_grade.h \
     game/item/item_type.h \

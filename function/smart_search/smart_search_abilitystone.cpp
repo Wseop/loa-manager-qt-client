@@ -1,13 +1,16 @@
 #include "smart_search_abilitystone.h"
 #include "ui_smart_search_abilitystone.h"
 #include "ui/widget_manager.h"
-#include "ui/engrave_selector.h"
 #include "api/api_manager.h"
 #include "api/search_option.h"
-#include "game_data/character/engrave/engrave_manager.h"
+#include "game/engrave/engrave_manager.h"
+#include "util/util.h"
 
+#include <algorithm>
 #include <QLabel>
+#include <QComboBox>
 #include <QPushButton>
+#include <QGroupBox>
 #include <QFrame>
 #include <QHBoxLayout>
 #include <QMessageBox>
@@ -19,27 +22,28 @@
 
 SmartSearchAbilityStone::SmartSearchAbilityStone(QLayout* pLayout) :
     ui(new Ui::SmartSearchAbilityStone),
-    m_addCount(0)
+    m_searchResults(0),
+    m_searchCount(0)
 {
     ui->setupUi(this);
-    pLayout->addWidget(this);
-    this->hide();
-
     ui->vLayoutMain->setAlignment(Qt::AlignHCenter);
     ui->hLayoutMenu->setAlignment(Qt::AlignHCenter);
 
-    initMenu();
-    initResultLayout();
+    pLayout->addWidget(this);
+    this->hide();
+
+    initializeEngraveSelector();
+    initializeResultUI();
 }
 
 SmartSearchAbilityStone::~SmartSearchAbilityStone()
 {
-    for (EngraveSelector* pEngraveSelector : m_engraveSelectors)
+    clearResult();
+    for (QComboBox* pEngraveSelector : m_engraveSelectors)
         delete pEngraveSelector;
+    delete m_pPenaltySelector;
     for (QWidget* pWidget : m_widgets)
         delete pWidget;
-    for (QPushButton* pButton : m_engraveSelectButtons)
-        delete pButton;
     for (QLayout* pLayout : m_layouts)
         delete pLayout;
     delete ui;
@@ -47,59 +51,94 @@ SmartSearchAbilityStone::~SmartSearchAbilityStone()
 
 void SmartSearchAbilityStone::refresh()
 {
-    // Nothing to do
+    if (m_searchResults.size() == 0)
+        return;
+
+    // 최저가 순으로 정렬
+    std::sort(m_searchResults.begin(), m_searchResults.end(), [](const auto& a, const auto& b){
+        return a.second < b.second;
+    });
+
+    // 검색 결과 출력
+    int row = 1;
+    for (const auto& searchResult : m_searchResults)
+    {
+        const AbilityStone& abilityStone = searchResult.first;
+        const int& price = searchResult.second;
+
+        QFrame* pHLine = WidgetManager::createLine(QFrame::HLine);
+        ui->gridResult->addWidget(pHLine, row++, 0, 1, -1);
+        m_resultWidgets.append(pHLine);
+
+        QLabel* pIcon = WidgetManager::createIcon(abilityStone.iconPath(), nullptr, itemGradeToBGColor(abilityStone.itemGrade()));
+        ui->gridResult->addWidget(pIcon, row, 0);
+        m_resultWidgets.append(pIcon);
+
+        QLabel* pLabelName = WidgetManager::createLabel(abilityStone.itemName(), 10, itemGradeToTextColor(abilityStone.itemGrade()));
+        ui->gridResult->addWidget(pLabelName, row, 1);
+        m_resultWidgets.append(pLabelName);
+
+        const QStringList& engraves = abilityStone.getEngraves();
+        for (int i = 0; i < engraves.size(); i++)
+        {
+            QLabel* pLabelEngrave = WidgetManager::createLabel(engraves[i]);
+            ui->gridResult->addWidget(pLabelEngrave, row, 2 + i);
+            m_resultWidgets.append(pLabelEngrave);
+        }
+
+        QLabel* pLabelPenalty = WidgetManager::createLabel(abilityStone.getPenalties()[0], 10, "red");
+        ui->gridResult->addWidget(pLabelPenalty, row, 4);
+        m_resultWidgets.append(pLabelPenalty);
+
+        QLabel* pLabelPrice = WidgetManager::createLabel(QString("%L1").arg(price));
+        ui->gridResult->addWidget(pLabelPrice, row, 5);
+        m_resultWidgets.append(pLabelPrice);
+
+        row++;
+    }
 }
 
-void SmartSearchAbilityStone::initMenu()
+void SmartSearchAbilityStone::initializeEngraveSelector()
 {
     const int MAX_SELECTOR = 5;
-    const QString selectedButtonStyle = "QPushButton { "
-                                        "border: 2px solid rgb(58, 134, 255);"
-                                        "border-radius: 5px;"
-                                        "background-color: rgb(225, 225, 225);"
-                                        "}";
 
-    // 선택 초기화 버튼 추가
-    QPushButton* pButtonInit = WidgetManager::createPushButton("초기화");
-    pButtonInit->setStyleSheet("QPushButton { color: red }");
-    ui->hLayoutMenu->addWidget(pButtonInit);
-    connect(pButtonInit, &QPushButton::released, this, [&](){
-        for (QPushButton* pButton : m_engraveSelectButtons)
-        {
-            pButton->setText("각인 선택");
-            pButton->setStyleSheet("");
-        }
-    });
-    m_widgets.append(pButtonInit);
+    // 전투 각인 오름차순 정렬
+    QStringList battleEngraves = EngraveManager::getInstance()->getBattleEngraves();
+    std::sort(battleEngraves.begin(), battleEngraves.end());
 
-    // 각인 선택 버튼 추가
+    // 각인 선택기 추가
+    QStringList engraves = {"선택 안함"};
+    engraves << battleEngraves;
+
+    QGroupBox* pGroupEngrave = WidgetManager::createGroupBox("각인 선택");
+    ui->hLayoutMenu->addWidget(pGroupEngrave);
+    m_widgets.append(pGroupEngrave);
+
+    QHBoxLayout* pLayoutGroupEngrave = new QHBoxLayout();
+    pGroupEngrave->setLayout(pLayoutGroupEngrave);
+    m_layouts.append(pLayoutGroupEngrave);
+
     for (int i = 0; i < MAX_SELECTOR; i++)
     {
-        // EngraveSelector 생성
-        EngraveSelector* pEngraveSelector = new EngraveSelector(false);
+        QComboBox* pEngraveSelector = WidgetManager::createComboBox(engraves);
+        pLayoutGroupEngrave->addWidget(pEngraveSelector);
         m_engraveSelectors.append(pEngraveSelector);
-
-        // EngraveSelector popup 버튼 생성
-        QPushButton* pButtonSelector = WidgetManager::createPushButton("각인 선택");
-        ui->hLayoutMenu->addWidget(pButtonSelector);
-        connect(pButtonSelector, &QPushButton::released, this, [&, pEngraveSelector](){
-            pEngraveSelector->show();
-        });
-        m_engraveSelectButtons.append(pButtonSelector);
-
-        // 각인 선택 완료 시 동작 정의
-        QList<QPushButton*> buttons = pEngraveSelector->getButtons();
-        for (QPushButton* pButton : buttons)
-        {
-            // EngraveSelector와 연결된 버튼에 선택한 각인 이름을 표기
-            // 선택 완료 시 스타일 변경
-            connect(pButton, &QPushButton::released, this, [&, pButton, pButtonSelector, selectedButtonStyle, pEngraveSelector](){
-                pButtonSelector->setText(pButton->text());
-                pButtonSelector->setStyleSheet(selectedButtonStyle);
-                pEngraveSelector->hide();
-            });
-        }
     }
+
+    // 감소 각인 선택기 추가
+    QStringList penalties = {"선택 안함"};
+    penalties << EngraveManager::getInstance()->getPenalties();
+
+    QGroupBox* pGroupPenalty = WidgetManager::createGroupBox("감소 각인 선택");
+    ui->hLayoutMenu->addWidget(pGroupPenalty);
+    m_widgets.append(pGroupPenalty);
+
+    QHBoxLayout* pLayoutGroupPenalty = new QHBoxLayout();
+    pGroupPenalty->setLayout(pLayoutGroupPenalty);
+    m_layouts.append(pLayoutGroupPenalty);
+
+    m_pPenaltySelector = WidgetManager::createComboBox(penalties);
+    pLayoutGroupPenalty->addWidget(m_pPenaltySelector);
 
     // 검색 버튼 추가
     QPushButton* pButtonSearch = WidgetManager::createPushButton("검색");
@@ -108,14 +147,13 @@ void SmartSearchAbilityStone::initMenu()
     m_widgets.append(pButtonSearch);
 }
 
-void SmartSearchAbilityStone::initResultLayout()
+void SmartSearchAbilityStone::initializeResultUI()
 {
-    const QStringList attributes = {"", "#", "각인1", "각인2", "최저가"};
-    const int widths[5] = {25, 50, 100, 100, 100};
+    const QStringList attributes = {"#", "아이템명", "각인1", "각인2", "감소", "최저가"};
 
     for (int col = 0; col < attributes.size(); col++)
     {
-        QLabel* pLabelAttribute = WidgetManager::createLabel(attributes[col], 12, "", widths[col]);
+        QLabel* pLabelAttribute = WidgetManager::createLabel(attributes[col], 12);
         ui->gridResult->addWidget(pLabelAttribute, 0, col);
         m_widgets.append(pLabelAttribute);
     }
@@ -125,11 +163,10 @@ void SmartSearchAbilityStone::searchAbilityStone()
 {
     // 선택한 각인 취합 (중복X)
     QSet<QString> engraves;
-    for (const QPushButton* pButton : m_engraveSelectButtons)
+    for (const QComboBox* pEngraveSelector : m_engraveSelectors)
     {
-        const QString& text = pButton->text();
-        if (text != "각인 선택")
-            engraves.insert(text);
+        if (pEngraveSelector->currentIndex() != 0)
+            engraves.insert(pEngraveSelector->currentText());
     }
 
     // 선택된 각인이 2개 미만이면 검색 취소
@@ -141,8 +178,12 @@ void SmartSearchAbilityStone::searchAbilityStone()
         return;
     }
 
+    clearResult();
+
     // 가능한 모든 조합으로 검색
     const QStringList selectedEngraves = engraves.values();
+    int total = combination(selectedEngraves.size(), 2);
+
     for (int i = 0; i < selectedEngraves.size() - 1; i++)
     {
         for (int j = i + 1; j < selectedEngraves.size(); j++)
@@ -151,7 +192,9 @@ void SmartSearchAbilityStone::searchAbilityStone()
             const QString& engrave2 = selectedEngraves[j];
 
             QNetworkAccessManager* pNetworkManager = new QNetworkAccessManager();
-            connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, engrave1, engrave2](QNetworkReply* pReply){
+            connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, total](QNetworkReply* pReply){
+                m_searchCount++;
+
                 QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
                 if (response.isNull())
                     return;
@@ -159,8 +202,30 @@ void SmartSearchAbilityStone::searchAbilityStone()
                 // 검색 결과 parsing (최저가 1개)
                 const QJsonObject& item = response.object().find("Items")->toArray()[0].toObject();
                 const int& price = item.find("AuctionInfo")->toObject().find("BuyPrice")->toInt();
+
+                AbilityStone abilityStone;
+                abilityStone.setItemName(item.find("Name")->toString());
+                abilityStone.setItemGrade(qStringToItemGrade(item.find("Grade")->toString()));
+                abilityStone.setIconPath(":/image/item/abilitystone/0.png");
+
+                const QJsonArray& options = item.find("Options")->toArray();
+                for (const QJsonValue& value : options)
+                {
+                    const QJsonObject& option = value.toObject();
+                    const QString& engrave = option.find("OptionName")->toString();
+
+                    if (option.find("IsPenalty")->toBool())
+                        abilityStone.addPenalty(engrave, 0);
+                    else
+                        abilityStone.addEngrave(engrave, 0);
+                }
+
                 // 검색 결과 추가
-                addSearchResult({engrave1, engrave2}, price);
+                m_searchResults.append({abilityStone, price});
+
+                // 검색 완료 시 UI 갱신
+                if (total == m_searchCount)
+                    refresh();
             });
             connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
@@ -171,49 +236,22 @@ void SmartSearchAbilityStone::searchAbilityStone()
             searchOption.setItemTier(3);
             searchOption.setPageNo(1);
             searchOption.setSortCondition("ASC");
-            searchOption.setEtcOption(ENGRAVE_OPTION_CODE, EngraveManager::getInstance()->getEngraveCode(engrave1));
-            searchOption.setEtcOption(ENGRAVE_OPTION_CODE, EngraveManager::getInstance()->getEngraveCode(engrave2));
+            searchOption.setEtcOption(EtcOptionCode::Engrave, EngraveManager::getInstance()->getEngraveCode(engrave1));
+            searchOption.setEtcOption(EtcOptionCode::Engrave, EngraveManager::getInstance()->getEngraveCode(engrave2));
+            if (m_pPenaltySelector->currentIndex() != 0)
+                searchOption.setEtcOption(EtcOptionCode::Engrave, EngraveManager::getInstance()->getEngraveCode(m_pPenaltySelector->currentText()));
 
             ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Auction, QJsonDocument(searchOption.toJsonObject()).toJson());
         }
     }
 }
 
-void SmartSearchAbilityStone::addSearchResult(const QStringList& engraves, const int& price)
+void SmartSearchAbilityStone::clearResult()
 {
-    const QString iconAbilityStone = ":/item/image/item/abilitystone_0.png";
-    const QString iconCancle = ":/icon/image/cancle.png";
+    m_searchResults.clear();
+    m_searchCount = 0;
 
-    // HLine
-    QFrame* pHLine = WidgetManager::createLine(QFrame::HLine);
-    ui->gridResult->addWidget(pHLine, ++m_addCount, 0, 1, -1);
-
-    // 아이콘 추가
-    QLabel* pIcon = WidgetManager::createIcon(iconAbilityStone, nullptr, backgroundColorCode(ItemGrade::유물));
-    ui->gridResult->addWidget(pIcon, ++m_addCount, 1, Qt::AlignHCenter);
-
-    // 각인명 추가
-    QList<QLabel*> engraveLabels;
-    for (int i = 0; i < 2; i++)
-    {
-        QLabel* pLabelEngrave = WidgetManager::createLabel(engraves[i]);
-        ui->gridResult->addWidget(pLabelEngrave, m_addCount, i + 2);
-        engraveLabels.append(pLabelEngrave);
-    }
-
-    // 가격 추가
-    QLabel* pLabelPrice = WidgetManager::createLabel(QString("%L1").arg(price));
-    ui->gridResult->addWidget(pLabelPrice, m_addCount, 4);
-
-    // 삭제 버튼 추가
-    QPushButton* pButtonDelete = WidgetManager::createPushButton(QPixmap(iconCancle), 25, 25);
-    ui->gridResult->addWidget(pButtonDelete, m_addCount, 0);
-    connect(pButtonDelete, &QPushButton::released, this, [&, pHLine, pIcon, engraveLabels, pLabelPrice, pButtonDelete](){
-        delete pHLine;
-        delete pIcon;
-        for (QLabel* pLabelEngrave : engraveLabels)
-            delete pLabelEngrave;
-        delete pLabelPrice;
-        delete pButtonDelete;
-    });
+    for (QWidget* pWidget : m_resultWidgets)
+        delete pWidget;
+    m_resultWidgets.clear();
 }

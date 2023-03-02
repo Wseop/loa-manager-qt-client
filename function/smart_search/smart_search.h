@@ -16,7 +16,7 @@ private:
     ~SmartSearch();
 
     void loadResource();
-    void initMenu();
+    void initializeMenu();
 
 public:
     static SmartSearch* getInstace();

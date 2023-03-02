@@ -2,6 +2,7 @@
 #define SMART_SEARCH_ABILITYSTONE_H
 
 #include "function/smart_search/smart_search_menu.h"
+#include "game/item/abilitystone.h"
 
 #include <QWidget>
 
@@ -20,20 +21,21 @@ public:
     void refresh() override;
 
 private:
-    void initMenu();
-    void initResultLayout();
+    void initializeEngraveSelector();
+    void initializeResultUI();
+
     void searchAbilityStone();
-    void addSearchResult(const QStringList& engraves, const int& price);
+    void clearResult();
 
 private:
     Ui::SmartSearchAbilityStone *ui;
 
-    const int ENGRAVE_OPTION_CODE = 3;
+    QList<class QComboBox*> m_engraveSelectors;
+    QComboBox* m_pPenaltySelector;
+    QList<QPair<AbilityStone, int>> m_searchResults;
+    int m_searchCount;
 
-    QList<class EngraveSelector*> m_engraveSelectors;
-    QList<class QPushButton*> m_engraveSelectButtons;
-    int m_addCount;
-
+    QList<QWidget*> m_resultWidgets;
     QList<QWidget*> m_widgets;
     QList<QLayout*> m_layouts;
 };

@@ -17,13 +17,15 @@ SmartSearch* SmartSearch::m_pInstance = nullptr;
 
 SmartSearch::SmartSearch() :
     ui(new Ui::SmartSearch),
-    m_pSelectedMenu(nullptr)
+    m_pSelectedMenu(nullptr),
+    m_pSelectedMenuButton(nullptr)
 {
     ui->setupUi(this);
     ui->hLayoutMenu->setAlignment(Qt::AlignHCenter);
+    ui->vLayoutMain->setAlignment(Qt::AlignTop);
 
     loadResource();
-    initMenu();
+    initializeMenu();
 }
 
 SmartSearch::~SmartSearch()
@@ -41,7 +43,7 @@ void SmartSearch::loadResource()
     m_menuNames = json.find("Menu")->toVariant().toStringList();
 }
 
-void SmartSearch::initMenu()
+void SmartSearch::initializeMenu()
 {
     // 메뉴별 위젯 생성 (메뉴 목록 순서대로 생성)
     SmartSearchMenu* pEngraveBook = new SmartSearchEngraveBook(ui->vLayoutMain);

@@ -19,11 +19,12 @@ SmartSearchReforge::SmartSearchReforge(QLayout* pLayout) :
     ui(new Ui::SmartSearchReforge)
 {
     ui->setupUi(this);
+
     pLayout->addWidget(this);
     this->hide();
 
     loadResource();
-    initUI();
+    initializeUI();
 }
 
 SmartSearchReforge::~SmartSearchReforge()
@@ -81,7 +82,7 @@ void SmartSearchReforge::refresh()
             // option setting 후 api 요청(post) 전달
             SearchOption searchOption(SearchType::Market);
             searchOption.setCategoryCode(CategoryCode::Reforge);
-            searchOption.setItemName(item.getName());
+            searchOption.setItemName(item.itemName());
             searchOption.setItemTier(3);
             searchOption.setPageNo(1);
             searchOption.setSortCondition("ASC");
@@ -96,7 +97,7 @@ void SmartSearchReforge::refresh()
 void SmartSearchReforge::loadResource()
 {
     QJsonObject json = ResourceManager::getInstance()->loadJson("reforge");
-    const QString iconPath = ":/reforge/image/reforge/reforge_%1_%2.png";
+    const QString iconPath = ":/image/item/reforge/%1_%2.png";
 
     const QJsonArray& reforges = json.find("Reforge")->toArray();
     for (int i = 0; i < reforges.size(); i++)
@@ -116,9 +117,9 @@ void SmartSearchReforge::loadResource()
             if (name == "명예의 파편")
                 continue;
 
-            Item item(ItemType::Size);
-            item.setName(name);
-            item.setGrade(strToItemGrade(object.find("Grade")->toString()));
+            Item item(ItemType::Default);
+            item.setItemName(name);
+            item.setItemGrade(qStringToItemGrade(object.find("Grade")->toString()));
             item.setIconPath(iconPath.arg(i).arg(j));
             items.append(item);
         }
@@ -126,19 +127,13 @@ void SmartSearchReforge::loadResource()
     }
 }
 
-void SmartSearchReforge::initUI()
+void SmartSearchReforge::initializeUI()
 {
-    const int LABEL_WIDTH = 150;
-
     // 속성 label 추가
     const QStringList attributes = {"#", "재료", "최근 거래가", "현재 최저가", "효율 (개당 가격)"};
     for (int col = 0; col < attributes.size(); col++)
     {
-        QLabel* pLabelAttribute = nullptr;
-        if (col == 0)
-            pLabelAttribute = WidgetManager::createLabel(attributes[col], 14, "", 50);
-        else
-            pLabelAttribute = WidgetManager::createLabel(attributes[col], 14, "", LABEL_WIDTH);
+        QLabel* pLabelAttribute = WidgetManager::createLabel(attributes[col], 14);
         ui->gridReforge->addWidget(pLabelAttribute, 0, col);
         m_widgets.append(pLabelAttribute);
     }
@@ -155,27 +150,28 @@ void SmartSearchReforge::initUI()
             ui->gridReforge->addWidget(pHLine, row++, 0, 1, -1);
             m_widgets.append(pHLine);
 
-            QLabel* pIcon = WidgetManager::createIcon(item.getIconPath(), nullptr, backgroundColorCode(item.getGrade()));
+            QLabel* pIcon = WidgetManager::createIcon(item.iconPath(), nullptr, itemGradeToBGColor(item.itemGrade()));
             ui->gridReforge->addWidget(pIcon, row, col++);
             m_widgets.append(pIcon);
 
-            QLabel* pLabelName = nullptr;
+            QString itemName = "";
             if (m_categories[i] == "파괴석" || m_categories[i] == "수호석")
-                pLabelName = WidgetManager::createLabel(item.getName() + " x10", 10, colorCode(item.getGrade()), LABEL_WIDTH);
+                itemName = item.itemName() + " x10";
             else
-                pLabelName = WidgetManager::createLabel(item.getName(), 10, colorCode(item.getGrade()), LABEL_WIDTH);
+                itemName = item.itemName();
+            QLabel* pLabelName = WidgetManager::createLabel(itemName, 10, itemGradeToTextColor(item.itemGrade()));
             ui->gridReforge->addWidget(pLabelName, row, col++);
             m_widgets.append(pLabelName);
 
-            QLabel* pLabelRecentPrice = WidgetManager::createLabel("-", 10, "", LABEL_WIDTH);
+            QLabel* pLabelRecentPrice = WidgetManager::createLabel("-", 10);
             ui->gridReforge->addWidget(pLabelRecentPrice, row, col++);
             m_recentPriceLabels.append(pLabelRecentPrice);
 
-            QLabel* pLabelMinPrice = WidgetManager::createLabel("-", 10, "", LABEL_WIDTH);
+            QLabel* pLabelMinPrice = WidgetManager::createLabel("-", 10);
             ui->gridReforge->addWidget(pLabelMinPrice, row, col++);
             m_minPriceLabels.append(pLabelMinPrice);
 
-            QLabel* pLabelEfficiency = WidgetManager::createLabel("-", 10, "", LABEL_WIDTH);
+            QLabel* pLabelEfficiency = WidgetManager::createLabel("-", 10);
             ui->gridReforge->addWidget(pLabelEfficiency, row, col++);
             m_efficiencyLabels.append(pLabelEfficiency);
 

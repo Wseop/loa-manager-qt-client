@@ -2,7 +2,7 @@
 #define SMART_SEARCH_REFORGE_H
 
 #include "function/smart_search/smart_search_menu.h"
-#include "game_data/character/item/item.h"
+#include "game/item/item.h"
 
 #include <QWidget>
 
@@ -22,7 +22,7 @@ public:
 
 private:
     void loadResource();
-    void initUI();
+    void initializeUI();
 
 private:
     Ui::SmartSearchReforge *ui;

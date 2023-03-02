@@ -3,7 +3,7 @@
 #include "ui/widget_manager.h"
 #include "api/api_manager.h"
 #include "api/search_option.h"
-#include "game_data/character/item/gem.h"
+#include "game/item/gem.h"
 
 #include <QLabel>
 #include <QJsonObject>
@@ -20,12 +20,11 @@ SmartSearchGem::SmartSearchGem(QLayout* pLayout) :
     })
 {
     ui->setupUi(this);
+
     pLayout->addWidget(this);
     this->hide();
 
-    ui->hLayoutMain->setAlignment(Qt::AlignHCenter);
-
-    initUI();
+    initializeUI();
 }
 
 SmartSearchGem::~SmartSearchGem()
@@ -52,23 +51,25 @@ void SmartSearchGem::refresh()
                     return;
 
                 const QJsonObject& item = response.object().find("Items")->toArray()[0].toObject();
-
-                Gem gem;
-                gem.setName(item.find("Name")->toString());
-                gem.setGrade(strToItemGrade(item.find("Grade")->toString()));
-                gem.setIconPath(item.find("Icon")->toString());
+                const QString& itemName = item.find("Name")->toString();
 
                 // 보석 타입 설정
-                if (gem.getName().contains("멸화"))
-                    gem.setGemType(GemType::멸화);
+                GemType gemType;
+                if (itemName.contains("멸화"))
+                    gemType = GemType::멸화;
                 else
-                    gem.setGemType(GemType::홍염);
+                    gemType = GemType::홍염;
+
+                Gem gem(gemType);
+                gem.setItemName(itemName);
+                gem.setItemGrade(qStringToItemGrade(item.find("Grade")->toString()));
+                gem.setIconPath(item.find("Icon")->toString());
 
                 // 보석 레벨 설정
-                if (gem.getName().startsWith("10"))
-                    gem.setLevel(10);
+                if (itemName.startsWith("10"))
+                    gem.setGemLevel(10);
                 else
-                    gem.setLevel(gem.getName()[0].digitValue());
+                    gem.setGemLevel(itemName[0].digitValue());
 
                 // 가격 parsing
                 const int& price = item.find("AuctionInfo")->toObject().find("BuyPrice")->toInt();
@@ -90,7 +91,7 @@ void SmartSearchGem::refresh()
     }
 }
 
-void SmartSearchGem::initUI()
+void SmartSearchGem::initializeUI()
 {
     const QStringList attributes = {"#", "보석", "최저가"};
     const QList<QGridLayout*> layouts = {ui->gridLeft, ui->gridRight};
@@ -100,7 +101,7 @@ void SmartSearchGem::initUI()
         // attribute label 추가
         for (int j = 0; j < attributes.size(); j++)
         {
-            QLabel* pLabel = WidgetManager::createLabel(attributes[j], 14, "", LABEL_WIDTH[j]);
+            QLabel* pLabel = WidgetManager::createLabel(attributes[j], 14);
             layouts[i]->addWidget(pLabel, 0, j);
             m_widgets.append(pLabel);
         }
@@ -109,8 +110,8 @@ void SmartSearchGem::initUI()
 
 void SmartSearchGem::updateUI(const Gem gem, const int price)
 {
-    QGridLayout* pLayout = gem.getGemType() == GemType::멸화 ? ui->gridLeft : ui->gridRight;
-    int row = (2 * gem.getLevel()) - 9;
+    QGridLayout* pLayout = gem.gemType() == GemType::멸화 ? ui->gridLeft : ui->gridRight;
+    int row = (2 * gem.gemLevel()) - 9;
 
     QNetworkAccessManager* pIconLoader = new QNetworkAccessManager();
     m_iconLoaders.append(pIconLoader);
@@ -119,15 +120,15 @@ void SmartSearchGem::updateUI(const Gem gem, const int price)
     pLayout->addWidget(pHLine, row++, 0, 1, -1);
     m_gemWidgets.append(pHLine);
 
-    QLabel* pIcon = WidgetManager::createIcon(gem.getIconPath(), pIconLoader, backgroundColorCode(gem.getGrade()));
+    QLabel* pIcon = WidgetManager::createIcon(gem.iconPath(), pIconLoader, itemGradeToBGColor(gem.itemGrade()));
     pLayout->addWidget(pIcon, row, 0);
     m_gemWidgets.append(pIcon);
 
-    QLabel* pLabelName = WidgetManager::createLabel(gem.getName(), 10, colorCode(gem.getGrade()), LABEL_WIDTH[1]);
+    QLabel* pLabelName = WidgetManager::createLabel(gem.itemName(), 10, itemGradeToTextColor(gem.itemGrade()));
     pLayout->addWidget(pLabelName, row, 1);
     m_gemWidgets.append(pLabelName);
 
-    QLabel* pLabelPrice = WidgetManager::createLabel(QString("%L1").arg(price), 10, "", LABEL_WIDTH[2]);
+    QLabel* pLabelPrice = WidgetManager::createLabel(QString("%L1").arg(price), 10);
     pLayout->addWidget(pLabelPrice, row, 2);
     m_gemWidgets.append(pLabelPrice);
 }

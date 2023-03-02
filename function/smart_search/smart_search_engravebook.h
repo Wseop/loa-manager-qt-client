@@ -20,7 +20,7 @@ public:
     void refresh() override;
 
 private:
-    void initUI();
+    void initializeUI();
     void updateUI();
     void clearUI();
 
@@ -28,8 +28,6 @@ private:
 
 private:
     Ui::SmartSearchEngraveBook *ui;
-
-    const int LABEL_WIDTH = 200;
 
     int m_searchPageNo;
 

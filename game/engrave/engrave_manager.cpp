@@ -67,7 +67,7 @@ const QStringList EngraveManager::getEngraves() const
     return m_engraveToCode.keys();
 }
 
-const QStringList& EngraveManager::getbattleEngraves() const
+const QStringList& EngraveManager::getBattleEngraves() const
 {
     return m_battleEngraves;
 }

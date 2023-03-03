@@ -101,9 +101,8 @@ QLineEdit* WidgetManager::createLineEdit(QValidator* pValidator, QString placeHo
     QLineEdit* pLineEdit = new QLineEdit();
     pLineEdit->setValidator(pValidator);
     pLineEdit->setPlaceholderText(placeHolder);
-    pLineEdit->setAlignment(Qt::AlignHCenter);
     pLineEdit->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
-    pLineEdit->setMaximumSize(width, height);
+    pLineEdit->setFixedSize(width, height);
     return pLineEdit;
 }
 

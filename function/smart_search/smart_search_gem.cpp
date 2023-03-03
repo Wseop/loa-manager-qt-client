@@ -102,7 +102,7 @@ void SmartSearchGem::initializeUI()
         for (int j = 0; j < attributes[i].size(); j++)
         {
             QLabel* pLabel = WidgetManager::createLabel(attributes[i][j], 14);
-            layouts[i]->addWidget(pLabel, 0, j);
+            layouts[i]->addWidget(pLabel, 0, j, Qt::AlignHCenter);
             m_widgets.append(pLabel);
         }
     }
@@ -121,15 +121,15 @@ void SmartSearchGem::updateUI(const Gem gem, const int price)
     m_gemWidgets.append(pHLine);
 
     QLabel* pIcon = WidgetManager::createIcon(gem.iconPath(), pIconLoader, itemGradeToBGColor(gem.itemGrade()));
-    pLayout->addWidget(pIcon, row, 0);
+    pLayout->addWidget(pIcon, row, 0, Qt::AlignHCenter);
     m_gemWidgets.append(pIcon);
 
     QLabel* pLabelName = WidgetManager::createLabel(gem.itemName(), 10, itemGradeToTextColor(gem.itemGrade()), 300);
-    pLayout->addWidget(pLabelName, row, 1);
+    pLayout->addWidget(pLabelName, row, 1, Qt::AlignHCenter);
     m_gemWidgets.append(pLabelName);
 
     QLabel* pLabelPrice = WidgetManager::createLabel(QString("%L1").arg(price), 10, "", 300);
-    pLayout->addWidget(pLabelPrice, row, 2);
+    pLayout->addWidget(pLabelPrice, row, 2, Qt::AlignHCenter);
     m_gemWidgets.append(pLabelPrice);
 }
 

@@ -26,7 +26,6 @@ SmartSearchAbilityStone::SmartSearchAbilityStone(QLayout* pLayout) :
     m_searchCount(0)
 {
     ui->setupUi(this);
-    ui->vLayoutMain->setAlignment(Qt::AlignHCenter);
     ui->hLayoutMenu->setAlignment(Qt::AlignHCenter);
 
     pLayout->addWidget(this);

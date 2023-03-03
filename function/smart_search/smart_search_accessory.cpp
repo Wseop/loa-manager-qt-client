@@ -35,6 +35,7 @@ SmartSearchAccessory::SmartSearchAccessory(QLayout* pLayout) :
     initializeOptionSelector();
     initializeOptionCode();
     initializeSearchButton();
+    initializeResultUI();
 }
 
 SmartSearchAccessory::~SmartSearchAccessory()
@@ -51,7 +52,10 @@ SmartSearchAccessory::~SmartSearchAccessory()
 
 void SmartSearchAccessory::refresh()
 {
-    // Nothing to do
+    if (m_searchResults.size() == 0)
+        return;
+
+    showSearchResult();
 }
 
 void SmartSearchAccessory::initializeOption()
@@ -111,6 +115,16 @@ void SmartSearchAccessory::initializeOptionSelector()
         pLayout->addWidget(pOptionSelector);
         m_optionSelectors.append(pOptionSelector);
     }
+
+    // 등급에 따라 각인 label 표기 변경
+    // 유물 : 33, 34, 35 | 고대 : 34, 35, 36
+    connect(m_optionSelectors[OptionIndex::Grade], &QComboBox::currentIndexChanged, this, [&](int index){
+        const QString text = "각인(3%1)";
+
+        for (int i = 0; i < m_engraveLabels.size(); i++)
+            m_engraveLabels[i]->setText(text.arg(3 + i + index));
+    });
+
 
     // 특성2는 목걸이를 선택한 경우만 활성화
     connect(m_optionSelectors[OptionIndex::Part], &QComboBox::currentIndexChanged, this, [&](int index){
@@ -177,6 +191,8 @@ void SmartSearchAccessory::initializeSearchButton()
                 baseSearchOption.setEtcOption(EtcOptionCode::Ability, m_abilityCodes[selectedOption]);
             else if (i == static_cast<int>(OptionIndex::Ability2) && m_optionSelectors[OptionIndex::Ability2]->isEnabled())
                 baseSearchOption.setEtcOption(EtcOptionCode::Ability, m_abilityCodes[selectedOption]);
+            else if (i == static_cast<int>(OptionIndex::Quality))
+                baseSearchOption.setQuality(selectedOption.chopped(3).toInt());
             else if (i == static_cast<int>(OptionIndex::Engrave1))
                 baseSearchOption.setEtcOption(EtcOptionCode::Engrave, EngraveManager::getInstance()->getEngraveCode(selectedOption), 3, 3);
             else if (i == static_cast<int>(OptionIndex::Penalty) && m_optionSelectors[i]->currentIndex() != 0)
@@ -197,30 +213,32 @@ void SmartSearchAccessory::initializeSearchButton()
     });
 }
 
-//void SmartSearchAccessory::initResultLayout()
-//{
-//    m_resultLayouts = {ui->gridResult1, ui->gridResult2, ui->gridResult3};
-//    for (int i = 0; i < m_resultLayouts.size(); i++)
-//        m_resultLayouts[i]->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
+void SmartSearchAccessory::initializeResultUI()
+{
+    m_resultLayouts = {ui->gridResult1, ui->gridResult2, ui->gridResult3};
+    for (QGridLayout* pLayout : m_resultLayouts)
+        pLayout->setAlignment(Qt::AlignTop);
 
-//    const QStringList attributes = {"#", "아이템명", "품질", "특성", "각인(3/%1,%2)", "가격"};
+    const QStringList attributes = {"#", "아이템명", "품질", "특성", "각인(3%1)", "가격"};
+    for (int i = 0; i < m_resultLayouts.size(); i++)
+    {
+        for (int j = 0; j < attributes.size(); j++)
+        {
+            QLabel* pLabelAttribute = nullptr;
 
-//    for (int i = 0; i < m_resultLayouts.size(); i++)
-//    {
-//        for (int j = 0; j < attributes.size(); j++)
-//        {
-//            const QString& attribute = attributes[j];
+            if (j == 4)
+            {
+                pLabelAttribute = WidgetManager::createLabel(attributes[j].arg(j - 1 + i), 12);
+                m_engraveLabels.append(pLabelAttribute);
+            }
+            else
+                pLabelAttribute = WidgetManager::createLabel(attributes[j], 12);
 
-//            QLabel* pLabel = nullptr;
-//            if (j == 4)
-//                pLabel = WidgetManager::createLabel(attribute.arg(j - 1 + i).arg(j + i), 10, "", LABEL_WIDTHS[j]);
-//            else
-//                pLabel = WidgetManager::createLabel(attribute, 10, "", LABEL_WIDTHS[j]);
-//            m_resultLayouts[i]->addWidget(pLabel, 0, j);
-//            m_widgets.append(pLabel);
-//        }
-//    }
-//}
+            m_resultLayouts[i]->addWidget(pLabelAttribute, 0, j);
+            m_widgets.append(pLabelAttribute);
+        }
+    }
+}
 
 void SmartSearchAccessory::searchAccessory(SearchOption& searchOption, AccessoryPart part)
 {
@@ -271,6 +289,7 @@ void SmartSearchAccessory::searchAccessory(SearchOption& searchOption, Accessory
             m_searchResults.append({pAccessory, price});
         }
 
+        // 검색 종료 시 ui 갱신
         if (m_responseCount == MAX_SEARCH_COUNT)
             refresh();
     });
@@ -279,81 +298,51 @@ void SmartSearchAccessory::searchAccessory(SearchOption& searchOption, Accessory
     ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Auction, QJsonDocument(searchOption.toJsonObject()).toJson());
 }
 
-//void SmartSearchAccessory::addItemToLayout(const Accessory& acc, const int& price)
-//{
-//    int col = 0;
-//    int layoutIndex = 0;
+void SmartSearchAccessory::showSearchResult()
+{
+    for (const auto& result : m_searchResults)
+    {
+        const Accessory* pAccessory = result.first;
 
-//    // 각인 값으로 배치될 레이아웃 결정
-//    QList<PairEngraveValue> engraves = acc.getEngraves();
-//    std::sort(engraves.begin(), engraves.end(), [&](PairEngraveValue& a, PairEngraveValue& b){
-//        return a.second < b.second;
-//    });
+        // 각인값의 합으로 layout index 설정
+        int layoutIndex = 0;
 
-//    layoutIndex = engraves[1].second - engraves[0].second;
-//    if (acc.getGrade() == ItemGrade::고대)
-//        layoutIndex -= 1;
+        const QStringList& engraves = pAccessory->getEngraves();
+        int sumOfEngraveValue = pAccessory->getEngraveValue(engraves[0]) + pAccessory->getEngraveValue(engraves[1]);
 
-//    // HLine 추가
-//    QFrame* pHLine = WidgetManager::createLine(QFrame::HLine);
-//    m_resultLayouts[layoutIndex]->addWidget(pHLine, ++m_currentLayoutRows[layoutIndex], 0, 1, -1);
-//    m_itemWidgets.append(pHLine);
+        if (pAccessory->itemGrade() == ItemGrade::유물)
+            layoutIndex = sumOfEngraveValue - 6;
+        else if (pAccessory->itemGrade() == ItemGrade::고대)
+            layoutIndex = sumOfEngraveValue - 7;
+        else
+            continue;
 
-//    QNetworkAccessManager* pIconLoader = new QNetworkAccessManager();
-//    connect(pIconLoader, &QNetworkAccessManager::finished, pIconLoader, &QNetworkAccessManager::deleteLater);
+        QGridLayout* pLayout = m_resultLayouts[layoutIndex];
+        int& row = m_currentLayoutRows[layoutIndex];
+        int col = 0;
 
-//    // 아이콘 추가
-//    QLabel* pIcon = WidgetManager::createIcon(acc.getIconPath(), pIconLoader, backgroundColorCode(acc.getGrade()));
-//    m_resultLayouts[layoutIndex]->addWidget(pIcon, ++m_currentLayoutRows[layoutIndex], col++);
-//    m_itemWidgets.append(pIcon);
+        // 구분선 추가
+        pLayout->addWidget(createHLine(), ++row, 0, 1, -1);
 
-//    // 아이템명 추가
-//    QLabel* pLabelName = WidgetManager::createLabel(acc.getName(), 10, colorCode(acc.getGrade()), LABEL_WIDTHS[col]);
-//    m_resultLayouts[layoutIndex]->addWidget(pLabelName, m_currentLayoutRows[layoutIndex], col++);
-//    m_itemWidgets.append(pLabelName);
+        // 아이콘 추가
+        pLayout->addWidget(createIcon(pAccessory->iconPath(), pAccessory->itemGrade()), ++row, col++);
 
-//    // 품질 추가
-//    QProgressBar* pQualityBar = WidgetManager::createQualityBar(acc.getQuality(), LABEL_WIDTHS[col], 20, 10);
-//    m_resultLayouts[layoutIndex]->addWidget(pQualityBar, m_currentLayoutRows[layoutIndex], col++);
-//    m_itemWidgets.append(pQualityBar);
+        // 아이템명 추가
+        pLayout->addWidget(createLabelItemName(pAccessory->itemName(), pAccessory->itemGrade()), row, col++);
 
-//    // 특성 추가
-//    QVBoxLayout* pLayoutAbility = new QVBoxLayout();
-//    pLayoutAbility->setSpacing(1);
-//    m_resultLayouts[layoutIndex]->addLayout(pLayoutAbility, m_currentLayoutRows[layoutIndex], col++);
-//    m_itemLayouts.append(pLayoutAbility);
+        // 품질 추가
+        pLayout->addWidget(createQualityBar(pAccessory->quality()), row, col++);
 
-//    const QMap<Ability, int>& abilities = acc.getAbilities();
-//    for (auto iter = abilities.begin(); iter != abilities.end(); iter++)
-//    {
-//        QLabel* pLabelAbility = WidgetManager::createLabel(QString("%1 +%2").arg(abilityToStr(iter.key())).arg(iter.value()), 10, "", LABEL_WIDTHS[col - 1]);
-//        pLayoutAbility->addWidget(pLabelAbility);
-//        m_itemWidgets.append(pLabelAbility);
-//    }
+        // 특성 추가
+        pLayout->addLayout(createAbilityLayout(pAccessory->abilities()), row, col++);
 
-//    // 각인 추가
-//    QVBoxLayout* pLayoutEngrave = new QVBoxLayout();
-//    pLayoutEngrave->setSpacing(1);
-//    m_resultLayouts[layoutIndex]->addLayout(pLayoutEngrave, m_currentLayoutRows[layoutIndex], col++);
-//    m_itemLayouts.append(pLayoutEngrave);
+        // 증가, 감소 각인 추가
+        pLayout->addLayout(createEngraveLayout(pAccessory), row, col++);
 
-//    for (const PairEngraveValue& engrave : engraves)
-//    {
-//        QLabel* pLabelEngrave = WidgetManager::createLabel(QString("%1 %2").arg(engrave.first).arg(engrave.second), 10, "", LABEL_WIDTHS[col - 1]);
-//        pLayoutEngrave->addWidget(pLabelEngrave);
-//        m_itemWidgets.append(pLabelEngrave);
-//    }
-
-//    const PairEngraveValue& penalty = acc.getPenalties()[0];
-//    QLabel* pLabelPenalty = WidgetManager::createLabel(QString("%1 %2").arg(penalty.first).arg(penalty.second), 10, "red", LABEL_WIDTHS[col - 1]);
-//    pLayoutEngrave->addWidget(pLabelPenalty);
-//    m_itemWidgets.append(pLabelPenalty);
-
-//    // 가격 추가
-//    QLabel* pLabelPrice = WidgetManager::createLabel(QString("%L1").arg(price), 10, "", LABEL_WIDTHS[col]);
-//    m_resultLayouts[layoutIndex]->addWidget(pLabelPrice, m_currentLayoutRows[layoutIndex], col++);
-//    m_itemWidgets.append(pLabelPrice);
-//}
+        // 가격 정보 추가
+        pLayout->addWidget(createLabelPrice(result.second), row, col++);
+    }
+}
 
 void SmartSearchAccessory::clearResult()
 {
@@ -371,4 +360,82 @@ void SmartSearchAccessory::clearResult()
     for (QLayout* pLayout : m_itemLayouts)
         delete pLayout;
     m_itemLayouts.clear();
+}
+
+QFrame* SmartSearchAccessory::createHLine()
+{
+    QFrame* pHLine = WidgetManager::createLine(QFrame::HLine);
+    m_itemWidgets.append(pHLine);
+    return pHLine;
+}
+
+QLabel* SmartSearchAccessory::createIcon(const QString& iconPath, const ItemGrade& itemGrade)
+{
+    QNetworkAccessManager* pIconLoader = new QNetworkAccessManager();
+    connect(pIconLoader, &QNetworkAccessManager::finished, pIconLoader, &QNetworkAccessManager::deleteLater);
+
+    QLabel* pIcon = WidgetManager::createIcon(iconPath, pIconLoader, itemGradeToBGColor(itemGrade));
+    m_itemWidgets.append(pIcon);
+
+    return pIcon;
+}
+
+QLabel* SmartSearchAccessory::createLabelItemName(const QString& itemName, const ItemGrade& itemGrade)
+{
+    QLabel* pLabelItemName = WidgetManager::createLabel(itemName, 10, itemGradeToTextColor(itemGrade));
+    m_itemWidgets.append(pLabelItemName);
+    return pLabelItemName;
+}
+
+QProgressBar* SmartSearchAccessory::createQualityBar(const int& quality)
+{
+    QProgressBar* pQualityBar = WidgetManager::createQualityBar(quality, 50, 20);
+    m_itemWidgets.append(pQualityBar);
+    return pQualityBar;
+}
+
+QVBoxLayout* SmartSearchAccessory::createAbilityLayout(const QHash<Ability, int>& abilities)
+{
+    QVBoxLayout* pAbilityLayout = new QVBoxLayout();
+    m_itemLayouts.append(pAbilityLayout);
+
+    for (auto iter = abilities.begin(); iter != abilities.end(); iter++)
+    {
+        QLabel* pLabelAbility = WidgetManager::createLabel(QString("%1 +%2").arg(abilityToQString(iter.key())).arg(iter.value()));
+        pAbilityLayout->addWidget(pLabelAbility);
+        m_itemWidgets.append(pLabelAbility);
+    }
+
+    return pAbilityLayout;
+}
+
+QVBoxLayout* SmartSearchAccessory::createEngraveLayout(const Accessory* pAccessory)
+{
+    QVBoxLayout* pEngraveLayout = new QVBoxLayout();
+    m_itemLayouts.append(pEngraveLayout);
+
+    const QStringList& engraves = pAccessory->getEngraves();
+    for (const QString& engrave : engraves)
+    {
+        QLabel* pLabelEngrave = WidgetManager::createLabel(QString("%1 +%2").arg(engrave).arg(pAccessory->getEngraveValue(engrave)));
+        pEngraveLayout->addWidget(pLabelEngrave);
+        m_itemWidgets.append(pLabelEngrave);
+    }
+
+    const QStringList& penalties = pAccessory->getPenalties();
+    for (const QString& penalty : penalties)
+    {
+        QLabel* pLabelEngrave = WidgetManager::createLabel(QString("%1 +%2").arg(penalty).arg(pAccessory->getPenaltyValue(penalty)), 10, "red");
+        pEngraveLayout->addWidget(pLabelEngrave);
+        m_itemWidgets.append(pLabelEngrave);
+    }
+
+    return pEngraveLayout;
+}
+
+QLabel* SmartSearchAccessory::createLabelPrice(const int& price)
+{
+    QLabel* pLabelPrice = WidgetManager::createLabel(QString("%L1").arg(price));
+    m_itemWidgets.append(pLabelPrice);
+    return pLabelPrice;
 }

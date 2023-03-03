@@ -31,10 +31,20 @@ private:
     void initializeOptionSelector();
     void initializeOptionCode();
     void initializeSearchButton();
-//    void initResultLayout();
+    void initializeResultUI();
 
     void searchAccessory(SearchOption& searchOption, AccessoryPart part);
+    void showSearchResult();
     void clearResult();
+
+    // 검색 결과 widget 생성
+    class QFrame* createHLine();
+    class QLabel* createIcon(const QString& iconPath, const ItemGrade& itemGrade);
+    QLabel* createLabelItemName(const QString& itemName, const ItemGrade& itemGrade);
+    class QProgressBar* createQualityBar(const int& quality);
+    class QVBoxLayout* createAbilityLayout(const QHash<Ability, int>& abilities);
+    QVBoxLayout* createEngraveLayout(const Accessory* pAccessory);
+    QLabel* createLabelPrice(const int& price);
 
 private:
     Ui::SmartSearchAccessory *ui;
@@ -55,6 +65,7 @@ private:
     QList<QWidget*> m_itemWidgets;
     QList<QLayout*> m_itemLayouts;
 
+    QList<class QLabel*> m_engraveLabels;
     QList<QWidget*> m_widgets;
     QList<QLayout*> m_layouts;
 };

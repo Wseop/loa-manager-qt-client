@@ -20,6 +20,8 @@ SmartSearchEngraveBook::SmartSearchEngraveBook(QLayout* pLayout) :
     m_searchPageNo(1)
 {
     ui->setupUi(this);
+    ui->gridBattleEngrave->setAlignment(Qt::AlignTop);
+    ui->gridClassEngrave->setAlignment(Qt::AlignTop);
 
     pLayout->addWidget(this);
     this->hide();

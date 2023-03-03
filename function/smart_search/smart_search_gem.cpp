@@ -93,15 +93,15 @@ void SmartSearchGem::refresh()
 
 void SmartSearchGem::initializeUI()
 {
-    const QStringList attributes = {"#", "보석", "최저가"};
+    const QStringList attributes[2] = {{"#", "멸화", "최저가"}, {"#", "홍염", "최저가"}};
     const QList<QGridLayout*> layouts = {ui->gridLeft, ui->gridRight};
 
     for (int i = 0; i < layouts.size(); i++)
     {
         // attribute label 추가
-        for (int j = 0; j < attributes.size(); j++)
+        for (int j = 0; j < attributes[i].size(); j++)
         {
-            QLabel* pLabel = WidgetManager::createLabel(attributes[j], 14);
+            QLabel* pLabel = WidgetManager::createLabel(attributes[i][j], 14);
             layouts[i]->addWidget(pLabel, 0, j);
             m_widgets.append(pLabel);
         }
@@ -124,11 +124,11 @@ void SmartSearchGem::updateUI(const Gem gem, const int price)
     pLayout->addWidget(pIcon, row, 0);
     m_gemWidgets.append(pIcon);
 
-    QLabel* pLabelName = WidgetManager::createLabel(gem.itemName(), 10, itemGradeToTextColor(gem.itemGrade()));
+    QLabel* pLabelName = WidgetManager::createLabel(gem.itemName(), 10, itemGradeToTextColor(gem.itemGrade()), 300);
     pLayout->addWidget(pLabelName, row, 1);
     m_gemWidgets.append(pLabelName);
 
-    QLabel* pLabelPrice = WidgetManager::createLabel(QString("%L1").arg(price), 10);
+    QLabel* pLabelPrice = WidgetManager::createLabel(QString("%L1").arg(price), 10, "", 300);
     pLayout->addWidget(pLabelPrice, row, 2);
     m_gemWidgets.append(pLabelPrice);
 }

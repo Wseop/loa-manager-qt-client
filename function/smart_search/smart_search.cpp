@@ -22,7 +22,6 @@ SmartSearch::SmartSearch() :
 {
     ui->setupUi(this);
     ui->hLayoutMenu->setAlignment(Qt::AlignHCenter);
-    ui->vLayoutMain->setAlignment(Qt::AlignTop);
 
     loadResource();
     initializeMenu();

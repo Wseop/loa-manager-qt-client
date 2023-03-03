@@ -68,7 +68,7 @@ void SmartSearchReforge::refresh()
                 m_recentPriceLabels[labelIndex]->setText(QString("%L1").arg(recentPrice));
                 m_minPriceLabels[labelIndex]->setText(QString("%L1").arg(minPrice));
 
-                // 효율 업데이트 (명예의 파편)
+                // 개당 가격 업데이트
                 if (labelIndex < 3)
                 {
                     const int volumes[3] = {500, 1000, 1500};
@@ -130,7 +130,7 @@ void SmartSearchReforge::loadResource()
 void SmartSearchReforge::initializeUI()
 {
     // 속성 label 추가
-    const QStringList attributes = {"#", "재료", "최근 거래가", "현재 최저가", "효율 (개당 가격)"};
+    const QStringList attributes = {"#", "재료", "최근 거래가", "현재 최저가", "개당 가격"};
     for (int col = 0; col < attributes.size(); col++)
     {
         QLabel* pLabelAttribute = WidgetManager::createLabel(attributes[col], 14);

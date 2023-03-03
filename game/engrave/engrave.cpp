@@ -7,12 +7,12 @@ Engrave::Engrave()
 
 }
 
-const QStringList Engrave::getEngraves() const
+QStringList Engrave::getEngraves() const
 {
     return m_engraveValues.keys();
 }
 
-const QStringList Engrave::getPenalties() const
+QStringList Engrave::getPenalties() const
 {
     return m_penaltyValues.keys();
 }

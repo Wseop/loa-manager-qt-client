@@ -9,8 +9,8 @@ class Engrave
 public:
     Engrave();
 
-    const QStringList getEngraves() const;
-    const QStringList getPenalties() const;
+    QStringList getEngraves() const;
+    QStringList getPenalties() const;
     int getEngraveValue(const QString& engrave) const;
     int getPenaltyValue(const QString& penalty) const;
     int getEngraveLevel(const QString& engrave) const;

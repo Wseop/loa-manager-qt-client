@@ -62,22 +62,22 @@ void EngraveManager::destroyInstance()
     m_pEngrave = nullptr;
 }
 
-const QStringList EngraveManager::getEngraves() const
+QStringList EngraveManager::getEngraves() const
 {
     return m_engraveToCode.keys();
 }
 
-const QStringList& EngraveManager::getBattleEngraves() const
+QStringList EngraveManager::getBattleEngraves() const
 {
     return m_battleEngraves;
 }
 
-const QStringList& EngraveManager::getClassEngraves() const
+QStringList EngraveManager::getClassEngraves() const
 {
     return m_classEngraves;
 }
 
-const QStringList& EngraveManager::getPenalties() const
+QStringList EngraveManager::getPenalties() const
 {
     return m_penalties;
 }

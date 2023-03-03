@@ -17,10 +17,10 @@ public:
     static void destroyInstance();
 
 public:
-    const QStringList getEngraves() const;
-    const QStringList& getBattleEngraves() const;
-    const QStringList& getClassEngraves() const;
-    const QStringList& getPenalties() const;
+    QStringList getEngraves() const;
+    QStringList getBattleEngraves() const;
+    QStringList getClassEngraves() const;
+    QStringList getPenalties() const;
 
     const QString iconPath(const QString& engrave) const;
 

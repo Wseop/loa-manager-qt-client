@@ -27,6 +27,9 @@ SOURCES += \
     game/item/accessory.cpp \
     game/item/gem.cpp \
     game/item/item.cpp \
+    game/skill/skill.cpp \
+    game/skill/skill_manager.cpp \
+    game/skill/tripod.cpp \
     main.cpp \
     loamanager.cpp \
     resource/resource_manager.cpp \
@@ -59,6 +62,9 @@ HEADERS += \
     game/item/item.h \
     game/item/item_grade.h \
     game/item/item_type.h \
+    game/skill/skill.h \
+    game/skill/skill_manager.h \
+    game/skill/tripod.h \
     loamanager.h \
     resource/resource_manager.h \
     ui/admin_login.h \

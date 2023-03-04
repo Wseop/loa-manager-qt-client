@@ -11,6 +11,7 @@ class SearchOption
 {
 public:
     SearchOption(SearchType type);
+    SearchOption(const SearchOption& searchOption);
 
     void setSearchType(SearchType type);
 

@@ -23,8 +23,13 @@ const int MAX_SEARCH_COUNT = 3;
 
 SmartSearchAccessory::SmartSearchAccessory(QLayout* pLayout) :
     ui(new Ui::SmartSearchAccessory),
+    m_pSearchButton(nullptr),
+    m_searchPage(0),
+    m_addCount(0),
     m_responseCount(0),
-    m_currentLayoutRows({0, 0, 0})
+    m_searchOptions(MAX_SEARCH_COUNT),
+    m_currentLayoutRows({0, 0, 0}),
+    m_pButtonSearchMore(nullptr)
 {
     ui->setupUi(this);
 
@@ -36,26 +41,36 @@ SmartSearchAccessory::SmartSearchAccessory(QLayout* pLayout) :
     initializeOptionCode();
     initializeSearchButton();
     initializeResultUI();
+    initializeSearchMore();
 }
 
 SmartSearchAccessory::~SmartSearchAccessory()
 {
+    delete m_pSearchButton;
+    delete m_pButtonSearchMore;
+
     for (QWidget* pWidget : m_optionSelectors)
         delete pWidget;
     for (QWidget* pWidget : m_widgets)
         delete pWidget;
     for (QLayout* pLayout : m_layouts)
         delete pLayout;
+
     clearResult();
+
     delete ui;
 }
 
 void SmartSearchAccessory::refresh()
 {
     if (m_searchResults.size() == 0)
+    {
+        m_pSearchButton->setEnabled(true);
         return;
+    }
 
-    showSearchResult();
+    m_responseCount = 0;
+    addSearchResult();
 }
 
 void SmartSearchAccessory::initializeOption()
@@ -151,12 +166,15 @@ void SmartSearchAccessory::initializeOptionCode()
 
 void SmartSearchAccessory::initializeSearchButton()
 {
-    QPushButton* pSearchButton = WidgetManager::createPushButton("검색", 10);
-    ui->hLayoutOption->addWidget(pSearchButton);
-    m_widgets.append(pSearchButton);
+    m_pSearchButton = WidgetManager::createPushButton("검색", 10);
+    ui->hLayoutOption->addWidget(m_pSearchButton);
 
     // 검색 버튼 기능 구현
-    connect(pSearchButton, &QPushButton::released, this, [&](){
+    connect(m_pSearchButton, &QPushButton::released, this, [&](){
+        m_pSearchButton->setDisabled(true);
+        m_pButtonSearchMore->show();
+        m_responseCount = 0;
+
         // 각인이 선택되지 않은 경우 검색 중단
         for (int i = OptionIndex::Engrave1; i <= OptionIndex::Engrave2; i++)
         {
@@ -166,6 +184,7 @@ void SmartSearchAccessory::initializeSearchButton()
                 QMessageBox msgBox;
                 msgBox.setText("각인을 모두 선택해주세요.");
                 msgBox.exec();
+                m_pSearchButton->setEnabled(true);
                 return;
             }
         }
@@ -175,7 +194,6 @@ void SmartSearchAccessory::initializeSearchButton()
         // 검색 옵션 세팅
         SearchOption baseSearchOption(SearchType::Auction);
         baseSearchOption.setItemTier(3);
-        baseSearchOption.setPageNo(1);
         baseSearchOption.setSortCondition("ASC");
 
         // 각인2를 제외한 모든 옵션을 탐색하여 옵션 추가
@@ -199,17 +217,19 @@ void SmartSearchAccessory::initializeSearchButton()
                 baseSearchOption.setEtcOption(EtcOptionCode::Penalty, EngraveManager::getInstance()->getEngraveCode(selectedOption));
         }
 
-        // 각인2의 가능한 모든 수치에 대해 검색 시작 (유물 3~5, 고대 4~6)
+        // 각인2의 가능한 모든 수치로 검색 옵션 생성
         for (int i = 0; i < MAX_SEARCH_COUNT; i++)
         {
-            SearchOption searchOption = baseSearchOption;
+            SearchOption* pSearchOption = new SearchOption(baseSearchOption);
             int value = m_optionSelectors[OptionIndex::Grade]->currentIndex() == 0 ? (i + 3) : (i + 4);
 
             const QString& engrave = m_optionSelectors[OptionIndex::Engrave2]->currentText();
-            searchOption.setEtcOption(EtcOptionCode::Engrave, EngraveManager::getInstance()->getEngraveCode(engrave), value, value);
+            pSearchOption->setEtcOption(EtcOptionCode::Engrave, EngraveManager::getInstance()->getEngraveCode(engrave), value, value);
 
-            searchAccessory(searchOption, static_cast<AccessoryPart>(m_optionSelectors[OptionIndex::Part]->currentIndex()));
+            m_searchOptions[i] = pSearchOption;
         }
+
+        searchAccessory();
     });
 }
 
@@ -240,68 +260,86 @@ void SmartSearchAccessory::initializeResultUI()
     }
 }
 
-void SmartSearchAccessory::searchAccessory(SearchOption& searchOption, AccessoryPart part)
+void SmartSearchAccessory::initializeSearchMore()
 {
-    QNetworkAccessManager* pNetworkManager = new QNetworkAccessManager();
-    connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&](QNetworkReply* pReply){
-        m_responseCount++;
+    m_pButtonSearchMore = WidgetManager::createPushButton("페이지 추가 검색", 10, 500, 30);
+    m_pButtonSearchMore->hide();
+    ui->vLayoutMain->addWidget(m_pButtonSearchMore);
+    ui->vLayoutMain->setAlignment(m_pButtonSearchMore, Qt::AlignHCenter);
 
-        QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
-        if (response.isNull())
-            return;
-
-        // 악세서리 정보 parsing
-        const QJsonArray& items = response.object().find("Items")->toArray();
-        for (const QJsonValue& value : items)
-        {
-            const QJsonObject& item = value.toObject();
-
-            Accessory* pAccessory = new Accessory();
-            pAccessory->setAccessoryPart(part);
-            pAccessory->setItemName(item.find("Name")->toString());
-            pAccessory->setItemGrade(qStringToItemGrade(item.find("Grade")->toString()));
-            pAccessory->setQuality(item.find("GradeQuality")->toInt());
-            pAccessory->setIconPath(item.find("Icon")->toString());
-
-            const QJsonArray& options = item.find("Options")->toArray();
-            for (const QJsonValue& value : options)
-            {
-                const QJsonObject& option = value.toObject();
-
-                const QString& type = option.find("Type")->toString();
-                const QString& optionName = option.find("OptionName")->toString();
-                const int& optionValue = option.find("Value")->toInt();
-
-                if (type == "STAT")
-                    pAccessory->setAbility(qStringToAbility(optionName), optionValue);
-                else if (type == "ABILITY_ENGRAVE")
-                {
-                    if (option.find("IsPenalty")->toBool())
-                        pAccessory->addPenalty(optionName, optionValue);
-                    else
-                        pAccessory->addEngrave(optionName, optionValue);
-                }
-            }
-
-            // 가격 정보 parsing
-            const int& price = item.find("AuctionInfo")->toObject().find("BuyPrice")->toInt();
-
-            m_searchResults.append({pAccessory, price});
-        }
-
-        // 검색 종료 시 ui 갱신
-        if (m_responseCount == MAX_SEARCH_COUNT)
-            refresh();
-    });
-    connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
-
-    ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Auction, QJsonDocument(searchOption.toJsonObject()).toJson());
+    connect(m_pButtonSearchMore, &QPushButton::released, this, &SmartSearchAccessory::searchAccessory);
 }
 
-void SmartSearchAccessory::showSearchResult()
+void SmartSearchAccessory::searchAccessory()
 {
-    for (const auto& result : m_searchResults)
+    ++m_searchPage;
+
+    for (int i = 0; i < MAX_SEARCH_COUNT; i++)
     {
+        QNetworkAccessManager* pNetworkManager = new QNetworkAccessManager();
+        connect(pNetworkManager, &QNetworkAccessManager::finished, this, &SmartSearchAccessory::parseSearchResult);
+        connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
+
+        m_searchOptions[i]->setPageNo(m_searchPage);
+        ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Auction, QJsonDocument(m_searchOptions[i]->toJsonObject()).toJson());
+    }
+}
+
+void SmartSearchAccessory::parseSearchResult(QNetworkReply* pReply)
+{
+    m_responseCount++;
+
+    QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
+    if (response.isNull())
+        return;
+
+    // 악세서리 정보 parsing
+    const QJsonArray& items = response.object().find("Items")->toArray();
+    for (const QJsonValue& value : items)
+    {
+        const QJsonObject& item = value.toObject();
+
+        Accessory* pAccessory = new Accessory();
+        pAccessory->setItemName(item.find("Name")->toString());
+        pAccessory->setItemGrade(qStringToItemGrade(item.find("Grade")->toString()));
+        pAccessory->setQuality(item.find("GradeQuality")->toInt());
+        pAccessory->setIconPath(item.find("Icon")->toString());
+
+        const QJsonArray& options = item.find("Options")->toArray();
+        for (const QJsonValue& value : options)
+        {
+            const QJsonObject& option = value.toObject();
+
+            const QString& type = option.find("Type")->toString();
+            const QString& optionName = option.find("OptionName")->toString();
+            const int& optionValue = option.find("Value")->toInt();
+
+            if (type == "STAT")
+                pAccessory->setAbility(qStringToAbility(optionName), optionValue);
+            else if (type == "ABILITY_ENGRAVE")
+            {
+                if (option.find("IsPenalty")->toBool())
+                    pAccessory->addPenalty(optionName, optionValue);
+                else
+                    pAccessory->addEngrave(optionName, optionValue);
+            }
+        }
+
+        // 가격 정보 parsing
+        const int& price = item.find("AuctionInfo")->toObject().find("BuyPrice")->toInt();
+
+        m_searchResults.append({pAccessory, price});
+    }
+
+    if (m_responseCount == MAX_SEARCH_COUNT)
+        refresh();
+}
+
+void SmartSearchAccessory::addSearchResult()
+{
+    for (; m_addCount < m_searchResults.size(); m_addCount++)
+    {
+        const auto& result = m_searchResults[m_addCount];
         const Accessory* pAccessory = result.first;
 
         // 각인값의 합으로 layout index 설정
@@ -321,33 +359,37 @@ void SmartSearchAccessory::showSearchResult()
         int& row = m_currentLayoutRows[layoutIndex];
         int col = 0;
 
-        // 구분선 추가
+        // 가로 구분선 추가
         pLayout->addWidget(createHLine(), ++row, 0, 1, -1);
-
         // 아이콘 추가
         pLayout->addWidget(createIcon(pAccessory->iconPath(), pAccessory->itemGrade()), ++row, col++);
-
         // 아이템명 추가
         pLayout->addWidget(createLabelItemName(pAccessory->itemName(), pAccessory->itemGrade()), row, col++);
-
         // 품질 추가
         pLayout->addWidget(createQualityBar(pAccessory->quality()), row, col++);
-
         // 특성 추가
         pLayout->addLayout(createAbilityLayout(pAccessory->abilities()), row, col++);
-
         // 증가, 감소 각인 추가
         pLayout->addLayout(createEngraveLayout(pAccessory), row, col++);
-
         // 가격 정보 추가
         pLayout->addWidget(createLabelPrice(result.second), row, col++);
     }
+
+    // TODO. UI 업데이트 후 3초뒤 활성화
+    m_pSearchButton->setEnabled(true);
 }
 
 void SmartSearchAccessory::clearResult()
 {
-    m_responseCount = 0;
+    m_searchPage = 0;
+    m_addCount = 0;
     m_currentLayoutRows = {0, 0, 0};
+
+    for (SearchOption* pSearchOption : m_searchOptions)
+    {
+        delete pSearchOption;
+        pSearchOption = nullptr;
+    }
 
     for (int i = 0; i < m_searchResults.size(); i++)
         delete m_searchResults[i].first;

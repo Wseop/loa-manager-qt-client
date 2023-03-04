@@ -32,9 +32,11 @@ private:
     void initializeOptionCode();
     void initializeSearchButton();
     void initializeResultUI();
+    void initializeSearchMore();
 
-    void searchAccessory(SearchOption& searchOption, AccessoryPart part);
-    void showSearchResult();
+    void searchAccessory();
+    void parseSearchResult(class QNetworkReply* pReply);
+    void addSearchResult();
     void clearResult();
 
     // 검색 결과 widget 생성
@@ -49,6 +51,8 @@ private:
 private:
     Ui::SmartSearchAccessory *ui;
 
+    class QPushButton* m_pSearchButton;
+
     // option
     QList<QStringList> m_optionItems;
     QList<class QComboBox*> m_optionSelectors;
@@ -58,10 +62,14 @@ private:
     QHash<QString, CategoryCode> m_partCodes;
 
     // 검색 결과 & ui
+    int m_searchPage;
+    int m_addCount;
     int m_responseCount;
+    QList<class SearchOption*> m_searchOptions;
     QList<QPair<Accessory*, int>> m_searchResults;
     QList<class QGridLayout*> m_resultLayouts;
     QList<int> m_currentLayoutRows;
+    QPushButton* m_pButtonSearchMore;
     QList<QWidget*> m_itemWidgets;
     QList<QLayout*> m_itemLayouts;
 

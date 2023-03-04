@@ -5,6 +5,15 @@ SearchOption::SearchOption(SearchType type)
     setSearchType(type);
 }
 
+SearchOption::SearchOption(const SearchOption& searchOption) :
+    m_searchOption(searchOption.m_searchOption),
+    m_searchType(searchOption.m_searchType),
+    m_skillOptions(searchOption.m_skillOptions),
+    m_etcOptions(searchOption.m_etcOptions)
+{
+
+}
+
 void SearchOption::setSearchType(SearchType type)
 {
     m_searchType = type;

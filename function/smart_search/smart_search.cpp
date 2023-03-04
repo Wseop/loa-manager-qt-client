@@ -8,6 +8,7 @@
 #include "function/smart_search/smart_search_gem.h"
 #include "function/smart_search/smart_search_accessory.h"
 #include "function/smart_search/smart_search_abilitystone.h"
+#include "function/smart_search/smart_search_tripod.h"
 
 #include <QJsonObject>
 #include <QJsonArray>
@@ -55,6 +56,8 @@ void SmartSearch::initializeMenu()
     m_menuWidgets.append(pAccessory);
     SmartSearchMenu* pAbilityStone = new SmartSearchAbilityStone(ui->vLayoutMain);
     m_menuWidgets.append(pAbilityStone);
+    SmartSearchMenu* pTripod = new SmartSearchTripod(ui->vLayoutMain);
+    m_menuWidgets.append(pTripod);
 
     // 메뉴 버튼 추가
     for (int i = 0; i < m_menuNames.size(); i++)

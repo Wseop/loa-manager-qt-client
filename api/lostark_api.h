@@ -40,6 +40,13 @@ enum class AbilityCode
     숙련
 };
 
+enum class EtcOptionCode
+{
+    Ability = 2,
+    Engrave = 3,
+    Penalty = 6,
+};
+
 enum class SearchType
 {
     Auction,

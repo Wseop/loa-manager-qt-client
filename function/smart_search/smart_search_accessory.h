@@ -46,7 +46,7 @@ private:
     class QProgressBar* createQualityBar(const int& quality);
     class QVBoxLayout* createAbilityLayout(const QHash<Ability, int>& abilities);
     QVBoxLayout* createEngraveLayout(const Accessory* pAccessory);
-    QLabel* createLabelPrice(const int& price);
+    QLabel* createLabelPrice(const Price& price);
 
 private:
     Ui::SmartSearchAccessory *ui;
@@ -66,7 +66,7 @@ private:
     int m_addCount;
     int m_responseCount;
     QList<class SearchOption*> m_searchOptions;
-    QList<QPair<Accessory*, int>> m_searchResults;
+    QList<QPair<Accessory*, Price>> m_searchResults;
     QList<class QGridLayout*> m_resultLayouts;
     QList<int> m_currentLayoutRows;
     QPushButton* m_pButtonSearchMore;

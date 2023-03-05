@@ -17,6 +17,7 @@
 #include <QJsonDocument>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QTimer>
 #include <algorithm>
 
 const int MAX_SEARCH_COUNT = 3;
@@ -172,8 +173,6 @@ void SmartSearchAccessory::initializeSearchButton()
     // 검색 버튼 기능 구현
     connect(m_pSearchButton, &QPushButton::released, this, [&](){
         m_pSearchButton->setDisabled(true);
-        m_pButtonSearchMore->show();
-        m_responseCount = 0;
 
         // 각인이 선택되지 않은 경우 검색 중단
         for (int i = OptionIndex::Engrave1; i <= OptionIndex::Engrave2; i++)
@@ -189,6 +188,8 @@ void SmartSearchAccessory::initializeSearchButton()
             }
         }
 
+        m_responseCount = 0;
+        m_pButtonSearchMore->show();
         clearResult();
 
         // 검색 옵션 세팅
@@ -239,7 +240,7 @@ void SmartSearchAccessory::initializeResultUI()
     for (QGridLayout* pLayout : m_resultLayouts)
         pLayout->setAlignment(Qt::AlignTop);
 
-    const QStringList attributes = {"#", "아이템명", "품질", "특성", "각인(3%1)", "가격"};
+    const QStringList attributes = {"#", "아이템명", "품질", "특성", "각인(3%1)", "즉시 구매가\n(최소입찰가)"};
     for (int i = 0; i < m_resultLayouts.size(); i++)
     {
         for (int j = 0; j < attributes.size(); j++)
@@ -248,11 +249,11 @@ void SmartSearchAccessory::initializeResultUI()
 
             if (j == 4)
             {
-                pLabelAttribute = WidgetManager::createLabel(attributes[j].arg(j - 1 + i), 12);
+                pLabelAttribute = WidgetManager::createLabel(attributes[j].arg(j - 1 + i), 12, "", 200, 50);
                 m_engraveLabels.append(pLabelAttribute);
             }
             else
-                pLabelAttribute = WidgetManager::createLabel(attributes[j], 12);
+                pLabelAttribute = WidgetManager::createLabel(attributes[j], 12, "", 200, 50);
 
             m_resultLayouts[i]->addWidget(pLabelAttribute, 0, j);
             m_widgets.append(pLabelAttribute);
@@ -326,9 +327,11 @@ void SmartSearchAccessory::parseSearchResult(QNetworkReply* pReply)
         }
 
         // 가격 정보 parsing
-        const int& price = item.find("AuctionInfo")->toObject().find("BuyPrice")->toInt();
+        const QJsonObject& auctionInfo = item.find("AuctionInfo")->toObject();
+        int buyPrice = auctionInfo.find("BuyPrice")->toInt();
+        int bidStartPrice = auctionInfo.find("BidStartPrice")->toInt();
 
-        m_searchResults.append({pAccessory, price});
+        m_searchResults.append({pAccessory, {buyPrice, bidStartPrice}});
     }
 
     if (m_responseCount == MAX_SEARCH_COUNT)
@@ -375,8 +378,10 @@ void SmartSearchAccessory::addSearchResult()
         pLayout->addWidget(createLabelPrice(result.second), row, col++);
     }
 
-    // TODO. UI 업데이트 후 3초뒤 활성화
-    m_pSearchButton->setEnabled(true);
+    // UI 업데이트 후 3초뒤 검색버튼 활성화
+    QTimer::singleShot(3000, this, [&](){
+        m_pSearchButton->setEnabled(true);
+    });
 }
 
 void SmartSearchAccessory::clearResult()
@@ -475,9 +480,13 @@ QVBoxLayout* SmartSearchAccessory::createEngraveLayout(const Accessory* pAccesso
     return pEngraveLayout;
 }
 
-QLabel* SmartSearchAccessory::createLabelPrice(const int& price)
+QLabel* SmartSearchAccessory::createLabelPrice(const Price& price)
 {
-    QLabel* pLabelPrice = WidgetManager::createLabel(QString("%L1").arg(price));
+    QLabel* pLabelPrice = nullptr;
+    if (price.buyPrice != 0)
+        pLabelPrice = WidgetManager::createLabel(QString("%L1\n(%L2)").arg(price.buyPrice).arg(price.bidStartPrice), 10, "", 200, 50);
+    else
+        pLabelPrice = WidgetManager::createLabel(QString("%L1\n(%L2)").arg("-").arg(price.bidStartPrice), 10, "", 200, 50);
     m_itemWidgets.append(pLabelPrice);
     return pLabelPrice;
 }

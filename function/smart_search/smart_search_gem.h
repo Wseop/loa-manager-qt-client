@@ -24,11 +24,12 @@ private:
     void updateUI(const class Gem gem, Price price);
     void clearUI();
 
+    void parseSearchResult(class QNetworkReply* pReply);
+
 private:
     Ui::SmartSearchGem *ui;
 
     QList<QStringList> m_searchList;
-    QList<class QNetworkAccessManager*> m_iconLoaders;
 
     QList<QWidget*> m_gemWidgets;
     QList<QWidget*> m_widgets;

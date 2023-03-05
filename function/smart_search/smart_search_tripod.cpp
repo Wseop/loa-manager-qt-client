@@ -20,9 +20,6 @@
 #include <QNetworkReply>
 #include <QIntValidator>
 
-const QString LABEL_STYLE_NORMAL = "QLabel { border: 1px solid black }";
-const QString LABEL_STYLE_EMPHASIS = "QLabel { border: 1px solid black; color: red }";
-
 SmartSearchTripod::SmartSearchTripod(QLayout* pLayout) :
     ui(new Ui::SmartSearchTripod),
     m_filterPrice(0),
@@ -105,9 +102,12 @@ void SmartSearchTripod::initializePriceFilter()
 
         // 입력된 금액 이상이면 색상 변경하여 강조
         const QList<int>& skillCodes = m_tripodPriceLabels.keys();
+
         for (int skillCode : skillCodes)
         {
-            for (QLabel* pLabel : m_tripodPriceLabels[skillCode])
+            const QHash<int, class QLabel*>& tripodPriceLabels = m_tripodPriceLabels[skillCode];
+
+            for (QLabel* pLabel : tripodPriceLabels)
             {
                 QString text = pLabel->text();
 
@@ -135,7 +135,7 @@ void SmartSearchTripod::initializeSearchButton()
         // 이전 데이터 삭제
         clearResult();
 
-        // 선택된 직업의 스킬 목록 로드
+        // 선택된 직업의 스킬 목록 로드 & 트라이포드별로 가격 검색 시작
         const QList<Skill>& skills = SkillManager::getInstance()->skillList(m_pClassSelector->currentText());
 
         for (int i = 0; i < skills.size(); i++)

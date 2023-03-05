@@ -23,7 +23,8 @@
 SmartSearchAbilityStone::SmartSearchAbilityStone(QLayout* pLayout) :
     ui(new Ui::SmartSearchAbilityStone),
     m_searchResults(0),
-    m_searchCount(0)
+    m_totalSearchCount(0),
+    m_currentSearchCount(0)
 {
     ui->setupUi(this);
     ui->hLayoutMenu->setAlignment(Qt::AlignHCenter);
@@ -38,13 +39,17 @@ SmartSearchAbilityStone::SmartSearchAbilityStone(QLayout* pLayout) :
 SmartSearchAbilityStone::~SmartSearchAbilityStone()
 {
     clearResult();
+
     for (QComboBox* pEngraveSelector : m_engraveSelectors)
         delete pEngraveSelector;
     delete m_pPenaltySelector;
+
     for (QWidget* pWidget : m_widgets)
         delete pWidget;
+
     for (QLayout* pLayout : m_layouts)
         delete pLayout;
+
     delete ui;
 }
 
@@ -53,24 +58,24 @@ void SmartSearchAbilityStone::refresh()
     if (m_searchResults.size() == 0)
         return;
 
-    // 최저가 순으로 정렬
+    // 검색 결과 최저가 순으로 정렬
     std::sort(m_searchResults.begin(), m_searchResults.end(), [](const auto& a, const auto& b){
         return a.second.buyPrice < b.second.buyPrice;
     });
 
     // 검색 결과 출력
-    int row = 1;
+    int row = 0;
     for (const auto& searchResult : m_searchResults)
     {
         const AbilityStone& abilityStone = searchResult.first;
         const Price& price = searchResult.second;
 
         QFrame* pHLine = WidgetManager::createLine(QFrame::HLine);
-        ui->gridResult->addWidget(pHLine, row++, 0, 1, -1);
+        ui->gridResult->addWidget(pHLine, ++row, 0, 1, -1);
         m_resultWidgets.append(pHLine);
 
         QLabel* pIcon = WidgetManager::createIcon(abilityStone.iconPath(), nullptr, itemGradeToBGColor(abilityStone.itemGrade()));
-        ui->gridResult->addWidget(pIcon, row, 0);
+        ui->gridResult->addWidget(pIcon, ++row, 0);
         m_resultWidgets.append(pIcon);
 
         QLabel* pLabelName = WidgetManager::createLabel(abilityStone.itemName(), 10, itemGradeToTextColor(abilityStone.itemGrade()));
@@ -85,15 +90,13 @@ void SmartSearchAbilityStone::refresh()
             m_resultWidgets.append(pLabelEngrave);
         }
 
-        QLabel* pLabelPenalty = WidgetManager::createLabel(abilityStone.getPenalties()[0], 10, "red");
+        QLabel* pLabelPenalty = WidgetManager::createLabel(abilityStone.getPenalties().at(0), 10, "red");
         ui->gridResult->addWidget(pLabelPenalty, row, 4);
         m_resultWidgets.append(pLabelPenalty);
 
         QLabel* pLabelPrice = WidgetManager::createLabel(QString("%L1\n(%L2)").arg(price.buyPrice).arg(price.bidStartPrice), 10, "", 200, 50);
-        ui->gridResult->addWidget(pLabelPrice, row, 5);
+        ui->gridResult->addWidget(pLabelPrice, row++, 5);
         m_resultWidgets.append(pLabelPrice);
-
-        row++;
     }
 }
 
@@ -181,7 +184,7 @@ void SmartSearchAbilityStone::searchAbilityStone()
 
     // 가능한 모든 조합으로 검색
     const QStringList selectedEngraves = engraves.values();
-    int total = combination(selectedEngraves.size(), 2);
+    m_totalSearchCount = combination(selectedEngraves.size(), 2);
 
     for (int i = 0; i < selectedEngraves.size() - 1; i++)
     {
@@ -191,43 +194,7 @@ void SmartSearchAbilityStone::searchAbilityStone()
             const QString& engrave2 = selectedEngraves[j];
 
             QNetworkAccessManager* pNetworkManager = new QNetworkAccessManager();
-            connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, total](QNetworkReply* pReply){
-                m_searchCount++;
-
-                QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
-                if (response.isNull())
-                    return;
-
-                // 검색 결과 parsing (최저가 1개)
-                const QJsonObject& item = response.object().find("Items")->toArray()[0].toObject();
-                const QJsonObject& auctionInfo = item.find("AuctionInfo")->toObject();
-                int buyPrice = auctionInfo.find("BuyPrice")->toInt();
-                int bidStartPrice = auctionInfo.find("BidStartPrice")->toInt();
-
-                AbilityStone abilityStone;
-                abilityStone.setItemName(item.find("Name")->toString());
-                abilityStone.setItemGrade(qStringToItemGrade(item.find("Grade")->toString()));
-                abilityStone.setIconPath(":/image/item/abilitystone/0.png");
-
-                const QJsonArray& options = item.find("Options")->toArray();
-                for (const QJsonValue& value : options)
-                {
-                    const QJsonObject& option = value.toObject();
-                    const QString& engrave = option.find("OptionName")->toString();
-
-                    if (option.find("IsPenalty")->toBool())
-                        abilityStone.addPenalty(engrave, 0);
-                    else
-                        abilityStone.addEngrave(engrave, 0);
-                }
-
-                // 검색 결과 추가
-                m_searchResults.append({abilityStone, {buyPrice, bidStartPrice}});
-
-                // 검색 완료 시 UI 갱신
-                if (total == m_searchCount)
-                    refresh();
-            });
+            connect(pNetworkManager, &QNetworkAccessManager::finished, this, &SmartSearchAbilityStone::parseSearchResult);
             connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
             // 어빌리티 스톤 검색 옵션 세팅 후 api 요청 전달
@@ -247,10 +214,51 @@ void SmartSearchAbilityStone::searchAbilityStone()
     }
 }
 
+void SmartSearchAbilityStone::parseSearchResult(QNetworkReply* pReply)
+{
+    m_currentSearchCount++;
+
+    QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
+    if (response.isNull())
+        return;
+
+    // 검색 결과 parsing (최저가 1개)
+    const QJsonObject& item = response.object().find("Items")->toArray()[0].toObject();
+    const QJsonObject& auctionInfo = item.find("AuctionInfo")->toObject();
+    int buyPrice = auctionInfo.find("BuyPrice")->toInt();
+    int bidStartPrice = auctionInfo.find("BidStartPrice")->toInt();
+
+    AbilityStone abilityStone;
+    abilityStone.setItemName(item.find("Name")->toString());
+    abilityStone.setItemGrade(qStringToItemGrade(item.find("Grade")->toString()));
+    abilityStone.setIconPath(":/image/item/abilitystone/0.png");
+
+    const QJsonArray& options = item.find("Options")->toArray();
+    for (const QJsonValue& value : options)
+    {
+        const QJsonObject& option = value.toObject();
+        const QString& engrave = option.find("OptionName")->toString();
+
+        if (option.find("IsPenalty")->toBool())
+            abilityStone.addPenalty(engrave, 0);
+        else
+            abilityStone.addEngrave(engrave, 0);
+    }
+
+    // 검색 결과 추가
+    m_searchResults.append({abilityStone, {buyPrice, bidStartPrice}});
+
+    // 검색 완료 시 UI 갱신
+    if (m_totalSearchCount == m_currentSearchCount)
+        refresh();
+}
+
 void SmartSearchAbilityStone::clearResult()
 {
     m_searchResults.clear();
-    m_searchCount = 0;
+
+    m_totalSearchCount = 0;
+    m_currentSearchCount = 0;
 
     for (QWidget* pWidget : m_resultWidgets)
         delete pWidget;

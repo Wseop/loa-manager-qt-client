@@ -24,13 +24,13 @@ const int MAX_SEARCH_COUNT = 3;
 
 SmartSearchAccessory::SmartSearchAccessory(QLayout* pLayout) :
     ui(new Ui::SmartSearchAccessory),
-    m_pSearchButton(nullptr),
     m_searchPage(0),
     m_addCount(0),
     m_responseCount(0),
     m_searchOptions(MAX_SEARCH_COUNT),
     m_currentLayoutRows({0, 0, 0}),
-    m_pButtonSearchMore(nullptr)
+    m_pButtonSearchMore(nullptr),
+    m_pSearchButton(nullptr)
 {
     ui->setupUi(this);
 
@@ -192,44 +192,7 @@ void SmartSearchAccessory::initializeSearchButton()
         m_pButtonSearchMore->show();
         clearResult();
 
-        // 검색 옵션 세팅
-        SearchOption baseSearchOption(SearchType::Auction);
-        baseSearchOption.setItemTier(3);
-        baseSearchOption.setSortCondition("ASC");
-
-        // 각인2를 제외한 모든 옵션을 탐색하여 옵션 추가
-        for (int i = 0; i < m_optionItems.size(); i++)
-        {
-            const QString& selectedOption = m_optionSelectors[i]->currentText();
-
-            if (i == static_cast<int>(OptionIndex::Grade))
-                baseSearchOption.setItemGrade(qStringToItemGrade(selectedOption));
-            else if (i == static_cast<int>(OptionIndex::Part))
-                baseSearchOption.setCategoryCode(m_partCodes[selectedOption]);
-            else if (i == static_cast<int>(OptionIndex::Ability1))
-                baseSearchOption.setEtcOption(EtcOptionCode::Ability, m_abilityCodes[selectedOption]);
-            else if (i == static_cast<int>(OptionIndex::Ability2) && m_optionSelectors[OptionIndex::Ability2]->isEnabled())
-                baseSearchOption.setEtcOption(EtcOptionCode::Ability, m_abilityCodes[selectedOption]);
-            else if (i == static_cast<int>(OptionIndex::Quality))
-                baseSearchOption.setQuality(selectedOption.chopped(3).toInt());
-            else if (i == static_cast<int>(OptionIndex::Engrave1))
-                baseSearchOption.setEtcOption(EtcOptionCode::Engrave, EngraveManager::getInstance()->getEngraveCode(selectedOption), 3, 3);
-            else if (i == static_cast<int>(OptionIndex::Penalty) && m_optionSelectors[i]->currentIndex() != 0)
-                baseSearchOption.setEtcOption(EtcOptionCode::Penalty, EngraveManager::getInstance()->getEngraveCode(selectedOption));
-        }
-
-        // 각인2의 가능한 모든 수치로 검색 옵션 생성
-        for (int i = 0; i < MAX_SEARCH_COUNT; i++)
-        {
-            SearchOption* pSearchOption = new SearchOption(baseSearchOption);
-            int value = m_optionSelectors[OptionIndex::Grade]->currentIndex() == 0 ? (i + 3) : (i + 4);
-
-            const QString& engrave = m_optionSelectors[OptionIndex::Engrave2]->currentText();
-            pSearchOption->setEtcOption(EtcOptionCode::Engrave, EngraveManager::getInstance()->getEngraveCode(engrave), value, value);
-
-            m_searchOptions[i] = pSearchOption;
-        }
-
+        setSearchOption();
         searchAccessory();
     });
 }
@@ -237,6 +200,7 @@ void SmartSearchAccessory::initializeSearchButton()
 void SmartSearchAccessory::initializeResultUI()
 {
     m_resultLayouts = {ui->gridResult1, ui->gridResult2, ui->gridResult3};
+
     for (QGridLayout* pLayout : m_resultLayouts)
         pLayout->setAlignment(Qt::AlignTop);
 
@@ -269,6 +233,47 @@ void SmartSearchAccessory::initializeSearchMore()
     ui->vLayoutMain->setAlignment(m_pButtonSearchMore, Qt::AlignHCenter);
 
     connect(m_pButtonSearchMore, &QPushButton::released, this, &SmartSearchAccessory::searchAccessory);
+}
+
+void SmartSearchAccessory::setSearchOption()
+{
+    // 검색 옵션 세팅
+    SearchOption baseSearchOption(SearchType::Auction);
+    baseSearchOption.setItemTier(3);
+    baseSearchOption.setSortCondition("ASC");
+
+    // 각인2를 제외한 모든 옵션을 탐색하여 옵션 추가
+    for (int i = 0; i < m_optionItems.size(); i++)
+    {
+        const QString& selectedOption = m_optionSelectors[i]->currentText();
+
+        if (i == static_cast<int>(OptionIndex::Grade))
+            baseSearchOption.setItemGrade(qStringToItemGrade(selectedOption));
+        else if (i == static_cast<int>(OptionIndex::Part))
+            baseSearchOption.setCategoryCode(m_partCodes[selectedOption]);
+        else if (i == static_cast<int>(OptionIndex::Ability1))
+            baseSearchOption.setEtcOption(EtcOptionCode::Ability, m_abilityCodes[selectedOption]);
+        else if (i == static_cast<int>(OptionIndex::Ability2) && m_optionSelectors[OptionIndex::Ability2]->isEnabled())
+            baseSearchOption.setEtcOption(EtcOptionCode::Ability, m_abilityCodes[selectedOption]);
+        else if (i == static_cast<int>(OptionIndex::Quality))
+            baseSearchOption.setQuality(selectedOption.chopped(3).toInt());
+        else if (i == static_cast<int>(OptionIndex::Engrave1))
+            baseSearchOption.setEtcOption(EtcOptionCode::Engrave, EngraveManager::getInstance()->getEngraveCode(selectedOption), 3, 3);
+        else if (i == static_cast<int>(OptionIndex::Penalty) && m_optionSelectors[i]->currentIndex() != 0)
+            baseSearchOption.setEtcOption(EtcOptionCode::Penalty, EngraveManager::getInstance()->getEngraveCode(selectedOption));
+    }
+
+    // 각인2의 가능한 모든 수치로 검색 옵션 생성
+    for (int i = 0; i < MAX_SEARCH_COUNT; i++)
+    {
+        SearchOption* pSearchOption = new SearchOption(baseSearchOption);
+        int value = m_optionSelectors[OptionIndex::Grade]->currentIndex() == 0 ? (i + 3) : (i + 4);
+
+        const QString& engrave = m_optionSelectors[OptionIndex::Engrave2]->currentText();
+        pSearchOption->setEtcOption(EtcOptionCode::Engrave, EngraveManager::getInstance()->getEngraveCode(engrave), value, value);
+
+        m_searchOptions[i] = pSearchOption;
+    }
 }
 
 void SmartSearchAccessory::searchAccessory()

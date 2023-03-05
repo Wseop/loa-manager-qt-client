@@ -24,7 +24,8 @@ private:
     void updateUI();
     void clearUI();
 
-    void updatePrice(bool bResetPageNo);
+    void searchEngraveBook(bool bResetPageNo);
+    void parseSearchResult(class QNetworkReply* pReply);
 
 private:
     Ui::SmartSearchEngraveBook *ui;
@@ -33,6 +34,7 @@ private:
 
     QStringList m_battleEngraveKeys;
     QStringList m_classEngraveKeys;
+
     QHash<QString, QPair<int, int>> m_engravePrices;
     QList<QWidget*> m_priceWidgets;
 

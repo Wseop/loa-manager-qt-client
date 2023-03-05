@@ -14,6 +14,9 @@ class SmartSearchTripod : public QWidget, public SmartSearchMenu
 {
     Q_OBJECT
 
+    const QString LABEL_STYLE_NORMAL = "QLabel { border: 1px solid black }";
+    const QString LABEL_STYLE_EMPHASIS = "QLabel { border: 1px solid black; color: red }";
+
 public:
     SmartSearchTripod(QLayout* pLayout);
     ~SmartSearchTripod();

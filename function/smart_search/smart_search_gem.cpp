@@ -44,40 +44,7 @@ void SmartSearchGem::refresh()
         for (int j = 0; j < m_searchList[i].size(); j++)
         {
             QNetworkAccessManager* pNetworkManager = new QNetworkAccessManager();
-            connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&](QNetworkReply* pReply){
-                // 검색 결과 parsing
-                QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
-                if (response.isNull())
-                    return;
-
-                const QJsonObject& item = response.object().find("Items")->toArray()[0].toObject();
-                const QString& itemName = item.find("Name")->toString();
-
-                // 보석 타입 설정
-                GemType gemType;
-                if (itemName.contains("멸화"))
-                    gemType = GemType::멸화;
-                else
-                    gemType = GemType::홍염;
-
-                Gem gem(gemType);
-                gem.setItemName(itemName);
-                gem.setItemGrade(qStringToItemGrade(item.find("Grade")->toString()));
-                gem.setIconPath(item.find("Icon")->toString());
-
-                // 보석 레벨 설정
-                if (itemName.startsWith("10"))
-                    gem.setGemLevel(10);
-                else
-                    gem.setGemLevel(itemName[0].digitValue());
-
-                // 가격 parsing
-                const QJsonObject& auctionInfo = item.find("AuctionInfo")->toObject();
-                int buyPrice = auctionInfo.find("BuyPrice")->toInt();
-                int bidStartPrice = auctionInfo.find("BidStartPrice")->toInt();
-
-                updateUI(gem, {buyPrice, bidStartPrice});
-            });
+            connect(pNetworkManager, &QNetworkAccessManager::finished, this, &SmartSearchGem::parseSearchResult);
             connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
             // 보석 가격 검색
@@ -95,7 +62,7 @@ void SmartSearchGem::refresh()
 
 void SmartSearchGem::initializeUI()
 {
-    const QStringList attributes[2] = {{"#", "멸화", "최저가"}, {"#", "홍염", "즉시 구매가\n(최소 입찰가)"}};
+    const QStringList attributes[2] = {{"#", "멸화", "즉시 구매가\n(최소 입찰가)"}, {"#", "홍염", "즉시 구매가\n(최소 입찰가)"}};
     const QList<QGridLayout*> layouts = {ui->gridLeft, ui->gridRight};
 
     for (int i = 0; i < layouts.size(); i++)
@@ -116,7 +83,7 @@ void SmartSearchGem::updateUI(const Gem gem, Price price)
     int row = (2 * gem.gemLevel()) - 9;
 
     QNetworkAccessManager* pIconLoader = new QNetworkAccessManager();
-    m_iconLoaders.append(pIconLoader);
+    connect(pIconLoader, &QNetworkAccessManager::finished, pIconLoader, &QNetworkAccessManager::deleteLater);
 
     QFrame* pHLine = WidgetManager::createLine(QFrame::HLine);
     pLayout->addWidget(pHLine, row++, 0, 1, -1);
@@ -139,9 +106,42 @@ void SmartSearchGem::clearUI()
 {
     for (QWidget* pWidget : m_gemWidgets)
         delete pWidget;
-    for (QNetworkAccessManager* pNetworkManager : m_iconLoaders)
-        delete pNetworkManager;
 
     m_gemWidgets.clear();
-    m_iconLoaders.clear();
+}
+
+void SmartSearchGem::parseSearchResult(QNetworkReply* pReply)
+{
+    // 검색 결과 parsing
+    QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
+    if (response.isNull())
+        return;
+
+    const QJsonObject& item = response.object().find("Items")->toArray()[0].toObject();
+    const QString& itemName = item.find("Name")->toString();
+
+    // 보석 타입 설정
+    GemType gemType;
+    if (itemName.contains("멸화"))
+        gemType = GemType::멸화;
+    else
+        gemType = GemType::홍염;
+
+    Gem gem(gemType);
+    gem.setItemName(itemName);
+    gem.setItemGrade(qStringToItemGrade(item.find("Grade")->toString()));
+    gem.setIconPath(item.find("Icon")->toString());
+
+    // 보석 레벨 설정
+    if (itemName.startsWith("10"))
+        gem.setGemLevel(10);
+    else
+        gem.setGemLevel(itemName[0].digitValue());
+
+    // 가격 parsing
+    const QJsonObject& auctionInfo = item.find("AuctionInfo")->toObject();
+    int buyPrice = auctionInfo.find("BuyPrice")->toInt();
+    int bidStartPrice = auctionInfo.find("BidStartPrice")->toInt();
+
+    updateUI(gem, {buyPrice, bidStartPrice});
 }

@@ -72,9 +72,11 @@ void SmartSearchGem::refresh()
                     gem.setGemLevel(itemName[0].digitValue());
 
                 // 가격 parsing
-                const int& price = item.find("AuctionInfo")->toObject().find("BuyPrice")->toInt();
+                const QJsonObject& auctionInfo = item.find("AuctionInfo")->toObject();
+                int buyPrice = auctionInfo.find("BuyPrice")->toInt();
+                int bidStartPrice = auctionInfo.find("BidStartPrice")->toInt();
 
-                updateUI(gem, price);
+                updateUI(gem, {buyPrice, bidStartPrice});
             });
             connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
@@ -93,7 +95,7 @@ void SmartSearchGem::refresh()
 
 void SmartSearchGem::initializeUI()
 {
-    const QStringList attributes[2] = {{"#", "멸화", "최저가"}, {"#", "홍염", "최저가"}};
+    const QStringList attributes[2] = {{"#", "멸화", "최저가"}, {"#", "홍염", "즉시 구매가\n(최소 입찰가)"}};
     const QList<QGridLayout*> layouts = {ui->gridLeft, ui->gridRight};
 
     for (int i = 0; i < layouts.size(); i++)
@@ -101,14 +103,14 @@ void SmartSearchGem::initializeUI()
         // attribute label 추가
         for (int j = 0; j < attributes[i].size(); j++)
         {
-            QLabel* pLabel = WidgetManager::createLabel(attributes[i][j], 14);
+            QLabel* pLabel = WidgetManager::createLabel(attributes[i][j], 14, "", 200, 50);
             layouts[i]->addWidget(pLabel, 0, j, Qt::AlignHCenter);
             m_widgets.append(pLabel);
         }
     }
 }
 
-void SmartSearchGem::updateUI(const Gem gem, const int price)
+void SmartSearchGem::updateUI(const Gem gem, Price price)
 {
     QGridLayout* pLayout = gem.gemType() == GemType::멸화 ? ui->gridLeft : ui->gridRight;
     int row = (2 * gem.gemLevel()) - 9;
@@ -128,7 +130,7 @@ void SmartSearchGem::updateUI(const Gem gem, const int price)
     pLayout->addWidget(pLabelName, row, 1, Qt::AlignHCenter);
     m_gemWidgets.append(pLabelName);
 
-    QLabel* pLabelPrice = WidgetManager::createLabel(QString("%L1").arg(price), 10, "", 300);
+    QLabel* pLabelPrice = WidgetManager::createLabel(QString("%L1\n(%L2)").arg(price.buyPrice).arg(price.bidStartPrice), 10, "", 300, 50);
     pLayout->addWidget(pLabelPrice, row, 2, Qt::AlignHCenter);
     m_gemWidgets.append(pLabelPrice);
 }

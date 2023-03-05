@@ -32,7 +32,7 @@ private:
 
     QList<class QComboBox*> m_engraveSelectors;
     QComboBox* m_pPenaltySelector;
-    QList<QPair<AbilityStone, int>> m_searchResults;
+    QList<QPair<AbilityStone, Price>> m_searchResults;
     int m_searchCount;
 
     QList<QWidget*> m_resultWidgets;

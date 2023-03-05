@@ -21,7 +21,7 @@ public:
 
 private:
     void initializeUI();
-    void updateUI(const class Gem gem, const int price);
+    void updateUI(const class Gem gem, Price price);
     void clearUI();
 
 private:

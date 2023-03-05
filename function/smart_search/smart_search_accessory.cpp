@@ -240,7 +240,7 @@ void SmartSearchAccessory::initializeResultUI()
     for (QGridLayout* pLayout : m_resultLayouts)
         pLayout->setAlignment(Qt::AlignTop);
 
-    const QStringList attributes = {"#", "아이템명", "품질", "특성", "각인(3%1)", "즉시 구매가\n(최소입찰가)"};
+    const QStringList attributes = {"#", "아이템명", "품질", "특성", "각인(3%1)", "즉시 구매가\n(최소 입찰가)"};
     for (int i = 0; i < m_resultLayouts.size(); i++)
     {
         for (int j = 0; j < attributes.size(); j++)

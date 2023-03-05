@@ -55,7 +55,7 @@ void SmartSearchAbilityStone::refresh()
 
     // 최저가 순으로 정렬
     std::sort(m_searchResults.begin(), m_searchResults.end(), [](const auto& a, const auto& b){
-        return a.second < b.second;
+        return a.second.buyPrice < b.second.buyPrice;
     });
 
     // 검색 결과 출력
@@ -63,7 +63,7 @@ void SmartSearchAbilityStone::refresh()
     for (const auto& searchResult : m_searchResults)
     {
         const AbilityStone& abilityStone = searchResult.first;
-        const int& price = searchResult.second;
+        const Price& price = searchResult.second;
 
         QFrame* pHLine = WidgetManager::createLine(QFrame::HLine);
         ui->gridResult->addWidget(pHLine, row++, 0, 1, -1);
@@ -89,7 +89,7 @@ void SmartSearchAbilityStone::refresh()
         ui->gridResult->addWidget(pLabelPenalty, row, 4);
         m_resultWidgets.append(pLabelPenalty);
 
-        QLabel* pLabelPrice = WidgetManager::createLabel(QString("%L1").arg(price));
+        QLabel* pLabelPrice = WidgetManager::createLabel(QString("%L1\n(%L2)").arg(price.buyPrice).arg(price.bidStartPrice), 10, "", 200, 50);
         ui->gridResult->addWidget(pLabelPrice, row, 5);
         m_resultWidgets.append(pLabelPrice);
 
@@ -148,11 +148,11 @@ void SmartSearchAbilityStone::initializeEngraveSelector()
 
 void SmartSearchAbilityStone::initializeResultUI()
 {
-    const QStringList attributes = {"#", "아이템명", "각인1", "각인2", "감소", "최저가"};
+    const QStringList attributes = {"#", "아이템명", "각인1", "각인2", "감소", "즉시 구매가\n(최소 입찰가)"};
 
     for (int col = 0; col < attributes.size(); col++)
     {
-        QLabel* pLabelAttribute = WidgetManager::createLabel(attributes[col], 12);
+        QLabel* pLabelAttribute = WidgetManager::createLabel(attributes[col], 12, "", 200, 50);
         ui->gridResult->addWidget(pLabelAttribute, 0, col);
         m_widgets.append(pLabelAttribute);
     }
@@ -200,7 +200,9 @@ void SmartSearchAbilityStone::searchAbilityStone()
 
                 // 검색 결과 parsing (최저가 1개)
                 const QJsonObject& item = response.object().find("Items")->toArray()[0].toObject();
-                const int& price = item.find("AuctionInfo")->toObject().find("BuyPrice")->toInt();
+                const QJsonObject& auctionInfo = item.find("AuctionInfo")->toObject();
+                int buyPrice = auctionInfo.find("BuyPrice")->toInt();
+                int bidStartPrice = auctionInfo.find("BidStartPrice")->toInt();
 
                 AbilityStone abilityStone;
                 abilityStone.setItemName(item.find("Name")->toString());
@@ -220,7 +222,7 @@ void SmartSearchAbilityStone::searchAbilityStone()
                 }
 
                 // 검색 결과 추가
-                m_searchResults.append({abilityStone, price});
+                m_searchResults.append({abilityStone, {buyPrice, bidStartPrice}});
 
                 // 검색 완료 시 UI 갱신
                 if (total == m_searchCount)

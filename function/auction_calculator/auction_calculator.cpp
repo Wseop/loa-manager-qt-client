@@ -100,3 +100,8 @@ void AuctionCalculator::destroyInstance()
     delete m_pInstance;
     m_pInstance = nullptr;
 }
+
+void AuctionCalculator::start()
+{
+    // Nothing to do
+}

@@ -1,13 +1,15 @@
 #ifndef AUCTION_CALCULATOR_H
 #define AUCTION_CALCULATOR_H
 
+#include "function/function_widget.h"
+
 #include <QWidget>
 
 namespace Ui {
 class AuctionCalculator;
 }
 
-class AuctionCalculator : public QWidget
+class AuctionCalculator : public QWidget, public FunctionWidget
 {
     Q_OBJECT
 
@@ -25,6 +27,9 @@ private:
 public:
     static AuctionCalculator* getInstance();
     static void destroyInstance();
+
+public:
+    void start() override;
 
 private:
     Ui::AuctionCalculator *ui;

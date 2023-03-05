@@ -45,6 +45,7 @@ HEADERS += \
     db/db_manager.h \
     db/document_builder.h \
     function/auction_calculator/auction_calculator.h \
+    function/function_widget.h \
     function/smart_search/smart_search.h \
     function/smart_search/smart_search_abilitystone.h \
     function/smart_search/smart_search_accessory.h \

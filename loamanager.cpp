@@ -2,6 +2,7 @@
 #include "ui_loamanager.h"
 #include "ui/widget_manager.h"
 #include "ui/admin_login.h"
+#include "function/function_widget.h"
 #include "function/auction_calculator/auction_calculator.h"
 #include "function/smart_search/smart_search.h"
 #include "resource/resource_manager.h"
@@ -83,7 +84,10 @@ void LoaManager::initMenuButton()
                 for (int i = 0; i < m_functions.size(); i++)
                 {
                     if (i == menuIndex)
+                    {
+                        dynamic_cast<FunctionWidget*>(m_functions[i])->start();
                         m_functions[i]->show();
+                    }
                     else
                         m_functions[i]->hide();
                 }

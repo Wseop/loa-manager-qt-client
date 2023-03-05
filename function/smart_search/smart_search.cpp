@@ -98,3 +98,8 @@ void SmartSearch::destroyInstance()
     delete m_pInstance;
     m_pInstance = nullptr;
 }
+
+void SmartSearch::start()
+{
+    // Nothing to do
+}

@@ -39,8 +39,15 @@ LoaManager::~LoaManager()
 {
     delete m_pAdminLogin;
     delete m_pAdminButton;
+
+    for (QPushButton* pButton : m_menuButtons)
+        delete pButton;
+    m_menuButtons.clear();
+
     for (QWidget* pWidget : m_widgets)
         delete pWidget;
+    m_widgets.clear();
+
     delete ui;
 }
 
@@ -78,18 +85,22 @@ void LoaManager::initMenuButton()
         {
             QPushButton* pMenuButton = WidgetManager::createPushButton(menuName);
             pLayout->addWidget(pMenuButton);
-            m_widgets.append(pMenuButton);
+            m_menuButtons.append(pMenuButton);
 
             connect(pMenuButton, &QPushButton::released, this, [&, menuIndex](){
                 for (int i = 0; i < m_functions.size(); i++)
                 {
                     if (i == menuIndex)
                     {
+                        m_menuButtons[i]->setDisabled(true);
                         dynamic_cast<FunctionWidget*>(m_functions[i])->start();
                         m_functions[i]->show();
                     }
                     else
+                    {
+                        m_menuButtons[i]->setEnabled(true);
                         m_functions[i]->hide();
+                    }
                 }
             });
 

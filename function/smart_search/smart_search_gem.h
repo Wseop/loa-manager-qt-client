@@ -14,7 +14,7 @@ class SmartSearchGem : public QWidget, public SmartSearchMenu
     Q_OBJECT
 
 public:
-    SmartSearchGem(QLayout* pLayout);
+    SmartSearchGem(QLayout *pLayout);
     ~SmartSearchGem();
 
     void refresh() override;
@@ -24,7 +24,7 @@ private:
     void updateUI(const class Gem gem, Price price);
     void clearUI();
 
-    void parseSearchResult(class QNetworkReply* pReply);
+    void parseSearchResult(class QNetworkReply *pReply);
 
 private:
     Ui::SmartSearchGem *ui;

@@ -25,13 +25,13 @@ private:
     void loadFont();
 
 public:
-    static FontManager* getInstance();
+    static FontManager *getInstance();
     static void destroyInstance();
 
     QFont getFont(FontFamily fontFamily, int fontSize);
 
 private:
-    static FontManager* m_pFontManager;
+    static FontManager *m_pFontManager;
 
     QStringList m_fontFamilies;
 };

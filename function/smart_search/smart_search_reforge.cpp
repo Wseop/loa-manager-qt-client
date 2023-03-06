@@ -14,7 +14,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
-SmartSearchReforge::SmartSearchReforge(QLayout* pLayout) :
+SmartSearchReforge::SmartSearchReforge(QLayout *pLayout) :
     SmartSearchMenu(),
     ui(new Ui::SmartSearchReforge)
 {
@@ -50,19 +50,19 @@ void SmartSearchReforge::refresh()
     {
         for (int j = 0; j < m_items[i].size(); j++)
         {
-            const Item& item = m_items[i][j];
+            const Item &item = m_items[i][j];
 
-            QNetworkAccessManager* pNetworkManager = new QNetworkAccessManager();
-            connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, labelIndex](QNetworkReply* pReply){
+            QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
+            connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, labelIndex](QNetworkReply *pReply){
                 // 데이터 parsing
                 QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
                 if (response.isNull())
                     return;
 
-                const QJsonObject& item = response.object().find("Items")->toArray()[0].toObject();
-                const QString& name = item.find("Name")->toString();
-                const int& recentPrice = item.find("RecentPrice")->toInt();
-                const int& minPrice = item.find("CurrentMinPrice")->toInt();
+                const QJsonObject &item = response.object().find("Items")->toArray()[0].toObject();
+                const QString &name = item.find("Name")->toString();
+                const int &recentPrice = item.find("RecentPrice")->toInt();
+                const int &minPrice = item.find("CurrentMinPrice")->toInt();
 
                 // 가격 정보 업데이트
                 m_recentPriceLabels[labelIndex]->setText(QString("%L1").arg(recentPrice));
@@ -99,21 +99,21 @@ void SmartSearchReforge::loadResource()
     QJsonObject json = ResourceManager::getInstance()->loadJson("reforge");
     const QString iconPath = ":/image/item/reforge/%1_%2.png";
 
-    const QJsonArray& reforges = json.find("Reforge")->toArray();
+    const QJsonArray &reforges = json.find("Reforge")->toArray();
     for (int i = 0; i < reforges.size(); i++)
     {
-        const QJsonObject& reforge = reforges[i].toObject();
+        const QJsonObject &reforge = reforges[i].toObject();
 
         // category 추가
         m_categories << reforge.find("Category")->toString();
 
         // item 목록 추가
         QList<Item> items;
-        const QJsonArray& jsonItems = reforge.find("Items")->toArray();
+        const QJsonArray &jsonItems = reforge.find("Items")->toArray();
         for (int j = 0; j < jsonItems.size(); j++)
         {
-            const QJsonObject& object = jsonItems[j].toObject();
-            const QString& name = object.find("Name")->toString();
+            const QJsonObject &object = jsonItems[j].toObject();
+            const QString &name = object.find("Name")->toString();
             if (name == "명예의 파편")
                 continue;
 
@@ -133,7 +133,7 @@ void SmartSearchReforge::initializeUI()
     const QStringList attributes = {"#", "재료", "최근 거래가", "현재 최저가", "개당 가격"};
     for (int col = 0; col < attributes.size(); col++)
     {
-        QLabel* pLabelAttribute = WidgetManager::createLabel(attributes[col], 14);
+        QLabel *pLabelAttribute = WidgetManager::createLabel(attributes[col], 14);
         ui->gridReforge->addWidget(pLabelAttribute, 0, col);
         m_widgets.append(pLabelAttribute);
     }
@@ -146,11 +146,11 @@ void SmartSearchReforge::initializeUI()
         {
             int col = 0;
 
-            QFrame* pHLine = WidgetManager::createLine(QFrame::HLine);
+            QFrame *pHLine = WidgetManager::createLine(QFrame::HLine);
             ui->gridReforge->addWidget(pHLine, row++, 0, 1, -1);
             m_widgets.append(pHLine);
 
-            QLabel* pIcon = WidgetManager::createIcon(item.iconPath(), nullptr, itemGradeToBGColor(item.itemGrade()));
+            QLabel *pIcon = WidgetManager::createIcon(item.iconPath(), nullptr, itemGradeToBGColor(item.itemGrade()));
             ui->gridReforge->addWidget(pIcon, row, col++);
             m_widgets.append(pIcon);
 
@@ -159,19 +159,19 @@ void SmartSearchReforge::initializeUI()
                 itemName = item.itemName() + " x10";
             else
                 itemName = item.itemName();
-            QLabel* pLabelName = WidgetManager::createLabel(itemName, 10, itemGradeToTextColor(item.itemGrade()));
+            QLabel *pLabelName = WidgetManager::createLabel(itemName, 10, itemGradeToTextColor(item.itemGrade()));
             ui->gridReforge->addWidget(pLabelName, row, col++);
             m_widgets.append(pLabelName);
 
-            QLabel* pLabelRecentPrice = WidgetManager::createLabel("-", 10);
+            QLabel *pLabelRecentPrice = WidgetManager::createLabel("-", 10);
             ui->gridReforge->addWidget(pLabelRecentPrice, row, col++);
             m_recentPriceLabels.append(pLabelRecentPrice);
 
-            QLabel* pLabelMinPrice = WidgetManager::createLabel("-", 10);
+            QLabel *pLabelMinPrice = WidgetManager::createLabel("-", 10);
             ui->gridReforge->addWidget(pLabelMinPrice, row, col++);
             m_minPriceLabels.append(pLabelMinPrice);
 
-            QLabel* pLabelEfficiency = WidgetManager::createLabel("-", 10);
+            QLabel *pLabelEfficiency = WidgetManager::createLabel("-", 10);
             ui->gridReforge->addWidget(pLabelEfficiency, row, col++);
             m_efficiencyLabels.append(pLabelEfficiency);
 

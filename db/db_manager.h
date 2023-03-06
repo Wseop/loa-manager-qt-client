@@ -24,7 +24,7 @@ private:
     mongocxx::collection getCollection(Collection collection);
 
 public:
-    static DbManager* getInstance();
+    static DbManager *getInstance();
     static void destroyInstance();
 
     void lock();
@@ -36,7 +36,7 @@ public:
     void deleteDocument(Collection collection, bsoncxx::document::value filter);
 
 private:
-    static DbManager* m_pInstance;
+    static DbManager *m_pInstance;
 
     QMutex m_mutex;
     mongocxx::instance m_instance{};

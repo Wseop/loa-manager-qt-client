@@ -12,14 +12,14 @@ private:
     ~ResourceManager();
 
 public:
-    static ResourceManager* getInstance();
+    static ResourceManager *getInstance();
     static void destroyInstance();
 
 public:
     QJsonObject loadJson(QString fileName);
 
 private:
-    static ResourceManager* m_pInstance;
+    static ResourceManager *m_pInstance;
 };
 
 #endif // RESOURCEMANAGER_H

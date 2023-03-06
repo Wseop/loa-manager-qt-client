@@ -33,7 +33,7 @@ static inline QString itemGradeToQString(ItemGrade itemGrade)
     }
 }
 
-static inline ItemGrade qStringToItemGrade(const QString& itemGrade)
+static inline ItemGrade qStringToItemGrade(const QString &itemGrade)
 {
     if (itemGrade == "일반")
         return ItemGrade::일반;

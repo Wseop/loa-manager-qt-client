@@ -21,7 +21,7 @@ class SmartSearchAccessory : public QWidget, public SmartSearchMenu
     Q_OBJECT
 
 public:
-    SmartSearchAccessory(QLayout* pLayout);
+    SmartSearchAccessory(QLayout *pLayout);
     ~SmartSearchAccessory();
 
     void refresh() override;
@@ -36,18 +36,18 @@ private:
 
     void setSearchOption();
     void searchAccessory();
-    void parseSearchResult(class QNetworkReply* pReply);
+    void parseSearchResult(class QNetworkReply *pReply);
     void addSearchResult();
     void clearResult();
 
     // 검색 결과 widget 생성
     class QFrame* createHLine();
-    class QLabel* createIcon(const QString& iconPath, const ItemGrade& itemGrade);
-    QLabel* createLabelItemName(const QString& itemName, const ItemGrade& itemGrade);
-    class QProgressBar* createQualityBar(const int& quality);
-    class QVBoxLayout* createAbilityLayout(const QHash<Ability, int>& abilities);
-    QVBoxLayout* createEngraveLayout(const Accessory* pAccessory);
-    QLabel* createLabelPrice(const Price& price);
+    class QLabel* createIcon(const QString &iconPath, const ItemGrade &itemGrade);
+    QLabel *createLabelItemName(const QString &itemName, const ItemGrade &itemGrade);
+    class QProgressBar* createQualityBar(const int &quality);
+    class QVBoxLayout* createAbilityLayout(const QHash<Ability, int> &abilities);
+    QVBoxLayout *createEngraveLayout(const Accessory *pAccessory);
+    QLabel *createLabelPrice(const Price &price);
 
 private:
     Ui::SmartSearchAccessory *ui;
@@ -74,7 +74,7 @@ private:
     QList<QLayout*> m_itemLayouts;
 
     // ui
-    QPushButton* m_pSearchButton;
+    QPushButton *m_pSearchButton;
     QList<class QGridLayout*> m_resultLayouts;
     QList<class QLabel*> m_engraveLabels;
     QList<QWidget*> m_widgets;

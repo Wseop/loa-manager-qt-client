@@ -14,7 +14,7 @@ class SmartSearchEngraveBook : public QWidget, public SmartSearchMenu
     Q_OBJECT
 
 public:
-    SmartSearchEngraveBook(QLayout* pLayout);
+    SmartSearchEngraveBook(QLayout *pLayout);
     ~SmartSearchEngraveBook();
 
     void refresh() override;
@@ -25,7 +25,7 @@ private:
     void clearUI();
 
     void searchEngraveBook(bool bResetPageNo);
-    void parseSearchResult(class QNetworkReply* pReply);
+    void parseSearchResult(class QNetworkReply *pReply);
 
 private:
     Ui::SmartSearchEngraveBook *ui;

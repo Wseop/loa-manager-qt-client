@@ -14,7 +14,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
-SmartSearchEngraveBook::SmartSearchEngraveBook(QLayout* pLayout) :
+SmartSearchEngraveBook::SmartSearchEngraveBook(QLayout *pLayout) :
     SmartSearchMenu(),
     ui(new Ui::SmartSearchEngraveBook),
     m_searchPageNo(1)
@@ -52,13 +52,13 @@ void SmartSearchEngraveBook::initializeUI()
     // 전투, 직업 각인 table 초기 세팅
     for (int i = 0; i < categories.size(); i++)
     {
-        QLabel* pLabelCategory = WidgetManager::createLabel(categories[i], 16);
+        QLabel *pLabelCategory = WidgetManager::createLabel(categories[i], 16);
         m_layouts[i]->addWidget(pLabelCategory, 0, 0, 1, -1, Qt::AlignHCenter);
         m_widgets.append(pLabelCategory);
 
         for (int j = 0; j < attributes.size(); j++)
         {
-            QLabel* pLabelAttribute = WidgetManager::createLabel(attributes[j], 12);
+            QLabel *pLabelAttribute = WidgetManager::createLabel(attributes[j], 12);
             m_layouts[i]->addWidget(pLabelAttribute, 1, j);
             m_widgets.append(pLabelAttribute);
         }
@@ -74,31 +74,31 @@ void SmartSearchEngraveBook::updateUI()
     for (int i = 0; i < engraveKeys.size(); i++)
     {
         int row = 2;
-        const QStringList* keys = engraveKeys[i];
+        const QStringList *keys = engraveKeys[i];
 
         for (const QString& key : *keys)
         {
-            const int& recentPrice = m_engravePrices[key].first;
-            const int& minPrice = m_engravePrices[key].second;
+            const int &recentPrice = m_engravePrices[key].first;
+            const int &minPrice = m_engravePrices[key].second;
 
-            QFrame* pHLine = WidgetManager::createLine(QFrame::HLine);
+            QFrame *pHLine = WidgetManager::createLine(QFrame::HLine);
             m_layouts[i]->addWidget(pHLine, row++, 0, 1, -1);
             m_priceWidgets.append(pHLine);
 
-            QLabel* pIcon = WidgetManager::createIcon(":/image/item/book/0.png", nullptr);
+            QLabel *pIcon = WidgetManager::createIcon(":/image/item/book/0.png", nullptr);
             m_layouts[i]->addWidget(pIcon, row, 0);
             m_layouts[i]->setAlignment(pIcon, Qt::AlignHCenter);
             m_priceWidgets.append(pIcon);
 
-            QLabel* pLabelName = WidgetManager::createLabel(key, 10, itemGradeToTextColor(ItemGrade::전설));
+            QLabel *pLabelName = WidgetManager::createLabel(key, 10, itemGradeToTextColor(ItemGrade::전설));
             m_layouts[i]->addWidget(pLabelName, row, 1);
             m_priceWidgets.append(pLabelName);
 
-            QLabel* pLabelRecentPrice = WidgetManager::createLabel(QString("%L1").arg(recentPrice), 10);
+            QLabel *pLabelRecentPrice = WidgetManager::createLabel(QString("%L1").arg(recentPrice), 10);
             m_layouts[i]->addWidget(pLabelRecentPrice, row, 2);
             m_priceWidgets.append(pLabelRecentPrice);
 
-            QLabel* pLabelMinPrice = WidgetManager::createLabel(QString("%L1").arg(minPrice), 10);
+            QLabel *pLabelMinPrice = WidgetManager::createLabel(QString("%L1").arg(minPrice), 10);
             m_layouts[i]->addWidget(pLabelMinPrice, row++, 3);
             m_priceWidgets.append(pLabelMinPrice);
         }
@@ -120,7 +120,7 @@ void SmartSearchEngraveBook::searchEngraveBook(bool bResetPageNo)
     if (bResetPageNo)
         m_searchPageNo = 1;
 
-    QNetworkAccessManager* pNetworkManager = new QNetworkAccessManager();
+    QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
     connect(pNetworkManager, &QNetworkAccessManager::finished, this, &SmartSearchEngraveBook::parseSearchResult);
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
@@ -133,18 +133,18 @@ void SmartSearchEngraveBook::searchEngraveBook(bool bResetPageNo)
     ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Market, QJsonDocument(searchOption.toJsonObject()).toJson());
 }
 
-void SmartSearchEngraveBook::parseSearchResult(QNetworkReply* pReply)
+void SmartSearchEngraveBook::parseSearchResult(QNetworkReply *pReply)
 {
     QJsonObject result = QJsonDocument::fromJson(pReply->readAll()).object();
 
     // 검색 결과 parsing
-    const QJsonArray& items = result.find("Items")->toArray();
+    const QJsonArray &items = result.find("Items")->toArray();
     for (const QJsonValue& value : items)
     {
-        const QJsonObject& item = value.toObject();
-        const QString& name = item.find("Name")->toString();
-        const int& recentPrice = item.find("RecentPrice")->toInt();
-        const int& minPrice = item.find("CurrentMinPrice")->toInt();
+        const QJsonObject &item = value.toObject();
+        const QString &name = item.find("Name")->toString();
+        const int &recentPrice = item.find("RecentPrice")->toInt();
+        const int &minPrice = item.find("CurrentMinPrice")->toInt();
 
         if (name[0] == '[')
             m_classEngraveKeys << name;
@@ -154,7 +154,7 @@ void SmartSearchEngraveBook::parseSearchResult(QNetworkReply* pReply)
         m_engravePrices[name] = {recentPrice, minPrice};
     }
 
-    const int& maxPageSize = result.find("PageSize")->toInt();
+    const int &maxPageSize = result.find("PageSize")->toInt();
 
     // 다음 페이지가 있다면 추가 검색
     if (maxPageSize > m_searchPageNo)

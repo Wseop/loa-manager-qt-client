@@ -31,7 +31,7 @@ private:
     QList<QWidget*> m_functions;
     // admin button
     class AdminLogin* m_pAdminLogin;
-    QPushButton* m_pAdminButton;
+    QPushButton *m_pAdminButton;
     QList<QPushButton*> m_menuButtons;
 
     QList<QWidget*> m_widgets;

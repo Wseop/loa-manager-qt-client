@@ -4,7 +4,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
-ResourceManager* ResourceManager::m_pInstance = nullptr;
+ResourceManager *ResourceManager::m_pInstance = nullptr;
 
 ResourceManager::ResourceManager()
 {
@@ -16,7 +16,7 @@ ResourceManager::~ResourceManager()
 
 }
 
-ResourceManager* ResourceManager::getInstance()
+ResourceManager *ResourceManager::getInstance()
 {
     if (m_pInstance == nullptr)
         m_pInstance = new ResourceManager();

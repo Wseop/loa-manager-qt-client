@@ -18,17 +18,17 @@ private:
     void loadApiKey();
     void loadRequestUrl();
 
-    const QString& getApiKey();
+    const QString &getApiKey();
 
 public:
-    static ApiManager* getInstance();
+    static ApiManager *getInstance();
     static void destroyInstance();
 
-    void get(QNetworkAccessManager* pNetworkManager, LostarkApi api, QString param);
-    void post(QNetworkAccessManager* pNetworkManager, LostarkApi api, QByteArray data);
+    void get(QNetworkAccessManager *pNetworkManager, LostarkApi api, QString param);
+    void post(QNetworkAccessManager *pNetworkManager, LostarkApi api, QByteArray data);
 
 private:
-    static ApiManager* m_pInstance;
+    static ApiManager *m_pInstance;
 
     QStringList m_apiKeys;
     int m_keyIndex;

@@ -18,7 +18,7 @@ class SmartSearchTripod : public QWidget, public SmartSearchMenu
     const QString LABEL_STYLE_EMPHASIS = "QLabel { border: 1px solid black; color: red }";
 
 public:
-    SmartSearchTripod(QLayout* pLayout);
+    SmartSearchTripod(QLayout *pLayout);
     ~SmartSearchTripod();
 
     void refresh() override;
@@ -31,8 +31,8 @@ private:
 
     void clearResult();
     void searchTripod(int skillCode, int tripodCode);
-    void addSkillWidget(const Skill& skill, int row);
-    void addTripodWidget(const Tripod& tripod, int skillCode, int row, int col);
+    void addSkillWidget(const Skill &skill, int row);
+    void addTripodWidget(const Tripod &tripod, int skillCode, int row, int col);
 
 private:
     Ui::SmartSearchTripod *ui;

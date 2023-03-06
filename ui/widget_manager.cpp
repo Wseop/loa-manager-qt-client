@@ -13,25 +13,25 @@
 #include <QUrl>
 #include <QPixmap>
 
-QPushButton* WidgetManager::createPushButton(QString text, int fontSize, int width, int height)
+QPushButton *WidgetManager::createPushButton(QString text, int fontSize, int width, int height)
 {
-    QPushButton* pButton = new QPushButton(text);
+    QPushButton *pButton = new QPushButton(text);
     pButton->setFixedSize(width, height);
     pButton->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
     return pButton;
 }
 
-QPushButton* WidgetManager::createPushButton(QPixmap icon, int width, int height)
+QPushButton *WidgetManager::createPushButton(QPixmap icon, int width, int height)
 {
-    QPushButton* pButton = new QPushButton();
+    QPushButton *pButton = new QPushButton();
     pButton->setIcon(icon);
     pButton->setFixedSize(width, height);
     return pButton;
 }
 
-QLabel* WidgetManager::createLabel(QString text, int fontSize, QString color, int width, int height)
+QLabel *WidgetManager::createLabel(QString text, int fontSize, QString color, int width, int height)
 {
-    QLabel* pLabel = new QLabel(text);
+    QLabel *pLabel = new QLabel(text);
     pLabel->setMaximumSize(width, height);
     pLabel->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
     pLabel->setStyleSheet(QString("QLabel { color: %1 }").arg(color));
@@ -39,9 +39,9 @@ QLabel* WidgetManager::createLabel(QString text, int fontSize, QString color, in
     return pLabel;
 }
 
-QLabel* WidgetManager::createIcon(QString iconPath, QNetworkAccessManager* pNetworkManager, QString backgroundColor, int width, int height)
+QLabel *WidgetManager::createIcon(QString iconPath, QNetworkAccessManager *pNetworkManager, QString backgroundColor, int width, int height)
 {
-    QLabel* pIcon = new QLabel();
+    QLabel *pIcon = new QLabel();
     pIcon->setFixedSize(width, height);
     pIcon->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
@@ -61,7 +61,7 @@ QLabel* WidgetManager::createIcon(QString iconPath, QNetworkAccessManager* pNetw
     {
         QNetworkRequest request;
         request.setUrl(QUrl(iconPath));
-        connect(pNetworkManager, &QNetworkAccessManager::finished, [&, pIcon, width, height, style, backgroundColor](QNetworkReply* pReply){
+        connect(pNetworkManager, &QNetworkAccessManager::finished, [&, pIcon, width, height, style, backgroundColor](QNetworkReply *pReply){
             QPixmap iconImage;
             if (iconImage.loadFromData(pReply->readAll(), "PNG"))
             {
@@ -75,9 +75,9 @@ QLabel* WidgetManager::createIcon(QString iconPath, QNetworkAccessManager* pNetw
     return pIcon;
 }
 
-QProgressBar* WidgetManager::createQualityBar(int quality, int width, int height, int fontSize)
+QProgressBar *WidgetManager::createQualityBar(int quality, int width, int height, int fontSize)
 {
-    QProgressBar* pQualityBar = new QProgressBar();
+    QProgressBar *pQualityBar = new QProgressBar();
     pQualityBar->setValue(quality);
     pQualityBar->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     pQualityBar->setFormat("%p");
@@ -89,16 +89,16 @@ QProgressBar* WidgetManager::createQualityBar(int quality, int width, int height
 
 QComboBox *WidgetManager::createComboBox(QStringList items, int fontSize, int width, int height)
 {
-    QComboBox* pComboBox = new QComboBox();
+    QComboBox *pComboBox = new QComboBox();
     pComboBox->addItems(items);
     pComboBox->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
     pComboBox->setMaximumSize(width, height);
     return pComboBox;
 }
 
-QLineEdit* WidgetManager::createLineEdit(QValidator* pValidator, QString placeHolder, int fontSize, int width, int height)
+QLineEdit *WidgetManager::createLineEdit(QValidator *pValidator, QString placeHolder, int fontSize, int width, int height)
 {
-    QLineEdit* pLineEdit = new QLineEdit();
+    QLineEdit *pLineEdit = new QLineEdit();
     pLineEdit->setValidator(pValidator);
     pLineEdit->setPlaceholderText(placeHolder);
     pLineEdit->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
@@ -106,16 +106,16 @@ QLineEdit* WidgetManager::createLineEdit(QValidator* pValidator, QString placeHo
     return pLineEdit;
 }
 
-QGroupBox* WidgetManager::createGroupBox(QString title, int fontSize)
+QGroupBox *WidgetManager::createGroupBox(QString title, int fontSize)
 {
-    QGroupBox* pGroupBox = new QGroupBox(title);
+    QGroupBox *pGroupBox = new QGroupBox(title);
     pGroupBox->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
     return pGroupBox;
 }
 
-QFrame* WidgetManager::createLine(QFrame::Shape direction)
+QFrame *WidgetManager::createLine(QFrame::Shape direction)
 {
-    QFrame* pLine = new QFrame();
+    QFrame *pLine = new QFrame();
     pLine->setFrameStyle(direction);
     return pLine;
 }

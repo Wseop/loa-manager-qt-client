@@ -14,14 +14,14 @@ private:
     void initializeSkillList();
 
 public:
-    static SkillManager* getInstance();
+    static SkillManager *getInstance();
     static void destroyInstance();
 
 public:
-    QList<Skill> skillList(const QString& _class) const;
+    QList<Skill> skillList(const QString &_class) const;
 
 private:
-    static SkillManager* m_pInstance;
+    static SkillManager *m_pInstance;
 
 private:
     QHash<QString, QList<Skill>> m_skillList;

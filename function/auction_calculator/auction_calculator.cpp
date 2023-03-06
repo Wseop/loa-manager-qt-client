@@ -4,7 +4,7 @@
 
 #include <QIntValidator>
 
-AuctionCalculator* AuctionCalculator::m_pInstance = nullptr;
+AuctionCalculator *AuctionCalculator::m_pInstance = nullptr;
 
 AuctionCalculator::AuctionCalculator() :
     ui(new Ui::AuctionCalculator),
@@ -26,7 +26,7 @@ AuctionCalculator::~AuctionCalculator()
 
 void AuctionCalculator::setFonts()
 {
-    FontManager* pFontManager = FontManager::getInstance();
+    FontManager *pFontManager = FontManager::getInstance();
     QFont nanumBold10 = pFontManager->getFont(FontFamily::NanumSquareNeoBold, 10);
 
     ui->lbMarketPrice->setFont(nanumBold10);
@@ -86,7 +86,7 @@ void AuctionCalculator::calculatePrice()
     ui->resultLowest8->setText(resultText.arg(resultLowest8));
 }
 
-AuctionCalculator* AuctionCalculator::getInstance()
+AuctionCalculator *AuctionCalculator::getInstance()
 {
     if (m_pInstance == nullptr)
         m_pInstance = new AuctionCalculator();

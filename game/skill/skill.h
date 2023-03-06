@@ -21,7 +21,7 @@ public:
     void setIconPath(const QString &newIconPath);
 
     QList<Tripod> tripods() const;
-    void addTripod(const Tripod& tripod);
+    void addTripod(const Tripod &tripod);
 
 private:
     QString m_skillName;

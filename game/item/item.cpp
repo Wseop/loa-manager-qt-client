@@ -11,7 +11,7 @@ QString Item::itemName() const
     return m_itemName;
 }
 
-void Item::setItemName(const QString& newItemName)
+void Item::setItemName(const QString &newItemName)
 {
     m_itemName = newItemName;
 }
@@ -21,7 +21,7 @@ QString Item::iconPath() const
     return m_iconPath;
 }
 
-void Item::setIconPath(const QString& newIconPath)
+void Item::setIconPath(const QString &newIconPath)
 {
     m_iconPath = newIconPath;
 }

@@ -15,7 +15,7 @@ class SmartSearchAbilityStone : public QWidget, public SmartSearchMenu
     Q_OBJECT
 
 public:
-    SmartSearchAbilityStone(QLayout* pLayout);
+    SmartSearchAbilityStone(QLayout *pLayout);
     ~SmartSearchAbilityStone();
 
     void refresh() override;
@@ -25,14 +25,14 @@ private:
     void initializeResultUI();
 
     void searchAbilityStone();
-    void parseSearchResult(class QNetworkReply* pReply);
+    void parseSearchResult(class QNetworkReply *pReply);
     void clearResult();
 
 private:
     Ui::SmartSearchAbilityStone *ui;
 
     QList<class QComboBox*> m_engraveSelectors;
-    QComboBox* m_pPenaltySelector;
+    QComboBox *m_pPenaltySelector;
     QList<QPair<AbilityStone, Price>> m_searchResults;
     int m_totalSearchCount;
     int m_currentSearchCount;

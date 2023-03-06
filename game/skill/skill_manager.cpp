@@ -5,7 +5,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 
-SkillManager* SkillManager::m_pInstance = nullptr;
+SkillManager *SkillManager::m_pInstance = nullptr;
 
 SkillManager::SkillManager()
 {
@@ -26,15 +26,15 @@ void SkillManager::initializeSkillList()
 
     for (const QJsonValue& value : json)
     {
-        const QJsonObject& object = value.toObject();
+        const QJsonObject &object = value.toObject();
 
         // 직업별 스킬 목록 추가
-        const QString& _class = object.find("Class")->toString();
+        const QString &_class = object.find("Class")->toString();
         const QJsonArray skills = object.find("Skills")->toArray();
 
         for (const QJsonValue& value : skills)
         {
-            const QJsonObject& skill = value.toObject();
+            const QJsonObject &skill = value.toObject();
 
             Skill newSkill;
             newSkill.setSkillName(skill.find("Text")->toString());
@@ -42,11 +42,11 @@ void SkillManager::initializeSkillList()
             newSkill.setIconPath(skillIconPath.arg(skill.find("IconPath")->toString()));
 
             // 스킬별 트라이포드 목록 추가
-            const QJsonArray& tripods = skill.find("Tripods")->toArray();
+            const QJsonArray &tripods = skill.find("Tripods")->toArray();
 
             for (int i = 0; i < tripods.size(); i++)
             {
-                const QJsonObject& tripod = tripods[i].toObject();
+                const QJsonObject &tripod = tripods[i].toObject();
                 int tier = (i / 3) + 1;
 
                 Tripod newTripod;
@@ -66,7 +66,7 @@ void SkillManager::initializeSkillList()
     }
 }
 
-SkillManager* SkillManager::getInstance()
+SkillManager *SkillManager::getInstance()
 {
     if (m_pInstance == nullptr)
         m_pInstance = new SkillManager();
@@ -83,7 +83,7 @@ void SkillManager::destroyInstance()
     m_pInstance = nullptr;
 }
 
-QList<Skill> SkillManager::skillList(const QString& _class) const
+QList<Skill> SkillManager::skillList(const QString &_class) const
 {
     return m_skillList[_class];
 }

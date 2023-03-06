@@ -8,7 +8,7 @@
 #include <QNetworkRequest>
 #include <QNetworkAccessManager>
 
-ApiManager* ApiManager::m_pInstance = nullptr;
+ApiManager *ApiManager::m_pInstance = nullptr;
 
 ApiManager::ApiManager() :
     m_keyIndex(0),
@@ -25,7 +25,7 @@ ApiManager::~ApiManager()
 
 void ApiManager::loadApiKey()
 {
-    DbManager* pDbManager = DbManager::getInstance();
+    DbManager *pDbManager = DbManager::getInstance();
     bsoncxx::builder::stream::document dummyDoc{};
 
     pDbManager->lock();
@@ -41,26 +41,26 @@ void ApiManager::loadApiKey()
 void ApiManager::loadRequestUrl()
 {
     const QJsonObject json = ResourceManager::getInstance()->loadJson("api");
-    const QJsonArray& api = json.find("Api")->toArray();
+    const QJsonArray &api = json.find("Api")->toArray();
 
     for (const QJsonValue& value : api)
     {
-        const QJsonObject& obj = value.toObject();
-        const int& index = obj.find("Index")->toInt();
-        const QString& requestUrl = obj.find("RequestURL")->toString();
+        const QJsonObject &obj = value.toObject();
+        const int &index = obj.find("Index")->toInt();
+        const QString &requestUrl = obj.find("RequestURL")->toString();
 
         m_requestUrls[index] = requestUrl;
     }
 }
 
-const QString& ApiManager::getApiKey()
+const QString &ApiManager::getApiKey()
 {
     if (m_keyIndex >= m_apiKeys.size())
         m_keyIndex = 0;
     return m_apiKeys[m_keyIndex++];
 }
 
-ApiManager* ApiManager::getInstance()
+ApiManager *ApiManager::getInstance()
 {
     if (m_pInstance == nullptr)
         m_pInstance = new ApiManager();
@@ -75,7 +75,7 @@ void ApiManager::destroyInstance()
     m_pInstance = nullptr;
 }
 
-void ApiManager::get(QNetworkAccessManager* pNetworkManager, LostarkApi api, QString param)
+void ApiManager::get(QNetworkAccessManager *pNetworkManager, LostarkApi api, QString param)
 {
     QString url = m_requestUrls[static_cast<int>(api)].arg(param);
     QNetworkRequest request;
@@ -85,7 +85,7 @@ void ApiManager::get(QNetworkAccessManager* pNetworkManager, LostarkApi api, QSt
     pNetworkManager->get(request);
 }
 
-void ApiManager::post(QNetworkAccessManager* pNetworkManager, LostarkApi api, QByteArray data)
+void ApiManager::post(QNetworkAccessManager *pNetworkManager, LostarkApi api, QByteArray data)
 {
     QString url = m_requestUrls[static_cast<int>(api)];
     QNetworkRequest request;

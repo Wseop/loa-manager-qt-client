@@ -67,23 +67,23 @@ void LoaManager::initFunction()
 void LoaManager::initMenuButton()
 {
     int menuIndex = 0;
-    const QJsonArray& menus = m_mainSetting.find("Menu")->toArray();
+    const QJsonArray &menus = m_mainSetting.find("Menu")->toArray();
 
     for (int i = 0; i < menus.size(); i++)
     {
-        const QJsonObject& menu = menus[i].toObject();
-        const QString& title = menu.find("Title")->toString();
-        const QStringList& menuList = menu.find("List")->toVariant().toStringList();
+        const QJsonObject &menu = menus[i].toObject();
+        const QString &title = menu.find("Title")->toString();
+        const QStringList &menuList = menu.find("List")->toVariant().toStringList();
 
-        QGroupBox* pMenuGroup = WidgetManager::createGroupBox(title);
+        QGroupBox *pMenuGroup = WidgetManager::createGroupBox(title);
         ui->hLayoutMenu->addWidget(pMenuGroup);
         m_widgets.append(pMenuGroup);
-        QHBoxLayout* pLayout = new QHBoxLayout();
+        QHBoxLayout *pLayout = new QHBoxLayout();
         pMenuGroup->setLayout(pLayout);
 
         for (const QString& menuName : menuList)
         {
-            QPushButton* pMenuButton = WidgetManager::createPushButton(menuName);
+            QPushButton *pMenuButton = WidgetManager::createPushButton(menuName);
             pLayout->addWidget(pMenuButton);
             m_menuButtons.append(pMenuButton);
 

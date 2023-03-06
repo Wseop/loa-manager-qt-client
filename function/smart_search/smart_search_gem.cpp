@@ -12,7 +12,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
-SmartSearchGem::SmartSearchGem(QLayout* pLayout) :
+SmartSearchGem::SmartSearchGem(QLayout *pLayout) :
     ui(new Ui::SmartSearchGem),
     m_searchList({
         {"5레벨 멸화", "6레벨 멸화", "7레벨 멸화", "8레벨 멸화", "9레벨 멸화", "10레벨 멸화"},
@@ -43,7 +43,7 @@ void SmartSearchGem::refresh()
     {
         for (int j = 0; j < m_searchList[i].size(); j++)
         {
-            QNetworkAccessManager* pNetworkManager = new QNetworkAccessManager();
+            QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
             connect(pNetworkManager, &QNetworkAccessManager::finished, this, &SmartSearchGem::parseSearchResult);
             connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
@@ -70,7 +70,7 @@ void SmartSearchGem::initializeUI()
         // attribute label 추가
         for (int j = 0; j < attributes[i].size(); j++)
         {
-            QLabel* pLabel = WidgetManager::createLabel(attributes[i][j], 14, "", 200, 50);
+            QLabel *pLabel = WidgetManager::createLabel(attributes[i][j], 14, "", 200, 50);
             layouts[i]->addWidget(pLabel, 0, j, Qt::AlignHCenter);
             m_widgets.append(pLabel);
         }
@@ -79,25 +79,25 @@ void SmartSearchGem::initializeUI()
 
 void SmartSearchGem::updateUI(const Gem gem, Price price)
 {
-    QGridLayout* pLayout = gem.gemType() == GemType::멸화 ? ui->gridLeft : ui->gridRight;
+    QGridLayout *pLayout = gem.gemType() == GemType::멸화 ? ui->gridLeft : ui->gridRight;
     int row = (2 * gem.gemLevel()) - 9;
 
-    QNetworkAccessManager* pIconLoader = new QNetworkAccessManager();
+    QNetworkAccessManager *pIconLoader = new QNetworkAccessManager();
     connect(pIconLoader, &QNetworkAccessManager::finished, pIconLoader, &QNetworkAccessManager::deleteLater);
 
-    QFrame* pHLine = WidgetManager::createLine(QFrame::HLine);
+    QFrame *pHLine = WidgetManager::createLine(QFrame::HLine);
     pLayout->addWidget(pHLine, row++, 0, 1, -1);
     m_gemWidgets.append(pHLine);
 
-    QLabel* pIcon = WidgetManager::createIcon(gem.iconPath(), pIconLoader, itemGradeToBGColor(gem.itemGrade()));
+    QLabel *pIcon = WidgetManager::createIcon(gem.iconPath(), pIconLoader, itemGradeToBGColor(gem.itemGrade()));
     pLayout->addWidget(pIcon, row, 0, Qt::AlignHCenter);
     m_gemWidgets.append(pIcon);
 
-    QLabel* pLabelName = WidgetManager::createLabel(gem.itemName(), 10, itemGradeToTextColor(gem.itemGrade()), 300);
+    QLabel *pLabelName = WidgetManager::createLabel(gem.itemName(), 10, itemGradeToTextColor(gem.itemGrade()), 300);
     pLayout->addWidget(pLabelName, row, 1, Qt::AlignHCenter);
     m_gemWidgets.append(pLabelName);
 
-    QLabel* pLabelPrice = WidgetManager::createLabel(QString("%L1\n(%L2)").arg(price.buyPrice).arg(price.bidStartPrice), 10, "", 300, 50);
+    QLabel *pLabelPrice = WidgetManager::createLabel(QString("%L1\n(%L2)").arg(price.buyPrice).arg(price.bidStartPrice), 10, "", 300, 50);
     pLayout->addWidget(pLabelPrice, row, 2, Qt::AlignHCenter);
     m_gemWidgets.append(pLabelPrice);
 }
@@ -110,15 +110,15 @@ void SmartSearchGem::clearUI()
     m_gemWidgets.clear();
 }
 
-void SmartSearchGem::parseSearchResult(QNetworkReply* pReply)
+void SmartSearchGem::parseSearchResult(QNetworkReply *pReply)
 {
     // 검색 결과 parsing
     QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
     if (response.isNull())
         return;
 
-    const QJsonObject& item = response.object().find("Items")->toArray()[0].toObject();
-    const QString& itemName = item.find("Name")->toString();
+    const QJsonObject &item = response.object().find("Items")->toArray()[0].toObject();
+    const QString &itemName = item.find("Name")->toString();
 
     // 보석 타입 설정
     GemType gemType;
@@ -139,7 +139,7 @@ void SmartSearchGem::parseSearchResult(QNetworkReply* pReply)
         gem.setGemLevel(itemName[0].digitValue());
 
     // 가격 parsing
-    const QJsonObject& auctionInfo = item.find("AuctionInfo")->toObject();
+    const QJsonObject &auctionInfo = item.find("AuctionInfo")->toObject();
     int buyPrice = auctionInfo.find("BuyPrice")->toInt();
     int bidStartPrice = auctionInfo.find("BidStartPrice")->toInt();
 

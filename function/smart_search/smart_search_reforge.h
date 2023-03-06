@@ -15,7 +15,7 @@ class SmartSearchReforge : public QWidget, public SmartSearchMenu
     Q_OBJECT
 
 public:
-    SmartSearchReforge(QLayout* pLayout);
+    SmartSearchReforge(QLayout *pLayout);
     ~SmartSearchReforge();
 
     void refresh() override;

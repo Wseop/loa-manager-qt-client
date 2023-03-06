@@ -1,6 +1,6 @@
 #include "font_manager.h"
 
-FontManager* FontManager::m_pFontManager = nullptr;
+FontManager *FontManager::m_pFontManager = nullptr;
 
 FontManager::FontManager()
 {
@@ -26,7 +26,7 @@ void FontManager::loadFont()
         m_fontFamilies.append(QFontDatabase::applicationFontFamilies(i).at(0));
 }
 
-FontManager* FontManager::getInstance()
+FontManager *FontManager::getInstance()
 {
     if (m_pFontManager == nullptr)
         m_pFontManager = new FontManager();

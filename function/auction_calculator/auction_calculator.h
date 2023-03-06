@@ -25,7 +25,7 @@ private:
     void calculatePrice();
 
 public:
-    static AuctionCalculator* getInstance();
+    static AuctionCalculator *getInstance();
     static void destroyInstance();
 
 public:
@@ -34,7 +34,7 @@ public:
 private:
     Ui::AuctionCalculator *ui;
 
-    static AuctionCalculator* m_pInstance;
+    static AuctionCalculator *m_pInstance;
 
     const double DISTRIBUTE_BALANCE_4 = 0.71;
     const double DISTRIBUTE_BALANCE_8 = 0.83;

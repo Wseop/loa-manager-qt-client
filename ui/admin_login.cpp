@@ -44,7 +44,7 @@ AdminLogin::~AdminLogin()
 
 void AdminLogin::loadAdminKey()
 {
-    DbManager* pDbManager = DbManager::getInstance();
+    DbManager *pDbManager = DbManager::getInstance();
     bsoncxx::builder::stream::document filter{};
     filter << "Type" << 0;
 

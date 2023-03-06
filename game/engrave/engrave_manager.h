@@ -13,7 +13,7 @@ private:
     void initalizeEngraveList();
 
 public:
-    static EngraveManager* getInstance();
+    static EngraveManager *getInstance();
     static void destroyInstance();
 
 public:
@@ -22,16 +22,16 @@ public:
     QStringList getClassEngraves() const;
     QStringList getPenalties() const;
 
-    const QString iconPath(const QString& engrave) const;
+    const QString iconPath(const QString &engrave) const;
 
-    bool isClassEngrave(const QString& engrave);
-    bool isPenalty(const QString& engrave);
+    bool isClassEngrave(const QString &engrave);
+    bool isPenalty(const QString &engrave);
 
-    int getEngraveCode(const QString& engrave);
-    const QString getEngraveByCode(const int& code) const;
+    int getEngraveCode(const QString &engrave);
+    const QString getEngraveByCode(const int &code) const;
 
 private:
-    static EngraveManager* m_pEngrave;
+    static EngraveManager *m_pEngrave;
 
 private:
     QHash<QString, int> m_engraveToCode;

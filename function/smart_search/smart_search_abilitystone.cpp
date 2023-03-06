@@ -20,7 +20,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
-SmartSearchAbilityStone::SmartSearchAbilityStone(QLayout* pLayout) :
+SmartSearchAbilityStone::SmartSearchAbilityStone(QLayout *pLayout) :
     ui(new Ui::SmartSearchAbilityStone),
     m_searchResults(0),
     m_totalSearchCount(0),
@@ -67,34 +67,34 @@ void SmartSearchAbilityStone::refresh()
     int row = 0;
     for (const auto& searchResult : m_searchResults)
     {
-        const AbilityStone& abilityStone = searchResult.first;
-        const Price& price = searchResult.second;
+        const AbilityStone &abilityStone = searchResult.first;
+        const Price &price = searchResult.second;
 
-        QFrame* pHLine = WidgetManager::createLine(QFrame::HLine);
+        QFrame *pHLine = WidgetManager::createLine(QFrame::HLine);
         ui->gridResult->addWidget(pHLine, ++row, 0, 1, -1);
         m_resultWidgets.append(pHLine);
 
-        QLabel* pIcon = WidgetManager::createIcon(abilityStone.iconPath(), nullptr, itemGradeToBGColor(abilityStone.itemGrade()));
+        QLabel *pIcon = WidgetManager::createIcon(abilityStone.iconPath(), nullptr, itemGradeToBGColor(abilityStone.itemGrade()));
         ui->gridResult->addWidget(pIcon, ++row, 0);
         m_resultWidgets.append(pIcon);
 
-        QLabel* pLabelName = WidgetManager::createLabel(abilityStone.itemName(), 10, itemGradeToTextColor(abilityStone.itemGrade()));
+        QLabel *pLabelName = WidgetManager::createLabel(abilityStone.itemName(), 10, itemGradeToTextColor(abilityStone.itemGrade()));
         ui->gridResult->addWidget(pLabelName, row, 1);
         m_resultWidgets.append(pLabelName);
 
-        const QStringList& engraves = abilityStone.getEngraves();
+        const QStringList &engraves = abilityStone.getEngraves();
         for (int i = 0; i < engraves.size(); i++)
         {
-            QLabel* pLabelEngrave = WidgetManager::createLabel(engraves[i]);
+            QLabel *pLabelEngrave = WidgetManager::createLabel(engraves[i]);
             ui->gridResult->addWidget(pLabelEngrave, row, 2 + i);
             m_resultWidgets.append(pLabelEngrave);
         }
 
-        QLabel* pLabelPenalty = WidgetManager::createLabel(abilityStone.getPenalties().at(0), 10, "red");
+        QLabel *pLabelPenalty = WidgetManager::createLabel(abilityStone.getPenalties().at(0), 10, "red");
         ui->gridResult->addWidget(pLabelPenalty, row, 4);
         m_resultWidgets.append(pLabelPenalty);
 
-        QLabel* pLabelPrice = WidgetManager::createLabel(QString("%L1\n(%L2)").arg(price.buyPrice).arg(price.bidStartPrice), 10, "", 200, 50);
+        QLabel *pLabelPrice = WidgetManager::createLabel(QString("%L1\n(%L2)").arg(price.buyPrice).arg(price.bidStartPrice), 10, "", 200, 50);
         ui->gridResult->addWidget(pLabelPrice, row++, 5);
         m_resultWidgets.append(pLabelPrice);
     }
@@ -112,17 +112,17 @@ void SmartSearchAbilityStone::initializeEngraveSelector()
     QStringList engraves = {"선택 안함"};
     engraves << battleEngraves;
 
-    QGroupBox* pGroupEngrave = WidgetManager::createGroupBox("각인 선택");
+    QGroupBox *pGroupEngrave = WidgetManager::createGroupBox("각인 선택");
     ui->hLayoutMenu->addWidget(pGroupEngrave);
     m_widgets.append(pGroupEngrave);
 
-    QHBoxLayout* pLayoutGroupEngrave = new QHBoxLayout();
+    QHBoxLayout *pLayoutGroupEngrave = new QHBoxLayout();
     pGroupEngrave->setLayout(pLayoutGroupEngrave);
     m_layouts.append(pLayoutGroupEngrave);
 
     for (int i = 0; i < MAX_SELECTOR; i++)
     {
-        QComboBox* pEngraveSelector = WidgetManager::createComboBox(engraves);
+        QComboBox *pEngraveSelector = WidgetManager::createComboBox(engraves);
         pLayoutGroupEngrave->addWidget(pEngraveSelector);
         m_engraveSelectors.append(pEngraveSelector);
     }
@@ -131,11 +131,11 @@ void SmartSearchAbilityStone::initializeEngraveSelector()
     QStringList penalties = {"선택 안함"};
     penalties << EngraveManager::getInstance()->getPenalties();
 
-    QGroupBox* pGroupPenalty = WidgetManager::createGroupBox("감소 각인 선택");
+    QGroupBox *pGroupPenalty = WidgetManager::createGroupBox("감소 각인 선택");
     ui->hLayoutMenu->addWidget(pGroupPenalty);
     m_widgets.append(pGroupPenalty);
 
-    QHBoxLayout* pLayoutGroupPenalty = new QHBoxLayout();
+    QHBoxLayout *pLayoutGroupPenalty = new QHBoxLayout();
     pGroupPenalty->setLayout(pLayoutGroupPenalty);
     m_layouts.append(pLayoutGroupPenalty);
 
@@ -143,7 +143,7 @@ void SmartSearchAbilityStone::initializeEngraveSelector()
     pLayoutGroupPenalty->addWidget(m_pPenaltySelector);
 
     // 검색 버튼 추가
-    QPushButton* pButtonSearch = WidgetManager::createPushButton("검색");
+    QPushButton *pButtonSearch = WidgetManager::createPushButton("검색");
     connect(pButtonSearch, &QPushButton::released, this, &SmartSearchAbilityStone::searchAbilityStone);
     ui->hLayoutMenu->addWidget(pButtonSearch);
     m_widgets.append(pButtonSearch);
@@ -155,7 +155,7 @@ void SmartSearchAbilityStone::initializeResultUI()
 
     for (int col = 0; col < attributes.size(); col++)
     {
-        QLabel* pLabelAttribute = WidgetManager::createLabel(attributes[col], 12, "", 200, 50);
+        QLabel *pLabelAttribute = WidgetManager::createLabel(attributes[col], 12, "", 200, 50);
         ui->gridResult->addWidget(pLabelAttribute, 0, col);
         m_widgets.append(pLabelAttribute);
     }
@@ -190,10 +190,10 @@ void SmartSearchAbilityStone::searchAbilityStone()
     {
         for (int j = i + 1; j < selectedEngraves.size(); j++)
         {
-            const QString& engrave1 = selectedEngraves[i];
-            const QString& engrave2 = selectedEngraves[j];
+            const QString &engrave1 = selectedEngraves[i];
+            const QString &engrave2 = selectedEngraves[j];
 
-            QNetworkAccessManager* pNetworkManager = new QNetworkAccessManager();
+            QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
             connect(pNetworkManager, &QNetworkAccessManager::finished, this, &SmartSearchAbilityStone::parseSearchResult);
             connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
@@ -214,7 +214,7 @@ void SmartSearchAbilityStone::searchAbilityStone()
     }
 }
 
-void SmartSearchAbilityStone::parseSearchResult(QNetworkReply* pReply)
+void SmartSearchAbilityStone::parseSearchResult(QNetworkReply *pReply)
 {
     m_currentSearchCount++;
 
@@ -223,8 +223,8 @@ void SmartSearchAbilityStone::parseSearchResult(QNetworkReply* pReply)
         return;
 
     // 검색 결과 parsing (최저가 1개)
-    const QJsonObject& item = response.object().find("Items")->toArray()[0].toObject();
-    const QJsonObject& auctionInfo = item.find("AuctionInfo")->toObject();
+    const QJsonObject &item = response.object().find("Items")->toArray()[0].toObject();
+    const QJsonObject &auctionInfo = item.find("AuctionInfo")->toObject();
     int buyPrice = auctionInfo.find("BuyPrice")->toInt();
     int bidStartPrice = auctionInfo.find("BidStartPrice")->toInt();
 
@@ -233,11 +233,11 @@ void SmartSearchAbilityStone::parseSearchResult(QNetworkReply* pReply)
     abilityStone.setItemGrade(qStringToItemGrade(item.find("Grade")->toString()));
     abilityStone.setIconPath(":/image/item/abilitystone/0.png");
 
-    const QJsonArray& options = item.find("Options")->toArray();
+    const QJsonArray &options = item.find("Options")->toArray();
     for (const QJsonValue& value : options)
     {
-        const QJsonObject& option = value.toObject();
-        const QString& engrave = option.find("OptionName")->toString();
+        const QJsonObject &option = value.toObject();
+        const QString &engrave = option.find("OptionName")->toString();
 
         if (option.find("IsPenalty")->toBool())
             abilityStone.addPenalty(engrave, 0);

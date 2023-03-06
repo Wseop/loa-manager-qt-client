@@ -11,7 +11,7 @@
 
 using namespace bsoncxx::builder::stream;
 
-DbManager* DbManager::m_pInstance = nullptr;
+DbManager *DbManager::m_pInstance = nullptr;
 
 DbManager::DbManager()
 {
@@ -53,7 +53,7 @@ mongocxx::collection DbManager::getCollection(Collection collection)
     }
 }
 
-DbManager* DbManager::getInstance()
+DbManager *DbManager::getInstance()
 {
     if (m_pInstance == nullptr)
         m_pInstance = new DbManager();

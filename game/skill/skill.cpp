@@ -40,7 +40,7 @@ QList<Tripod> Skill::tripods() const
     return m_tripods;
 }
 
-void Skill::addTripod(const Tripod& tripod)
+void Skill::addTripod(const Tripod &tripod)
 {
     m_tripods.append(tripod);
 }

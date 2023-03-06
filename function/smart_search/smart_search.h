@@ -21,7 +21,7 @@ private:
     void initializeMenu();
 
 public:
-    static SmartSearch* getInstace();
+    static SmartSearch *getInstace();
     static void destroyInstance();
 
 public:
@@ -30,11 +30,11 @@ public:
 private:
     Ui::SmartSearch *ui;
 
-    static SmartSearch* m_pInstance;
+    static SmartSearch *m_pInstance;
 
     QStringList m_menuNames;
     QList<class SmartSearchMenu*> m_menuWidgets;
-    SmartSearchMenu* m_pSelectedMenu;
+    SmartSearchMenu *m_pSelectedMenu;
     class QPushButton* m_pSelectedMenuButton;
 
     QList<QWidget*> m_widgets;

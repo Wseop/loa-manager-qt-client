@@ -21,7 +21,7 @@ private:
     void initializeMenu();
 
 public:
-    static SmartSearch *getInstace();
+    static SmartSearch *getInstance();
     static void destroyInstance();
 
 public:

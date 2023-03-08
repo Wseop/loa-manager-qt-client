@@ -84,7 +84,7 @@ void SmartSearch::initializeMenu()
     }
 }
 
-SmartSearch *SmartSearch::getInstace()
+SmartSearch *SmartSearch::getInstance()
 {
     if (m_pInstance == nullptr)
         m_pInstance = new SmartSearch();

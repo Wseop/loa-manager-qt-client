@@ -14,6 +14,9 @@ SOURCES += \
     db/db_manager.cpp \
     db/document_builder.cpp \
     function/auction_calculator/auction_calculator.cpp \
+    function/content_reward/content_reward.cpp \
+    function/content_reward/content_reward_adder.cpp \
+    function/content_reward/content_reward_table.cpp \
     function/smart_search/smart_search.cpp \
     function/smart_search/smart_search_abilitystone.cpp \
     function/smart_search/smart_search_accessory.cpp \
@@ -45,6 +48,9 @@ HEADERS += \
     db/db_manager.h \
     db/document_builder.h \
     function/auction_calculator/auction_calculator.h \
+    function/content_reward/content_reward.h \
+    function/content_reward/content_reward_adder.h \
+    function/content_reward/content_reward_table.h \
     function/function_widget.h \
     function/smart_search/smart_search.h \
     function/smart_search/smart_search_abilitystone.h \
@@ -75,6 +81,9 @@ HEADERS += \
 
 FORMS += \
     function/auction_calculator/auction_calculator.ui \
+    function/content_reward/content_reward.ui \
+    function/content_reward/content_reward_adder.ui \
+    function/content_reward/content_reward_table.ui \
     function/smart_search/smart_search.ui \
     function/smart_search/smart_search_abilitystone.ui \
     function/smart_search/smart_search_accessory.ui \

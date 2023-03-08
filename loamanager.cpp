@@ -5,6 +5,7 @@
 #include "function/function_widget.h"
 #include "function/auction_calculator/auction_calculator.h"
 #include "function/smart_search/smart_search.h"
+#include "function/content_reward/content_reward.h"
 #include "resource/resource_manager.h"
 
 #include <QFile>
@@ -56,6 +57,7 @@ void LoaManager::initFunction()
     // main.json의 메뉴 list 순서에 맞게 등록
     m_functions.append(SmartSearch::getInstace());
     m_functions.append(AuctionCalculator::getInstance());
+    m_functions.append(ContentReward::getInstance());
 
     for (QWidget* pWidget : m_functions)
     {

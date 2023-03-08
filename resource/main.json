@@ -1,9 +1,9 @@
 {
-    "Version": "LoaManager v1.1.0",
+    "Version": "LoaManager v1.1.1",
     "Menu": [
         {
             "Title": "시세",
-            "List": ["거래소/경매장\n검색", "경매 손익\n계산기"]
+            "List": ["거래소/경매장\n검색", "경매 손익\n계산기", "컨텐츠 별\n보상"]
         }
     ]
 }

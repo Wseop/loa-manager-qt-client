@@ -10,7 +10,7 @@ class DocumentBuilder : public QObject
     Q_OBJECT
 
 public:
-    static bsoncxx::builder::stream::document buildDocumentContentsReward(QString level, QStringList items, QList<int> itemCounts, QString remark);
+    static bsoncxx::builder::stream::document buildDocumentContentsReward(int count, QString level, QStringList items, QList<int> itemCounts);
 };
 
 #endif // DOCUMENTBUILDER_H

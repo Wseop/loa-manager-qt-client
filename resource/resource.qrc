@@ -932,6 +932,7 @@
         <file alias="smart_search.json">smart_search/smart_search.json</file>
         <file>main.json</file>
         <file alias="skill.json">skill/skill.json</file>
+        <file alias="drop_table.json">contents/drop_table.json</file>
     </qresource>
     <qresource prefix="/">
         <file>back.png</file>

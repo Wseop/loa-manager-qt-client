@@ -14,5 +14,9 @@ Lostark OpenAPI를 활용한 편의기능 제공 앱
     > 유물 : 33, 34, 35    
     > 고대 : 34, 35, 36
   - **5레벨 트라이포드** : 선택한 직업의 모든 5레벨 트라이포드 가격 정보와 가격 필터링 기능 제공
+- **[컨텐츠 보상](https://github.com/Wseop/QT_LoaManager/tree/main/function/content_reward)**
+  - 카오스 던전, 가디언 토벌 진행 시 획득 가능한 재화의 평균치를 제공 
+  - 획득한 재화를 골드 가치로 환산한 데이터 제공
+    > 1490이상 컨텐츠부터 구현
 ## 다운로드 및 실행
 - 우측의 [Releases 탭](https://github.com/Wseop/QT_LoaManager/releases)에서 zip파일 다운 및 압축해제 후 exe파일 실행

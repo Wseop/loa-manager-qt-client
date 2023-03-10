@@ -9,7 +9,7 @@ FontManager::FontManager()
 
 FontManager::~FontManager()
 {
-    destroyInstance();
+
 }
 
 void FontManager::loadFont()

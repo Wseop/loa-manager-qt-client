@@ -20,7 +20,7 @@ ApiManager::ApiManager() :
 
 ApiManager::~ApiManager()
 {
-    destroyInstance();
+
 }
 
 void ApiManager::loadApiKey()

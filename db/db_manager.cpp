@@ -20,7 +20,7 @@ DbManager::DbManager()
 
 DbManager::~DbManager()
 {
-    destroyInstance();
+
 }
 
 void DbManager::connect()

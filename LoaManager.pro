@@ -30,8 +30,10 @@ SOURCES += \
     game/engrave/engrave_manager.cpp \
     game/item/abilitystone.cpp \
     game/item/accessory.cpp \
+    game/item/armor.cpp \
     game/item/gem.cpp \
     game/item/item.cpp \
+    game/item/weapon.cpp \
     game/skill/skill.cpp \
     game/skill/skill_manager.cpp \
     game/skill/tripod.cpp \
@@ -69,10 +71,13 @@ HEADERS += \
     game/engrave/engrave_manager.h \
     game/item/abilitystone.h \
     game/item/accessory.h \
+    game/item/armor.h \
     game/item/gem.h \
     game/item/item.h \
     game/item/item_grade.h \
+    game/item/item_set.h \
     game/item/item_type.h \
+    game/item/weapon.h \
     game/skill/skill.h \
     game/skill/skill_manager.h \
     game/skill/tripod.h \

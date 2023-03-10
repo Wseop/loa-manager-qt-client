@@ -933,6 +933,7 @@
         <file>main.json</file>
         <file alias="skill.json">skill/skill.json</file>
         <file alias="drop_table.json">contents/drop_table.json</file>
+        <file alias="raid_reward.json">contents/raid_reward.json</file>
     </qresource>
     <qresource prefix="/">
         <file>back.png</file>

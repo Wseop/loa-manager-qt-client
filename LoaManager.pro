@@ -17,6 +17,8 @@ SOURCES += \
     function/content_reward/content_reward.cpp \
     function/content_reward/content_reward_adder.cpp \
     function/content_reward/content_reward_table.cpp \
+    function/raid_profit/raid_profit.cpp \
+    function/raid_profit/raid_profit_table.cpp \
     function/smart_search/smart_search.cpp \
     function/smart_search/smart_search_abilitystone.cpp \
     function/smart_search/smart_search_accessory.cpp \
@@ -52,6 +54,8 @@ HEADERS += \
     function/content_reward/content_reward_adder.h \
     function/content_reward/content_reward_table.h \
     function/function_widget.h \
+    function/raid_profit/raid_profit.h \
+    function/raid_profit/raid_profit_table.h \
     function/smart_search/smart_search.h \
     function/smart_search/smart_search_abilitystone.h \
     function/smart_search/smart_search_accessory.h \
@@ -84,6 +88,8 @@ FORMS += \
     function/content_reward/content_reward.ui \
     function/content_reward/content_reward_adder.ui \
     function/content_reward/content_reward_table.ui \
+    function/raid_profit/raid_profit.ui \
+    function/raid_profit/raid_profit_table.ui \
     function/smart_search/smart_search.ui \
     function/smart_search/smart_search_abilitystone.ui \
     function/smart_search/smart_search_accessory.ui \

@@ -6,6 +6,7 @@
 #include "function/auction_calculator/auction_calculator.h"
 #include "function/smart_search/smart_search.h"
 #include "function/content_reward/content_reward.h"
+#include "function/raid_profit/raid_profit.h"
 #include "resource/resource_manager.h"
 
 #include <QFile>
@@ -58,6 +59,7 @@ void LoaManager::initFunction()
     m_functions.append(SmartSearch::getInstance());
     m_functions.append(AuctionCalculator::getInstance());
     m_functions.append(ContentReward::getInstance());
+    m_functions.append(RaidProfit::getInstance());
 
     for (QWidget* pWidget : m_functions)
     {

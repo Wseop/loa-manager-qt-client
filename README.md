@@ -18,5 +18,7 @@ Lostark OpenAPI를 활용한 편의기능 제공 앱
   - 카오스 던전, 가디언 토벌 진행 시 획득 가능한 재화의 평균치를 제공 
   - 획득한 재화를 골드 가치로 환산한 데이터 제공
     > 1490이상 컨텐츠부터 구현
+- **[더보기 손익](https://github.com/Wseop/QT_LoaManager/tree/main/function/raid_profit)**
+  - 레이드 더보기로 획득 가능한 재화들의 골드 가치를 계산하여 더보기 손익 제공
 ## 다운로드 및 실행
 - 우측의 [Releases 탭](https://github.com/Wseop/QT_LoaManager/releases)에서 zip파일 다운 및 압축해제 후 exe파일 실행

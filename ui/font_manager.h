@@ -31,9 +31,9 @@ public:
     QFont getFont(FontFamily fontFamily, int fontSize);
 
 private:
-    static FontManager *m_pFontManager;
+    static FontManager *mpFontManager;
 
-    QStringList m_fontFamilies;
+    QStringList mFontFamilies;
 };
 
 #endif // FONTMANAGER_H

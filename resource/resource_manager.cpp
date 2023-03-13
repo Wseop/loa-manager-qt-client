@@ -5,7 +5,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
-ResourceManager *ResourceManager::m_pInstance = nullptr;
+ResourceManager *ResourceManager::mpInstance = nullptr;
 
 ResourceManager::ResourceManager()
 {
@@ -19,13 +19,13 @@ ResourceManager::~ResourceManager()
 
 void ResourceManager::initializeIconPath()
 {
-    m_iconPath["어빌리티 스톤"] = ":/image/item/abilitystone/0.png";
-    m_iconPath["각인서"] = ":/image/item/book/0.png";
-    m_iconPath["보석"] = ":/image/item/gem/0.png";
-    m_iconPath["실링"] = ":/image/item/money/0.png";
-    m_iconPath["골드"] = ":/image/item/money/1.png";
-    m_iconPath["선명한 지혜의 기운"] = ":/image/item/vigor/0.png";
-    m_iconPath["빛나는 지혜의 기운"] = ":/image/item/vigor/1.png";
+    mIconPath["어빌리티 스톤"] = ":/image/item/abilitystone/0.png";
+    mIconPath["각인서"] = ":/image/item/book/0.png";
+    mIconPath["보석"] = ":/image/item/gem/0.png";
+    mIconPath["실링"] = ":/image/item/money/0.png";
+    mIconPath["골드"] = ":/image/item/money/1.png";
+    mIconPath["선명한 지혜의 기운"] = ":/image/item/vigor/0.png";
+    mIconPath["빛나는 지혜의 기운"] = ":/image/item/vigor/1.png";
 
     QString reforgeIconPath = ":/image/item/reforge/%1_%2.png";
     QJsonArray reforges = loadJson("reforge").find("Reforge")->toArray();
@@ -41,26 +41,26 @@ void ResourceManager::initializeIconPath()
             const QString& name = item.find("Name")->toString();
             int id2 = item.find("Id")->toInt();
 
-            m_iconPath[name] = reforgeIconPath.arg(id1).arg(id2);
+            mIconPath[name] = reforgeIconPath.arg(id1).arg(id2);
         }
     }
 }
 
 ResourceManager *ResourceManager::getInstance()
 {
-    if (m_pInstance == nullptr)
-        m_pInstance = new ResourceManager();
+    if (mpInstance == nullptr)
+        mpInstance = new ResourceManager();
 
-    return m_pInstance;
+    return mpInstance;
 }
 
 void ResourceManager::destroyInstance()
 {
-    if (m_pInstance == nullptr)
+    if (mpInstance == nullptr)
         return;
 
-    delete m_pInstance;
-    m_pInstance = nullptr;
+    delete mpInstance;
+    mpInstance = nullptr;
 }
 
 QJsonObject ResourceManager::loadJson(QString fileName)
@@ -82,8 +82,8 @@ QJsonObject ResourceManager::loadJson(QString fileName)
 
 QString ResourceManager::iconPath(QString item)
 {
-    if (!m_iconPath.contains(item))
+    if (!mIconPath.contains(item))
         return "";
     else
-        return m_iconPath[item];
+        return mIconPath[item];
 }

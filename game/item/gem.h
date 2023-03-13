@@ -18,9 +18,13 @@ public:
     int gemLevel() const;
     void setGemLevel(int newGemLevel);
 
+    QString skillName() const;
+    void setSkillName(const QString &newSkillName);
+
 private:
-    GemType m_gemType;
-    int m_gemLevel;
+    GemType mGemType;
+    int mGemLevel;
+    QString mSkillName;
 };
 
 #endif // GEM_H

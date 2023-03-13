@@ -9,9 +9,9 @@
 
 RaidProfitTable::RaidProfitTable(const QString &content, const QList<int> &costs, const QList<RewardItems> &rewardItems) :
     ui(new Ui::RaidProfitTable),
-    m_content(content),
-    m_costs(costs),
-    m_rewardItems(rewardItems)
+    mContent(content),
+    mCosts(costs),
+    mRewardItems(rewardItems)
 {
     ui->setupUi(this);
 
@@ -20,22 +20,22 @@ RaidProfitTable::RaidProfitTable(const QString &content, const QList<int> &costs
 
 RaidProfitTable::~RaidProfitTable()
 {
-    for (QWidget *pWidget : m_widgets)
+    for (QWidget *pWidget : mWidgets)
         delete pWidget;
-    m_widgets.clear();
+    mWidgets.clear();
 
-    for (QLayout *pLayout : m_layouts)
+    for (QLayout *pLayout : mLayouts)
         delete pLayout;
-    m_layouts.clear();
+    mLayouts.clear();
 
     delete ui;
 }
 
 void RaidProfitTable::refreshItemPrice(const QHash<QString, double> &itemPrice, const QList<QCheckBox*> &itemSelectors)
 {
-    for (int i = 0; i < m_costs.size(); i++)
+    for (int i = 0; i < mCosts.size(); i++)
     {
-        const RewardItems &rewardItems = m_rewardItems[i];
+        const RewardItems &rewardItems = mRewardItems[i];
         double totalGold = 0;
         double profit = 0;
 
@@ -49,21 +49,21 @@ void RaidProfitTable::refreshItemPrice(const QHash<QString, double> &itemPrice, 
                 totalGold += price * itemCount;
         }
 
-        m_goldLabels[i]->setText(QString("%L1").arg(totalGold, 0, 'f', 2));
+        mGoldLabels[i]->setText(QString("%L1").arg(totalGold, 0, 'f', 2));
 
-        profit = totalGold - m_costs[i];
-        m_profitLabels[i]->setText(QString("%L1").arg(profit, 0, 'f', 2));
+        profit = totalGold - mCosts[i];
+        mProfitLabels[i]->setText(QString("%L1").arg(profit, 0, 'f', 2));
 
         if (profit > 0)
-            m_profitLabels[i]->setStyleSheet("QLabel { color: blue }");
+            mProfitLabels[i]->setStyleSheet("QLabel { color: blue }");
         else
-            m_profitLabels[i]->setStyleSheet("QLabel { color: red }");
+            mProfitLabels[i]->setStyleSheet("QLabel { color: red }");
     }
 }
 
 void RaidProfitTable::initializeTable()
 {
-    QList<int> colSpans = {1, static_cast<int>(m_rewardItems[0].size()), 1, 1, 1};
+    QList<int> colSpans = {1, static_cast<int>(mRewardItems[0].size()), 1, 1, 1};
 
     initializeTableColumn(colSpans);
     initializeTableRow(colSpans);
@@ -79,7 +79,7 @@ void RaidProfitTable::initializeTableColumn(const QList<int> &colSpans)
     {
         QLabel *pLabel = WidgetManager::createLabel(attributes[i], 12, "", 150);
         ui->gridTable->addWidget(pLabel, 0, col, 1, colSpans[i], Qt::AlignHCenter);
-        m_widgets << pLabel;
+        mWidgets << pLabel;
 
         col += colSpans[i];
 
@@ -87,14 +87,14 @@ void RaidProfitTable::initializeTableColumn(const QList<int> &colSpans)
         {
             QFrame *pVLine = WidgetManager::createLine(QFrame::VLine);
             ui->gridTable->addWidget(pVLine, 0, col++, -1, 1, Qt::AlignHCenter);
-            m_widgets << pVLine;
+            mWidgets << pVLine;
         }
     }
 }
 
 void RaidProfitTable::initializeTableRow(const QList<int> &colSpans)
 {
-    int gateSize = m_costs.size();
+    int gateSize = mCosts.size();
     int row = 1;
     QStringList gateNameOfKayangel = {"천공의 문 넬라시아", "영원한 빛의 요람"};
 
@@ -104,41 +104,41 @@ void RaidProfitTable::initializeTableRow(const QList<int> &colSpans)
 
         QFrame *pHLine = WidgetManager::createLine(QFrame::HLine);
         ui->gridTable->addWidget(pHLine, row++, 0, 1, -1);
-        m_widgets << pHLine;
+        mWidgets << pHLine;
 
         // 관문
         QLabel *pLabelGate = nullptr;
 
-        if (m_content.contains("카양겔"))
+        if (mContent.contains("카양겔"))
             pLabelGate = WidgetManager::createLabel(gateNameOfKayangel[i], 10, "", 100);
         else
             pLabelGate = WidgetManager::createLabel(QString("%1관문").arg(i + 1), 10, "", 100);
 
         ui->gridTable->addWidget(pLabelGate, row, col, Qt::AlignHCenter);
-        m_widgets << pLabelGate;
+        mWidgets << pLabelGate;
 
         col += colSpans[0] + 1 + colSpans[1] + 1;
 
         // 더보기 비용
-        QLabel *pLabelCost = WidgetManager::createLabel(QString("%L1").arg(m_costs[i]), 10, "", 100);
+        QLabel *pLabelCost = WidgetManager::createLabel(QString("%L1").arg(mCosts[i]), 10, "", 100);
         ui->gridTable->addWidget(pLabelCost, row, col, Qt::AlignHCenter);
-        m_widgets << pLabelCost;
+        mWidgets << pLabelCost;
 
         col += colSpans[2] + 1;
 
         // 골드 가치 합계
         QLabel *pLabelTotalGold = WidgetManager::createLabel("-", 10, "", 100);
         ui->gridTable->addWidget(pLabelTotalGold, row, col, Qt::AlignHCenter);
-        m_goldLabels << pLabelTotalGold;
-        m_widgets << pLabelTotalGold;
+        mGoldLabels << pLabelTotalGold;
+        mWidgets << pLabelTotalGold;
 
         col += colSpans[3] + 1;
 
         // 더보기 손익
         QLabel *pLabelProfit = WidgetManager::createLabel("-", 10, "", 100);
         ui->gridTable->addWidget(pLabelProfit, row++, col, Qt::AlignHCenter);
-        m_profitLabels << pLabelProfit;
-        m_widgets << pLabelProfit;
+        mProfitLabels << pLabelProfit;
+        mWidgets << pLabelProfit;
     }
 }
 
@@ -146,7 +146,7 @@ void RaidProfitTable::initializeTableReward()
 {
     int row = 2;
 
-    for (const RewardItems &rewardItems : m_rewardItems)
+    for (const RewardItems &rewardItems : mRewardItems)
     {
         int col = 2;
 
@@ -154,15 +154,15 @@ void RaidProfitTable::initializeTableReward()
         {
             QVBoxLayout *pLayoutItem = new QVBoxLayout();
             ui->gridTable->addLayout(pLayoutItem, row, col++, Qt::AlignHCenter);
-            m_layouts << pLayoutItem;
+            mLayouts << pLayoutItem;
 
             QLabel *pIconItem = WidgetManager::createIcon(ResourceManager::getInstance()->iconPath(rewardItem.first), nullptr);
             pLayoutItem->addWidget(pIconItem);
-            m_widgets << pIconItem;
+            mWidgets << pIconItem;
 
             QLabel *pLabelItemCount = WidgetManager::createLabel(QString("%L1").arg(rewardItem.second), 10, "", 100);
             pLayoutItem->addWidget(pLabelItemCount);
-            m_widgets << pLabelItemCount;
+            mWidgets << pLabelItemCount;
         }
 
         row += 2;

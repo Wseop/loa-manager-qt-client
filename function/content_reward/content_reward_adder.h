@@ -31,21 +31,21 @@ private:
 private:
     Ui::ContentRewardAdder *ui;
 
-    QStringList m_contents;
-    QHash<QString, QStringList> m_contentLevels;
-    QHash<QString, QStringList> m_dropTable;
-    QList<int> m_stages;
-    QHash<QString, int> m_itemIndex;
+    QStringList mContents;
+    QHash<QString, QStringList> mContentLevels;
+    QHash<QString, QStringList> mDropTable;
+    QList<int> mStages;
+    QHash<QString, int> mItemIndex;
 
-    class QComboBox *m_pContentSelector;
-    QList<QComboBox*> m_levelSelectors;
-    QComboBox *m_pCurrentLevelSelector;
+    class QComboBox *mpContentSelector;
+    QList<QComboBox*> mLevelSelectors;
+    QComboBox *mpCurrentLevelSelector;
 
-    class QIntValidator *m_pInputValidator;
-    QList<class QLineEdit*> m_lineEdits;
+    class QIntValidator *mpInputValidator;
+    QList<class QLineEdit*> mLineEdits;
 
-    QList<QWidget*> m_widgets;
-    QList<QLayout*> m_layouts;
+    QList<QWidget*> mWidgets;
+    QList<QLayout*> mLayouts;
 };
 
 #endif // CONTENT_REWARD_ADDER_H

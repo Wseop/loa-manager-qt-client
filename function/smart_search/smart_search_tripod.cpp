@@ -22,8 +22,8 @@
 
 SmartSearchTripod::SmartSearchTripod(QLayout *pLayout) :
     ui(new Ui::SmartSearchTripod),
-    m_filterPrice(0),
-    m_pPriceValidator(new QIntValidator())
+    mFilterPrice(0),
+    mpPriceValidator(new QIntValidator())
 {
     ui->setupUi(this);
     ui->hLayoutMenu->setAlignment(Qt::AlignHCenter);
@@ -40,10 +40,10 @@ SmartSearchTripod::SmartSearchTripod(QLayout *pLayout) :
 SmartSearchTripod::~SmartSearchTripod()
 {
     clearResult();
-    delete m_pClassSelector;
-    for (QWidget* pWidget : m_widgets)
+    delete mpClassSelector;
+    for (QWidget* pWidget : mWidgets)
         delete pWidget;
-    for (QLayout* pLayout : m_layouts)
+    for (QLayout* pLayout : mLayouts)
         delete pLayout;
     delete ui;
 }
@@ -70,14 +70,14 @@ void SmartSearchTripod::initializeClassSelector()
     QGroupBox *pGroupClassSelector = WidgetManager::createGroupBox("직업 선택");
     pGroupClassSelector->setMaximumWidth(9 + 200 + 9);
     ui->hLayoutMenu->addWidget(pGroupClassSelector);
-    m_widgets.append(pGroupClassSelector);
+    mWidgets.append(pGroupClassSelector);
 
     QHBoxLayout *pLayout = new QHBoxLayout();
     pGroupClassSelector->setLayout(pLayout);
-    m_layouts.append(pLayout);
+    mLayouts.append(pLayout);
 
-    m_pClassSelector = WidgetManager::createComboBox(classes);
-    pLayout->addWidget(m_pClassSelector);
+    mpClassSelector = WidgetManager::createComboBox(classes);
+    pLayout->addWidget(mpClassSelector);
 }
 
 void SmartSearchTripod::initializePriceFilter()
@@ -86,26 +86,26 @@ void SmartSearchTripod::initializePriceFilter()
     QGroupBox *pGroupPriceFilter = WidgetManager::createGroupBox("가격 필터");
     pGroupPriceFilter->setMaximumWidth(9 + 200 + 9);
     ui->hLayoutMenu->addWidget(pGroupPriceFilter);
-    m_widgets.append(pGroupPriceFilter);
+    mWidgets.append(pGroupPriceFilter);
 
     QHBoxLayout *pLayout = new QHBoxLayout();
     pGroupPriceFilter->setLayout(pLayout);
-    m_layouts.append(pLayout);
+    mLayouts.append(pLayout);
 
-    QLineEdit *pPriceFilter = WidgetManager::createLineEdit(m_pPriceValidator, "금액 입력");
+    QLineEdit *pPriceFilter = WidgetManager::createLineEdit(mpPriceValidator, "금액 입력");
     pLayout->addWidget(pPriceFilter);
-    m_widgets.append(pPriceFilter);
+    mWidgets.append(pPriceFilter);
 
     // 값 입력 시 필터링 금액 업데이트
     connect(pPriceFilter, &QLineEdit::textChanged, this, [&](const QString &price){
-        m_filterPrice = price.toInt();
+        mFilterPrice = price.toInt();
 
         // 입력된 금액 이상이면 색상 변경하여 강조
-        const QList<int> &skillCodes = m_tripodPriceLabels.keys();
+        const QList<int> &skillCodes = mTripodPriceLabels.keys();
 
         for (int skillCode : skillCodes)
         {
-            const QHash<int, QLabel*> &tripodPriceLabels = m_tripodPriceLabels[skillCode];
+            const QHash<int, QLabel*> &tripodPriceLabels = mTripodPriceLabels[skillCode];
 
             for (QLabel* pLabel : tripodPriceLabels)
             {
@@ -115,7 +115,7 @@ void SmartSearchTripod::initializePriceFilter()
                     continue;
 
                 int price = text.remove(",").toInt();
-                if (price >= m_filterPrice)
+                if (price >= mFilterPrice)
                     pLabel->setStyleSheet(LABEL_STYLE_EMPHASIS);
                 else
                     pLabel->setStyleSheet(LABEL_STYLE_NORMAL);
@@ -128,7 +128,7 @@ void SmartSearchTripod::initializeSearchButton()
 {
     QPushButton *pSearchButton = WidgetManager::createPushButton("검색");
     ui->hLayoutMenu->addWidget(pSearchButton);
-    m_widgets.append(pSearchButton);
+    mWidgets.append(pSearchButton);
 
     // 검색 버튼 기능 구현
     connect(pSearchButton, &QPushButton::released, this, [&](){
@@ -136,8 +136,8 @@ void SmartSearchTripod::initializeSearchButton()
         clearResult();
 
         // 선택된 직업의 스킬 목록 로드 & 트라이포드별로 가격 검색 시작
-        const QHash<QString, Skill> &skills = SkillManager::getInstance()->skills(m_pClassSelector->currentText());
-        const QStringList &skillNames = SkillManager::getInstance()->skillNames(m_pClassSelector->currentText());
+        const QHash<QString, Skill> &skills = SkillManager::getInstance()->skills(mpClassSelector->currentText());
+        const QStringList &skillNames = SkillManager::getInstance()->skillNames(mpClassSelector->currentText());
 
         for (int i = 0; i < skillNames.size(); i++)
         {
@@ -168,7 +168,7 @@ void SmartSearchTripod::initializeResultUI()
     {
         QLabel *pLabelAttribute = WidgetManager::createLabel(attributes[i], 12);
         ui->gridResult->addWidget(pLabelAttribute, 0, col, 1, colSpans[i], Qt::AlignHCenter);
-        m_widgets.append(pLabelAttribute);
+        mWidgets.append(pLabelAttribute);
 
         col += colSpans[i];
 
@@ -176,7 +176,7 @@ void SmartSearchTripod::initializeResultUI()
         {
             QFrame *pVLine = WidgetManager::createLine(QFrame::VLine);
             ui->gridResult->addWidget(pVLine, 0, col, -1, 1);
-            m_widgets.append(pVLine);
+            mWidgets.append(pVLine);
 
             col += 1;
         }
@@ -185,15 +185,15 @@ void SmartSearchTripod::initializeResultUI()
 
 void SmartSearchTripod::clearResult()
 {
-    m_tripodPriceLabels.clear();
+    mTripodPriceLabels.clear();
 
-    for (QWidget* pWidget : m_resultWidgets)
+    for (QWidget* pWidget : mResultWidgets)
         delete pWidget;
-    m_resultWidgets.clear();
+    mResultWidgets.clear();
 
-    for (QLayout* pLayout : m_resultLayouts)
+    for (QLayout* pLayout : mResultLayouts)
         delete pLayout;
-    m_resultLayouts.clear();
+    mResultLayouts.clear();
 }
 
 void SmartSearchTripod::searchTripod(int skillCode, int tripodCode)
@@ -210,7 +210,7 @@ void SmartSearchTripod::searchTripod(int skillCode, int tripodCode)
         const QJsonArray &items = response.object().find("Items")->toArray();
         if (items.size() == 0)
         {
-            m_tripodPriceLabels[skillCode][tripodCode]->setText("검색 결과 없음");
+            mTripodPriceLabels[skillCode][tripodCode]->setText("검색 결과 없음");
             return;
         }
 
@@ -219,9 +219,9 @@ void SmartSearchTripod::searchTripod(int skillCode, int tripodCode)
         int price = item.find("AuctionInfo")->toObject().find("BuyPrice")->toInt();
 
         // UI Update
-        m_tripodPriceLabels[skillCode][tripodCode]->setText(QString("%L1").arg(price));
-        if (price >= m_filterPrice)
-            m_tripodPriceLabels[skillCode][tripodCode]->setStyleSheet(LABEL_STYLE_EMPHASIS);
+        mTripodPriceLabels[skillCode][tripodCode]->setText(QString("%L1").arg(price));
+        if (price >= mFilterPrice)
+            mTripodPriceLabels[skillCode][tripodCode]->setStyleSheet(LABEL_STYLE_EMPHASIS);
     });
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
@@ -241,40 +241,40 @@ void SmartSearchTripod::addSkillWidget(const Skill &skill, int row)
     // 구분선 추가
     QFrame *pHLine = WidgetManager::createLine(QFrame::HLine);
     ui->gridResult->addWidget(pHLine, row++, 0, 1, -1);
-    m_resultWidgets.append(pHLine);
+    mResultWidgets.append(pHLine);
 
     QVBoxLayout *pSkillLayout = new QVBoxLayout();
     ui->gridResult->addLayout(pSkillLayout, row, 0);
-    m_resultLayouts.append(pSkillLayout);
+    mResultLayouts.append(pSkillLayout);
 
     // 스킬 아이콘 추가
     QLabel *pIcon = WidgetManager::createIcon(skill.iconPath(), nullptr);
     pSkillLayout->addWidget(pIcon);
     pSkillLayout->setAlignment(pIcon, Qt::AlignHCenter);
-    m_resultWidgets.append(pIcon);
+    mResultWidgets.append(pIcon);
 
     // 스킬명 추가
     QLabel *pLabelSkillName = WidgetManager::createLabel(skill.skillName());
     pSkillLayout->addWidget(pLabelSkillName, Qt::AlignHCenter);
-    m_resultWidgets.append(pLabelSkillName);
+    mResultWidgets.append(pLabelSkillName);
 }
 
 void SmartSearchTripod::addTripodWidget(const Tripod &tripod, int skillCode, int row, int col)
 {
     QVBoxLayout *pTripodLayout = new QVBoxLayout();
     ui->gridResult->addLayout(pTripodLayout, row, col);
-    m_resultLayouts.append(pTripodLayout);
+    mResultLayouts.append(pTripodLayout);
 
     // 트라이포드 아이콘 추가
     QLabel *pIcon = WidgetManager::createIcon(tripod.iconPath(), nullptr, "black");
     pTripodLayout->addWidget(pIcon);
     pTripodLayout->setAlignment(pIcon, Qt::AlignHCenter);
-    m_resultWidgets.append(pIcon);
+    mResultWidgets.append(pIcon);
 
     // 트라이포드명 추가
     QLabel *pLabelTripodName = WidgetManager::createLabel(tripod.tripodName());
     pTripodLayout->addWidget(pLabelTripodName);
-    m_resultWidgets.append(pLabelTripodName);
+    mResultWidgets.append(pLabelTripodName);
 
     // 트라이포드 가격 레이블 추가
     QLabel *pLabelTripodPrice = nullptr;
@@ -286,7 +286,7 @@ void SmartSearchTripod::addTripodWidget(const Tripod &tripod, int skillCode, int
         pLabelTripodPrice->setStyleSheet(LABEL_STYLE_NORMAL);
     }
     pTripodLayout->addWidget(pLabelTripodPrice);
-    m_resultWidgets.append(pLabelTripodPrice);
-    m_tripodPriceLabels[skillCode][tripod.tripodCode()] = pLabelTripodPrice;
+    mResultWidgets.append(pLabelTripodPrice);
+    mTripodPriceLabels[skillCode][tripod.tripodCode()] = pLabelTripodPrice;
 }
 

@@ -8,80 +8,80 @@ Armor::Armor() :
 
 ArmorPart Armor::armorPart() const
 {
-    return m_armorPart;
+    return mArmorPart;
 }
 
 void Armor::setArmorPart(ArmorPart newArmorPart)
 {
-    m_armorPart = newArmorPart;
+    mArmorPart = newArmorPart;
 }
 
 int Armor::quality() const
 {
-    return m_quality;
+    return mQuality;
 }
 
 void Armor::setQuality(int newQuality)
 {
-    m_quality = newQuality;
+    mQuality = newQuality;
 }
 
 int Armor::itemLevel() const
 {
-    return m_itemLevel;
+    return mItemLevel;
 }
 
 void Armor::setItemLevel(int newItemLevel)
 {
-    m_itemLevel = newItemLevel;
+    mItemLevel = newItemLevel;
 }
 
 int Armor::tier() const
 {
-    return m_tier;
+    return mTier;
 }
 
 void Armor::setTier(int newTier)
 {
-    m_tier = newTier;
+    mTier = newTier;
 }
 
 int Armor::reforge() const
 {
-    return m_reforge;
+    return mReforge;
 }
 
 void Armor::setReforge(int newReforge)
 {
-    m_reforge = newReforge;
+    mReforge = newReforge;
 }
 
 ItemSet Armor::itemSet() const
 {
-    return m_itemSet;
+    return mItemSet;
 }
 
 void Armor::setItemSet(ItemSet newItemSet)
 {
-    m_itemSet = newItemSet;
+    mItemSet = newItemSet;
 }
 
 int Armor::setLevel() const
 {
-    return m_setLevel;
+    return mSetLevel;
 }
 
 void Armor::setSetLevel(int newSetLevel)
 {
-    m_setLevel = newSetLevel;
+    mSetLevel = newSetLevel;
 }
 
 QList<Elixir> Armor::elixirs() const
 {
-    return m_elixirs;
+    return mElixirs;
 }
 
 void Armor::addElixir(const Elixir &elixir)
 {
-    m_elixirs << elixir;
+    mElixirs << elixir;
 }

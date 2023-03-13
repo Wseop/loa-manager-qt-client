@@ -20,8 +20,8 @@ public:
     void addPenalty(const QString &penalty, int value);
 
 private:
-    QHash<QString, int> m_engraveValues;
-    QHash<QString, int> m_penaltyValues;
+    QHash<QString, int> mEngraveValues;
+    QHash<QString, int> mPenaltyValues;
 };
 
 #endif // ENGRAVE_H

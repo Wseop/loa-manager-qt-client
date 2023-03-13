@@ -5,7 +5,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 
-SkillManager *SkillManager::m_pInstance = nullptr;
+SkillManager *SkillManager::mpInstance = nullptr;
 
 SkillManager::SkillManager()
 {
@@ -61,35 +61,35 @@ void SkillManager::initializeSkillList()
 
                 newSkill.addTripod(newTripod);
             }
-            m_skillNames[_class] << newSkill.skillName();
-            m_skills[_class][newSkill.skillName()] = newSkill;
+            mSkillNames[_class] << newSkill.skillName();
+            mSkills[_class][newSkill.skillName()] = newSkill;
         }
     }
 }
 
 SkillManager *SkillManager::getInstance()
 {
-    if (m_pInstance == nullptr)
-        m_pInstance = new SkillManager();
+    if (mpInstance == nullptr)
+        mpInstance = new SkillManager();
 
-    return m_pInstance;
+    return mpInstance;
 }
 
 void SkillManager::destroyInstance()
 {
-    if (m_pInstance == nullptr)
+    if (mpInstance == nullptr)
         return;
 
-    delete m_pInstance;
-    m_pInstance = nullptr;
+    delete mpInstance;
+    mpInstance = nullptr;
 }
 
 QStringList SkillManager::skillNames(const QString &_class) const
 {
-    return m_skillNames[_class];
+    return mSkillNames[_class];
 }
 
 QHash<QString, Skill> SkillManager::skills(const QString &_class) const
 {
-    return m_skills[_class];
+    return mSkills[_class];
 }

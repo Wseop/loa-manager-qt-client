@@ -30,16 +30,16 @@ private:
 private:
     Ui::SmartSearchEngraveBook *ui;
 
-    int m_searchPageNo;
+    int mSearchPageNo;
 
-    QStringList m_battleEngraveKeys;
-    QStringList m_classEngraveKeys;
+    QStringList mBattleEngraveKeys;
+    QStringList mClassEngraveKeys;
 
-    QHash<QString, QPair<int, int>> m_engravePrices;
-    QList<QWidget*> m_priceWidgets;
+    QHash<QString, QPair<int, int>> mEngravePrices;
+    QList<QWidget*> mPriceWidgets;
 
-    QList<class QGridLayout*> m_layouts;
-    QList<QWidget*> m_widgets;
+    QList<class QGridLayout*> mLayouts;
+    QList<QWidget*> mWidgets;
 };
 
 #endif // SMART_SEARCH_ENGRAVEBOOK_H

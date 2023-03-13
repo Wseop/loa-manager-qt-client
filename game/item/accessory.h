@@ -27,9 +27,9 @@ public:
     void setAbility(Ability ability, int value);
 
 private:
-    AccessoryPart m_accessoryPart;
-    int m_quality;
-    QHash<Ability, int> m_abilities;
+    AccessoryPart mAccessoryPart;
+    int mQuality;
+    QHash<Ability, int> mAbilities;
 };
 
 #endif // ACCESSORY_H

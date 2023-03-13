@@ -23,10 +23,10 @@ public:
     QString iconPath(QString item);
 
 private:
-    static ResourceManager *m_pInstance;
+    static ResourceManager *mpInstance;
 
 private:
-    QHash<QString, QString> m_iconPath;
+    QHash<QString, QString> mIconPath;
 };
 
 #endif // RESOURCEMANAGER_H

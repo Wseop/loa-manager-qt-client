@@ -25,15 +25,15 @@ private:
 private:
     Ui::LoaManager *ui;
 
-    QJsonObject m_mainSetting;
+    QJsonObject mMainSetting;
 
     // function
-    QList<QWidget*> m_functions;
+    QList<QWidget*> mFunctions;
     // admin button
-    class AdminLogin* m_pAdminLogin;
-    QPushButton *m_pAdminButton;
-    QList<QPushButton*> m_menuButtons;
+    class AdminLogin* mpAdminLogin;
+    QPushButton *mpAdminButton;
+    QList<QPushButton*> mMenuButtons;
 
-    QList<QWidget*> m_widgets;
+    QList<QWidget*> mWidgets;
 };
 #endif // LOAMANAGER_H

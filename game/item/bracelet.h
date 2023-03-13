@@ -17,8 +17,8 @@ public:
     void addSpecialEffect(const QString &effect, int value);
 
 private:
-    QList<QPair<QString, int>> m_effects;
-    QList<QPair<QString, int>> m_specialEffects;
+    QList<QPair<QString, int>> mEffects;
+    QList<QPair<QString, int>> mSpecialEffects;
 };
 
 #endif // BRACELET_H

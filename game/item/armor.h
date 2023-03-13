@@ -47,14 +47,14 @@ public:
     void addElixir(const Elixir &elixir);
 
 private:
-    ArmorPart m_armorPart;
-    int m_quality;
-    int m_itemLevel;
-    int m_tier;
-    int m_reforge;
-    ItemSet m_itemSet;
-    int m_setLevel;
-    QList<Elixir> m_elixirs;
+    ArmorPart mArmorPart;
+    int mQuality;
+    int mItemLevel;
+    int mTier;
+    int mReforge;
+    ItemSet mItemSet;
+    int mSetLevel;
+    QList<Elixir> mElixirs;
 };
 
 #endif // ARMOR_H

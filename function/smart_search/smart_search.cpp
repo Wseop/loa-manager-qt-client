@@ -14,12 +14,12 @@
 #include <QJsonArray>
 #include <QPushButton>
 
-SmartSearch *SmartSearch::m_pInstance = nullptr;
+SmartSearch *SmartSearch::mpInstance = nullptr;
 
 SmartSearch::SmartSearch() :
     ui(new Ui::SmartSearch),
-    m_pSelectedMenu(nullptr),
-    m_pSelectedMenuButton(nullptr)
+    mpSelectedMenu(nullptr),
+    mpSelectedMenuButton(nullptr)
 {
     ui->setupUi(this);
     ui->hLayoutMenu->setAlignment(Qt::AlignHCenter);
@@ -30,9 +30,9 @@ SmartSearch::SmartSearch() :
 
 SmartSearch::~SmartSearch()
 {
-    for (QWidget* pWidget : m_widgets)
+    for (QWidget* pWidget : mWidgets)
         delete pWidget;
-    for (SmartSearchMenu* pMenu : m_menuWidgets)
+    for (SmartSearchMenu* pMenu : mMenuWidgets)
         delete pMenu;
     delete ui;
 }
@@ -40,63 +40,63 @@ SmartSearch::~SmartSearch()
 void SmartSearch::loadResource()
 {
     QJsonObject json = ResourceManager::getInstance()->loadJson("smart_search");
-    m_menuNames = json.find("Menu")->toVariant().toStringList();
+    mMenuNames = json.find("Menu")->toVariant().toStringList();
 }
 
 void SmartSearch::initializeMenu()
 {
     // 메뉴별 위젯 생성 (메뉴 목록 순서대로 생성)
     SmartSearchMenu *pEngraveBook = new SmartSearchEngraveBook(ui->vLayoutMain);
-    m_menuWidgets.append(pEngraveBook);
+    mMenuWidgets.append(pEngraveBook);
     SmartSearchMenu *pReforge = new SmartSearchReforge(ui->vLayoutMain);
-    m_menuWidgets.append(pReforge);
+    mMenuWidgets.append(pReforge);
     SmartSearchMenu *pGem = new SmartSearchGem(ui->vLayoutMain);
-    m_menuWidgets.append(pGem);
+    mMenuWidgets.append(pGem);
     SmartSearchMenu *pAccessory = new SmartSearchAccessory(ui->vLayoutMain);
-    m_menuWidgets.append(pAccessory);
+    mMenuWidgets.append(pAccessory);
     SmartSearchMenu *pAbilityStone = new SmartSearchAbilityStone(ui->vLayoutMain);
-    m_menuWidgets.append(pAbilityStone);
+    mMenuWidgets.append(pAbilityStone);
     SmartSearchMenu *pTripod = new SmartSearchTripod(ui->vLayoutMain);
-    m_menuWidgets.append(pTripod);
+    mMenuWidgets.append(pTripod);
 
     // 메뉴 버튼 추가
-    for (int i = 0; i < m_menuNames.size(); i++)
+    for (int i = 0; i < mMenuNames.size(); i++)
     {
-        QPushButton *pMenuButton = WidgetManager::createPushButton(m_menuNames[i]);
+        QPushButton *pMenuButton = WidgetManager::createPushButton(mMenuNames[i]);
         ui->hLayoutMenu->addWidget(pMenuButton);
-        m_widgets.append(pMenuButton);
+        mWidgets.append(pMenuButton);
 
         connect(pMenuButton, &QPushButton::released, this, [&, i, pMenuButton](){
-            if (m_pSelectedMenuButton != nullptr)
-                m_pSelectedMenuButton->setEnabled(true);
-            m_pSelectedMenuButton = pMenuButton;
-            m_pSelectedMenuButton->setDisabled(true);
+            if (mpSelectedMenuButton != nullptr)
+                mpSelectedMenuButton->setEnabled(true);
+            mpSelectedMenuButton = pMenuButton;
+            mpSelectedMenuButton->setDisabled(true);
 
             // 화면에 표시할 메뉴 변경
-            if (m_pSelectedMenu != nullptr)
-                dynamic_cast<QWidget*>(m_pSelectedMenu)->hide();
-            m_pSelectedMenu = m_menuWidgets[i];
-            dynamic_cast<QWidget*>(m_pSelectedMenu)->show();
+            if (mpSelectedMenu != nullptr)
+                dynamic_cast<QWidget*>(mpSelectedMenu)->hide();
+            mpSelectedMenu = mMenuWidgets[i];
+            dynamic_cast<QWidget*>(mpSelectedMenu)->show();
 
             // 변경된 메뉴 갱신
-            m_pSelectedMenu->refresh();
+            mpSelectedMenu->refresh();
         });
     }
 }
 
 SmartSearch *SmartSearch::getInstance()
 {
-    if (m_pInstance == nullptr)
-        m_pInstance = new SmartSearch();
-    return m_pInstance;
+    if (mpInstance == nullptr)
+        mpInstance = new SmartSearch();
+    return mpInstance;
 }
 
 void SmartSearch::destroyInstance()
 {
-    if (m_pInstance == nullptr)
+    if (mpInstance == nullptr)
         return;
-    delete m_pInstance;
-    m_pInstance = nullptr;
+    delete mpInstance;
+    mpInstance = nullptr;
 }
 
 void SmartSearch::start()

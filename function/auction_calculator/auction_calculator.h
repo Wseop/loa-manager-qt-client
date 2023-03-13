@@ -34,14 +34,14 @@ public:
 private:
     Ui::AuctionCalculator *ui;
 
-    static AuctionCalculator *m_pInstance;
+    static AuctionCalculator *mpInstance;
 
     const double DISTRIBUTE_BALANCE_4 = 0.71;
     const double DISTRIBUTE_BALANCE_8 = 0.83;
     const double DISTRIBUTE_LOWPRICE_4 = 0.65;
     const double DISTRIBUTE_LOWPRICE_8 = 0.76;
 
-    class QIntValidator* m_pInputValidator;
+    class QIntValidator* mpInputValidator;
 };
 
 #endif // AUCTION_CALCULATOR_H

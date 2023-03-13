@@ -37,18 +37,18 @@ private:
 private:
     Ui::SmartSearchTripod *ui;
 
-    int m_filterPrice;
+    int mFilterPrice;
 
-    class QComboBox* m_pClassSelector;
-    class QIntValidator* m_pPriceValidator;
+    class QComboBox* mpClassSelector;
+    class QIntValidator* mpPriceValidator;
 
     // search result
-    QHash<int, QHash<int, class QLabel*>> m_tripodPriceLabels;
-    QList<QWidget*> m_resultWidgets;
-    QList<QLayout*> m_resultLayouts;
+    QHash<int, QHash<int, class QLabel*>> mTripodPriceLabels;
+    QList<QWidget*> mResultWidgets;
+    QList<QLayout*> mResultLayouts;
 
-    QList<QWidget*> m_widgets;
-    QList<QLayout*> m_layouts;
+    QList<QWidget*> mWidgets;
+    QList<QLayout*> mLayouts;
 };
 
 #endif // SMART_SEARCH_TRIPOD_H

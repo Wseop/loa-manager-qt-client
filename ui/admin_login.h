@@ -21,7 +21,7 @@ private:
 private:
     Ui::AdminLogin *ui;
 
-    QString m_adminKey;
+    QString mAdminKey;
 };
 
 #endif // ADMIN_LOGIN_H

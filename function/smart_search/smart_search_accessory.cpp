@@ -24,13 +24,13 @@ const int MAX_SEARCH_COUNT = 3;
 
 SmartSearchAccessory::SmartSearchAccessory(QLayout *pLayout) :
     ui(new Ui::SmartSearchAccessory),
-    m_searchPage(0),
-    m_addCount(0),
-    m_responseCount(0),
-    m_searchOptions(MAX_SEARCH_COUNT),
-    m_currentLayoutRows({0, 0, 0}),
-    m_pButtonSearchMore(nullptr),
-    m_pSearchButton(nullptr)
+    mSearchPage(0),
+    mAddCount(0),
+    mResponseCount(0),
+    mSearchOptions(MAX_SEARCH_COUNT),
+    mCurrentLayoutRows({0, 0, 0}),
+    mpButtonSearchMore(nullptr),
+    mpSearchButton(nullptr)
 {
     ui->setupUi(this);
 
@@ -47,14 +47,14 @@ SmartSearchAccessory::SmartSearchAccessory(QLayout *pLayout) :
 
 SmartSearchAccessory::~SmartSearchAccessory()
 {
-    delete m_pSearchButton;
-    delete m_pButtonSearchMore;
+    delete mpSearchButton;
+    delete mpButtonSearchMore;
 
-    for (QWidget* pWidget : m_optionSelectors)
+    for (QWidget* pWidget : mOptionSelectors)
         delete pWidget;
-    for (QWidget* pWidget : m_widgets)
+    for (QWidget* pWidget : mWidgets)
         delete pWidget;
-    for (QLayout* pLayout : m_layouts)
+    for (QLayout* pLayout : mLayouts)
         delete pLayout;
 
     clearResult();
@@ -64,13 +64,13 @@ SmartSearchAccessory::~SmartSearchAccessory()
 
 void SmartSearchAccessory::refresh()
 {
-    if (m_searchResults.size() == 0)
+    if (mSearchResults.size() == 0)
     {
-        m_pSearchButton->setEnabled(true);
+        mpSearchButton->setEnabled(true);
         return;
     }
 
-    m_responseCount = 0;
+    mResponseCount = 0;
     addSearchResult();
 }
 
@@ -78,24 +78,24 @@ void SmartSearchAccessory::initializeOption()
 {
     // 등급
     QStringList grades = {"유물", "고대"};
-    m_optionItems << grades;
+    mOptionItems << grades;
 
     // 부위
     QStringList parts = {"목걸이", "귀걸이", "반지"};
-    m_optionItems << parts;
+    mOptionItems << parts;
 
     // 특성
     QStringList abilities;
     for (int i = 0; i < static_cast<int>(Ability::size); i++)
         abilities << abilityToQString(static_cast<Ability>(i));
     for (int i = 0; i < 2; i++)
-        m_optionItems << abilities;
+        mOptionItems << abilities;
 
     // 품질
     QStringList qualities;
     for (int i = 0; i < 10; i++)
         qualities << QString("%1 이상").arg(i * 10);
-    m_optionItems << qualities;
+    mOptionItems << qualities;
 
     // 전투, 직업 각인
     QStringList engraves = {"선택 안함"};
@@ -105,12 +105,12 @@ void SmartSearchAccessory::initializeOption()
     std::sort(classEngraves.begin(), classEngraves.end());
     engraves << battleEngraves << classEngraves;
     for (int i = 0; i < 2; i++)
-        m_optionItems << engraves;
+        mOptionItems << engraves;
 
     // 감소 각인
     QStringList penalties = {"선택 안함"};
     penalties << EngraveManager::getInstance()->getPenalties();
-    m_optionItems << penalties;
+    mOptionItems << penalties;
 }
 
 void SmartSearchAccessory::initializeOptionSelector()
@@ -121,75 +121,75 @@ void SmartSearchAccessory::initializeOptionSelector()
     {
         QGroupBox *pGroup = WidgetManager::createGroupBox(groupTitles[i]);
         ui->hLayoutOption->addWidget(pGroup);
-        m_widgets.append(pGroup);
+        mWidgets.append(pGroup);
 
         QHBoxLayout *pLayout = new QHBoxLayout();
         pGroup->setLayout(pLayout);
-        m_layouts.append(pLayout);
+        mLayouts.append(pLayout);
 
-        QComboBox *pOptionSelector = WidgetManager::createComboBox(m_optionItems[i]);
+        QComboBox *pOptionSelector = WidgetManager::createComboBox(mOptionItems[i]);
         pLayout->addWidget(pOptionSelector);
-        m_optionSelectors.append(pOptionSelector);
+        mOptionSelectors.append(pOptionSelector);
     }
 
     // 등급에 따라 각인 label 표기 변경
     // 유물 : 33, 34, 35 | 고대 : 34, 35, 36
-    connect(m_optionSelectors[OptionIndex::Grade], &QComboBox::currentIndexChanged, this, [&](int index){
+    connect(mOptionSelectors[OptionIndex::Grade], &QComboBox::currentIndexChanged, this, [&](int index){
         const QString text = "각인(3%1)";
 
-        for (int i = 0; i < m_engraveLabels.size(); i++)
-            m_engraveLabels[i]->setText(text.arg(3 + i + index));
+        for (int i = 0; i < mEngraveLabels.size(); i++)
+            mEngraveLabels[i]->setText(text.arg(3 + i + index));
     });
 
 
     // 특성2는 목걸이를 선택한 경우만 활성화
-    connect(m_optionSelectors[OptionIndex::Part], &QComboBox::currentIndexChanged, this, [&](int index){
+    connect(mOptionSelectors[OptionIndex::Part], &QComboBox::currentIndexChanged, this, [&](int index){
         if (index != 0)
-            m_optionSelectors[OptionIndex::Ability2]->setDisabled(true);
+            mOptionSelectors[OptionIndex::Ability2]->setDisabled(true);
         else
-            m_optionSelectors[OptionIndex::Ability2]->setEnabled(true);
+            mOptionSelectors[OptionIndex::Ability2]->setEnabled(true);
     });
 }
 
 void SmartSearchAccessory::initializeOptionCode()
 {
-    m_abilityCodes["치명"] = static_cast<int>(AbilityCode::치명);
-    m_abilityCodes["특화"] = static_cast<int>(AbilityCode::특화);
-    m_abilityCodes["제압"] = static_cast<int>(AbilityCode::제압);
-    m_abilityCodes["신속"] = static_cast<int>(AbilityCode::신속);
-    m_abilityCodes["인내"] = static_cast<int>(AbilityCode::인내);
-    m_abilityCodes["숙련"] = static_cast<int>(AbilityCode::숙련);
+    mAbilityCodes["치명"] = static_cast<int>(AbilityCode::치명);
+    mAbilityCodes["특화"] = static_cast<int>(AbilityCode::특화);
+    mAbilityCodes["제압"] = static_cast<int>(AbilityCode::제압);
+    mAbilityCodes["신속"] = static_cast<int>(AbilityCode::신속);
+    mAbilityCodes["인내"] = static_cast<int>(AbilityCode::인내);
+    mAbilityCodes["숙련"] = static_cast<int>(AbilityCode::숙련);
 
-    m_partCodes["목걸이"] = CategoryCode::Necklace;
-    m_partCodes["귀걸이"] = CategoryCode::Earring;
-    m_partCodes["반지"] = CategoryCode::Ring;
+    mPartCodes["목걸이"] = CategoryCode::Necklace;
+    mPartCodes["귀걸이"] = CategoryCode::Earring;
+    mPartCodes["반지"] = CategoryCode::Ring;
 }
 
 void SmartSearchAccessory::initializeSearchButton()
 {
-    m_pSearchButton = WidgetManager::createPushButton("검색", 10);
-    ui->hLayoutOption->addWidget(m_pSearchButton);
+    mpSearchButton = WidgetManager::createPushButton("검색", 10);
+    ui->hLayoutOption->addWidget(mpSearchButton);
 
     // 검색 버튼 기능 구현
-    connect(m_pSearchButton, &QPushButton::released, this, [&](){
-        m_pSearchButton->setDisabled(true);
+    connect(mpSearchButton, &QPushButton::released, this, [&](){
+        mpSearchButton->setDisabled(true);
 
         // 각인이 선택되지 않은 경우 검색 중단
         for (int i = OptionIndex::Engrave1; i <= OptionIndex::Engrave2; i++)
         {
-            QComboBox *pEngraveSelector = m_optionSelectors[i];
+            QComboBox *pEngraveSelector = mOptionSelectors[i];
             if (pEngraveSelector->currentIndex() == 0)
             {
                 QMessageBox msgBox;
                 msgBox.setText("각인을 모두 선택해주세요.");
                 msgBox.exec();
-                m_pSearchButton->setEnabled(true);
+                mpSearchButton->setEnabled(true);
                 return;
             }
         }
 
-        m_responseCount = 0;
-        m_pButtonSearchMore->show();
+        mResponseCount = 0;
+        mpButtonSearchMore->show();
         clearResult();
 
         setSearchOption();
@@ -199,13 +199,13 @@ void SmartSearchAccessory::initializeSearchButton()
 
 void SmartSearchAccessory::initializeResultUI()
 {
-    m_resultLayouts = {ui->gridResult1, ui->gridResult2, ui->gridResult3};
+    mResultLayouts = {ui->gridResult1, ui->gridResult2, ui->gridResult3};
 
-    for (QGridLayout* pLayout : m_resultLayouts)
+    for (QGridLayout* pLayout : mResultLayouts)
         pLayout->setAlignment(Qt::AlignTop);
 
     const QStringList attributes = {"#", "아이템명", "품질", "특성", "각인(3%1)", "즉시 구매가\n(최소 입찰가)"};
-    for (int i = 0; i < m_resultLayouts.size(); i++)
+    for (int i = 0; i < mResultLayouts.size(); i++)
     {
         for (int j = 0; j < attributes.size(); j++)
         {
@@ -214,25 +214,25 @@ void SmartSearchAccessory::initializeResultUI()
             if (j == 4)
             {
                 pLabelAttribute = WidgetManager::createLabel(attributes[j].arg(j - 1 + i), 12, "", 200, 50);
-                m_engraveLabels.append(pLabelAttribute);
+                mEngraveLabels.append(pLabelAttribute);
             }
             else
                 pLabelAttribute = WidgetManager::createLabel(attributes[j], 12, "", 200, 50);
 
-            m_resultLayouts[i]->addWidget(pLabelAttribute, 0, j);
-            m_widgets.append(pLabelAttribute);
+            mResultLayouts[i]->addWidget(pLabelAttribute, 0, j);
+            mWidgets.append(pLabelAttribute);
         }
     }
 }
 
 void SmartSearchAccessory::initializeSearchMore()
 {
-    m_pButtonSearchMore = WidgetManager::createPushButton("페이지 추가 검색", 10, 500, 30);
-    m_pButtonSearchMore->hide();
-    ui->vLayoutMain->addWidget(m_pButtonSearchMore);
-    ui->vLayoutMain->setAlignment(m_pButtonSearchMore, Qt::AlignHCenter);
+    mpButtonSearchMore = WidgetManager::createPushButton("페이지 추가 검색", 10, 500, 30);
+    mpButtonSearchMore->hide();
+    ui->vLayoutMain->addWidget(mpButtonSearchMore);
+    ui->vLayoutMain->setAlignment(mpButtonSearchMore, Qt::AlignHCenter);
 
-    connect(m_pButtonSearchMore, &QPushButton::released, this, &SmartSearchAccessory::searchAccessory);
+    connect(mpButtonSearchMore, &QPushButton::released, this, &SmartSearchAccessory::searchAccessory);
 }
 
 void SmartSearchAccessory::setSearchOption()
@@ -243,23 +243,23 @@ void SmartSearchAccessory::setSearchOption()
     baseSearchOption.setSortCondition("ASC");
 
     // 각인2를 제외한 모든 옵션을 탐색하여 옵션 추가
-    for (int i = 0; i < m_optionItems.size(); i++)
+    for (int i = 0; i < mOptionItems.size(); i++)
     {
-        const QString &selectedOption = m_optionSelectors[i]->currentText();
+        const QString &selectedOption = mOptionSelectors[i]->currentText();
 
         if (i == static_cast<int>(OptionIndex::Grade))
             baseSearchOption.setItemGrade(qStringToItemGrade(selectedOption));
         else if (i == static_cast<int>(OptionIndex::Part))
-            baseSearchOption.setCategoryCode(m_partCodes[selectedOption]);
+            baseSearchOption.setCategoryCode(mPartCodes[selectedOption]);
         else if (i == static_cast<int>(OptionIndex::Ability1))
-            baseSearchOption.setEtcOption(EtcOptionCode::Ability, m_abilityCodes[selectedOption]);
-        else if (i == static_cast<int>(OptionIndex::Ability2) && m_optionSelectors[OptionIndex::Ability2]->isEnabled())
-            baseSearchOption.setEtcOption(EtcOptionCode::Ability, m_abilityCodes[selectedOption]);
+            baseSearchOption.setEtcOption(EtcOptionCode::Ability, mAbilityCodes[selectedOption]);
+        else if (i == static_cast<int>(OptionIndex::Ability2) && mOptionSelectors[OptionIndex::Ability2]->isEnabled())
+            baseSearchOption.setEtcOption(EtcOptionCode::Ability, mAbilityCodes[selectedOption]);
         else if (i == static_cast<int>(OptionIndex::Quality))
             baseSearchOption.setQuality(selectedOption.chopped(3).toInt());
         else if (i == static_cast<int>(OptionIndex::Engrave1))
             baseSearchOption.setEtcOption(EtcOptionCode::Engrave, EngraveManager::getInstance()->getEngraveCode(selectedOption), 3, 3);
-        else if (i == static_cast<int>(OptionIndex::Penalty) && m_optionSelectors[i]->currentIndex() != 0)
+        else if (i == static_cast<int>(OptionIndex::Penalty) && mOptionSelectors[i]->currentIndex() != 0)
             baseSearchOption.setEtcOption(EtcOptionCode::Penalty, EngraveManager::getInstance()->getEngraveCode(selectedOption));
     }
 
@@ -267,18 +267,18 @@ void SmartSearchAccessory::setSearchOption()
     for (int i = 0; i < MAX_SEARCH_COUNT; i++)
     {
         SearchOption *pSearchOption = new SearchOption(baseSearchOption);
-        int value = m_optionSelectors[OptionIndex::Grade]->currentIndex() == 0 ? (i + 3) : (i + 4);
+        int value = mOptionSelectors[OptionIndex::Grade]->currentIndex() == 0 ? (i + 3) : (i + 4);
 
-        const QString &engrave = m_optionSelectors[OptionIndex::Engrave2]->currentText();
+        const QString &engrave = mOptionSelectors[OptionIndex::Engrave2]->currentText();
         pSearchOption->setEtcOption(EtcOptionCode::Engrave, EngraveManager::getInstance()->getEngraveCode(engrave), value, value);
 
-        m_searchOptions[i] = pSearchOption;
+        mSearchOptions[i] = pSearchOption;
     }
 }
 
 void SmartSearchAccessory::searchAccessory()
 {
-    ++m_searchPage;
+    ++mSearchPage;
 
     for (int i = 0; i < MAX_SEARCH_COUNT; i++)
     {
@@ -286,14 +286,14 @@ void SmartSearchAccessory::searchAccessory()
         connect(pNetworkManager, &QNetworkAccessManager::finished, this, &SmartSearchAccessory::parseSearchResult);
         connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-        m_searchOptions[i]->setPageNo(m_searchPage);
-        ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Auction, QJsonDocument(m_searchOptions[i]->toJsonObject()).toJson());
+        mSearchOptions[i]->setPageNo(mSearchPage);
+        ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Auction, QJsonDocument(mSearchOptions[i]->toJsonObject()).toJson());
     }
 }
 
 void SmartSearchAccessory::parseSearchResult(QNetworkReply *pReply)
 {
-    m_responseCount++;
+    mResponseCount++;
 
     QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
     if (response.isNull())
@@ -336,18 +336,18 @@ void SmartSearchAccessory::parseSearchResult(QNetworkReply *pReply)
         int buyPrice = auctionInfo.find("BuyPrice")->toInt();
         int bidStartPrice = auctionInfo.find("BidStartPrice")->toInt();
 
-        m_searchResults.append({pAccessory, {buyPrice, bidStartPrice}});
+        mSearchResults.append({pAccessory, {buyPrice, bidStartPrice}});
     }
 
-    if (m_responseCount == MAX_SEARCH_COUNT)
+    if (mResponseCount == MAX_SEARCH_COUNT)
         refresh();
 }
 
 void SmartSearchAccessory::addSearchResult()
 {
-    for (; m_addCount < m_searchResults.size(); m_addCount++)
+    for (; mAddCount < mSearchResults.size(); mAddCount++)
     {
-        const auto& result = m_searchResults[m_addCount];
+        const auto& result = mSearchResults[mAddCount];
         const Accessory *pAccessory = result.first;
 
         // 각인값의 합으로 layout index 설정
@@ -363,8 +363,8 @@ void SmartSearchAccessory::addSearchResult()
         else
             continue;
 
-        QGridLayout *pLayout = m_resultLayouts[layoutIndex];
-        int &row = m_currentLayoutRows[layoutIndex];
+        QGridLayout *pLayout = mResultLayouts[layoutIndex];
+        int &row = mCurrentLayoutRows[layoutIndex];
         int col = 0;
 
         // 가로 구분선 추가
@@ -385,39 +385,39 @@ void SmartSearchAccessory::addSearchResult()
 
     // UI 업데이트 후 3초뒤 검색버튼 활성화
     QTimer::singleShot(3000, this, [&](){
-        m_pSearchButton->setEnabled(true);
+        mpSearchButton->setEnabled(true);
     });
 }
 
 void SmartSearchAccessory::clearResult()
 {
-    m_searchPage = 0;
-    m_addCount = 0;
-    m_currentLayoutRows = {0, 0, 0};
+    mSearchPage = 0;
+    mAddCount = 0;
+    mCurrentLayoutRows = {0, 0, 0};
 
-    for (SearchOption* pSearchOption : m_searchOptions)
+    for (SearchOption* pSearchOption : mSearchOptions)
     {
         delete pSearchOption;
         pSearchOption = nullptr;
     }
 
-    for (int i = 0; i < m_searchResults.size(); i++)
-        delete m_searchResults[i].first;
-    m_searchResults.clear();
+    for (int i = 0; i < mSearchResults.size(); i++)
+        delete mSearchResults[i].first;
+    mSearchResults.clear();
 
-    for (QWidget* pWidget : m_itemWidgets)
+    for (QWidget* pWidget : mItemWidgets)
         delete pWidget;
-    m_itemWidgets.clear();
+    mItemWidgets.clear();
 
-    for (QLayout* pLayout : m_itemLayouts)
+    for (QLayout* pLayout : mItemLayouts)
         delete pLayout;
-    m_itemLayouts.clear();
+    mItemLayouts.clear();
 }
 
 QFrame *SmartSearchAccessory::createHLine()
 {
     QFrame *pHLine = WidgetManager::createLine(QFrame::HLine);
-    m_itemWidgets.append(pHLine);
+    mItemWidgets.append(pHLine);
     return pHLine;
 }
 
@@ -427,7 +427,7 @@ QLabel *SmartSearchAccessory::createIcon(const QString &iconPath, const ItemGrad
     connect(pIconLoader, &QNetworkAccessManager::finished, pIconLoader, &QNetworkAccessManager::deleteLater);
 
     QLabel *pIcon = WidgetManager::createIcon(iconPath, pIconLoader, itemGradeToBGColor(itemGrade));
-    m_itemWidgets.append(pIcon);
+    mItemWidgets.append(pIcon);
 
     return pIcon;
 }
@@ -435,27 +435,27 @@ QLabel *SmartSearchAccessory::createIcon(const QString &iconPath, const ItemGrad
 QLabel *SmartSearchAccessory::createLabelItemName(const QString &itemName, const ItemGrade &itemGrade)
 {
     QLabel *pLabelItemName = WidgetManager::createLabel(itemName, 10, itemGradeToTextColor(itemGrade));
-    m_itemWidgets.append(pLabelItemName);
+    mItemWidgets.append(pLabelItemName);
     return pLabelItemName;
 }
 
 QProgressBar *SmartSearchAccessory::createQualityBar(const int &quality)
 {
     QProgressBar *pQualityBar = WidgetManager::createQualityBar(quality, 50, 20);
-    m_itemWidgets.append(pQualityBar);
+    mItemWidgets.append(pQualityBar);
     return pQualityBar;
 }
 
 QVBoxLayout *SmartSearchAccessory::createAbilityLayout(const QHash<Ability, int> &abilities)
 {
     QVBoxLayout *pAbilityLayout = new QVBoxLayout();
-    m_itemLayouts.append(pAbilityLayout);
+    mItemLayouts.append(pAbilityLayout);
 
     for (auto iter = abilities.begin(); iter != abilities.end(); iter++)
     {
         QLabel *pLabelAbility = WidgetManager::createLabel(QString("%1 +%2").arg(abilityToQString(iter.key())).arg(iter.value()));
         pAbilityLayout->addWidget(pLabelAbility);
-        m_itemWidgets.append(pLabelAbility);
+        mItemWidgets.append(pLabelAbility);
     }
 
     return pAbilityLayout;
@@ -464,14 +464,14 @@ QVBoxLayout *SmartSearchAccessory::createAbilityLayout(const QHash<Ability, int>
 QVBoxLayout *SmartSearchAccessory::createEngraveLayout(const Accessory *pAccessory)
 {
     QVBoxLayout *pEngraveLayout = new QVBoxLayout();
-    m_itemLayouts.append(pEngraveLayout);
+    mItemLayouts.append(pEngraveLayout);
 
     const QStringList &engraves = pAccessory->getEngraves();
     for (const QString& engrave : engraves)
     {
         QLabel *pLabelEngrave = WidgetManager::createLabel(QString("%1 +%2").arg(engrave).arg(pAccessory->getEngraveValue(engrave)));
         pEngraveLayout->addWidget(pLabelEngrave);
-        m_itemWidgets.append(pLabelEngrave);
+        mItemWidgets.append(pLabelEngrave);
     }
 
     const QStringList &penalties = pAccessory->getPenalties();
@@ -479,7 +479,7 @@ QVBoxLayout *SmartSearchAccessory::createEngraveLayout(const Accessory *pAccesso
     {
         QLabel *pLabelEngrave = WidgetManager::createLabel(QString("%1 +%2").arg(penalty).arg(pAccessory->getPenaltyValue(penalty)), 10, "red");
         pEngraveLayout->addWidget(pLabelEngrave);
-        m_itemWidgets.append(pLabelEngrave);
+        mItemWidgets.append(pLabelEngrave);
     }
 
     return pEngraveLayout;
@@ -492,6 +492,6 @@ QLabel *SmartSearchAccessory::createLabelPrice(const Price &price)
         pLabelPrice = WidgetManager::createLabel(QString("%L1\n(%L2)").arg(price.buyPrice).arg(price.bidStartPrice), 10, "", 200, 50);
     else
         pLabelPrice = WidgetManager::createLabel(QString("%L1\n(%L2)").arg("-").arg(price.bidStartPrice), 10, "", 200, 50);
-    m_itemWidgets.append(pLabelPrice);
+    mItemWidgets.append(pLabelPrice);
     return pLabelPrice;
 }

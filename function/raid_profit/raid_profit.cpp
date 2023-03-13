@@ -15,13 +15,13 @@
 #include <QLabel>
 #include <QCheckBox>
 
-RaidProfit *RaidProfit::m_pInstance = nullptr;
+RaidProfit *RaidProfit::mpInstance = nullptr;
 
 RaidProfit::RaidProfit() :
     ui(new Ui::RaidProfit),
-    m_responseCount(0),
-    m_pContentSelector(nullptr),
-    m_pCurrentTable(nullptr)
+    mResponseCount(0),
+    mpContentSelector(nullptr),
+    mpCurrentTable(nullptr)
 {
     ui->setupUi(this);
     ui->hLayoutSelector->setAlignment(Qt::AlignHCenter);
@@ -35,17 +35,17 @@ RaidProfit::RaidProfit() :
 
 RaidProfit::~RaidProfit()
 {
-    for (SearchOption *pSearchOption : m_searchOptions)
+    for (SearchOption *pSearchOption : mSearchOptions)
         delete pSearchOption;
-    m_searchOptions.clear();
+    mSearchOptions.clear();
 
-    for (QWidget *pWidget : m_widgets)
+    for (QWidget *pWidget : mWidgets)
         delete pWidget;
-    m_widgets.clear();
+    mWidgets.clear();
 
-    for (QLayout *pLayout : m_layouts)
+    for (QLayout *pLayout : mLayouts)
         delete pLayout;
-    m_layouts.clear();
+    mLayouts.clear();
 
     delete ui;
 }
@@ -55,24 +55,24 @@ void RaidProfit::initializeRaidReward()
     QJsonObject json = ResourceManager::getInstance()->loadJson("raid_reward");
 
     // 전체 콘텐츠 목록 초기화
-    m_contents = json.find("Contents")->toVariant().toStringList();
+    mContents = json.find("Contents")->toVariant().toStringList();
 
     // 아이템 가격 테이블 초기화
     const QStringList &rewards = json.find("Rewards")->toVariant().toStringList();
     for (const QString &reward : rewards)
     {
         if (reward.contains("명예의 파편"))
-            m_itemPrice["명예의 파편"] = 0;
+            mItemPrice["명예의 파편"] = 0;
         else if (reward == "선명한 지혜의 정수")
-            m_itemPrice["선명한 지혜의 기운"] = 0;
+            mItemPrice["선명한 지혜의 기운"] = 0;
         else if (reward == "빛나는 지혜의 정수")
-            m_itemPrice["빛나는 지혜의 기운"] = 0;
+            mItemPrice["빛나는 지혜의 기운"] = 0;
         else
-            m_itemPrice[reward] = 0;
+            mItemPrice[reward] = 0;
     }
 
     // 레이드 관문별 더보기 보상 정보 초기화
-    for (const QString &content : m_contents)
+    for (const QString &content : mContents)
     {
         const QJsonArray &more = json.find(content)->toObject().find("More")->toArray();
         QList<int> costsPerRaid;
@@ -98,15 +98,15 @@ void RaidProfit::initializeRaidReward()
             rewardItemsPerRaid << rewardItemsPerGate;
         }
 
-        m_costs << costsPerRaid;
-        m_rewardItems << rewardItemsPerRaid;
+        mCosts << costsPerRaid;
+        mRewardItems << rewardItemsPerRaid;
     }
 }
 
 void RaidProfit::initializeSearchOption()
 {
     // Item 가격 검색 시 필요한 SearchOption 초기화
-    const QStringList &items = m_itemPrice.keys();
+    const QStringList &items = mItemPrice.keys();
     for (const QString &item : items)
     {
         SearchOption *pSearchOption = new SearchOption(SearchType::Market);
@@ -123,7 +123,7 @@ void RaidProfit::initializeSearchOption()
         pSearchOption->setPageNo(1);
         pSearchOption->setSortCondition("ASC");
 
-        m_searchOptions << pSearchOption;
+        mSearchOptions << pSearchOption;
     }
 }
 
@@ -131,20 +131,20 @@ void RaidProfit::initializeContentSelect()
 {
     QGroupBox *pGroupContentSelect = WidgetManager::createGroupBox("레이드 선택");
     ui->hLayoutSelector->addWidget(pGroupContentSelect);
-    m_widgets << pGroupContentSelect;
+    mWidgets << pGroupContentSelect;
 
     QHBoxLayout *pLayoutContentSelect = new QHBoxLayout();
     pGroupContentSelect->setLayout(pLayoutContentSelect);
-    m_layouts << pLayoutContentSelect;
+    mLayouts << pLayoutContentSelect;
 
-    m_pContentSelector = WidgetManager::createComboBox(m_contents);
-    pLayoutContentSelect->addWidget(m_pContentSelector);
-    m_widgets << m_pContentSelector;
+    mpContentSelector = WidgetManager::createComboBox(mContents);
+    pLayoutContentSelect->addWidget(mpContentSelector);
+    mWidgets << mpContentSelector;
 
-    connect(m_pContentSelector, &QComboBox::currentIndexChanged, this, [&](int index){
-        m_pCurrentTable->hide();
-        m_pCurrentTable = m_profitTables[index];
-        m_pCurrentTable->show();
+    connect(mpContentSelector, &QComboBox::currentIndexChanged, this, [&](int index){
+        mpCurrentTable->hide();
+        mpCurrentTable = mProfitTables[index];
+        mpCurrentTable->show();
     });
 }
 
@@ -152,62 +152,62 @@ void RaidProfit::initializeItemSelect()
 {
     QGroupBox *pGroupItemSelect = WidgetManager::createGroupBox("손익 계산에 포함");
     ui->hLayoutSelector->addWidget(pGroupItemSelect);
-    m_widgets << pGroupItemSelect;
+    mWidgets << pGroupItemSelect;
 
     QHBoxLayout *pLayoutItemSelect = new QHBoxLayout();
     pGroupItemSelect->setLayout(pLayoutItemSelect);
-    m_layouts << pLayoutItemSelect;
+    mLayouts << pLayoutItemSelect;
 
     const QStringList items = {"명예의 파편", "파괴석", "수호석", "돌파석", "정수"};
     for (const QString &item : items)
     {
         QVBoxLayout *pLayout = new QVBoxLayout();
         pLayoutItemSelect->addLayout(pLayout);
-        m_layouts << pLayout;
+        mLayouts << pLayout;
 
         QLabel *pLabel = WidgetManager::createLabel(item);
         pLayout->addWidget(pLabel);
-        m_widgets << pLabel;
+        mWidgets << pLabel;
 
         QCheckBox *pItemSelector = new QCheckBox();
         pItemSelector->setChecked(true);
         pLayout->addWidget(pItemSelector);
         pLayout->setAlignment(pItemSelector, Qt::AlignHCenter);
-        m_itemSelectors << pItemSelector;
-        m_widgets << pItemSelector;
+        mItemSelectors << pItemSelector;
+        mWidgets << pItemSelector;
 
         connect(pItemSelector, &QCheckBox::stateChanged, this, [&](){
-            for (RaidProfitTable *pProfitTable : m_profitTables)
-                pProfitTable->refreshItemPrice(m_itemPrice, m_itemSelectors);
+            for (RaidProfitTable *pProfitTable : mProfitTables)
+                pProfitTable->refreshItemPrice(mItemPrice, mItemSelectors);
         });
     }
 }
 
 void RaidProfit::initializeProfitTable()
 {
-    for (int i = 0; i < m_contents.size(); i++)
+    for (int i = 0; i < mContents.size(); i++)
     {
-        RaidProfitTable *pProfitTable = new RaidProfitTable(m_contents[i], m_costs[i], m_rewardItems[i]);
+        RaidProfitTable *pProfitTable = new RaidProfitTable(mContents[i], mCosts[i], mRewardItems[i]);
         pProfitTable->hide();
         ui->vLayoutMain->addWidget(pProfitTable);
 
-        m_profitTables << pProfitTable;
-        m_widgets << pProfitTable;
+        mProfitTables << pProfitTable;
+        mWidgets << pProfitTable;
     }
 
-    m_pCurrentTable = m_profitTables[0];
-    m_pCurrentTable->show();
+    mpCurrentTable = mProfitTables[0];
+    mpCurrentTable->show();
 }
 
 void RaidProfit::refreshItemPrice()
 {
-    m_responseCount = 0;
+    mResponseCount = 0;
 
-    for (int i = 0; i < m_itemPrice.size(); i++)
+    for (int i = 0; i < mItemPrice.size(); i++)
     {
         QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
         connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&](QNetworkReply *pReply){
-            m_responseCount++;
+            mResponseCount++;
 
             // 아이템 가격 검색 결과 처리
             QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
@@ -218,45 +218,45 @@ void RaidProfit::refreshItemPrice()
                 int itemPrice = item.find("CurrentMinPrice")->toInt();
 
                 if (itemName.contains("명예의 파편"))
-                    m_itemPrice["명예의 파편"] = itemPrice / (double)500;
+                    mItemPrice["명예의 파편"] = itemPrice / (double)500;
                 else if (itemName == "선명한 지혜의 정수")
-                    m_itemPrice["선명한 지혜의 기운"] = itemPrice * 1.5;
+                    mItemPrice["선명한 지혜의 기운"] = itemPrice * 1.5;
                 else if (itemName == "빛나는 지혜의 정수")
-                    m_itemPrice["빛나는 지혜의 기운"] = itemPrice * 1.5;
+                    mItemPrice["빛나는 지혜의 기운"] = itemPrice * 1.5;
                 else if (itemName.contains("파괴") || itemName.contains("수호"))
-                    m_itemPrice[itemName] = itemPrice / (double)10;
+                    mItemPrice[itemName] = itemPrice / (double)10;
                 else
-                    m_itemPrice[itemName] = itemPrice;
+                    mItemPrice[itemName] = itemPrice;
             }
 
             // 모든 아이템 검색 완료 시 UI Update
-            if (m_responseCount == m_itemPrice.size())
+            if (mResponseCount == mItemPrice.size())
             {
-                for (RaidProfitTable *pProfitTable : m_profitTables)
-                    pProfitTable->refreshItemPrice(m_itemPrice, m_itemSelectors);
+                for (RaidProfitTable *pProfitTable : mProfitTables)
+                    pProfitTable->refreshItemPrice(mItemPrice, mItemSelectors);
             }
         });
         connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-        ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Market, QJsonDocument(m_searchOptions[i]->toJsonObject()).toJson());
+        ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Market, QJsonDocument(mSearchOptions[i]->toJsonObject()).toJson());
     }
 }
 
 RaidProfit *RaidProfit::getInstance()
 {
-    if (m_pInstance == nullptr)
-        m_pInstance = new RaidProfit();
+    if (mpInstance == nullptr)
+        mpInstance = new RaidProfit();
 
-    return m_pInstance;
+    return mpInstance;
 }
 
 void RaidProfit::destroyInstance()
 {
-    if (m_pInstance == nullptr)
+    if (mpInstance == nullptr)
         return;
 
-    delete m_pInstance;
-    m_pInstance = nullptr;
+    delete mpInstance;
+    mpInstance = nullptr;
 }
 
 void RaidProfit::start()

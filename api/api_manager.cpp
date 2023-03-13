@@ -8,11 +8,11 @@
 #include <QNetworkRequest>
 #include <QNetworkAccessManager>
 
-ApiManager *ApiManager::m_pInstance = nullptr;
+ApiManager *ApiManager::mpInstance = nullptr;
 
 ApiManager::ApiManager() :
-    m_keyIndex(0),
-    m_requestUrls(static_cast<int>(LostarkApi::Size))
+    mKeyIndex(0),
+    mRequestUrls(static_cast<int>(LostarkApi::Size))
 {
     loadApiKey();
     loadRequestUrl();
@@ -34,7 +34,7 @@ void ApiManager::loadApiKey()
 
     for (const QJsonValue& key : keys)
     {
-        m_apiKeys << key.toObject().find("Key")->toString();
+        mApiKeys << key.toObject().find("Key")->toString();
     }
 }
 
@@ -49,35 +49,35 @@ void ApiManager::loadRequestUrl()
         const int &index = obj.find("Index")->toInt();
         const QString &requestUrl = obj.find("RequestURL")->toString();
 
-        m_requestUrls[index] = requestUrl;
+        mRequestUrls[index] = requestUrl;
     }
 }
 
 const QString &ApiManager::getApiKey()
 {
-    if (m_keyIndex >= m_apiKeys.size())
-        m_keyIndex = 0;
-    return m_apiKeys[m_keyIndex++];
+    if (mKeyIndex >= mApiKeys.size())
+        mKeyIndex = 0;
+    return mApiKeys[mKeyIndex++];
 }
 
 ApiManager *ApiManager::getInstance()
 {
-    if (m_pInstance == nullptr)
-        m_pInstance = new ApiManager();
-    return m_pInstance;
+    if (mpInstance == nullptr)
+        mpInstance = new ApiManager();
+    return mpInstance;
 }
 
 void ApiManager::destroyInstance()
 {
-    if (m_pInstance == nullptr)
+    if (mpInstance == nullptr)
         return;
-    delete m_pInstance;
-    m_pInstance = nullptr;
+    delete mpInstance;
+    mpInstance = nullptr;
 }
 
 void ApiManager::get(QNetworkAccessManager *pNetworkManager, LostarkApi api, QString param)
 {
-    QString url = m_requestUrls[static_cast<int>(api)].arg(param);
+    QString url = mRequestUrls[static_cast<int>(api)].arg(param);
     QNetworkRequest request;
     request.setRawHeader("accept", "application/json");
     request.setRawHeader("authorization", QString("bearer %1").arg(getApiKey()).toUtf8());
@@ -87,7 +87,7 @@ void ApiManager::get(QNetworkAccessManager *pNetworkManager, LostarkApi api, QSt
 
 void ApiManager::post(QNetworkAccessManager *pNetworkManager, LostarkApi api, QByteArray data)
 {
-    QString url = m_requestUrls[static_cast<int>(api)];
+    QString url = mRequestUrls[static_cast<int>(api)];
     QNetworkRequest request;
     request.setRawHeader("accept", "application/json");
     request.setRawHeader("authorization", QString("bearer %1").arg(getApiKey()).toUtf8());

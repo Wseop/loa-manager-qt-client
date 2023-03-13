@@ -30,14 +30,14 @@ public:
 private:
     Ui::SmartSearch *ui;
 
-    static SmartSearch *m_pInstance;
+    static SmartSearch *mpInstance;
 
-    QStringList m_menuNames;
-    QList<class SmartSearchMenu*> m_menuWidgets;
-    SmartSearchMenu *m_pSelectedMenu;
-    class QPushButton* m_pSelectedMenuButton;
+    QStringList mMenuNames;
+    QList<class SmartSearchMenu*> mMenuWidgets;
+    SmartSearchMenu *mpSelectedMenu;
+    class QPushButton* mpSelectedMenuButton;
 
-    QList<QWidget*> m_widgets;
+    QList<QWidget*> mWidgets;
 };
 
 #endif // SMART_SEARCH_H

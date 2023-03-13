@@ -53,32 +53,32 @@ private:
     Ui::SmartSearchAccessory *ui;
 
     // option
-    QList<QStringList> m_optionItems;
-    QList<class QComboBox*> m_optionSelectors;
+    QList<QStringList> mOptionItems;
+    QList<class QComboBox*> mOptionSelectors;
 
     // search option code
-    QHash<QString, int> m_abilityCodes;
-    QHash<QString, CategoryCode> m_partCodes;
+    QHash<QString, int> mAbilityCodes;
+    QHash<QString, CategoryCode> mPartCodes;
 
     // 검색 상태 & 검색 결과
-    int m_searchPage;
-    int m_addCount;
-    int m_responseCount;
-    QList<class SearchOption*> m_searchOptions;
-    QList<QPair<Accessory*, Price>> m_searchResults;
+    int mSearchPage;
+    int mAddCount;
+    int mResponseCount;
+    QList<class SearchOption*> mSearchOptions;
+    QList<QPair<Accessory*, Price>> mSearchResults;
 
     // 검색 결과 ui
-    QList<int> m_currentLayoutRows;
-    class QPushButton* m_pButtonSearchMore;
-    QList<QWidget*> m_itemWidgets;
-    QList<QLayout*> m_itemLayouts;
+    QList<int> mCurrentLayoutRows;
+    class QPushButton* mpButtonSearchMore;
+    QList<QWidget*> mItemWidgets;
+    QList<QLayout*> mItemLayouts;
 
     // ui
-    QPushButton *m_pSearchButton;
-    QList<class QGridLayout*> m_resultLayouts;
-    QList<class QLabel*> m_engraveLabels;
-    QList<QWidget*> m_widgets;
-    QList<QLayout*> m_layouts;
+    QPushButton *mpSearchButton;
+    QList<class QGridLayout*> mResultLayouts;
+    QList<class QLabel*> mEngraveLabels;
+    QList<QWidget*> mWidgets;
+    QList<QLayout*> mLayouts;
 };
 
 #endif // SMART_SEARCH_ACCESSORY_H

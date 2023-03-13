@@ -27,15 +27,15 @@ private:
 private:
     Ui::SmartSearchReforge *ui;
 
-    QStringList m_categories;
-    QList<QList<Item>> m_items;
+    QStringList mCategories;
+    QList<QList<Item>> mItems;
 
-    QList<class QLabel*> m_recentPriceLabels;
-    QList<QLabel*> m_minPriceLabels;
-    QList<QLabel*> m_efficiencyLabels;
+    QList<class QLabel*> mRecentPriceLabels;
+    QList<QLabel*> mMinPriceLabels;
+    QList<QLabel*> mEfficiencyLabels;
 
-    QList<QLayout*> m_layouts;
-    QList<QWidget*> m_widgets;
+    QList<QLayout*> mLayouts;
+    QList<QWidget*> mWidgets;
 };
 
 #endif // SMART_SEARCH_REFORGE_H

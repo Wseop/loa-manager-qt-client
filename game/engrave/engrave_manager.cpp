@@ -6,7 +6,7 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 
-EngraveManager *EngraveManager::m_pEngrave = nullptr;
+EngraveManager *EngraveManager::mpEngrave = nullptr;
 
 EngraveManager::EngraveManager()
 {
@@ -32,78 +32,78 @@ void EngraveManager::initalizeEngraveList()
         const bool &isPenalty = engrave.find("Penalty")->toBool();
 
         // 각인명 <-> 각인코드 맵 초기화
-        m_engraveToCode[text] = code;
-        m_codeToEngrave[code] = text;
+        mEngraveToCode[text] = code;
+        mCodeToEngrave[code] = text;
 
         // 각인 종류별로 리스트에 추가
         if (isPenalty)
-            m_penalties << text;
+            mPenalties << text;
         else if (cls.isEmpty())
-            m_battleEngraves << text;
+            mBattleEngraves << text;
         else
-            m_classEngraves << text;
+            mClassEngraves << text;
     }
 }
 
 EngraveManager *EngraveManager::getInstance()
 {
-    if (m_pEngrave == nullptr)
-        m_pEngrave = new EngraveManager();
+    if (mpEngrave == nullptr)
+        mpEngrave = new EngraveManager();
 
-    return m_pEngrave;
+    return mpEngrave;
 }
 
 void EngraveManager::destroyInstance()
 {
-    if (m_pEngrave == nullptr)
+    if (mpEngrave == nullptr)
         return;
 
-    delete m_pEngrave;
-    m_pEngrave = nullptr;
+    delete mpEngrave;
+    mpEngrave = nullptr;
 }
 
 QStringList EngraveManager::getEngraves() const
 {
-    return m_engraveToCode.keys();
+    return mEngraveToCode.keys();
 }
 
 QStringList EngraveManager::getBattleEngraves() const
 {
-    return m_battleEngraves;
+    return mBattleEngraves;
 }
 
 QStringList EngraveManager::getClassEngraves() const
 {
-    return m_classEngraves;
+    return mClassEngraves;
 }
 
 QStringList EngraveManager::getPenalties() const
 {
-    return m_penalties;
+    return mPenalties;
 }
 
 const QString EngraveManager::iconPath(const QString &engrave) const
 {
     QString iconPath = ":/engrave/image/engrave/%1.png";
-    return iconPath.arg(m_engraveToCode[engrave]);
+    return iconPath.arg(mEngraveToCode[engrave]);
 }
 
 bool EngraveManager::isClassEngrave(const QString &engrave)
 {
-    return m_classEngraves.contains(engrave);
+    return mClassEngraves.contains(engrave);
 }
 
 bool EngraveManager::isPenalty(const QString &engrave)
 {
-    return m_penalties.contains(engrave);
+    return mPenalties.contains(engrave);
 }
 
 int EngraveManager::getEngraveCode(const QString &engrave)
 {
-    return m_engraveToCode[engrave];
+    return mEngraveToCode[engrave];
 }
 
 const QString EngraveManager::getEngraveByCode(const int &code) const
 {
-    return m_codeToEngrave[code];
+    return mCodeToEngrave[code];
 }

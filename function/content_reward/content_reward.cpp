@@ -22,15 +22,15 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
-extern bool g_bAdmin;
+extern bool gbAdmin;
 
 ContentReward *ContentReward::m_pInstance = nullptr;
 
 ContentReward::ContentReward() :
     ui(new Ui::ContentReward),
-    m_pContentSelector(nullptr),
-    m_pSelectedTable(nullptr),
-    m_pRewardAdder(nullptr)
+    mpContentSelector(nullptr),
+    mpSelectedTable(nullptr),
+    mpRewardAdder(nullptr)
 {
     ui->setupUi(this);
     ui->hLayoutSelector->setAlignment(Qt::AlignHCenter);
@@ -45,35 +45,35 @@ ContentReward::ContentReward() :
 
 ContentReward::~ContentReward()
 {
-    for (SearchOption *pSearchOption : m_searchOptions)
+    for (SearchOption *pSearchOption : mSearchOptions)
         delete pSearchOption;
-    m_searchOptions.clear();
+    mSearchOptions.clear();
 
-    if (m_pContentSelector != nullptr)
+    if (mpContentSelector != nullptr)
     {
-        delete m_pContentSelector;
-        m_pContentSelector = nullptr;
+        delete mpContentSelector;
+        mpContentSelector = nullptr;
     }
 
-    for (auto iter = m_tradableSelector.begin(); iter != m_tradableSelector.end(); iter++)
+    for (auto iter = mTradableSelector.begin(); iter != mTradableSelector.end(); iter++)
         delete iter.value();
-    m_tradableSelector.clear();
+    mTradableSelector.clear();
 
-    for (ContentRewardTable *pRewardTable : m_rewardTables)
+    for (ContentRewardTable *pRewardTable : mRewardTables)
         delete pRewardTable;
-    m_rewardTables.clear();
+    mRewardTables.clear();
 
-    if (m_pRewardAdder != nullptr)
-        delete m_pRewardAdder;
-    m_pRewardAdder = nullptr;
+    if (mpRewardAdder != nullptr)
+        delete mpRewardAdder;
+    mpRewardAdder = nullptr;
 
-    for (QWidget *pWidget : m_widgets)
+    for (QWidget *pWidget : mWidgets)
         delete pWidget;
-    m_widgets.clear();
+    mWidgets.clear();
 
-    for (QLayout *pLayout : m_layouts)
+    for (QLayout *pLayout : mLayouts)
         delete pLayout;
-    m_layouts.clear();
+    mLayouts.clear();
 
     delete ui;
 }
@@ -83,10 +83,10 @@ void ContentReward::initializeContentData()
     QJsonObject json = ResourceManager::getInstance()->loadJson("drop_table");
 
     // 컨텐츠 목록 초기화
-    m_contents = json.find("Contents")->toVariant().toStringList();
+    mContents = json.find("Contents")->toVariant().toStringList();
 
     // 컨텐츠별 data 초기화
-    for (const QString &content : m_contents)
+    for (const QString &content : mContents)
     {
         const QJsonArray &dropTable = json.find(content)->toObject().find("DropTable")->toArray();
 
@@ -96,13 +96,13 @@ void ContentReward::initializeContentData()
             const QString &level = object.find("Level")->toString();
             int stage = object.find("Stage")->toInt();
 
-            m_contentLevels[content] << level;
-            m_dropTable[level] = object.find("ItemList")->toVariant().toStringList();
+            mContentLevels[content] << level;
+            mDropTable[level] = object.find("ItemList")->toVariant().toStringList();
 
             for (int i = 0; i < stage; i++)
             {
                 const QString levelStage = content == "카오스 던전" ? level + QString::number(i + 1) : level;
-                m_rewardData[levelStage] = {0, QList<int>(m_dropTable[level].size(), 0)};
+                mRewardData[levelStage] = {0, QList<int>(mDropTable[level].size(), 0)};
             }
         }
     }
@@ -110,12 +110,12 @@ void ContentReward::initializeContentData()
     // 골드로 환산이 가능한 아이템들의 가격 정보 초기화
     const QStringList &tradable = json.find("Tradable")->toVariant().toStringList();
     for (const QString &item : tradable)
-        m_tradablePrice[item] = 0;
+        mTradablePrice[item] = 0;
 }
 
 void ContentReward::initializeSearchOption()
 {
-    const QStringList &items = m_tradablePrice.keys();
+    const QStringList &items = mTradablePrice.keys();
     for (const QString &item : items)
     {
         SearchOption *pSearchOption = nullptr;
@@ -135,7 +135,7 @@ void ContentReward::initializeSearchOption()
         pSearchOption->setPageNo(1);
         pSearchOption->setSortCondition("ASC");
 
-        m_searchOptions << pSearchOption;
+        mSearchOptions << pSearchOption;
     }
 }
 
@@ -143,18 +143,18 @@ void ContentReward::initializeContentSelector()
 {
     QGroupBox *pGroupContentSelector = WidgetManager::createGroupBox("컨텐츠 선택");
     ui->hLayoutSelector->addWidget(pGroupContentSelector);
-    m_widgets.append(pGroupContentSelector);
+    mWidgets.append(pGroupContentSelector);
 
     QHBoxLayout *pLayoutContentSelector = new QHBoxLayout();
     pGroupContentSelector->setLayout(pLayoutContentSelector);
-    m_layouts.append(pLayoutContentSelector);
+    mLayouts.append(pLayoutContentSelector);
 
-    m_pContentSelector = WidgetManager::createComboBox(m_contents);
-    pLayoutContentSelector->addWidget(m_pContentSelector);
-    connect(m_pContentSelector, &QComboBox::currentIndexChanged, this, [&](int index){
-        m_pSelectedTable->hide();
-        m_pSelectedTable = m_rewardTables[index];
-        m_pSelectedTable->show();
+    mpContentSelector = WidgetManager::createComboBox(mContents);
+    pLayoutContentSelector->addWidget(mpContentSelector);
+    connect(mpContentSelector, &QComboBox::currentIndexChanged, this, [&](int index){
+        mpSelectedTable->hide();
+        mpSelectedTable = mRewardTables[index];
+        mpSelectedTable->show();
     });
 }
 
@@ -162,59 +162,59 @@ void ContentReward::initializeTradableSelector()
 {
     QGroupBox *pGroupTradableSelector = WidgetManager::createGroupBox("골드 가치에 포함");
     ui->hLayoutSelector->addWidget(pGroupTradableSelector);
-    m_widgets.append(pGroupTradableSelector);
+    mWidgets.append(pGroupTradableSelector);
 
     QHBoxLayout *pLayoutTradableSelector = new QHBoxLayout();
     pLayoutTradableSelector->setSpacing(10);
     pGroupTradableSelector->setLayout(pLayoutTradableSelector);
-    m_layouts.append(pLayoutTradableSelector);
+    mLayouts.append(pLayoutTradableSelector);
 
     const QStringList items = {"명예의 파편", "파괴석", "수호석", "돌파석", "보석"};
     for (const QString &item : items)
     {
         QVBoxLayout *pLayoutCheckBox = new QVBoxLayout();
         pLayoutTradableSelector->addLayout(pLayoutCheckBox);
-        m_layouts.append(pLayoutCheckBox);
+        mLayouts.append(pLayoutCheckBox);
 
         QLabel *pLabelCheckBox = WidgetManager::createLabel(item);
         pLayoutCheckBox->addWidget(pLabelCheckBox);
-        m_widgets.append(pLabelCheckBox);
+        mWidgets.append(pLabelCheckBox);
 
         QCheckBox *pCheckBox = new QCheckBox();
         pCheckBox->setChecked(true);
         pLayoutCheckBox->addWidget(pCheckBox);
         pLayoutCheckBox->setAlignment(pCheckBox, Qt::AlignHCenter);
-        m_tradableSelector[item] = pCheckBox;
+        mTradableSelector[item] = pCheckBox;
         connect(pCheckBox, &QCheckBox::stateChanged, this, [&](){
-            for (ContentRewardTable *pRewardTable : m_rewardTables)
-                pRewardTable->refreshTradablePrice(m_tradablePrice, m_tradableSelector);
+            for (ContentRewardTable *pRewardTable : mRewardTables)
+                pRewardTable->refreshTradablePrice(mTradablePrice, mTradableSelector);
         });
     }
 }
 
 void ContentReward::initializeRewardTable()
 {
-    for (const QString &content : m_contents)
+    for (const QString &content : mContents)
     {
-        ContentRewardTable *pContentRewardTable = new ContentRewardTable(content, m_contentLevels[content], m_dropTable);
+        ContentRewardTable *pContentRewardTable = new ContentRewardTable(content, mContentLevels[content], mDropTable);
         pContentRewardTable->hide();
         ui->vLayoutMain->addWidget(pContentRewardTable);
-        m_rewardTables.append(pContentRewardTable);
+        mRewardTables.append(pContentRewardTable);
     }
-    m_pSelectedTable = m_rewardTables[0];
-    m_pSelectedTable->show();
+    mpSelectedTable = mRewardTables[0];
+    mpSelectedTable->show();
 }
 
 void ContentReward::initializeRewardAdder()
 {
-    m_pRewardAdder = new ContentRewardAdder(m_contents, m_contentLevels, m_dropTable);
+    mpRewardAdder = new ContentRewardAdder(mContents, mContentLevels, mDropTable);
 
     QPushButton *pButtonInsertData = WidgetManager::createPushButton("데이터 추가");
     ui->hLayoutSelector->addWidget(pButtonInsertData);
-    m_widgets.append(pButtonInsertData);
+    mWidgets.append(pButtonInsertData);
 
     connect(pButtonInsertData, &QPushButton::released, this, [&](){
-        if (!g_bAdmin)
+        if (!gbAdmin)
         {
             QMessageBox msgBox;
             msgBox.setText("관리자 권한 필요");
@@ -222,7 +222,7 @@ void ContentReward::initializeRewardAdder()
             return;
         }
 
-        m_pRewardAdder->show();
+        mpRewardAdder->show();
     });
 }
 
@@ -233,11 +233,11 @@ void ContentReward::refreshRewardData()
     bsoncxx::builder::stream::document dummyFilter {};
 
     // reward data 초기화
-    const QStringList &levelStages = m_rewardData.keys();
+    const QStringList &levelStages = mRewardData.keys();
     for (const QString &levelStage : levelStages)
     {
         QString level = levelStage.back().isDigit() ? levelStage.chopped(1) : levelStage;
-        m_rewardData[levelStage] = {0, QList<int>(m_dropTable[level].size(), 0)};
+        mRewardData[levelStage] = {0, QList<int>(mDropTable[level].size(), 0)};
     }
 
     // db에 저장된 reward data 로드
@@ -250,7 +250,7 @@ void ContentReward::refreshRewardData()
         {
             const QJsonObject &object = value.toObject();
             const QString &level = object.find("Level")->toString();
-            const QStringList &dropTable = level.back().isDigit() ? m_dropTable[level.chopped(1)] : m_dropTable[level];
+            const QStringList &dropTable = level.back().isDigit() ? mDropTable[level.chopped(1)] : mDropTable[level];
 
             // reward data 추가
             RewardData newRewardData({0, QList<int>(dropTable.size(), 0)});
@@ -259,28 +259,28 @@ void ContentReward::refreshRewardData()
             for (int i = 0; i < dropTable.size(); i++)
                 newRewardData.itemCounts[i] = object.find(dropTable[i])->toInt();
 
-            m_rewardData[level] += newRewardData;
+            mRewardData[level] += newRewardData;
         }
     }
     pDbManager->unlock();
 
     // RewardTable 업데이트
-    for (ContentRewardTable *pRewardTable : m_rewardTables)
-        pRewardTable->refreshRewardData(m_rewardData);
+    for (ContentRewardTable *pRewardTable : mRewardTables)
+        pRewardTable->refreshRewardData(mRewardData);
 }
 
 void ContentReward::refreshTradablePrice()
 {
-    m_tradableResponseCount = 0;
+    mTradableResponseCount = 0;
 
-    const QStringList &items = m_tradablePrice.keys();
+    const QStringList &items = mTradablePrice.keys();
     for (int i = 0; i < items.size(); i++)
     {
         const QString &item = items[i];
 
         QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
         connect(pNetworkManager, &QNetworkAccessManager::finished, this, [this, item, items](QNetworkReply *pReply){
-            m_tradableResponseCount++;
+            mTradableResponseCount++;
 
             QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
             if (response.isNull())
@@ -297,18 +297,18 @@ void ContentReward::refreshTradablePrice()
                 minPrice = object.find("CurrentMinPrice")->toInt();
 
             // 가격 update
-            m_tradablePrice[item] = minPrice;
+            mTradablePrice[item] = minPrice;
 
             // 모든 tradable의 가격 정보가 업데이트 되면 RewardTable에 반영
-            if (m_tradableResponseCount == items.size())
+            if (mTradableResponseCount == items.size())
             {
-                for (ContentRewardTable *pRewardTable : m_rewardTables)
-                    pRewardTable->refreshTradablePrice(m_tradablePrice, m_tradableSelector);
+                for (ContentRewardTable *pRewardTable : mRewardTables)
+                    pRewardTable->refreshTradablePrice(mTradablePrice, mTradableSelector);
             }
         });
         connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-        SearchOption *pSearchOption = m_searchOptions[i];
+        SearchOption *pSearchOption = mSearchOptions[i];
 
         if (item == "1레벨 멸화")
             ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Auction, QJsonDocument(pSearchOption->toJsonObject()).toJson());

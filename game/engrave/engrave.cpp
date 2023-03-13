@@ -9,41 +9,41 @@ Engrave::Engrave()
 
 QStringList Engrave::getEngraves() const
 {
-    return m_engraveValues.keys();
+    return mEngraveValues.keys();
 }
 
 QStringList Engrave::getPenalties() const
 {
-    return m_penaltyValues.keys();
+    return mPenaltyValues.keys();
 }
 
 int Engrave::getEngraveValue(const QString &engrave) const
 {
-    return m_engraveValues[engrave];
+    return mEngraveValues[engrave];
 }
 
 int Engrave::getPenaltyValue(const QString &penalty) const
 {
-    return m_penaltyValues[penalty];
+    return mPenaltyValues[penalty];
 }
 
 int Engrave::getEngraveLevel(const QString &engrave) const
 {
-    return m_engraveValues[engrave] / VALUE_PER_LEVEL;
+    return mEngraveValues[engrave] / VALUE_PER_LEVEL;
 }
 
 int Engrave::getPenaltyLevel(const QString &penalty) const
 {
-    return m_penaltyValues[penalty] / VALUE_PER_LEVEL;
+    return mPenaltyValues[penalty] / VALUE_PER_LEVEL;
 }
 
 void Engrave::addEngrave(const QString &engrave, int value)
 {
-    m_engraveValues[engrave] += value;
+    mEngraveValues[engrave] += value;
 }
 
 void Engrave::addPenalty(const QString &penalty, int value)
 {
-    m_penaltyValues[penalty] += value;
+    mPenaltyValues[penalty] += value;
 }
 

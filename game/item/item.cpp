@@ -1,42 +1,42 @@
 #include "item.h"
 
 Item::Item(ItemType itemType)
-    : m_itemType(itemType)
+    : mItemType(itemType)
 {
 
 }
 
 QString Item::itemName() const
 {
-    return m_itemName;
+    return mItemName;
 }
 
 void Item::setItemName(const QString &newItemName)
 {
-    m_itemName = newItemName;
+    mItemName = newItemName;
 }
 
 QString Item::iconPath() const
 {
-    return m_iconPath;
+    return mIconPath;
 }
 
 void Item::setIconPath(const QString &newIconPath)
 {
-    m_iconPath = newIconPath;
+    mIconPath = newIconPath;
 }
 
 ItemGrade Item::itemGrade() const
 {
-    return m_itemGrade;
+    return mItemGrade;
 }
 
 void Item::setItemGrade(ItemGrade newItemGrade)
 {
-    m_itemGrade = newItemGrade;
+    mItemGrade = newItemGrade;
 }
 
 ItemType Item::itemType() const
 {
-    return m_itemType;
+    return mItemType;
 }

@@ -31,15 +31,15 @@ public:
     const QString getEngraveByCode(const int &code) const;
 
 private:
-    static EngraveManager *m_pEngrave;
+    static EngraveManager *mpEngrave;
 
 private:
-    QHash<QString, int> m_engraveToCode;
-    QHash<int, QString> m_codeToEngrave;
+    QHash<QString, int> mEngraveToCode;
+    QHash<int, QString> mCodeToEngrave;
 
-    QStringList m_battleEngraves;
-    QStringList m_classEngraves;
-    QStringList m_penalties;
+    QStringList mBattleEngraves;
+    QStringList mClassEngraves;
+    QStringList mPenalties;
 };
 
 #endif // ENGRAVE_MANAGER_H

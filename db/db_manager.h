@@ -36,12 +36,12 @@ public:
     void deleteDocument(Collection collection, bsoncxx::document::value filter);
 
 private:
-    static DbManager *m_pInstance;
+    static DbManager *mpInstance;
 
-    QMutex m_mutex;
-    mongocxx::instance m_instance{};
-    mongocxx::client m_client;
-    mongocxx::database m_db;
+    QMutex mMutex;
+    mongocxx::instance mInstance{};
+    mongocxx::client mClient;
+    mongocxx::database mDb;
 };
 
 #endif // DBMANAGER_H

@@ -8,20 +8,20 @@ Bracelet::Bracelet() :
 
 QList<QPair<QString, int>> Bracelet::effects() const
 {
-    return m_effects;
+    return mEffects;
 }
 
 void Bracelet::addEffect(const QString &effect, int value)
 {
-    m_effects.append({effect, value});
+    mEffects.append({effect, value});
 }
 
 QList<QPair<QString, int>> Bracelet::specialEffects() const
 {
-    return m_specialEffects;
+    return mSpecialEffects;
 }
 
 void Bracelet::addSpecialEffect(const QString &effect, int value)
 {
-    m_specialEffects.append({effect, value});
+    mSpecialEffects.append({effect, value});
 }

@@ -1,6 +1,6 @@
 #include "font_manager.h"
 
-FontManager *FontManager::m_pFontManager = nullptr;
+FontManager *FontManager::mpFontManager = nullptr;
 
 FontManager::FontManager()
 {
@@ -23,28 +23,28 @@ void FontManager::loadFont()
 
     // initialize fontfamily list
     for (int i = 0; i < static_cast<int>(FontFamily::FontFamilySize); i++)
-        m_fontFamilies.append(QFontDatabase::applicationFontFamilies(i).at(0));
+        mFontFamilies.append(QFontDatabase::applicationFontFamilies(i).at(0));
 }
 
 FontManager *FontManager::getInstance()
 {
-    if (m_pFontManager == nullptr)
-        m_pFontManager = new FontManager();
+    if (mpFontManager == nullptr)
+        mpFontManager = new FontManager();
 
-    return m_pFontManager;
+    return mpFontManager;
 }
 
 void FontManager::destroyInstance()
 {
-    if (m_pFontManager == nullptr)
+    if (mpFontManager == nullptr)
         return;
 
-    delete m_pFontManager;
-    m_pFontManager = nullptr;
+    delete mpFontManager;
+    mpFontManager = nullptr;
 }
 
 QFont FontManager::getFont(FontFamily fontFamily, int fontSize)
 {
     int index = static_cast<int>(fontFamily);
-    return QFont(m_fontFamilies[index], fontSize);
+    return QFont(mFontFamilies[index], fontSize);
 }

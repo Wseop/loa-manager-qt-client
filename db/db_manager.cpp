@@ -11,7 +11,7 @@
 
 using namespace bsoncxx::builder::stream;
 
-DbManager *DbManager::m_pInstance = nullptr;
+DbManager *DbManager::mpInstance = nullptr;
 
 DbManager::DbManager()
 {
@@ -30,8 +30,8 @@ void DbManager::connect()
     QString password = config.value("database/password").toString();
 
     QString dbUri = QString("mongodb+srv://%1:%2@cluster0.88yln.mongodb.net/?retryWrites=true&w=majority").arg(userName, password);
-    m_client = {mongocxx::uri{dbUri.toStdString()}};
-    m_db = m_client["LoaManager"];
+    mClient = {mongocxx::uri{dbUri.toStdString()}};
+    mDb = mClient["LoaManager"];
 }
 
 mongocxx::collection DbManager::getCollection(Collection collection)
@@ -39,43 +39,43 @@ mongocxx::collection DbManager::getCollection(Collection collection)
     switch (collection)
     {
     case Collection::Admin:
-        return m_db["Admin"];
+        return mDb["Admin"];
     case Collection::ApiKey:
-        return m_db["ApiKey"];
+        return mDb["ApiKey"];
     case Collection::Character:
-        return m_db["Character"];
+        return mDb["Character"];
     case Collection::Setting:
-        return m_db["Setting"];
+        return mDb["Setting"];
     case Collection::Reward_Chaos:
-        return m_db["Reward_Chaos"];
+        return mDb["Reward_Chaos"];
     case Collection::Reward_Guardian:
-        return m_db["Reward_Guardian"];
+        return mDb["Reward_Guardian"];
     }
 }
 
 DbManager *DbManager::getInstance()
 {
-    if (m_pInstance == nullptr)
-        m_pInstance = new DbManager();
-    return m_pInstance;
+    if (mpInstance == nullptr)
+        mpInstance = new DbManager();
+    return mpInstance;
 }
 
 void DbManager::destroyInstance()
 {
-    if (m_pInstance == nullptr)
+    if (mpInstance == nullptr)
         return;
-    delete m_pInstance;
-    m_pInstance = nullptr;
+    delete mpInstance;
+    mpInstance = nullptr;
 }
 
 void DbManager::lock()
 {
-    m_mutex.lock();
+    mMutex.lock();
 }
 
 void DbManager::unlock()
 {
-    m_mutex.unlock();
+    mMutex.unlock();
 }
 
 QJsonObject DbManager::findDocument(Collection collection, bsoncxx::document::value filter)

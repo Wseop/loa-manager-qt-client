@@ -15,8 +15,8 @@ public:
     int itemLevel() const;
     void setItemLevel(int newItemLevel);
 
-    int iter() const;
-    void setIter(int newIter);
+    int tier() const;
+    void setTier(int newTier);
 
     int reforge() const;
     void setReforge(int newReforge);
@@ -31,13 +31,13 @@ public:
     void setElla(bool newElla);
 
 private:
-    int m_quality;
-    int m_itemLevel;
-    int m_iter;
-    int m_reforge;
-    ItemSet m_itemSet;
-    int m_setLevel;
-    bool m_ella;
+    int mQuality;
+    int mItemLevel;
+    int mTier;
+    int mReforge;
+    ItemSet mItemSet;
+    int mSetLevel;
+    bool mbElla;
 };
 
 #endif // WEAPON_H

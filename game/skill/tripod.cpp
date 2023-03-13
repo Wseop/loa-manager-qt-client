@@ -7,50 +7,60 @@ Tripod::Tripod()
 
 QString Tripod::tripodName() const
 {
-    return m_tripodName;
+    return mTripodName;
 }
 
 void Tripod::setTripodName(const QString &newTripodName)
 {
-    m_tripodName = newTripodName;
+    mTripodName = newTripodName;
 }
 
 int Tripod::tier() const
 {
-    return m_tier;
+    return mTier;
 }
 
 void Tripod::setTier(int newTier)
 {
-    m_tier = newTier;
+    mTier = newTier;
 }
 
 int Tripod::tripodCode() const
 {
-    return m_tripodCode;
+    return mTripodCode;
 }
 
 void Tripod::setTripodCode(int newTripodCode)
 {
-    m_tripodCode = newTripodCode;
+    mTripodCode = newTripodCode;
 }
 
 int Tripod::maxLevel() const
 {
-    return m_maxLevel;
+    return mMaxLevel;
 }
 
 void Tripod::setMaxLevel(int newMaxLevel)
 {
-    m_maxLevel = newMaxLevel;
+    mMaxLevel = newMaxLevel;
 }
 
 QString Tripod::iconPath() const
 {
-    return m_iconPath;
+    return mIconPath;
 }
 
 void Tripod::setIconPath(const QString &newIconPath)
 {
-    m_iconPath = newIconPath;
+    mIconPath = newIconPath;
+}
+
+int Tripod::tripodLevel() const
+{
+    return mTripodLevel;
+}
+
+void Tripod::setTripodLevel(int newTripodLevel)
+{
+    mTripodLevel = newTripodLevel;
 }

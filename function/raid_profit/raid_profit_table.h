@@ -28,15 +28,15 @@ private:
 private:
     Ui::RaidProfitTable *ui;
 
-    QString m_content;
-    QList<int> m_costs;
-    QList<RewardItems> m_rewardItems;
+    QString mContent;
+    QList<int> mCosts;
+    QList<RewardItems> mRewardItems;
 
-    QList<class QLabel*> m_goldLabels;
-    QList<QLabel*> m_profitLabels;
+    QList<class QLabel*> mGoldLabels;
+    QList<QLabel*> mProfitLabels;
 
-    QList<QWidget*> m_widgets;
-    QList<QLayout*> m_layouts;
+    QList<QWidget*> mWidgets;
+    QList<QLayout*> mLayouts;
 };
 
 #endif // RAID_PROFIT_TABLE_H

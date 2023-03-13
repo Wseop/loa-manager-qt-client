@@ -14,7 +14,7 @@
 
 SmartSearchGem::SmartSearchGem(QLayout *pLayout) :
     ui(new Ui::SmartSearchGem),
-    m_searchList({
+    mSearchList({
         {"5레벨 멸화", "6레벨 멸화", "7레벨 멸화", "8레벨 멸화", "9레벨 멸화", "10레벨 멸화"},
         {"5레벨 홍염", "6레벨 홍염", "7레벨 홍염", "8레벨 홍염", "9레벨 홍염", "10레벨 홍염"}
     })
@@ -29,7 +29,7 @@ SmartSearchGem::SmartSearchGem(QLayout *pLayout) :
 
 SmartSearchGem::~SmartSearchGem()
 {
-    for (QWidget* pWidget : m_widgets)
+    for (QWidget* pWidget : mWidgets)
         delete pWidget;
     clearUI();
     delete ui;
@@ -39,9 +39,9 @@ void SmartSearchGem::refresh()
 {
     clearUI();
 
-    for (int i = 0; i < m_searchList.size(); i++)
+    for (int i = 0; i < mSearchList.size(); i++)
     {
-        for (int j = 0; j < m_searchList[i].size(); j++)
+        for (int j = 0; j < mSearchList[i].size(); j++)
         {
             QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
             connect(pNetworkManager, &QNetworkAccessManager::finished, this, &SmartSearchGem::parseSearchResult);
@@ -50,7 +50,7 @@ void SmartSearchGem::refresh()
             // 보석 가격 검색
             SearchOption searchOption(SearchType::Auction);
             searchOption.setCategoryCode(CategoryCode::Gem);
-            searchOption.setItemName(m_searchList[i][j]);
+            searchOption.setItemName(mSearchList[i][j]);
             searchOption.setItemTier(3);
             searchOption.setPageNo(1);
             searchOption.setSortCondition("ASC");
@@ -72,7 +72,7 @@ void SmartSearchGem::initializeUI()
         {
             QLabel *pLabel = WidgetManager::createLabel(attributes[i][j], 14, "", 200, 50);
             layouts[i]->addWidget(pLabel, 0, j, Qt::AlignHCenter);
-            m_widgets.append(pLabel);
+            mWidgets.append(pLabel);
         }
     }
 }
@@ -87,27 +87,27 @@ void SmartSearchGem::updateUI(const Gem gem, Price price)
 
     QFrame *pHLine = WidgetManager::createLine(QFrame::HLine);
     pLayout->addWidget(pHLine, row++, 0, 1, -1);
-    m_gemWidgets.append(pHLine);
+    mGemWidgets.append(pHLine);
 
     QLabel *pIcon = WidgetManager::createIcon(gem.iconPath(), pIconLoader, itemGradeToBGColor(gem.itemGrade()));
     pLayout->addWidget(pIcon, row, 0, Qt::AlignHCenter);
-    m_gemWidgets.append(pIcon);
+    mGemWidgets.append(pIcon);
 
     QLabel *pLabelName = WidgetManager::createLabel(gem.itemName(), 10, itemGradeToTextColor(gem.itemGrade()), 300);
     pLayout->addWidget(pLabelName, row, 1, Qt::AlignHCenter);
-    m_gemWidgets.append(pLabelName);
+    mGemWidgets.append(pLabelName);
 
     QLabel *pLabelPrice = WidgetManager::createLabel(QString("%L1\n(%L2)").arg(price.buyPrice).arg(price.bidStartPrice), 10, "", 300, 50);
     pLayout->addWidget(pLabelPrice, row, 2, Qt::AlignHCenter);
-    m_gemWidgets.append(pLabelPrice);
+    mGemWidgets.append(pLabelPrice);
 }
 
 void SmartSearchGem::clearUI()
 {
-    for (QWidget* pWidget : m_gemWidgets)
+    for (QWidget* pWidget : mGemWidgets)
         delete pWidget;
 
-    m_gemWidgets.clear();
+    mGemWidgets.clear();
 }
 
 void SmartSearchGem::parseSearchResult(QNetworkReply *pReply)

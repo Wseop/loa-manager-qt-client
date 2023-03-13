@@ -4,14 +4,14 @@
 
 #include <QIntValidator>
 
-AuctionCalculator *AuctionCalculator::m_pInstance = nullptr;
+AuctionCalculator *AuctionCalculator::mpInstance = nullptr;
 
 AuctionCalculator::AuctionCalculator() :
     ui(new Ui::AuctionCalculator),
-    m_pInputValidator(new QIntValidator())
+    mpInputValidator(new QIntValidator())
 {
     ui->setupUi(this);
-    ui->lePrice->setValidator(m_pInputValidator);
+    ui->lePrice->setValidator(mpInputValidator);
 
     setFonts();
     setStyleSheets();
@@ -88,17 +88,17 @@ void AuctionCalculator::calculatePrice()
 
 AuctionCalculator *AuctionCalculator::getInstance()
 {
-    if (m_pInstance == nullptr)
-        m_pInstance = new AuctionCalculator();
-    return m_pInstance;
+    if (mpInstance == nullptr)
+        mpInstance = new AuctionCalculator();
+    return mpInstance;
 }
 
 void AuctionCalculator::destroyInstance()
 {
-    if (m_pInstance == nullptr)
+    if (mpInstance == nullptr)
         return;
-    delete m_pInstance;
-    m_pInstance = nullptr;
+    delete mpInstance;
+    mpInstance = nullptr;
 }
 
 void AuctionCalculator::start()

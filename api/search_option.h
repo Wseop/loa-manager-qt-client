@@ -31,10 +31,10 @@ public:
     QJsonObject toJsonObject();
 
 private:
-    QJsonObject m_searchOption;
-    SearchType m_searchType;
-    QJsonArray m_skillOptions;
-    QJsonArray m_etcOptions;
+    QJsonObject mSearchOption;
+    SearchType mSearchType;
+    QJsonArray mSkillOptions;
+    QJsonArray mEtcOptions;
 };
 
 #endif // SEARCHOPTION_H

@@ -28,19 +28,19 @@ private:
 private:
     Ui::ContentRewardTable *ui;
 
-    QString m_content;
-    QStringList m_contentLevels;
-    QList<int> m_stages;
-    QHash<QString, QStringList> m_dropTable;
-    QHash<QString, RewardData> m_rewardData;
-    QHash<QString, double> m_tradablePrice;
+    QString mContent;
+    QStringList mContentLevels;
+    QList<int> mStages;
+    QHash<QString, QStringList> mDropTable;
+    QHash<QString, RewardData> mRewardData;
+    QHash<QString, double> mTradablePrice;
 
-    QHash<QString, QList<class QLabel*>> m_itemCountLabels;
-    QHash<QString, QLabel*> m_goldLabel;
-    QHash<QString, QLabel*> m_countLabel;
+    QHash<QString, QList<class QLabel*>> mItemCountLabels;
+    QHash<QString, QLabel*> mGoldLabel;
+    QHash<QString, QLabel*> mCountLabel;
 
-    QList<QWidget*> m_widgets;
-    QList<QLayout*> m_layouts;
+    QList<QWidget*> mWidgets;
+    QList<QLayout*> mLayouts;
 };
 
 #endif // CONTENT_REWARD_TABLE_H

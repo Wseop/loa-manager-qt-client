@@ -23,12 +23,17 @@ public:
     QString iconPath() const;
     void setIconPath(const QString &newIconPath);
 
+    int tripodLevel() const;
+    void setTripodLevel(int newTripodLevel);
+
 private:
-    QString m_tripodName;
-    int m_tier;
-    int m_tripodCode;
-    int m_maxLevel;
-    QString m_iconPath;
+    QString mTripodName;
+    int mTier;
+    int mTripodCode;
+    int mMaxLevel;
+    QString mIconPath;
+
+    int mTripodLevel;
 };
 
 #endif // TRIPOD_H

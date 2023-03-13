@@ -29,10 +29,10 @@ private:
 private:
     Ui::SmartSearchGem *ui;
 
-    QList<QStringList> m_searchList;
+    QList<QStringList> mSearchList;
 
-    QList<QWidget*> m_gemWidgets;
-    QList<QWidget*> m_widgets;
+    QList<QWidget*> mGemWidgets;
+    QList<QWidget*> mWidgets;
 };
 
 #endif // SMART_SEARCH_GEM_H

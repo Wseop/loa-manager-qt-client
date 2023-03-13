@@ -23,10 +23,10 @@ public:
     ItemType itemType() const;
 
 private:
-    ItemType m_itemType;
-    QString m_itemName;
-    QString m_iconPath;
-    ItemGrade m_itemGrade;
+    ItemType mItemType;
+    QString mItemName;
+    QString mIconPath;
+    ItemGrade mItemGrade;
 };
 
 #endif // ITEM_H

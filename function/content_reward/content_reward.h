@@ -59,29 +59,29 @@ private:
 private:
     Ui::ContentReward *ui;
 
-    QStringList m_contents;
-    QHash<QString, QStringList> m_contentLevels;
-    QHash<QString, QStringList> m_dropTable;
-    QHash<QString, RewardData> m_rewardData;
-    QHash<QString, int> m_tradablePrice;
-    int m_tradableResponseCount;
+    QStringList mContents;
+    QHash<QString, QStringList> mContentLevels;
+    QHash<QString, QStringList> mDropTable;
+    QHash<QString, RewardData> mRewardData;
+    QHash<QString, int> mTradablePrice;
+    int mTradableResponseCount;
 
     // 거래소, 경매장 검색
-    QList<class SearchOption*> m_searchOptions;
+    QList<class SearchOption*> mSearchOptions;
 
     // selector
-    class QComboBox *m_pContentSelector;
-    QHash<QString, class QCheckBox*> m_tradableSelector;
+    class QComboBox *mpContentSelector;
+    QHash<QString, class QCheckBox*> mTradableSelector;
 
     // reward table
-    QList<class ContentRewardTable*> m_rewardTables;
-    ContentRewardTable *m_pSelectedTable;
+    QList<class ContentRewardTable*> mRewardTables;
+    ContentRewardTable *mpSelectedTable;
 
     // reward adder
-    class ContentRewardAdder *m_pRewardAdder;
+    class ContentRewardAdder *mpRewardAdder;
 
-    QList<QWidget*> m_widgets;
-    QList<QLayout*> m_layouts;
+    QList<QWidget*> mWidgets;
+    QList<QLayout*> mLayouts;
 };
 
 #endif // CONTENT_REWARD_H

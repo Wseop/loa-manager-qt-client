@@ -16,13 +16,13 @@
 #include <QGroupBox>
 #include <QHBoxLayout>
 
-bool g_bAdmin = false;
+bool gbAdmin = false;
 
 LoaManager::LoaManager() :
     ui(new Ui::LoaManager),
-    m_mainSetting(ResourceManager::getInstance()->loadJson("main")),
-    m_pAdminLogin(new AdminLogin()),
-    m_pAdminButton(nullptr)
+    mMainSetting(ResourceManager::getInstance()->loadJson("main")),
+    mpAdminLogin(new AdminLogin()),
+    mpAdminButton(nullptr)
 {
     ui->setupUi(this);
     ui->hLayoutMenu->setAlignment(Qt::AlignLeft);
@@ -33,22 +33,22 @@ LoaManager::LoaManager() :
     initAdminButton();
 
     this->setWindowIcon(QIcon(":/Home.ico"));
-    this->setWindowTitle(m_mainSetting.find("Version")->toString());
+    this->setWindowTitle(mMainSetting.find("Version")->toString());
     this->showMaximized();
 }
 
 LoaManager::~LoaManager()
 {
-    delete m_pAdminLogin;
-    delete m_pAdminButton;
+    delete mpAdminLogin;
+    delete mpAdminButton;
 
-    for (QPushButton* pButton : m_menuButtons)
+    for (QPushButton* pButton : mMenuButtons)
         delete pButton;
-    m_menuButtons.clear();
+    mMenuButtons.clear();
 
-    for (QWidget* pWidget : m_widgets)
+    for (QWidget* pWidget : mWidgets)
         delete pWidget;
-    m_widgets.clear();
+    mWidgets.clear();
 
     delete ui;
 }
@@ -56,12 +56,12 @@ LoaManager::~LoaManager()
 void LoaManager::initFunction()
 {
     // main.json의 메뉴 list 순서에 맞게 등록
-    m_functions.append(SmartSearch::getInstance());
-    m_functions.append(AuctionCalculator::getInstance());
-    m_functions.append(ContentReward::getInstance());
-    m_functions.append(RaidProfit::getInstance());
+    mFunctions.append(SmartSearch::getInstance());
+    mFunctions.append(AuctionCalculator::getInstance());
+    mFunctions.append(ContentReward::getInstance());
+    mFunctions.append(RaidProfit::getInstance());
 
-    for (QWidget* pWidget : m_functions)
+    for (QWidget* pWidget : mFunctions)
     {
         pWidget->hide();
         ui->vLayoutContents->addWidget(pWidget);
@@ -71,7 +71,7 @@ void LoaManager::initFunction()
 void LoaManager::initMenuButton()
 {
     int menuIndex = 0;
-    const QJsonArray &menus = m_mainSetting.find("Menu")->toArray();
+    const QJsonArray &menus = mMainSetting.find("Menu")->toArray();
 
     for (int i = 0; i < menus.size(); i++)
     {
@@ -81,7 +81,7 @@ void LoaManager::initMenuButton()
 
         QGroupBox *pMenuGroup = WidgetManager::createGroupBox(title);
         ui->hLayoutMenu->addWidget(pMenuGroup);
-        m_widgets.append(pMenuGroup);
+        mWidgets.append(pMenuGroup);
         QHBoxLayout *pLayout = new QHBoxLayout();
         pMenuGroup->setLayout(pLayout);
 
@@ -89,21 +89,21 @@ void LoaManager::initMenuButton()
         {
             QPushButton *pMenuButton = WidgetManager::createPushButton(menuName);
             pLayout->addWidget(pMenuButton);
-            m_menuButtons.append(pMenuButton);
+            mMenuButtons.append(pMenuButton);
 
             connect(pMenuButton, &QPushButton::released, this, [&, menuIndex](){
-                for (int i = 0; i < m_functions.size(); i++)
+                for (int i = 0; i < mFunctions.size(); i++)
                 {
                     if (i == menuIndex)
                     {
-                        m_menuButtons[i]->setDisabled(true);
-                        dynamic_cast<FunctionWidget*>(m_functions[i])->start();
-                        m_functions[i]->show();
+                        mMenuButtons[i]->setDisabled(true);
+                        dynamic_cast<FunctionWidget*>(mFunctions[i])->start();
+                        mFunctions[i]->show();
                     }
                     else
                     {
-                        m_menuButtons[i]->setEnabled(true);
-                        m_functions[i]->hide();
+                        mMenuButtons[i]->setEnabled(true);
+                        mFunctions[i]->hide();
                     }
                 }
             });
@@ -115,11 +115,11 @@ void LoaManager::initMenuButton()
 
 void LoaManager::initAdminButton()
 {
-    m_pAdminButton = WidgetManager::createPushButton("관리자 로그인");
-    ui->hLayoutAdmin->addWidget(m_pAdminButton);
+    mpAdminButton = WidgetManager::createPushButton("관리자 로그인");
+    ui->hLayoutAdmin->addWidget(mpAdminButton);
     ui->hLayoutAdmin->setAlignment(Qt::AlignRight);
-    connect(m_pAdminButton, &QPushButton::released, this, [&](){
-        m_pAdminLogin->show();
+    connect(mpAdminButton, &QPushButton::released, this, [&](){
+        mpAdminLogin->show();
     });
 }
 

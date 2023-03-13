@@ -4,11 +4,11 @@
 #include "db/db_manager.h"
 #include <QMessageBox>
 
-extern bool g_bAdmin;
+extern bool gbAdmin;
 
 AdminLogin::AdminLogin() :
     ui(new Ui::AdminLogin),
-    m_adminKey("")
+    mAdminKey("")
 {
     ui->setupUi(this);
     this->setWindowIcon(QIcon(":/icon/Home.ico"));
@@ -19,13 +19,13 @@ AdminLogin::AdminLogin() :
     loadAdminKey();
 
     connect(ui->leInputKey, &QLineEdit::returnPressed, this, [&](){
-        if (m_adminKey == "")
+        if (mAdminKey == "")
             return;
 
         QString input = ui->leInputKey->text();
-        if (input == m_adminKey)
+        if (input == mAdminKey)
         {
-            g_bAdmin = true;
+            gbAdmin = true;
             this->close();
         }
         else
@@ -52,5 +52,5 @@ void AdminLogin::loadAdminKey()
     QJsonObject result = pDbManager->findDocument(Collection::Admin, filter.extract());
     pDbManager->unlock();
 
-    m_adminKey = result.find("Key")->toString();
+    mAdminKey = result.find("Key")->toString();
 }

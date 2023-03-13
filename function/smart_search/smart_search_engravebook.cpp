@@ -17,7 +17,7 @@
 SmartSearchEngraveBook::SmartSearchEngraveBook(QLayout *pLayout) :
     SmartSearchMenu(),
     ui(new Ui::SmartSearchEngraveBook),
-    m_searchPageNo(1)
+    mSearchPageNo(1)
 {
     ui->setupUi(this);
     ui->gridBattleEngrave->setAlignment(Qt::AlignTop);
@@ -26,14 +26,14 @@ SmartSearchEngraveBook::SmartSearchEngraveBook(QLayout *pLayout) :
     pLayout->addWidget(this);
     this->hide();
 
-    m_layouts = {ui->gridBattleEngrave, ui->gridClassEngrave};
+    mLayouts = {ui->gridBattleEngrave, ui->gridClassEngrave};
 
     initializeUI();
 }
 
 SmartSearchEngraveBook::~SmartSearchEngraveBook()
 {
-    for (QWidget* pWidget : m_widgets)
+    for (QWidget* pWidget : mWidgets)
         delete pWidget;
     clearUI();
     delete ui;
@@ -53,14 +53,14 @@ void SmartSearchEngraveBook::initializeUI()
     for (int i = 0; i < categories.size(); i++)
     {
         QLabel *pLabelCategory = WidgetManager::createLabel(categories[i], 16);
-        m_layouts[i]->addWidget(pLabelCategory, 0, 0, 1, -1, Qt::AlignHCenter);
-        m_widgets.append(pLabelCategory);
+        mLayouts[i]->addWidget(pLabelCategory, 0, 0, 1, -1, Qt::AlignHCenter);
+        mWidgets.append(pLabelCategory);
 
         for (int j = 0; j < attributes.size(); j++)
         {
             QLabel *pLabelAttribute = WidgetManager::createLabel(attributes[j], 12);
-            m_layouts[i]->addWidget(pLabelAttribute, 1, j);
-            m_widgets.append(pLabelAttribute);
+            mLayouts[i]->addWidget(pLabelAttribute, 1, j);
+            mWidgets.append(pLabelAttribute);
         }
     }
 }
@@ -69,7 +69,7 @@ void SmartSearchEngraveBook::updateUI()
 {
     clearUI();
 
-    const QList<QStringList*> engraveKeys = {&m_battleEngraveKeys, &m_classEngraveKeys};
+    const QList<QStringList*> engraveKeys = {&mBattleEngraveKeys, &mClassEngraveKeys};
 
     for (int i = 0; i < engraveKeys.size(); i++)
     {
@@ -78,47 +78,47 @@ void SmartSearchEngraveBook::updateUI()
 
         for (const QString& key : *keys)
         {
-            const int &recentPrice = m_engravePrices[key].first;
-            const int &minPrice = m_engravePrices[key].second;
+            const int &recentPrice = mEngravePrices[key].first;
+            const int &minPrice = mEngravePrices[key].second;
 
             QFrame *pHLine = WidgetManager::createLine(QFrame::HLine);
-            m_layouts[i]->addWidget(pHLine, row++, 0, 1, -1);
-            m_priceWidgets.append(pHLine);
+            mLayouts[i]->addWidget(pHLine, row++, 0, 1, -1);
+            mPriceWidgets.append(pHLine);
 
             QLabel *pIcon = WidgetManager::createIcon(":/image/item/book/0.png", nullptr);
-            m_layouts[i]->addWidget(pIcon, row, 0);
-            m_layouts[i]->setAlignment(pIcon, Qt::AlignHCenter);
-            m_priceWidgets.append(pIcon);
+            mLayouts[i]->addWidget(pIcon, row, 0);
+            mLayouts[i]->setAlignment(pIcon, Qt::AlignHCenter);
+            mPriceWidgets.append(pIcon);
 
             QLabel *pLabelName = WidgetManager::createLabel(key, 10, itemGradeToTextColor(ItemGrade::전설));
-            m_layouts[i]->addWidget(pLabelName, row, 1);
-            m_priceWidgets.append(pLabelName);
+            mLayouts[i]->addWidget(pLabelName, row, 1);
+            mPriceWidgets.append(pLabelName);
 
             QLabel *pLabelRecentPrice = WidgetManager::createLabel(QString("%L1").arg(recentPrice), 10);
-            m_layouts[i]->addWidget(pLabelRecentPrice, row, 2);
-            m_priceWidgets.append(pLabelRecentPrice);
+            mLayouts[i]->addWidget(pLabelRecentPrice, row, 2);
+            mPriceWidgets.append(pLabelRecentPrice);
 
             QLabel *pLabelMinPrice = WidgetManager::createLabel(QString("%L1").arg(minPrice), 10);
-            m_layouts[i]->addWidget(pLabelMinPrice, row++, 3);
-            m_priceWidgets.append(pLabelMinPrice);
+            mLayouts[i]->addWidget(pLabelMinPrice, row++, 3);
+            mPriceWidgets.append(pLabelMinPrice);
         }
     }
 
-    m_battleEngraveKeys.clear();
-    m_classEngraveKeys.clear();
+    mBattleEngraveKeys.clear();
+    mClassEngraveKeys.clear();
 }
 
 void SmartSearchEngraveBook::clearUI()
 {
-    for (QWidget* pWidget : m_priceWidgets)
+    for (QWidget* pWidget : mPriceWidgets)
         delete pWidget;
-    m_priceWidgets.clear();
+    mPriceWidgets.clear();
 }
 
 void SmartSearchEngraveBook::searchEngraveBook(bool bResetPageNo)
 {
     if (bResetPageNo)
-        m_searchPageNo = 1;
+        mSearchPageNo = 1;
 
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
     connect(pNetworkManager, &QNetworkAccessManager::finished, this, &SmartSearchEngraveBook::parseSearchResult);
@@ -127,7 +127,7 @@ void SmartSearchEngraveBook::searchEngraveBook(bool bResetPageNo)
     SearchOption searchOption(SearchType::Market);
     searchOption.setCategoryCode(CategoryCode::EngraveBook);
     searchOption.setItemGrade(ItemGrade::전설);
-    searchOption.setPageNo(m_searchPageNo);
+    searchOption.setPageNo(mSearchPageNo);
     searchOption.setSortCondition("DESC");
 
     ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Market, QJsonDocument(searchOption.toJsonObject()).toJson());
@@ -147,19 +147,19 @@ void SmartSearchEngraveBook::parseSearchResult(QNetworkReply *pReply)
         const int &minPrice = item.find("CurrentMinPrice")->toInt();
 
         if (name[0] == '[')
-            m_classEngraveKeys << name;
+            mClassEngraveKeys << name;
         else
-            m_battleEngraveKeys << name;
+            mBattleEngraveKeys << name;
 
-        m_engravePrices[name] = {recentPrice, minPrice};
+        mEngravePrices[name] = {recentPrice, minPrice};
     }
 
     const int &maxPageSize = result.find("PageSize")->toInt();
 
     // 다음 페이지가 있다면 추가 검색
-    if (maxPageSize > m_searchPageNo)
+    if (maxPageSize > mSearchPageNo)
     {
-        m_searchPageNo++;
+        mSearchPageNo++;
         searchEngraveBook(false);
     }
     // 마지막 페이지이면 검색 결과 ui에 반영

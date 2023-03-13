@@ -22,11 +22,11 @@ public:
     QHash<QString, Skill> skills(const QString &_class) const;
 
 private:
-    static SkillManager *m_pInstance;
+    static SkillManager *mpInstance;
 
 private:
-    QHash<QString, QStringList> m_skillNames;
-    QHash<QString, QHash<QString, Skill>> m_skills;
+    QHash<QString, QStringList> mSkillNames;
+    QHash<QString, QHash<QString, Skill>> mSkills;
 };
 
 #endif // SKILLMANAGER_H

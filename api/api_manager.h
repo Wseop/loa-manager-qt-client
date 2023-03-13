@@ -28,11 +28,11 @@ public:
     void post(QNetworkAccessManager *pNetworkManager, LostarkApi api, QByteArray data);
 
 private:
-    static ApiManager *m_pInstance;
+    static ApiManager *mpInstance;
 
-    QStringList m_apiKeys;
-    int m_keyIndex;
-    QStringList m_requestUrls;
+    QStringList mApiKeys;
+    int mKeyIndex;
+    QStringList mRequestUrls;
 };
 
 #endif // APIMANAGER_H

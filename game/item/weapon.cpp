@@ -8,70 +8,70 @@ Weapon::Weapon() :
 
 int Weapon::quality() const
 {
-    return m_quality;
+    return mQuality;
 }
 
 void Weapon::setQuality(int newQuality)
 {
-    m_quality = newQuality;
+    mQuality = newQuality;
 }
 
 int Weapon::itemLevel() const
 {
-    return m_itemLevel;
+    return mItemLevel;
 }
 
 void Weapon::setItemLevel(int newItemLevel)
 {
-    m_itemLevel = newItemLevel;
+    mItemLevel = newItemLevel;
 }
 
-int Weapon::iter() const
+int Weapon::tier() const
 {
-    return m_iter;
+    return mTier;
 }
 
-void Weapon::setIter(int newIter)
+void Weapon::setTier(int newTier)
 {
-    m_iter = newIter;
+    mTier = newTier;
 }
 
 int Weapon::reforge() const
 {
-    return m_reforge;
+    return mReforge;
 }
 
 void Weapon::setReforge(int newReforge)
 {
-    m_reforge = newReforge;
+    mReforge = newReforge;
 }
 
 ItemSet Weapon::itemSet() const
 {
-    return m_itemSet;
+    return mItemSet;
 }
 
 void Weapon::setItemSet(ItemSet newItemSet)
 {
-    m_itemSet = newItemSet;
+    mItemSet = newItemSet;
 }
 
 int Weapon::setLevel() const
 {
-    return m_setLevel;
+    return mSetLevel;
 }
 
 void Weapon::setSetLevel(int newSetLevel)
 {
-    m_setLevel = newSetLevel;
+    mSetLevel = newSetLevel;
 }
 
 bool Weapon::ella() const
 {
-    return m_ella;
+    return mbElla;
 }
 
 void Weapon::setElla(bool newElla)
 {
-    m_ella = newElla;
+    mbElla = newElla;
 }

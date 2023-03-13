@@ -13,13 +13,13 @@
 
 ContentRewardAdder::ContentRewardAdder(const QStringList &contents, const QHash<QString, QStringList> &contentLevels, const QHash<QString, QStringList> &dropTable) :
     ui(new Ui::ContentRewardAdder),
-    m_contents(contents),
-    m_contentLevels(contentLevels),
-    m_dropTable(dropTable),
-    m_stages({2, 2, 2, 1}),
-    m_pContentSelector(nullptr),
-    m_pCurrentLevelSelector(nullptr),
-    m_pInputValidator(new QIntValidator())
+    mContents(contents),
+    mContentLevels(contentLevels),
+    mDropTable(dropTable),
+    mStages({2, 2, 2, 1}),
+    mpContentSelector(nullptr),
+    mpCurrentLevelSelector(nullptr),
+    mpInputValidator(new QIntValidator())
 {
     ui->setupUi(this);
 
@@ -34,57 +34,57 @@ ContentRewardAdder::ContentRewardAdder(const QStringList &contents, const QHash<
 
 ContentRewardAdder::~ContentRewardAdder()
 {
-    if (m_pContentSelector != nullptr)
-        delete m_pContentSelector;
-    m_pContentSelector = nullptr;
+    if (mpContentSelector != nullptr)
+        delete mpContentSelector;
+    mpContentSelector = nullptr;
 
-    for (QComboBox *pLevelSelector : m_levelSelectors)
+    for (QComboBox *pLevelSelector : mLevelSelectors)
         delete pLevelSelector;
-    m_levelSelectors.clear();
+    mLevelSelectors.clear();
 
-    if (m_pInputValidator != nullptr)
-        delete m_pInputValidator;
-    m_pInputValidator = nullptr;
+    if (mpInputValidator != nullptr)
+        delete mpInputValidator;
+    mpInputValidator = nullptr;
 
-    for (QLineEdit *pLineEdit : m_lineEdits)
+    for (QLineEdit *pLineEdit : mLineEdits)
         delete pLineEdit;
-    m_lineEdits.clear();
+    mLineEdits.clear();
 
-    for (QWidget *pWidget : m_widgets)
+    for (QWidget *pWidget : mWidgets)
         delete pWidget;
-    m_widgets.clear();
+    mWidgets.clear();
 
-    for (QLayout *pLayout : m_layouts)
+    for (QLayout *pLayout : mLayouts)
         delete pLayout;
-    m_layouts.clear();
+    mLayouts.clear();
 
     delete ui;
 }
 
 void ContentRewardAdder::initializeContentSelector()
 {
-    m_pContentSelector = WidgetManager::createComboBox(m_contents);
-    ui->hLayoutSelector->addWidget(m_pContentSelector);
-    connect(m_pContentSelector, &QComboBox::currentIndexChanged, this, [&](int index){
-        m_pCurrentLevelSelector->hide();
-        m_pCurrentLevelSelector = m_levelSelectors[index];
-        m_pCurrentLevelSelector->show();
+    mpContentSelector = WidgetManager::createComboBox(mContents);
+    ui->hLayoutSelector->addWidget(mpContentSelector);
+    connect(mpContentSelector, &QComboBox::currentIndexChanged, this, [&](int index){
+        mpCurrentLevelSelector->hide();
+        mpCurrentLevelSelector = mLevelSelectors[index];
+        mpCurrentLevelSelector->show();
     });
 }
 
 void ContentRewardAdder::initializeLevelSelector()
 {
-    for (const QString &content : m_contents)
+    for (const QString &content : mContents)
     {
         QStringList levelItems;
 
         if (content == "카오스 던전")
         {
-            const QStringList &levels = m_contentLevels[content];
+            const QStringList &levels = mContentLevels[content];
 
             for (int i = 0; i < levels.size(); i++)
             {
-                for (int j = 0; j < m_stages[i]; j++)
+                for (int j = 0; j < mStages[i]; j++)
                 {
                     levelItems << levels[i] + QString::number(j + 1);
                 }
@@ -92,27 +92,27 @@ void ContentRewardAdder::initializeLevelSelector()
         }
         else
         {
-            levelItems = m_contentLevels[content];
+            levelItems = mContentLevels[content];
         }
 
         QComboBox *pLevelSelector = WidgetManager::createComboBox(levelItems);
         pLevelSelector->hide();
         ui->hLayoutSelector->addWidget(pLevelSelector);
-        m_levelSelectors.append(pLevelSelector);
+        mLevelSelectors.append(pLevelSelector);
         connect(pLevelSelector, &QComboBox::currentIndexChanged, this, [&](int index){
 
         });
     }
 
-    m_pCurrentLevelSelector = m_levelSelectors[0];
-    m_pCurrentLevelSelector->show();
+    mpCurrentLevelSelector = mLevelSelectors[0];
+    mpCurrentLevelSelector->show();
 }
 
 void ContentRewardAdder::initializeInsertButton()
 {
     QPushButton *pInsertButton = WidgetManager::createPushButton("데이터 추가", 10, 100, 27);
     ui->hLayoutSelector->addWidget(pInsertButton);
-    m_widgets.append(pInsertButton);
+    mWidgets.append(pInsertButton);
 
     connect(pInsertButton, &QPushButton::released, this, &ContentRewardAdder::insertData);
 }
@@ -125,43 +125,43 @@ void ContentRewardAdder::initializeDataInputTable()
     {
         QLabel *pLabelItem = WidgetManager::createLabel(items[i], 12);
         ui->gridInputTable->addWidget(pLabelItem, 0, i);
-        m_widgets.append(pLabelItem);
+        mWidgets.append(pLabelItem);
 
-        QLineEdit *pLineEdit = WidgetManager::createLineEdit(m_pInputValidator, "", 10, 100, 25);
+        QLineEdit *pLineEdit = WidgetManager::createLineEdit(mpInputValidator, "", 10, 100, 25);
         ui->gridInputTable->addWidget(pLineEdit, 1, i);
-        m_lineEdits.append(pLineEdit);
+        mLineEdits.append(pLineEdit);
     }
 
-    m_itemIndex["실링"] = 1;
-    m_itemIndex["명예의 파편"] = 2;
-    m_itemIndex["파괴강석"] = 3;
-    m_itemIndex["정제된 파괴강석"] = 3;
-    m_itemIndex["수호강석"] = 4;
-    m_itemIndex["정제된 수호강석"] = 4;
-    m_itemIndex["경이로운 명예의 돌파석"] = 5;
-    m_itemIndex["찬란한 명예의 돌파석"] = 5;
-    m_itemIndex["보석"] = 6;
-    m_itemIndex["전설 악세"] = 7;
-    m_itemIndex["유물 악세"] = 8;
-    m_itemIndex["고대 악세"] = 9;
+    mItemIndex["실링"] = 1;
+    mItemIndex["명예의 파편"] = 2;
+    mItemIndex["파괴강석"] = 3;
+    mItemIndex["정제된 파괴강석"] = 3;
+    mItemIndex["수호강석"] = 4;
+    mItemIndex["정제된 수호강석"] = 4;
+    mItemIndex["경이로운 명예의 돌파석"] = 5;
+    mItemIndex["찬란한 명예의 돌파석"] = 5;
+    mItemIndex["보석"] = 6;
+    mItemIndex["전설 악세"] = 7;
+    mItemIndex["유물 악세"] = 8;
+    mItemIndex["고대 악세"] = 9;
 }
 
 void ContentRewardAdder::insertData()
 {
-    const QString &content = m_pContentSelector->currentText();
-    int count = m_lineEdits[0]->text().toInt();
-    const QString &level = m_pCurrentLevelSelector->currentText();
+    const QString &content = mpContentSelector->currentText();
+    int count = mLineEdits[0]->text().toInt();
+    const QString &level = mpCurrentLevelSelector->currentText();
 
     QStringList items;
     if (content == "카오스 던전")
-        items = m_dropTable[level.chopped(1)];
+        items = mDropTable[level.chopped(1)];
     else
-        items = m_dropTable[level];
+        items = mDropTable[level];
 
     QList<int> itemCounts;
     for (const QString &item : items)
     {
-        const QString& text = m_lineEdits[m_itemIndex[item]]->text();
+        const QString& text = mLineEdits[mItemIndex[item]]->text();
         if (text == "")
             return;
 
@@ -174,7 +174,7 @@ void ContentRewardAdder::insertData()
     connect(pInsertThread, &QThread::finished, pInsertThread, &QThread::deleteLater);
     pInsertThread->start();
 
-    for (QLineEdit *pLineEdit : m_lineEdits)
+    for (QLineEdit *pLineEdit : mLineEdits)
         pLineEdit->clear();
 
     this->close();

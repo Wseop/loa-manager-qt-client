@@ -8,30 +8,30 @@ Accessory::Accessory() :
 
 AccessoryPart Accessory::accessoryPart() const
 {
-    return m_accessoryPart;
+    return mAccessoryPart;
 }
 
 void Accessory::setAccessoryPart(AccessoryPart newAccessoryPart)
 {
-    m_accessoryPart = newAccessoryPart;
+    mAccessoryPart = newAccessoryPart;
 }
 
 int Accessory::quality() const
 {
-    return m_quality;
+    return mQuality;
 }
 
 void Accessory::setQuality(int newQuality)
 {
-    m_quality = newQuality;
+    mQuality = newQuality;
 }
 
 QHash<Ability, int> Accessory::abilities() const
 {
-    return m_abilities;
+    return mAbilities;
 }
 
 void Accessory::setAbility(Ability ability, int value)
 {
-    m_abilities[ability] = value;
+    mAbilities[ability] = value;
 }

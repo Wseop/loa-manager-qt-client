@@ -39,27 +39,27 @@ private:
     Ui::RaidProfit *ui;
 
     // Raid Reward
-    QStringList m_contents;
-    QHash<QString, double> m_itemPrice;
-    QList<QList<int>> m_costs;
-    QList<QList<RewardItems>> m_rewardItems;
+    QStringList mContents;
+    QHash<QString, double> mItemPrice;
+    QList<QList<int>> mCosts;
+    QList<QList<RewardItems>> mRewardItems;
 
     // 아이템 가격 검색
-    QList<SearchOption*> m_searchOptions;
-    int m_responseCount;
+    QList<SearchOption*> mSearchOptions;
+    int mResponseCount;
 
-    class QComboBox *m_pContentSelector;
-    QList<class QCheckBox*> m_itemSelectors;
+    class QComboBox *mpContentSelector;
+    QList<class QCheckBox*> mItemSelectors;
 
     // 레이드 더보기 보상/손익 테이블
-    QList<class RaidProfitTable*> m_profitTables;
-    RaidProfitTable *m_pCurrentTable;
+    QList<class RaidProfitTable*> mProfitTables;
+    RaidProfitTable *mpCurrentTable;
 
-    QList<QWidget*> m_widgets;
-    QList<QLayout*> m_layouts;
+    QList<QWidget*> mWidgets;
+    QList<QLayout*> mLayouts;
 
 private:
-    static RaidProfit *m_pInstance;
+    static RaidProfit *mpInstance;
 };
 
 #endif // RAID_PROFIT_H

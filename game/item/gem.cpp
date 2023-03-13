@@ -2,22 +2,32 @@
 
 Gem::Gem(GemType gemType) :
     Item(ItemType::Gem),
-    m_gemType(gemType)
+    mGemType(gemType)
 {
 
 }
 
 GemType Gem::gemType() const
 {
-    return m_gemType;
+    return mGemType;
 }
 
 int Gem::gemLevel() const
 {
-    return m_gemLevel;
+    return mGemLevel;
 }
 
 void Gem::setGemLevel(int newGemLevel)
 {
-    m_gemLevel = newGemLevel;
+    mGemLevel = newGemLevel;
+}
+
+QString Gem::skillName() const
+{
+    return mSkillName;
+}
+
+void Gem::setSkillName(const QString &newSkillName)
+{
+    mSkillName = newSkillName;
 }

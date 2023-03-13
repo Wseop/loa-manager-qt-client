@@ -31,15 +31,15 @@ private:
 private:
     Ui::SmartSearchAbilityStone *ui;
 
-    QList<class QComboBox*> m_engraveSelectors;
-    QComboBox *m_pPenaltySelector;
-    QList<QPair<AbilityStone, Price>> m_searchResults;
-    int m_totalSearchCount;
-    int m_currentSearchCount;
+    QList<class QComboBox*> mEngraveSelectors;
+    QComboBox *mpPenaltySelector;
+    QList<QPair<AbilityStone, Price>> mSearchResults;
+    int mTotalSearchCount;
+    int mCurrentSearchCount;
 
-    QList<QWidget*> m_resultWidgets;
-    QList<QWidget*> m_widgets;
-    QList<QLayout*> m_layouts;
+    QList<QWidget*> mResultWidgets;
+    QList<QWidget*> mWidgets;
+    QList<QLayout*> mLayouts;
 };
 
 #endif // SMART_SEARCH_ABILITYSTONE_H

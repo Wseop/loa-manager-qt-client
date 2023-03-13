@@ -1,46 +1,77 @@
 #include "skill.h"
+#include "game/item/rune.h"
 
-Skill::Skill()
+Skill::Skill() :
+    mpRune(nullptr)
 {
 
+}
+
+Skill::~Skill()
+{
+    if (mpRune != nullptr)
+    {
+        delete mpRune;
+        mpRune = nullptr;
+    }
 }
 
 QString Skill::skillName() const
 {
-    return m_skillName;
+    return mSkillName;
 }
 
 void Skill::setSkillName(const QString &newSkillName)
 {
-    m_skillName = newSkillName;
+    mSkillName = newSkillName;
 }
 
 int Skill::skillCode() const
 {
-    return m_skillCode;
+    return mSkillCode;
 }
 
 void Skill::setSkillCode(int newSkillCode)
 {
-    m_skillCode = newSkillCode;
+    mSkillCode = newSkillCode;
 }
 
 QString Skill::iconPath() const
 {
-    return m_iconPath;
+    return mIconPath;
 }
 
 void Skill::setIconPath(const QString &newIconPath)
 {
-    m_iconPath = newIconPath;
+    mIconPath = newIconPath;
 }
 
 QList<Tripod> Skill::tripods() const
 {
-    return m_tripods;
+    return mTripods;
 }
 
 void Skill::addTripod(const Tripod &tripod)
 {
-    m_tripods.append(tripod);
+    mTripods.append(tripod);
+}
+
+int Skill::skillLevel() const
+{
+    return mSkillLevel;
+}
+
+void Skill::setSkillLevel(int newSkillLevel)
+{
+    mSkillLevel = newSkillLevel;
+}
+
+Rune *Skill::rune() const
+{
+    return mpRune;
+}
+
+void Skill::setRune(Rune *pNewRune)
+{
+    mpRune = pNewRune;
 }

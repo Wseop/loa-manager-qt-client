@@ -22,9 +22,9 @@
 
 SmartSearchAbilityStone::SmartSearchAbilityStone(QLayout *pLayout) :
     ui(new Ui::SmartSearchAbilityStone),
-    m_searchResults(0),
-    m_totalSearchCount(0),
-    m_currentSearchCount(0)
+    mSearchResults(0),
+    mTotalSearchCount(0),
+    mCurrentSearchCount(0)
 {
     ui->setupUi(this);
     ui->hLayoutMenu->setAlignment(Qt::AlignHCenter);
@@ -40,14 +40,14 @@ SmartSearchAbilityStone::~SmartSearchAbilityStone()
 {
     clearResult();
 
-    for (QComboBox* pEngraveSelector : m_engraveSelectors)
+    for (QComboBox* pEngraveSelector : mEngraveSelectors)
         delete pEngraveSelector;
-    delete m_pPenaltySelector;
+    delete mpPenaltySelector;
 
-    for (QWidget* pWidget : m_widgets)
+    for (QWidget* pWidget : mWidgets)
         delete pWidget;
 
-    for (QLayout* pLayout : m_layouts)
+    for (QLayout* pLayout : mLayouts)
         delete pLayout;
 
     delete ui;
@@ -55,48 +55,48 @@ SmartSearchAbilityStone::~SmartSearchAbilityStone()
 
 void SmartSearchAbilityStone::refresh()
 {
-    if (m_searchResults.size() == 0)
+    if (mSearchResults.size() == 0)
         return;
 
     // 검색 결과 최저가 순으로 정렬
-    std::sort(m_searchResults.begin(), m_searchResults.end(), [](const auto& a, const auto& b){
+    std::sort(mSearchResults.begin(), mSearchResults.end(), [](const auto& a, const auto& b){
         return a.second.buyPrice < b.second.buyPrice;
     });
 
     // 검색 결과 출력
     int row = 0;
-    for (const auto& searchResult : m_searchResults)
+    for (const auto& searchResult : mSearchResults)
     {
         const AbilityStone &abilityStone = searchResult.first;
         const Price &price = searchResult.second;
 
         QFrame *pHLine = WidgetManager::createLine(QFrame::HLine);
         ui->gridResult->addWidget(pHLine, ++row, 0, 1, -1);
-        m_resultWidgets.append(pHLine);
+        mResultWidgets.append(pHLine);
 
         QLabel *pIcon = WidgetManager::createIcon(abilityStone.iconPath(), nullptr, itemGradeToBGColor(abilityStone.itemGrade()));
         ui->gridResult->addWidget(pIcon, ++row, 0);
-        m_resultWidgets.append(pIcon);
+        mResultWidgets.append(pIcon);
 
         QLabel *pLabelName = WidgetManager::createLabel(abilityStone.itemName(), 10, itemGradeToTextColor(abilityStone.itemGrade()));
         ui->gridResult->addWidget(pLabelName, row, 1);
-        m_resultWidgets.append(pLabelName);
+        mResultWidgets.append(pLabelName);
 
         const QStringList &engraves = abilityStone.getEngraves();
         for (int i = 0; i < engraves.size(); i++)
         {
             QLabel *pLabelEngrave = WidgetManager::createLabel(engraves[i]);
             ui->gridResult->addWidget(pLabelEngrave, row, 2 + i);
-            m_resultWidgets.append(pLabelEngrave);
+            mResultWidgets.append(pLabelEngrave);
         }
 
         QLabel *pLabelPenalty = WidgetManager::createLabel(abilityStone.getPenalties().at(0), 10, "red");
         ui->gridResult->addWidget(pLabelPenalty, row, 4);
-        m_resultWidgets.append(pLabelPenalty);
+        mResultWidgets.append(pLabelPenalty);
 
         QLabel *pLabelPrice = WidgetManager::createLabel(QString("%L1\n(%L2)").arg(price.buyPrice).arg(price.bidStartPrice), 10, "", 200, 50);
         ui->gridResult->addWidget(pLabelPrice, row++, 5);
-        m_resultWidgets.append(pLabelPrice);
+        mResultWidgets.append(pLabelPrice);
     }
 }
 
@@ -114,17 +114,17 @@ void SmartSearchAbilityStone::initializeEngraveSelector()
 
     QGroupBox *pGroupEngrave = WidgetManager::createGroupBox("각인 선택");
     ui->hLayoutMenu->addWidget(pGroupEngrave);
-    m_widgets.append(pGroupEngrave);
+    mWidgets.append(pGroupEngrave);
 
     QHBoxLayout *pLayoutGroupEngrave = new QHBoxLayout();
     pGroupEngrave->setLayout(pLayoutGroupEngrave);
-    m_layouts.append(pLayoutGroupEngrave);
+    mLayouts.append(pLayoutGroupEngrave);
 
     for (int i = 0; i < MAX_SELECTOR; i++)
     {
         QComboBox *pEngraveSelector = WidgetManager::createComboBox(engraves);
         pLayoutGroupEngrave->addWidget(pEngraveSelector);
-        m_engraveSelectors.append(pEngraveSelector);
+        mEngraveSelectors.append(pEngraveSelector);
     }
 
     // 감소 각인 선택기 추가
@@ -133,20 +133,20 @@ void SmartSearchAbilityStone::initializeEngraveSelector()
 
     QGroupBox *pGroupPenalty = WidgetManager::createGroupBox("감소 각인 선택");
     ui->hLayoutMenu->addWidget(pGroupPenalty);
-    m_widgets.append(pGroupPenalty);
+    mWidgets.append(pGroupPenalty);
 
     QHBoxLayout *pLayoutGroupPenalty = new QHBoxLayout();
     pGroupPenalty->setLayout(pLayoutGroupPenalty);
-    m_layouts.append(pLayoutGroupPenalty);
+    mLayouts.append(pLayoutGroupPenalty);
 
-    m_pPenaltySelector = WidgetManager::createComboBox(penalties);
-    pLayoutGroupPenalty->addWidget(m_pPenaltySelector);
+    mpPenaltySelector = WidgetManager::createComboBox(penalties);
+    pLayoutGroupPenalty->addWidget(mpPenaltySelector);
 
     // 검색 버튼 추가
     QPushButton *pButtonSearch = WidgetManager::createPushButton("검색");
     connect(pButtonSearch, &QPushButton::released, this, &SmartSearchAbilityStone::searchAbilityStone);
     ui->hLayoutMenu->addWidget(pButtonSearch);
-    m_widgets.append(pButtonSearch);
+    mWidgets.append(pButtonSearch);
 }
 
 void SmartSearchAbilityStone::initializeResultUI()
@@ -157,7 +157,7 @@ void SmartSearchAbilityStone::initializeResultUI()
     {
         QLabel *pLabelAttribute = WidgetManager::createLabel(attributes[col], 12, "", 200, 50);
         ui->gridResult->addWidget(pLabelAttribute, 0, col);
-        m_widgets.append(pLabelAttribute);
+        mWidgets.append(pLabelAttribute);
     }
 }
 
@@ -165,7 +165,7 @@ void SmartSearchAbilityStone::searchAbilityStone()
 {
     // 선택한 각인 취합 (중복X)
     QSet<QString> engraves;
-    for (const QComboBox* pEngraveSelector : m_engraveSelectors)
+    for (const QComboBox* pEngraveSelector : mEngraveSelectors)
     {
         if (pEngraveSelector->currentIndex() != 0)
             engraves.insert(pEngraveSelector->currentText());
@@ -184,7 +184,7 @@ void SmartSearchAbilityStone::searchAbilityStone()
 
     // 가능한 모든 조합으로 검색
     const QStringList selectedEngraves = engraves.values();
-    m_totalSearchCount = combination(selectedEngraves.size(), 2);
+    mTotalSearchCount = combination(selectedEngraves.size(), 2);
 
     for (int i = 0; i < selectedEngraves.size() - 1; i++)
     {
@@ -206,8 +206,8 @@ void SmartSearchAbilityStone::searchAbilityStone()
             searchOption.setSortCondition("ASC");
             searchOption.setEtcOption(EtcOptionCode::Engrave, EngraveManager::getInstance()->getEngraveCode(engrave1));
             searchOption.setEtcOption(EtcOptionCode::Engrave, EngraveManager::getInstance()->getEngraveCode(engrave2));
-            if (m_pPenaltySelector->currentIndex() != 0)
-                searchOption.setEtcOption(EtcOptionCode::Engrave, EngraveManager::getInstance()->getEngraveCode(m_pPenaltySelector->currentText()));
+            if (mpPenaltySelector->currentIndex() != 0)
+                searchOption.setEtcOption(EtcOptionCode::Engrave, EngraveManager::getInstance()->getEngraveCode(mpPenaltySelector->currentText()));
 
             ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Auction, QJsonDocument(searchOption.toJsonObject()).toJson());
         }
@@ -216,7 +216,7 @@ void SmartSearchAbilityStone::searchAbilityStone()
 
 void SmartSearchAbilityStone::parseSearchResult(QNetworkReply *pReply)
 {
-    m_currentSearchCount++;
+    mCurrentSearchCount++;
 
     QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
     if (response.isNull())
@@ -246,21 +246,21 @@ void SmartSearchAbilityStone::parseSearchResult(QNetworkReply *pReply)
     }
 
     // 검색 결과 추가
-    m_searchResults.append({abilityStone, {buyPrice, bidStartPrice}});
+    mSearchResults.append({abilityStone, {buyPrice, bidStartPrice}});
 
     // 검색 완료 시 UI 갱신
-    if (m_totalSearchCount == m_currentSearchCount)
+    if (mTotalSearchCount == mCurrentSearchCount)
         refresh();
 }
 
 void SmartSearchAbilityStone::clearResult()
 {
-    m_searchResults.clear();
+    mSearchResults.clear();
 
-    m_totalSearchCount = 0;
-    m_currentSearchCount = 0;
+    mTotalSearchCount = 0;
+    mCurrentSearchCount = 0;
 
-    for (QWidget* pWidget : m_resultWidgets)
+    for (QWidget* pWidget : mResultWidgets)
         delete pWidget;
-    m_resultWidgets.clear();
+    mResultWidgets.clear();
 }

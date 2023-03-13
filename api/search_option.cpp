@@ -6,64 +6,64 @@ SearchOption::SearchOption(SearchType type)
 }
 
 SearchOption::SearchOption(const SearchOption &searchOption) :
-    m_searchOption(searchOption.m_searchOption),
-    m_searchType(searchOption.m_searchType),
-    m_skillOptions(searchOption.m_skillOptions),
-    m_etcOptions(searchOption.m_etcOptions)
+    mSearchOption(searchOption.mSearchOption),
+    mSearchType(searchOption.mSearchType),
+    mSkillOptions(searchOption.mSkillOptions),
+    mEtcOptions(searchOption.mEtcOptions)
 {
 
 }
 
 void SearchOption::setSearchType(SearchType type)
 {
-    m_searchType = type;
+    mSearchType = type;
 
-    if (m_searchType == SearchType::Auction)
-        m_searchOption.insert("Sort", "BUY_PRICE");
+    if (mSearchType == SearchType::Auction)
+        mSearchOption.insert("Sort", "BUY_PRICE");
     else
-        m_searchOption.insert("Sort", "CURRENT_MIN_PRICE");
+        mSearchOption.insert("Sort", "CURRENT_MIN_PRICE");
 }
 
 void SearchOption::setCategoryCode(CategoryCode category)
 {
-    m_searchOption.insert("CategoryCode", static_cast<int>(category));
+    mSearchOption.insert("CategoryCode", static_cast<int>(category));
 }
 
 void SearchOption::setItemTier(int tier)
 {
-    m_searchOption.insert("ItemTier", tier);
+    mSearchOption.insert("ItemTier", tier);
 }
 
 void SearchOption::setItemGrade(ItemGrade itemGrade)
 {
-    m_searchOption.insert("ItemGrade", itemGradeToQString(itemGrade));
+    mSearchOption.insert("ItemGrade", itemGradeToQString(itemGrade));
 }
 
 void SearchOption::setItemName(QString itemName)
 {
-    m_searchOption.insert("ItemName", itemName);
+    mSearchOption.insert("ItemName", itemName);
 }
 
 void SearchOption::setPageNo(int pageNo)
 {
-    m_searchOption.insert("PageNo", pageNo);
+    mSearchOption.insert("PageNo", pageNo);
 }
 
 void SearchOption::setSortCondition(QString sortCondition)
 {
     if (sortCondition == "ASC" || sortCondition == "DESC")
-        m_searchOption.insert("SortCondition", sortCondition);
+        mSearchOption.insert("SortCondition", sortCondition);
 }
 
 void SearchOption::setQuality(int quality)
 {
-    if (m_searchType == SearchType::Auction)
-        m_searchOption.insert("ItemGradeQuality", quality);
+    if (mSearchType == SearchType::Auction)
+        mSearchOption.insert("ItemGradeQuality", quality);
 }
 
 void SearchOption::setSkillOption(int firstOption, int secondOption, int minValue, int maxValue)
 {
-    if (m_searchType == SearchType::Market)
+    if (mSearchType == SearchType::Market)
         return;
 
     QJsonObject skillOption;
@@ -73,12 +73,12 @@ void SearchOption::setSkillOption(int firstOption, int secondOption, int minValu
         skillOption.insert("MinValue", minValue);
     if (maxValue != -1)
         skillOption.insert("MaxValue", maxValue);
-    m_skillOptions.append(skillOption);
+    mSkillOptions.append(skillOption);
 }
 
 void SearchOption::setEtcOption(EtcOptionCode firstOption, int secondOption, int minValue, int maxValue)
 {
-    if (m_searchType == SearchType::Market)
+    if (mSearchType == SearchType::Market)
         return;
 
     QJsonObject etcOption;
@@ -88,18 +88,18 @@ void SearchOption::setEtcOption(EtcOptionCode firstOption, int secondOption, int
         etcOption.insert("MinValue", minValue);
     if (maxValue != -1)
         etcOption.insert("MaxValue", maxValue);
-    m_etcOptions.append(etcOption);
+    mEtcOptions.append(etcOption);
 }
 
 QJsonObject SearchOption::toJsonObject()
 {
-    if (m_searchType == SearchType::Auction)
+    if (mSearchType == SearchType::Auction)
     {
-        if (m_skillOptions.size() > 0)
-            m_searchOption.insert("SkillOptions", m_skillOptions);
-        if (m_etcOptions.size() > 0)
-            m_searchOption.insert("EtcOptions", m_etcOptions);
+        if (mSkillOptions.size() > 0)
+            mSearchOption.insert("SkillOptions", mSkillOptions);
+        if (mEtcOptions.size() > 0)
+            mSearchOption.insert("EtcOptions", mEtcOptions);
     }
 
-    return m_searchOption;
+    return mSearchOption;
 }

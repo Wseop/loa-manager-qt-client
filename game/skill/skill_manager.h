@@ -18,13 +18,15 @@ public:
     static void destroyInstance();
 
 public:
-    QList<Skill> skillList(const QString &_class) const;
+    QStringList skillNames(const QString &_class) const;
+    QHash<QString, Skill> skills(const QString &_class) const;
 
 private:
     static SkillManager *m_pInstance;
 
 private:
-    QHash<QString, QList<Skill>> m_skillList;
+    QHash<QString, QStringList> m_skillNames;
+    QHash<QString, QHash<QString, Skill>> m_skills;
 };
 
 #endif // SKILLMANAGER_H

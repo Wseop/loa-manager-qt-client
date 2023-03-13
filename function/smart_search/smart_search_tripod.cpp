@@ -136,11 +136,13 @@ void SmartSearchTripod::initializeSearchButton()
         clearResult();
 
         // 선택된 직업의 스킬 목록 로드 & 트라이포드별로 가격 검색 시작
-        const QList<Skill> &skills = SkillManager::getInstance()->skillList(m_pClassSelector->currentText());
+        const QHash<QString, Skill> &skills = SkillManager::getInstance()->skills(m_pClassSelector->currentText());
+        const QStringList &skillNames = SkillManager::getInstance()->skillNames(m_pClassSelector->currentText());
 
-        for (int i = 0; i < skills.size(); i++)
+        for (int i = 0; i < skillNames.size(); i++)
         {
-            const Skill &skill = skills[i];
+            const QString &skillName = skillNames[i];
+            const Skill &skill = skills[skillName];
 
             addSkillWidget(skill, (i * 2) + 1);
 

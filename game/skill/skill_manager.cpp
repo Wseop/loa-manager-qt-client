@@ -61,7 +61,8 @@ void SkillManager::initializeSkillList()
 
                 newSkill.addTripod(newTripod);
             }
-            m_skillList[_class].append(newSkill);
+            m_skillNames[_class] << newSkill.skillName();
+            m_skills[_class][newSkill.skillName()] = newSkill;
         }
     }
 }
@@ -83,7 +84,12 @@ void SkillManager::destroyInstance()
     m_pInstance = nullptr;
 }
 
-QList<Skill> SkillManager::skillList(const QString &_class) const
+QStringList SkillManager::skillNames(const QString &_class) const
 {
-    return m_skillList[_class];
+    return m_skillNames[_class];
+}
+
+QHash<QString, Skill> SkillManager::skills(const QString &_class) const
+{
+    return m_skills[_class];
 }

@@ -31,6 +31,7 @@ SOURCES += \
     game/item/abilitystone.cpp \
     game/item/accessory.cpp \
     game/item/armor.cpp \
+    game/item/bracelet.cpp \
     game/item/gem.cpp \
     game/item/item.cpp \
     game/item/weapon.cpp \
@@ -72,6 +73,7 @@ HEADERS += \
     game/item/abilitystone.h \
     game/item/accessory.h \
     game/item/armor.h \
+    game/item/bracelet.h \
     game/item/gem.h \
     game/item/item.h \
     game/item/item_grade.h \

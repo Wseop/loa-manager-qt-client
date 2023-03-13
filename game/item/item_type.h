@@ -7,7 +7,7 @@
  */
 enum class ItemType
 {
-    Default, AbilityStone, Gem, Accessory, Armor, Weapon
+    Default, AbilityStone, Gem, Accessory, Armor, Weapon, Bracelet
 };
 
 #endif // ITEM_TYPE_H

@@ -47,3 +47,13 @@ void Engrave::addPenalty(const QString &penalty, int value)
     mPenaltyValues[penalty] += value;
 }
 
+void Engrave::addEngraveLevel(const QString &engrave, int level)
+{
+    mEngraveValues[engrave] += level * VALUE_PER_LEVEL;
+}
+
+void Engrave::addPenaltyLevel(const QString &penalty, int level)
+{
+    mPenaltyValues[penalty] += level * VALUE_PER_LEVEL;
+}
+

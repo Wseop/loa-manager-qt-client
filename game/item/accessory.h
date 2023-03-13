@@ -9,7 +9,7 @@
 
 enum class AccessoryPart
 {
-    Necklace, Earring, Ring
+    Necklace = 0, Earring = 1, Ring = 3
 };
 
 class Accessory : public Item, public Engrave

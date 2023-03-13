@@ -18,6 +18,8 @@ public:
 
     void addEngrave(const QString &engrave, int value);
     void addPenalty(const QString &penalty, int value);
+    void addEngraveLevel(const QString &engrave, int level);
+    void addPenaltyLevel(const QString &penalty, int level);
 
 private:
     QHash<QString, int> mEngraveValues;

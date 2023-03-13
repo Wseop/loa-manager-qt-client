@@ -8,7 +8,7 @@
 
 enum class ArmorPart
 {
-    Head, Shoulder, Top, Bottom, Hand
+    Head, Shoulder, Top, Bottom, Hand, size
 };
 
 struct Elixir

@@ -15,7 +15,7 @@ EngraveManager::EngraveManager()
 
 EngraveManager::~EngraveManager()
 {
-    destroyInstance();
+
 }
 
 void EngraveManager::initalizeEngraveList()

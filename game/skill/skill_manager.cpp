@@ -14,7 +14,7 @@ SkillManager::SkillManager()
 
 SkillManager::~SkillManager()
 {
-    destroyInstance();
+
 }
 
 void SkillManager::initializeSkillList()

@@ -240,5 +240,21 @@ QList<Skill *> Character::skills() const
 void Character::addSkill(Skill *pSkill)
 {
     if (pSkill != nullptr)
+    {
+        for (auto iter = mSkills.constBegin(); iter != mSkills.constEnd(); iter++)
+        {
+            Skill *p = *iter;
+
+            if (p->skillName() == pSkill->skillName())
+            {
+                iter = mSkills.erase(iter);
+                mSkills.insert(iter, pSkill);
+
+                delete p;
+                return;
+            }
+        }
+
         mSkills << pSkill;
+    }
 }

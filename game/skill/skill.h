@@ -12,6 +12,7 @@ class Skill
 {
 public:
     Skill();
+    Skill(const Skill &other);
     ~Skill();
 
     QString skillName() const;
@@ -24,6 +25,7 @@ public:
     void setIconPath(const QString &newIconPath);
 
     QList<Tripod> tripods() const;
+    Tripod &tripod(int index);
     void addTripod(const Tripod &tripod);
 
     int skillLevel() const;
@@ -41,7 +43,6 @@ private:
     QString mIconPath;
     bool mbCounter;
     QList<Tripod> mTripods;
-
     int mSkillLevel;
     Rune *mpRune;
 };

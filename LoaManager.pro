@@ -14,6 +14,7 @@ SOURCES += \
     db/db_manager.cpp \
     db/document_builder.cpp \
     function/auction_calculator/auction_calculator.cpp \
+    function/character_search/character_search.cpp \
     function/content_reward/content_reward.cpp \
     function/content_reward/content_reward_adder.cpp \
     function/content_reward/content_reward_table.cpp \
@@ -57,6 +58,7 @@ HEADERS += \
     db/db_manager.h \
     db/document_builder.h \
     function/auction_calculator/auction_calculator.h \
+    function/character_search/character_search.h \
     function/content_reward/content_reward.h \
     function/content_reward/content_reward_adder.h \
     function/content_reward/content_reward_table.h \
@@ -100,6 +102,7 @@ HEADERS += \
 
 FORMS += \
     function/auction_calculator/auction_calculator.ui \
+    function/character_search/character_search.ui \
     function/content_reward/content_reward.ui \
     function/content_reward/content_reward_adder.ui \
     function/content_reward/content_reward_table.ui \

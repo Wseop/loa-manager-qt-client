@@ -2,7 +2,20 @@
 #include "game/item/rune.h"
 
 Skill::Skill() :
+    mSkillLevel(1),
     mpRune(nullptr)
+{
+
+}
+
+Skill::Skill(const Skill &other) :
+    mSkillName(other.skillName()),
+    mSkillCode(other.mSkillCode),
+    mIconPath(other.iconPath()),
+    mbCounter(other.isCounter()),
+    mTripods(other.tripods()),
+    mSkillLevel(other.mSkillLevel),
+    mpRune(other.rune())
 {
 
 }
@@ -49,6 +62,11 @@ void Skill::setIconPath(const QString &newIconPath)
 QList<Tripod> Skill::tripods() const
 {
     return mTripods;
+}
+
+Tripod &Skill::tripod(int index)
+{
+    return mTripods[index];
 }
 
 void Skill::addTripod(const Tripod &tripod)

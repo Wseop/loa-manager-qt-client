@@ -23,6 +23,9 @@ public:
     QString iconPath() const;
     void setIconPath(const QString &newIconPath);
 
+    bool isSelected() const;
+    void setSelected(bool bSelected);
+
     int tripodLevel() const;
     void setTripodLevel(int newTripodLevel);
 
@@ -33,6 +36,7 @@ private:
     int mMaxLevel;
     QString mIconPath;
 
+    bool mbSelected;
     int mTripodLevel;
 };
 

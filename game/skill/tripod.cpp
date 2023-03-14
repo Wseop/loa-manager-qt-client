@@ -55,6 +55,16 @@ void Tripod::setIconPath(const QString &newIconPath)
     mIconPath = newIconPath;
 }
 
+bool Tripod::isSelected() const
+{
+    return mbSelected;
+}
+
+void Tripod::setSelected(bool bSelected)
+{
+    mbSelected = bSelected;
+}
+
 int Tripod::tripodLevel() const
 {
     return mTripodLevel;

@@ -3,6 +3,7 @@
 #include "ui/widget_manager.h"
 #include "ui/admin_login.h"
 #include "function/function_widget.h"
+#include "function/character_search/character_search.h"
 #include "function/auction_calculator/auction_calculator.h"
 #include "function/smart_search/smart_search.h"
 #include "function/content_reward/content_reward.h"
@@ -56,10 +57,11 @@ LoaManager::~LoaManager()
 void LoaManager::initFunction()
 {
     // main.json의 메뉴 list 순서에 맞게 등록
-    mFunctions.append(SmartSearch::getInstance());
-    mFunctions.append(AuctionCalculator::getInstance());
-    mFunctions.append(ContentReward::getInstance());
-    mFunctions.append(RaidProfit::getInstance());
+    mFunctions << CharacterSearch::getInstance();
+    mFunctions << SmartSearch::getInstance();
+    mFunctions << AuctionCalculator::getInstance();
+    mFunctions << ContentReward::getInstance();
+    mFunctions << RaidProfit::getInstance();
 
     for (QWidget* pWidget : mFunctions)
     {

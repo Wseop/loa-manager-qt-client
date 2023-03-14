@@ -154,23 +154,6 @@ void CharacterSearch::renderCharacter(Character *pCharacter)
     bool breakPoint = true;
 }
 
-CharacterSearch *CharacterSearch::getInstance()
-{
-    if (mpInstance == nullptr)
-        mpInstance = new CharacterSearch();
-
-    return mpInstance;
-}
-
-void CharacterSearch::destroyInstance()
-{
-    if (mpInstance == nullptr)
-        return;
-
-    delete mpInstance;
-    mpInstance = nullptr;
-}
-
 void CharacterSearch::parseSibling(Character *pCharacter, QJsonDocument response)
 {
     const QJsonArray &siblings = response.array();
@@ -378,6 +361,23 @@ void CharacterSearch::parseGem(Character *pCharacter, QJsonDocument response)
     }
 
     CharacterSearch::getInstance()->updateParseStatus((uint8_t)(1 << 6), pCharacter);
+}
+
+CharacterSearch *CharacterSearch::getInstance()
+{
+    if (mpInstance == nullptr)
+        mpInstance = new CharacterSearch();
+
+    return mpInstance;
+}
+
+void CharacterSearch::destroyInstance()
+{
+    if (mpInstance == nullptr)
+        return;
+
+    delete mpInstance;
+    mpInstance = nullptr;
 }
 
 void CharacterSearch::start()

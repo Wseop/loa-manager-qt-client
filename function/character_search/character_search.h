@@ -27,10 +27,7 @@ private:
     void updateParseStatus(uint8_t bit, Character *pCharacter);
     void renderCharacter(Character *pCharacter);
 
-public:
-    static CharacterSearch *getInstance();
-    static void destroyInstance();
-
+private:
     static void parseSibling(Character *pCharacter, QJsonDocument response);
     static void parseProfile(Character *pCharacter, QJsonDocument response);
     static void parseEquipment(Character *pCharacter, QJsonDocument response);
@@ -38,6 +35,10 @@ public:
     static void parseEngrave(Character *pCharacter, QJsonDocument response);
     static void parseCard(Character *pCharacter, QJsonDocument response);
     static void parseGem(Character *pCharacter, QJsonDocument response);
+
+public:
+    static CharacterSearch *getInstance();
+    static void destroyInstance();
 
 public:
     void start() override;

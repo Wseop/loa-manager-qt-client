@@ -150,7 +150,10 @@ Accessory *Character::getAccessory(AccessoryPart part, int index) const
 void Character::setAccessory(Accessory *pAccessory, int index)
 {
     if (index < 0 || index > 2)
+    {
+        delete pAccessory;
         return;
+    }
 
     AccessoryPart part = pAccessory->accessoryPart();
     Accessory **dpAccessory = nullptr;

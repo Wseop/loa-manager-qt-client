@@ -66,6 +66,16 @@ void Skill::setSkillLevel(int newSkillLevel)
     mSkillLevel = newSkillLevel;
 }
 
+bool Skill::isCounter() const
+{
+    return mbCounter;
+}
+
+void Skill::setCounter(bool bCounter)
+{
+    mbCounter = bCounter;
+}
+
 Rune *Skill::rune() const
 {
     return mpRune;

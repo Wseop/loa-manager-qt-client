@@ -29,6 +29,9 @@ public:
     int skillLevel() const;
     void setSkillLevel(int newSkillLevel);
 
+    bool isCounter() const;
+    void setCounter(bool bCounter);
+
     Rune *rune() const;
     void setRune(Rune *pNewRune);
 
@@ -36,6 +39,7 @@ private:
     QString mSkillName;
     int mSkillCode;
     QString mIconPath;
+    bool mbCounter;
     QList<Tripod> mTripods;
 
     int mSkillLevel;

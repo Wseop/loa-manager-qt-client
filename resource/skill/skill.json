@@ -7,6 +7,7 @@
                     "Text": "더블 슬래쉬",
                     "Value": 16100,
                     "IconPath": "BK_Skill_01_1.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "혼신의 일격",
@@ -54,6 +55,7 @@
                     "Text": "어설트 블레이드",
                     "Value": 16110,
                     "IconPath": "BK_Skill_01_7.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "날렵한 움직임",
@@ -101,6 +103,7 @@
                     "Text": "크라임 해저드",
                     "Value": 16050,
                     "IconPath": "BK_Skill_01_4.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "근육 경련",
@@ -148,6 +151,7 @@
                     "Text": "피니쉬 스트라이크",
                     "Value": 16300,
                     "IconPath": "BK_Skill_01_14.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "강인함",
@@ -195,6 +199,7 @@
                     "Text": "숄더 차지",
                     "Value": 16060,
                     "IconPath": "BK_Skill_01_5.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "보호막 효과",
@@ -242,6 +247,7 @@
                     "Text": "휠윈드",
                     "Value": 16070,
                     "IconPath": "BK_Skill_01_3.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "가벼운 발걸음",
@@ -289,6 +295,7 @@
                     "Text": "파워 브레이크",
                     "Value": 16030,
                     "IconPath": "BK_Skill_01_6.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "예리한 일격",
@@ -336,6 +343,7 @@
                     "Text": "템페스트 슬래쉬",
                     "Value": 16190,
                     "IconPath": "BK_Skill_01_12.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "집중",
@@ -383,6 +391,7 @@
                     "Text": "마운틴 크래쉬",
                     "Value": 16220,
                     "IconPath": "BK_Skill_01_16.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -430,6 +439,7 @@
                     "Text": "다이빙 슬래쉬",
                     "Value": 16210,
                     "IconPath": "BK_Skill_01_13.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "탁월한 기동성",
@@ -477,6 +487,7 @@
                     "Text": "헬 블레이드",
                     "Value": 16080,
                     "IconPath": "BK_Skill_01_0.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "수련의 성과",
@@ -524,6 +535,7 @@
                     "Text": "체인 소드",
                     "Value": 16500,
                     "IconPath": "BK_Skill_01_18.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "급소 타격",
@@ -571,6 +583,7 @@
                     "Text": "윈드 블레이드",
                     "Value": 16610,
                     "IconPath": "BK_Skill_01_21.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "가속",
@@ -618,6 +631,7 @@
                     "Text": "메일스톰",
                     "Value": 16620,
                     "IconPath": "BK_Skill_01_22.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "날렵한 움직임",
@@ -665,6 +679,7 @@
                     "Text": "브레이브 슬래쉬",
                     "Value": 16630,
                     "IconPath": "BK_Skill_01_24.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -712,6 +727,7 @@
                     "Text": "레드 더스트",
                     "Value": 16120,
                     "IconPath": "BK_Skill_01_8.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "피해 증폭",
@@ -759,6 +775,7 @@
                     "Text": "소드 스톰",
                     "Value": 16600,
                     "IconPath": "BK_Skill_01_19.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "날렵한 움직임",
@@ -806,6 +823,7 @@
                     "Text": "오버드라이브",
                     "Value": 16640,
                     "IconPath": "BK_Skill_01_25.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "급소 타격",
@@ -858,6 +876,7 @@
                     "Text": "헤비 크러쉬",
                     "Value": 18050,
                     "IconPath": "DT_Skill_01_0.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "순각타격",
@@ -905,6 +924,7 @@
                     "Text": "그라비티 임팩트",
                     "Value": 18060,
                     "IconPath": "DT_Skill_01_1.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "충전 강화",
@@ -952,6 +972,7 @@
                     "Text": "드레드노트",
                     "Value": 18110,
                     "IconPath": "DT_Skill_01_3.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "강인함",
@@ -999,6 +1020,7 @@
                     "Text": "파워 스트라이크",
                     "Value": 18180,
                     "IconPath": "DT_Skill_01_14.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "무모한 공격",
@@ -1046,6 +1068,7 @@
                     "Text": "점핑 스매쉬",
                     "Value": 18160,
                     "IconPath": "DT_Skill_01_12.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "어둠의 불꽃",
@@ -1093,6 +1116,7 @@
                     "Text": "파워 숄더",
                     "Value": 18220,
                     "IconPath": "DT_Skill_01_18.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "단단한 신체",
@@ -1140,6 +1164,7 @@
                     "Text": "어스 스매셔",
                     "Value": 18080,
                     "IconPath": "DT_Skill_01_5.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "치명적인 힘",
@@ -1187,6 +1212,7 @@
                     "Text": "러닝 크래쉬",
                     "Value": 18210,
                     "IconPath": "DT_Skill_01_16.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "재빠른 움직임",
@@ -1234,6 +1260,7 @@
                     "Text": "그라비티 포스",
                     "Value": 18200,
                     "IconPath": "DT_Skill_01_17.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "충전 강화",
@@ -1281,6 +1308,7 @@
                     "Text": "인듀어 페인",
                     "Value": 18140,
                     "IconPath": "DT_Skill_01_9.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "넓은 타격",
@@ -1328,6 +1356,7 @@
                     "Text": "어스 이터",
                     "Value": 18150,
                     "IconPath": "DT_Skill_01_11.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "강화된 일격",
@@ -1375,6 +1404,7 @@
                     "Text": "풀 스윙",
                     "Value": 18070,
                     "IconPath": "DT_Skill_01_7.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "단단한 심장",
@@ -1422,6 +1452,7 @@
                     "Text": "뉴트럴라이저",
                     "Value": 18100,
                     "IconPath": "DT_Skill_01_2.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "중력 충전",
@@ -1469,6 +1500,7 @@
                     "Text": "어스 웨이브",
                     "Value": 18090,
                     "IconPath": "DT_Skill_01_23.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "중력 충전",
@@ -1516,6 +1548,7 @@
                     "Text": "퍼펙트 스윙",
                     "Value": 18170,
                     "IconPath": "DT_Skill_01_13.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "약점 포착",
@@ -1563,6 +1596,7 @@
                     "Text": "그라비티 컴프레이션",
                     "Value": 18190,
                     "IconPath": "DT_Skill_01_15.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "단단한 심장",
@@ -1610,6 +1644,7 @@
                     "Text": "사이즈믹 해머",
                     "Value": 18130,
                     "IconPath": "DT_Skill_01_10.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -1662,6 +1697,7 @@
                     "Text": "날카로운 창",
                     "Value": 17030,
                     "IconPath": "GL_Skill_01_19.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "진격",
@@ -1709,6 +1745,7 @@
                     "Text": "라이징 스피어",
                     "Value": 17070,
                     "IconPath": "GL_Skill_01_20.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "돌진",
@@ -1756,6 +1793,7 @@
                     "Text": "파이어 불릿",
                     "Value": 17060,
                     "IconPath": "GL_Skill_01_2.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "단단한 갑옷",
@@ -1803,6 +1841,7 @@
                     "Text": "대쉬 어퍼 파이어",
                     "Value": 17080,
                     "IconPath": "GL_Skill_01_8.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -1850,6 +1889,7 @@
                     "Text": "차지 스팅거",
                     "Value": 17210,
                     "IconPath": "GL_Skill_01_30.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "상처",
@@ -1897,6 +1937,7 @@
                     "Text": "카운터 스피어",
                     "Value": 17190,
                     "IconPath": "GL_Skill_01_29.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "공격 준비",
@@ -1944,6 +1985,7 @@
                     "Text": "스피어 샷",
                     "Value": 17160,
                     "IconPath": "GL_Skill_01_27.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "단단한 갑옷",
@@ -1991,6 +2033,7 @@
                     "Text": "버스트 캐넌",
                     "Value": 17200,
                     "IconPath": "GL_Skill_01_9.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "관통탄",
@@ -2038,6 +2081,7 @@
                     "Text": "방패 밀치기",
                     "Value": 17150,
                     "IconPath": "GL_Skill_01_22.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "갑옷 파괴",
@@ -2085,6 +2129,7 @@
                     "Text": "배쉬",
                     "Value": 17040,
                     "IconPath": "GL_Skill_01_1.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "갑옷 파괴",
@@ -2132,6 +2177,7 @@
                     "Text": "리프 어택",
                     "Value": 17110,
                     "IconPath": "GL_Skill_01_5.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "강화된 일격",
@@ -2179,6 +2225,7 @@
                     "Text": "가디언의 낙뢰",
                     "Value": 17140,
                     "IconPath": "GL_Skill_01_16.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -2226,6 +2273,7 @@
                     "Text": "갈고리 사슬",
                     "Value": 17090,
                     "IconPath": "GL_Skill_01_17.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -2273,6 +2321,7 @@
                     "Text": "방패 돌진",
                     "Value": 17050,
                     "IconPath": "GL_Skill_01_3.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "단단한 갑옷",
@@ -2320,6 +2369,7 @@
                     "Text": "증오의 함성",
                     "Value": 17180,
                     "IconPath": "GL_Skill_01_14.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -2367,6 +2417,7 @@
                     "Text": "방패 격동",
                     "Value": 17100,
                     "IconPath": "GL_Skill_01_18.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -2414,6 +2465,7 @@
                     "Text": "넬라시아의 기운",
                     "Value": 17130,
                     "IconPath": "GL_Skill_01_15.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "가벼운 발걸음",
@@ -2466,6 +2518,7 @@
                     "Text": "회전 베기",
                     "Value": 36030,
                     "IconPath": "HK_Skill_01_0.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "유연한 검술",
@@ -2513,6 +2566,7 @@
                     "Text": "섬광 찌르기",
                     "Value": 36040,
                     "IconPath": "HK_Skill_01_1.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "탁월한 기동성",
@@ -2560,6 +2614,7 @@
                     "Text": "돌진",
                     "Value": 36070,
                     "IconPath": "HK_Skill_01_4.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "탁월한 기동성",
@@ -2607,6 +2662,7 @@
                     "Text": "섬광 베기",
                     "Value": 36090,
                     "IconPath": "HK_Skill_01_6.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "단단한 갑옷",
@@ -2654,6 +2710,7 @@
                     "Text": "처단",
                     "Value": 36110,
                     "IconPath": "HK_Skill_01_8.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "재빠른 손놀림",
@@ -2701,6 +2758,7 @@
                     "Text": "질주 베기",
                     "Value": 36130,
                     "IconPath": "HK_Skill_01_10.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "단단한 갑옷",
@@ -2748,6 +2806,7 @@
                     "Text": "집행자의 검",
                     "Value": 36160,
                     "IconPath": "HK_Skill_01_13.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "가벼운 발걸음",
@@ -2795,6 +2854,7 @@
                     "Text": "정의 집행",
                     "Value": 36180,
                     "IconPath": "HK_Skill_01_15.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "수호 방벽",
@@ -2842,6 +2902,7 @@
                     "Text": "신성검",
                     "Value": 36190,
                     "IconPath": "HK_Skill_01_16.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "자세 잡기",
@@ -2889,6 +2950,7 @@
                     "Text": "빛의 충격",
                     "Value": 36050,
                     "IconPath": "HK_Skill_01_2.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "재빠른 손놀림",
@@ -2936,6 +2998,7 @@
                     "Text": "심판의 빛",
                     "Value": 36060,
                     "IconPath": "HK_Skill_01_3.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "재빠른 손놀림",
@@ -2983,6 +3046,7 @@
                     "Text": "정의의 검",
                     "Value": 36080,
                     "IconPath": "HK_Skill_01_5.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "통찰력",
@@ -3030,6 +3094,7 @@
                     "Text": "신의 율법",
                     "Value": 36150,
                     "IconPath": "HK_Skill_01_12.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "보호막",
@@ -3077,6 +3142,7 @@
                     "Text": "신의 분노",
                     "Value": 36170,
                     "IconPath": "HK_Skill_01_14.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "약육강식",
@@ -3124,6 +3190,7 @@
                     "Text": "신성 지역",
                     "Value": 36120,
                     "IconPath": "HK_Skill_01_9.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -3171,6 +3238,7 @@
                     "Text": "신성한 보호",
                     "Value": 36140,
                     "IconPath": "HK_Skill_01_11.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -3218,6 +3286,7 @@
                     "Text": "신성 폭발",
                     "Value": 36100,
                     "IconPath": "HK_Skill_01_7.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "단단한 갑옷",
@@ -3265,6 +3334,7 @@
                     "Text": "천상의 축복",
                     "Value": 36200,
                     "IconPath": "HK_Skill_01_17.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "정신 강화",
@@ -3317,6 +3387,7 @@
                     "Text": "크로스 블레이드",
                     "Value": 45100,
                     "IconPath": "BK_Skill_01_1.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "피해 증폭",
@@ -3364,6 +3435,7 @@
                     "Text": "퍼니싱 드로",
                     "Value": 45700,
                     "IconPath": "BK_Skill_01_28.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -3411,6 +3483,7 @@
                     "Text": "퓨리어스 클로",
                     "Value": 45710,
                     "IconPath": "BK_Skill_01_29.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "탁월한 기동성",
@@ -3458,6 +3531,7 @@
                     "Text": "페이탈 소드",
                     "Value": 45300,
                     "IconPath": "BK_Skill_01_14.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "강인함",
@@ -3505,6 +3579,7 @@
                     "Text": "와일드 러시",
                     "Value": 45060,
                     "IconPath": "BK_Skill_01_5.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "보호막 효과",
@@ -3552,6 +3627,7 @@
                     "Text": "그라운드 스매시",
                     "Value": 45620,
                     "IconPath": "BK_Skill_01_22.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "날렵한 움직임",
@@ -3599,6 +3675,7 @@
                     "Text": "퓨리 블레이드",
                     "Value": 45050,
                     "IconPath": "BK_Skill_01_4.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "근육 경련",
@@ -3646,6 +3723,7 @@
                     "Text": "파이널 블로",
                     "Value": 45190,
                     "IconPath": "BK_Skill_01_12.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "집중",
@@ -3693,6 +3771,7 @@
                     "Text": "와일드 스톰프",
                     "Value": 45220,
                     "IconPath": "BK_Skill_01_16.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -3740,6 +3819,7 @@
                     "Text": "플래시 블레이드",
                     "Value": 45110,
                     "IconPath": "BK_Skill_01_7.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "피해 증폭",
@@ -3787,6 +3867,7 @@
                     "Text": "크루얼 피어스",
                     "Value": 45740,
                     "IconPath": "BK_Skill_01_32.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "집중",
@@ -3834,6 +3915,7 @@
                     "Text": "플라잉 스트라이크",
                     "Value": 45210,
                     "IconPath": "BK_Skill_01_13.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "탁월한 기동성",
@@ -3881,6 +3963,7 @@
                     "Text": "허리케인 소드",
                     "Value": 45070,
                     "IconPath": "BK_Skill_01_3.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "가벼운 발걸음",
@@ -3928,6 +4011,7 @@
                     "Text": "스피닝 소드",
                     "Value": 45610,
                     "IconPath": "BK_Skill_01_21.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "가속",
@@ -3975,6 +4059,7 @@
                     "Text": "마운틴 클리브",
                     "Value": 45600,
                     "IconPath": "BK_Skill_01_19.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "날렵한 움직임",
@@ -4022,6 +4107,7 @@
                     "Text": "볼케이노 이럽션",
                     "Value": 45080,
                     "IconPath": "BK_Skill_01_0.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "수련의 성과",
@@ -4069,6 +4155,7 @@
                     "Text": "길로틴",
                     "Value": 45720,
                     "IconPath": "BK_Skill_01_30.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -4116,6 +4203,7 @@
                     "Text": "브루탈 임팩트",
                     "Value": 45730,
                     "IconPath": "BK_Skill_01_31.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "꿰뚫는 일격",
@@ -4168,6 +4256,7 @@
                     "Text": "운명의 부름",
                     "Value": 19180,
                     "IconPath": "AC_Skill_01_10.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "정신 강화",
@@ -4215,6 +4304,7 @@
                     "Text": "언리미티드 셔플",
                     "Value": 19120,
                     "IconPath": "AC_Skill_01_8.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "파멸의 셔플",
@@ -4262,6 +4352,7 @@
                     "Text": "리턴",
                     "Value": 19260,
                     "IconPath": "AC_Skill_01_15.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "급소 노출",
@@ -4309,6 +4400,7 @@
                     "Text": "신비한 쇄도",
                     "Value": 19210,
                     "IconPath": "AC_Skill_01_17.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "정신 강화",
@@ -4356,6 +4448,7 @@
                     "Text": "다크 리저렉션",
                     "Value": 19050,
                     "IconPath": "AC_Skill_01_4.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "날렵한 움직임",
@@ -4403,6 +4496,7 @@
                     "Text": "이보크",
                     "Value": 19030,
                     "IconPath": "AC_Skill_01_1.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -4450,6 +4544,7 @@
                     "Text": "쿼드라 엑셀레이트",
                     "Value": 19170,
                     "IconPath": "AC_Skill_01_9.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "부위파괴 강화",
@@ -4497,6 +4592,7 @@
                     "Text": "스크래치 딜러",
                     "Value": 19320,
                     "IconPath": "AC_Skill_01_24.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "탁월한 기동성",
@@ -4544,6 +4640,7 @@
                     "Text": "스파이럴 엣지",
                     "Value": 19190,
                     "IconPath": "AC_Skill_01_14.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "정신 강화",
@@ -4591,6 +4688,7 @@
                     "Text": "댄싱 오브 스파인플라워",
                     "Value": 19200,
                     "IconPath": "AC_Skill_01_11.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "치명적인 꽃",
@@ -4638,6 +4736,7 @@
                     "Text": "체크메이트",
                     "Value": 19040,
                     "IconPath": "AC_Skill_01_3.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "꿰뚫는 일격",
@@ -4685,6 +4784,7 @@
                     "Text": "스트림 오브 엣지",
                     "Value": 19150,
                     "IconPath": "AC_Skill_01_5.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "카드 증가",
@@ -4732,6 +4832,7 @@
                     "Text": "백 플러쉬",
                     "Value": 19230,
                     "IconPath": "AC_Skill_01_19.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "정신 강화",
@@ -4779,6 +4880,7 @@
                     "Text": "셀레스티얼 레인",
                     "Value": 19140,
                     "IconPath": "AC_Skill_01_6.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "날렵한 움직임",
@@ -4826,6 +4928,7 @@
                     "Text": "포 카드",
                     "Value": 19160,
                     "IconPath": "AC_Skill_01_7.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "신속한 준비",
@@ -4873,6 +4976,7 @@
                     "Text": "세렌디피티",
                     "Value": 19240,
                     "IconPath": "AC_Skill_01_20.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "꿰뚫는 일격",
@@ -4920,6 +5024,7 @@
                     "Text": "시크릿 가든",
                     "Value": 19310,
                     "IconPath": "AC_Skill_01_23.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -4972,6 +5077,7 @@
                     "Text": "마력의 결정체",
                     "Value": 20020,
                     "IconPath": "SM_Skill_01_1.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "정신 강화",
@@ -5019,6 +5125,7 @@
                     "Text": "순간 폭발",
                     "Value": 20050,
                     "IconPath": "SM_Skill_01_5.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "통찰력",
@@ -5066,6 +5173,7 @@
                     "Text": "쏜살 바람새",
                     "Value": 20060,
                     "IconPath": "SM_Skill_01_6.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "정신 강화",
@@ -5113,6 +5221,7 @@
                     "Text": "마력의 질주",
                     "Value": 20030,
                     "IconPath": "SM_Skill_01_2.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "불타는 질주",
@@ -5160,6 +5269,7 @@
                     "Text": "방출된 의지",
                     "Value": 20200,
                     "IconPath": "SM_Skill_01_14.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "탁월한 기동성",
@@ -5207,6 +5317,7 @@
                     "Text": "윙드 스피릿",
                     "Value": 20220,
                     "IconPath": "SM_Skill_01_16.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마력 강화",
@@ -5254,6 +5365,7 @@
                     "Text": "전류 방출",
                     "Value": 20230,
                     "IconPath": "SM_Skill_01_17.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "체인 방출",
@@ -5301,6 +5413,7 @@
                     "Text": "끈적이는 이끼늪",
                     "Value": 20180,
                     "IconPath": "SM_Skill_01_3.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "정신 강화",
@@ -5348,6 +5461,7 @@
                     "Text": "대지 붕괴",
                     "Value": 20240,
                     "IconPath": "SM_Skill_01_18.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "화염 붕괴",
@@ -5395,6 +5509,7 @@
                     "Text": "물의 정령",
                     "Value": 20250,
                     "IconPath": "SM_Skill_01_19.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "재빠른 시전",
@@ -5442,6 +5557,7 @@
                     "Text": "전기 폭풍",
                     "Value": 20270,
                     "IconPath": "SM_Skill_01_21.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -5489,6 +5605,7 @@
                     "Text": "고대의 창",
                     "Value": 20260,
                     "IconPath": "SM_Skill_01_20.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "고대의 심판",
@@ -5536,6 +5653,7 @@
                     "Text": "레이네의 가호",
                     "Value": 20040,
                     "IconPath": "SM_Skill_01_4.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "보호의 바람",
@@ -5583,6 +5701,7 @@
                     "Text": "파우루",
                     "Value": 20110,
                     "IconPath": "SM_Skill_01_37.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "황혼의 연소",
@@ -5630,6 +5749,7 @@
                     "Text": "엘씨드",
                     "Value": 20090,
                     "IconPath": "SM_Skill_01_36.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "정신 강화",
@@ -5677,6 +5797,7 @@
                     "Text": "마리린",
                     "Value": 20130,
                     "IconPath": "SM_Skill_01_39.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "공격력 강화",
@@ -5724,6 +5845,7 @@
                     "Text": "슈르디",
                     "Value": 20160,
                     "IconPath": "SM_Skill_01_25.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "충돌 무시",
@@ -5776,6 +5898,7 @@
                     "Text": "사운드 쇼크",
                     "Value": 21020,
                     "IconPath": "BD_Skill_01_1.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -5823,6 +5946,7 @@
                     "Text": "불협화음",
                     "Value": 21060,
                     "IconPath": "BD_Skill_01_5.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "날렵한 시전",
@@ -5870,6 +5994,7 @@
                     "Text": "사운드 웨이브",
                     "Value": 21050,
                     "IconPath": "BD_Skill_01_4.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "날렵한 시전",
@@ -5917,6 +6042,7 @@
                     "Text": "스티그마",
                     "Value": 21090,
                     "IconPath": "BD_Skill_01_8.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "넓은 공격",
@@ -5964,6 +6090,7 @@
                     "Text": "소나티네",
                     "Value": 21290,
                     "IconPath": "BD_Skill_01_26.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -6011,6 +6138,7 @@
                     "Text": "빛의 광시곡",
                     "Value": 21260,
                     "IconPath": "BD_Skill_01_22.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -6058,6 +6186,7 @@
                     "Text": "윈드 오브 뮤직",
                     "Value": 21070,
                     "IconPath": "BD_Skill_01_6.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "정신 강화",
@@ -6105,6 +6234,7 @@
                     "Text": "음파 진동",
                     "Value": 21170,
                     "IconPath": "BD_Skill_01_13.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "날렵한 시전",
@@ -6152,6 +6282,7 @@
                     "Text": "리듬 벅샷",
                     "Value": 21150,
                     "IconPath": "BD_Skill_01_9.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "선율 증가",
@@ -6199,6 +6330,7 @@
                     "Text": "사운드 홀릭",
                     "Value": 21120,
                     "IconPath": "BD_Skill_01_11.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "사운드 집중",
@@ -6246,6 +6378,7 @@
                     "Text": "폭풍의 서곡",
                     "Value": 21080,
                     "IconPath": "BD_Skill_01_7.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "정신 집중",
@@ -6293,6 +6426,7 @@
                     "Text": "천상의 연주",
                     "Value": 21160,
                     "IconPath": "BD_Skill_01_12.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -6340,6 +6474,7 @@
                     "Text": "음표 뭉치",
                     "Value": 21110,
                     "IconPath": "BD_Skill_01_10.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "굳건한 음표",
@@ -6387,6 +6522,7 @@
                     "Text": "죽음의 전주곡",
                     "Value": 21240,
                     "IconPath": "BD_Skill_01_20.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "열렬한 환호",
@@ -6434,6 +6570,7 @@
                     "Text": "율동의 하프",
                     "Value": 21180,
                     "IconPath": "BD_Skill_01_18.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "소환의 의지",
@@ -6481,6 +6618,7 @@
                     "Text": "행진곡",
                     "Value": 21270,
                     "IconPath": "BD_Skill_01_24.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "시간 감소",
@@ -6528,6 +6666,7 @@
                     "Text": "수호의 연주",
                     "Value": 21250,
                     "IconPath": "BD_Skill_01_21.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "강인함",
@@ -6580,6 +6719,7 @@
                     "Text": "블레이즈",
                     "Value": 37200,
                     "IconPath": "SCS_Skill_01_3.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "발화",
@@ -6627,6 +6767,7 @@
                     "Text": "에너지 방출",
                     "Value": 37240,
                     "IconPath": "SCS_Skill_01_15.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "날렵한 시전",
@@ -6674,6 +6815,7 @@
                     "Text": "라이트닝 볼텍스",
                     "Value": 37210,
                     "IconPath": "SCS_Skill_01_12.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마비",
@@ -6721,6 +6863,7 @@
                     "Text": "혹한의 부름",
                     "Value": 37340,
                     "IconPath": "SCS_Skill_01_9.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "오한",
@@ -6768,6 +6911,7 @@
                     "Text": "돌풍",
                     "Value": 37310,
                     "IconPath": "SCS_Skill_01_17.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "정신 강화",
@@ -6815,6 +6959,7 @@
                     "Text": "숭고한 해일",
                     "Value": 37320,
                     "IconPath": "SCS_Skill_01_11.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "정신 강화",
@@ -6862,6 +7007,7 @@
                     "Text": "인페르노",
                     "Value": 37230,
                     "IconPath": "SCS_Skill_01_4.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "발화",
@@ -6909,6 +7055,7 @@
                     "Text": "천벌",
                     "Value": 37270,
                     "IconPath": "SCS_Skill_01_14.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마비",
@@ -6956,6 +7103,7 @@
                     "Text": "리버스 그래비티",
                     "Value": 37280,
                     "IconPath": "SCS_Skill_01_16.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -7003,6 +7151,7 @@
                     "Text": "서릿발",
                     "Value": 37220,
                     "IconPath": "SCS_Skill_01_7.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "오한",
@@ -7050,6 +7199,7 @@
                     "Text": "라이트닝 볼트",
                     "Value": 37300,
                     "IconPath": "SCS_Skill_01_13.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마비",
@@ -7097,6 +7247,7 @@
                     "Text": "엘리멘탈 리액트",
                     "Value": 37260,
                     "IconPath": "SCS_Skill_01_18.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "통찰력",
@@ -7144,6 +7295,7 @@
                     "Text": "아이스 애로우",
                     "Value": 37250,
                     "IconPath": "SCS_Skill_01_8.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "오한",
@@ -7191,6 +7343,7 @@
                     "Text": "익스플로전",
                     "Value": 37330,
                     "IconPath": "SCS_Skill_01_5.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "발화",
@@ -7238,6 +7391,7 @@
                     "Text": "엘레기안의 손길",
                     "Value": 37290,
                     "IconPath": "SCS_Skill_01_10.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마나 회복",
@@ -7285,6 +7439,7 @@
                     "Text": "종말의 날",
                     "Value": 37350,
                     "IconPath": "SCS_Skill_01_6.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "발화",
@@ -7337,6 +7492,7 @@
                     "Text": "삼연권",
                     "Value": 22180,
                     "IconPath": "BM_Skill_01_6.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "암흑 공격",
@@ -7384,6 +7540,7 @@
                     "Text": "붕천퇴",
                     "Value": 22160,
                     "IconPath": "BM_Skill_01_14.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "탁월한 기동성",
@@ -7431,6 +7588,7 @@
                     "Text": "뇌명각",
                     "Value": 22170,
                     "IconPath": "BM_Skill_01_18.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "날카로운 움직임",
@@ -7478,6 +7636,7 @@
                     "Text": "섬열란아",
                     "Value": 22060,
                     "IconPath": "BM_Skill_01_3.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "성스러운 공격",
@@ -7525,6 +7684,7 @@
                     "Text": "월섬각",
                     "Value": 22190,
                     "IconPath": "BM_Skill_01_16.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "열섬각",
@@ -7572,6 +7732,7 @@
                     "Text": "지뢰진",
                     "Value": 22090,
                     "IconPath": "BM_Skill_01_9.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "진동 강화",
@@ -7619,6 +7780,7 @@
                     "Text": "잠룡승천축",
                     "Value": 22070,
                     "IconPath": "BM_Skill_01_2.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "나선각",
@@ -7666,6 +7828,7 @@
                     "Text": "바람의 속삭임",
                     "Value": 22120,
                     "IconPath": "BM_Skill_01_7.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "바람의 축복",
@@ -7713,6 +7876,7 @@
                     "Text": "초풍각",
                     "Value": 22280,
                     "IconPath": "BM_Skill_01_23.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "뇌풍각",
@@ -7760,6 +7924,7 @@
                     "Text": "화조강림",
                     "Value": 22130,
                     "IconPath": "BM_Skill_01_12.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "넓은 타격",
@@ -7807,6 +7972,7 @@
                     "Text": "용맹의 포효",
                     "Value": 22080,
                     "IconPath": "BM_Skill_01_4.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -7854,6 +8020,7 @@
                     "Text": "방천격",
                     "Value": 22320,
                     "IconPath": "BM_Skill_01_26.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "엘리멘탈 갈취",
@@ -7901,6 +8068,7 @@
                     "Text": "내공연소",
                     "Value": 22290,
                     "IconPath": "BM_Skill_01_24.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "연소 갑옷",
@@ -7948,6 +8116,7 @@
                     "Text": "오의 : 나선경",
                     "Value": 22030,
                     "IconPath": "BM_Skill_01_11.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "약점 포착",
@@ -7995,6 +8164,7 @@
                     "Text": "오의 : 화룡천상",
                     "Value": 22040,
                     "IconPath": "BM_Skill_01_5.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "흡수 타격",
@@ -8042,6 +8212,7 @@
                     "Text": "오의 : 뇌진격",
                     "Value": 22100,
                     "IconPath": "BM_Skill_01_0.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "급소 타격",
@@ -8089,6 +8260,7 @@
                     "Text": "오의 : 풍신초래",
                     "Value": 22110,
                     "IconPath": "BM_Skill_01_8.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "대지 폭풍",
@@ -8136,6 +8308,7 @@
                     "Text": "오의 : 폭쇄진",
                     "Value": 22020,
                     "IconPath": "BM_Skill_01_1.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "약점 포착",
@@ -8188,6 +8361,7 @@
                     "Text": "전진의 일격",
                     "Value": 23020,
                     "IconPath": "IF_Skill_01_0.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "집중",
@@ -8235,6 +8409,7 @@
                     "Text": "파쇄의 강타",
                     "Value": 23090,
                     "IconPath": "IF_Skill_01_2.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "피의 갈증",
@@ -8282,6 +8457,7 @@
                     "Text": "맹호격",
                     "Value": 23180,
                     "IconPath": "IF_Skill_01_14.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "넓은 타격",
@@ -8329,6 +8505,7 @@
                     "Text": "용의 강림",
                     "Value": 23050,
                     "IconPath": "IF_Skill_01_5.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "탁월한 기동성",
@@ -8376,6 +8553,7 @@
                     "Text": "순간 타격",
                     "Value": 23150,
                     "IconPath": "IF_Skill_01_13.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "넓은 타격",
@@ -8423,6 +8601,7 @@
                     "Text": "지진쇄",
                     "Value": 23070,
                     "IconPath": "IF_Skill_01_8.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "대지의 힘",
@@ -8470,6 +8649,7 @@
                     "Text": "난타연권",
                     "Value": 23220,
                     "IconPath": "IF_Skill_01_18.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빈틈포착",
@@ -8517,6 +8697,7 @@
                     "Text": "밀고 나가기",
                     "Value": 23200,
                     "IconPath": "IF_Skill_01_15.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "급소타격",
@@ -8564,6 +8745,7 @@
                     "Text": "철포난격",
                     "Value": 23230,
                     "IconPath": "IF_Skill_01_19.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "강화된 타격",
@@ -8611,6 +8793,7 @@
                     "Text": "공명의 사슬",
                     "Value": 23080,
                     "IconPath": "IF_Skill_01_1.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -8658,6 +8841,7 @@
                     "Text": "심판",
                     "Value": 23060,
                     "IconPath": "IF_Skill_01_9.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "급소타격",
@@ -8705,6 +8889,7 @@
                     "Text": "일망 타진",
                     "Value": 23160,
                     "IconPath": "IF_Skill_01_12.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "신속한 준비",
@@ -8752,6 +8937,7 @@
                     "Text": "죽음의 선고",
                     "Value": 23110,
                     "IconPath": "IF_Skill_01_10.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -8799,6 +8985,7 @@
                     "Text": "회심의 일격",
                     "Value": 23210,
                     "IconPath": "IF_Skill_01_7.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -8846,6 +9033,7 @@
                     "Text": "연환파신권",
                     "Value": 23100,
                     "IconPath": "IF_Skill_01_4.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "노련한 행동",
@@ -8893,6 +9081,7 @@
                     "Text": "진 용출권",
                     "Value": 23240,
                     "IconPath": "IF_Skill_01_20.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "기술 연마",
@@ -8940,6 +9129,7 @@
                     "Text": "파쇄격",
                     "Value": 23260,
                     "IconPath": "IF_Skill_01_22.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "과격한 주먹",
@@ -8987,6 +9177,7 @@
                     "Text": "초신성 폭발",
                     "Value": 23130,
                     "IconPath": "IF_Skill_01_11.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "재빠른 손놀림",
@@ -9039,6 +9230,7 @@
                     "Text": "무공탄",
                     "Value": 24090,
                     "IconPath": "SO_Skill_01_1.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "속도 강화",
@@ -9086,6 +9278,7 @@
                     "Text": "파쇄장",
                     "Value": 24180,
                     "IconPath": "SO_Skill_01_13.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "인내 강화",
@@ -9133,6 +9326,7 @@
                     "Text": "독마권",
                     "Value": 24070,
                     "IconPath": "SO_Skill_01_4.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "충전 강화",
@@ -9180,6 +9374,7 @@
                     "Text": "회선격추",
                     "Value": 24220,
                     "IconPath": "SO_Skill_01_17.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "밀쳐내기",
@@ -9227,6 +9422,7 @@
                     "Text": "흡철장",
                     "Value": 24170,
                     "IconPath": "SO_Skill_01_12.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "단단한 갑옷",
@@ -9274,6 +9470,7 @@
                     "Text": "탄지공",
                     "Value": 24260,
                     "IconPath": "SO_Skill_01_24.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -9321,6 +9518,7 @@
                     "Text": "벽력장",
                     "Value": 24080,
                     "IconPath": "SO_Skill_01_5.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "선공 준비",
@@ -9368,6 +9566,7 @@
                     "Text": "여래신장",
                     "Value": 24120,
                     "IconPath": "SO_Skill_01_8.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "공격 강화",
@@ -9415,6 +9614,7 @@
                     "Text": "순보",
                     "Value": 24240,
                     "IconPath": "SO_Skill_01_19.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "끊임없는 열정",
@@ -9462,6 +9662,7 @@
                     "Text": "번천장",
                     "Value": 24110,
                     "IconPath": "SO_Skill_01_7.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -9509,6 +9710,7 @@
                     "Text": "풍뢰일광포",
                     "Value": 24190,
                     "IconPath": "SO_Skill_01_14.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "충전 강화",
@@ -9556,6 +9758,7 @@
                     "Text": "낙영장",
                     "Value": 24200,
                     "IconPath": "SO_Skill_01_15.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "인내 강화",
@@ -9603,6 +9806,7 @@
                     "Text": "기공장",
                     "Value": 24230,
                     "IconPath": "SO_Skill_01_18.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -9650,6 +9854,7 @@
                     "Text": "섭물진기",
                     "Value": 24140,
                     "IconPath": "SO_Skill_01_9.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "단단한 갑옷",
@@ -9697,6 +9902,7 @@
                     "Text": "난화격",
                     "Value": 24210,
                     "IconPath": "SO_Skill_01_6.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "공격 강화",
@@ -9744,6 +9950,7 @@
                     "Text": "섬열파",
                     "Value": 24040,
                     "IconPath": "SO_Skill_01_2.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "인내 강화",
@@ -9791,6 +9998,7 @@
                     "Text": "내공 방출",
                     "Value": 24250,
                     "IconPath": "SO_Skill_01_20.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "재빠른 손놀림",
@@ -9843,6 +10051,7 @@
                     "Text": "이연격",
                     "Value": 34040,
                     "IconPath": "LM_Skill_01_5.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "화염 베기",
@@ -9890,6 +10099,7 @@
                     "Text": "연환섬",
                     "Value": 34120,
                     "IconPath": "LM_Skill_01_13.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "삼조격",
@@ -9937,6 +10147,7 @@
                     "Text": "열공참",
                     "Value": 34060,
                     "IconPath": "LM_Skill_01_7.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "재빠른 손놀림",
@@ -9984,6 +10195,7 @@
                     "Text": "선풍참혼",
                     "Value": 34140,
                     "IconPath": "LM_Skill_01_16.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -10031,6 +10243,7 @@
                     "Text": "일섬각",
                     "Value": 34080,
                     "IconPath": "LM_Skill_01_9.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "탁월한 기동성",
@@ -10078,6 +10291,7 @@
                     "Text": "철량추",
                     "Value": 34090,
                     "IconPath": "LM_Skill_01_10.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -10125,6 +10339,7 @@
                     "Text": "반월섬",
                     "Value": 34110,
                     "IconPath": "LM_Skill_01_12.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "난무 특화",
@@ -10172,6 +10387,7 @@
                     "Text": "맹룡열파",
                     "Value": 34150,
                     "IconPath": "LM_Skill_01_15.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "화염참",
@@ -10219,6 +10435,7 @@
                     "Text": "회선창",
                     "Value": 34070,
                     "IconPath": "LM_Skill_01_8.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -10266,6 +10483,7 @@
                     "Text": "공의연무",
                     "Value": 34160,
                     "IconPath": "LM_Skill_01_17.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -10313,6 +10531,7 @@
                     "Text": "청룡출수",
                     "Value": 34100,
                     "IconPath": "LM_Skill_01_11.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "방어 준비",
@@ -10360,6 +10579,7 @@
                     "Text": "풍진격",
                     "Value": 34050,
                     "IconPath": "LM_Skill_01_6.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -10407,6 +10627,7 @@
                     "Text": "질풍참",
                     "Value": 34130,
                     "IconPath": "LM_Skill_01_14.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -10454,6 +10675,7 @@
                     "Text": "청룡진",
                     "Value": 34170,
                     "IconPath": "LM_Skill_01_18.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "부위파괴 강화",
@@ -10501,6 +10723,7 @@
                     "Text": "나선창",
                     "Value": 34540,
                     "IconPath": "LM_Skill_01_20.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "화력 조절",
@@ -10548,6 +10771,7 @@
                     "Text": "사두룡격",
                     "Value": 34550,
                     "IconPath": "LM_Skill_01_21.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "화력 조절",
@@ -10595,6 +10819,7 @@
                     "Text": "굉열파",
                     "Value": 34560,
                     "IconPath": "LM_Skill_01_22.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -10642,6 +10867,7 @@
                     "Text": "유성강천",
                     "Value": 34570,
                     "IconPath": "LM_Skill_01_23.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "약점 포착",
@@ -10689,6 +10915,7 @@
                     "Text": "절룡세",
                     "Value": 34580,
                     "IconPath": "LM_Skill_01_24.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -10736,6 +10963,7 @@
                     "Text": "적룡포",
                     "Value": 34590,
                     "IconPath": "LM_Skill_01_25.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "반응 속도",
@@ -10788,6 +11016,7 @@
                     "Text": "삼연권",
                     "Value": 39180,
                     "IconPath": "BM_Skill_01_6.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "암흑 공격",
@@ -10835,6 +11064,7 @@
                     "Text": "붕천퇴",
                     "Value": 39160,
                     "IconPath": "BM_Skill_01_14.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "탁월한 기동성",
@@ -10882,6 +11112,7 @@
                     "Text": "뇌명각",
                     "Value": 39170,
                     "IconPath": "BM_Skill_01_18.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "날카로운 움직임",
@@ -10929,6 +11160,7 @@
                     "Text": "섬열란아",
                     "Value": 39060,
                     "IconPath": "BM_Skill_01_3.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "성스러운 공격",
@@ -10976,6 +11208,7 @@
                     "Text": "월섬각",
                     "Value": 39190,
                     "IconPath": "BM_Skill_01_16.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "열섬각",
@@ -11023,6 +11256,7 @@
                     "Text": "격호각",
                     "Value": 39290,
                     "IconPath": "BM_Skill_01_32.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "공격 집중",
@@ -11070,6 +11304,7 @@
                     "Text": "운룡각",
                     "Value": 39120,
                     "IconPath": "BM_Skill_01_29.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "탁월한 기동성",
@@ -11117,6 +11352,7 @@
                     "Text": "잠룡승천축",
                     "Value": 39070,
                     "IconPath": "BM_Skill_01_2.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "나선각",
@@ -11164,6 +11400,7 @@
                     "Text": "광폭진",
                     "Value": 39090,
                     "IconPath": "BM_Skill_01_33.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "공격 집중",
@@ -11211,6 +11448,7 @@
                     "Text": "초풍각",
                     "Value": 39280,
                     "IconPath": "BM_Skill_01_23.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "뇌풍각",
@@ -11258,6 +11496,7 @@
                     "Text": "화조강림",
                     "Value": 39130,
                     "IconPath": "BM_Skill_01_12.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "넓은 타격",
@@ -11305,6 +11544,7 @@
                     "Text": "번개의 속삭임",
                     "Value": 39080,
                     "IconPath": "BM_Skill_01_28.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "번개의 축복",
@@ -11352,6 +11592,7 @@
                     "Text": "방천격",
                     "Value": 39320,
                     "IconPath": "BM_Skill_01_26.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "엘리멘탈 갈취",
@@ -11399,6 +11640,7 @@
                     "Text": "오의 : 나선경",
                     "Value": 39030,
                     "IconPath": "BM_Skill_01_11.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "약점 포착",
@@ -11446,6 +11688,7 @@
                     "Text": "오의 : 호왕출현",
                     "Value": 39040,
                     "IconPath": "BM_Skill_01_34.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "강인함",
@@ -11493,6 +11736,7 @@
                     "Text": "오의 : 풍신초래",
                     "Value": 39110,
                     "IconPath": "BM_Skill_01_8.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "대지 폭풍",
@@ -11540,6 +11784,7 @@
                     "Text": "오의 : 폭쇄진",
                     "Value": 39020,
                     "IconPath": "BM_Skill_01_1.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "약점 포착",
@@ -11587,6 +11832,7 @@
                     "Text": "오의 : 뇌호격",
                     "Value": 39100,
                     "IconPath": "BM_Skill_01_35.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "행운의 버블",
@@ -11639,6 +11885,7 @@
                     "Text": "서프라이즈 어택",
                     "Value": 25040,
                     "IconPath": "BL_Skill_01_0.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "약점 노출",
@@ -11686,6 +11933,7 @@
                     "Text": "어퍼 슬래쉬",
                     "Value": 25060,
                     "IconPath": "BL_Skill_01_1.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "단단한 갑옷",
@@ -11733,6 +11981,7 @@
                     "Text": "윈드 컷",
                     "Value": 25050,
                     "IconPath": "BL_Skill_01_6.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "기동성 약화",
@@ -11780,6 +12029,7 @@
                     "Text": "폴스타",
                     "Value": 25170,
                     "IconPath": "BL_Skill_01_13.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -11827,6 +12077,7 @@
                     "Text": "스핀 커터",
                     "Value": 25120,
                     "IconPath": "BL_Skill_01_8.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "넓은 공격",
@@ -11874,6 +12125,7 @@
                     "Text": "블레이드 댄스",
                     "Value": 25100,
                     "IconPath": "BL_Skill_01_2.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "암흑 공격",
@@ -11921,6 +12173,7 @@
                     "Text": "다크 악셀",
                     "Value": 25150,
                     "IconPath": "BL_Skill_01_11.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "재빠른 손놀림",
@@ -11968,6 +12221,7 @@
                     "Text": "소울 앱소버",
                     "Value": 25110,
                     "IconPath": "BL_Skill_01_7.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "넓은 공격",
@@ -12015,6 +12269,7 @@
                     "Text": "데스 센텐스",
                     "Value": 25080,
                     "IconPath": "BL_Skill_01_4.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "탁월한 기동성",
@@ -12062,6 +12317,7 @@
                     "Text": "트윈 쉐도우",
                     "Value": 25090,
                     "IconPath": "BL_Skill_01_5.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -12109,6 +12365,7 @@
                     "Text": "어스 슬래쉬",
                     "Value": 25070,
                     "IconPath": "BL_Skill_01_3.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "뇌진탕",
@@ -12156,6 +12413,7 @@
                     "Text": "헤드 헌트",
                     "Value": 25210,
                     "IconPath": "BL_Skill_01_17.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -12203,6 +12461,7 @@
                     "Text": "문라이트 소닉",
                     "Value": 25140,
                     "IconPath": "BL_Skill_01_10.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "암흑 공격",
@@ -12250,6 +12509,7 @@
                     "Text": "터닝 슬래쉬",
                     "Value": 25130,
                     "IconPath": "BL_Skill_01_9.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "약점 노출",
@@ -12297,6 +12557,7 @@
                     "Text": "마엘스톰",
                     "Value": 25160,
                     "IconPath": "BL_Skill_01_12.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "차가운 접촉",
@@ -12344,6 +12605,7 @@
                     "Text": "페이탈 웨이브",
                     "Value": 25190,
                     "IconPath": "BL_Skill_01_15.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "오브 조절",
@@ -12391,6 +12653,7 @@
                     "Text": "블리츠 러시",
                     "Value": 25200,
                     "IconPath": "BL_Skill_01_16.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "넓은 공격",
@@ -12438,6 +12701,7 @@
                     "Text": "보이드 스트라이크",
                     "Value": 25180,
                     "IconPath": "BL_Skill_01_14.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "재빠른 손놀림",
@@ -12490,6 +12754,7 @@
                     "Text": "님블컷",
                     "Value": 27060,
                     "IconPath": "DM_Skill_01_5.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -12537,6 +12802,7 @@
                     "Text": "슬래셔",
                     "Value": 27070,
                     "IconPath": "DM_Skill_01_6.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "급소 베기",
@@ -12584,6 +12850,7 @@
                     "Text": "데모닉 슬래쉬",
                     "Value": 27050,
                     "IconPath": "DM_Skill_01_4.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "피해 증폭",
@@ -12631,6 +12898,7 @@
                     "Text": "스피닝 다이브",
                     "Value": 27140,
                     "IconPath": "DM_Skill_01_9.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "재빠른 손놀림",
@@ -12678,6 +12946,7 @@
                     "Text": "크루얼 커터",
                     "Value": 27180,
                     "IconPath": "DM_Skill_01_11.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "날렵한 움직임",
@@ -12725,6 +12994,7 @@
                     "Text": "쓰러스트 임팩트",
                     "Value": 27200,
                     "IconPath": "DM_Skill_01_12.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "탁월한 기동성",
@@ -12772,6 +13042,7 @@
                     "Text": "브루탈 크로스",
                     "Value": 27080,
                     "IconPath": "DM_Skill_01_7.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "전기 공격",
@@ -12819,6 +13090,7 @@
                     "Text": "그라인드 체인",
                     "Value": 27130,
                     "IconPath": "DM_Skill_01_8.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "강화된 일격",
@@ -12866,6 +13138,7 @@
                     "Text": "데몰리션",
                     "Value": 27220,
                     "IconPath": "DM_Skill_01_13.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "탁월한 기동성",
@@ -12913,6 +13186,7 @@
                     "Text": "스피닝 웨폰",
                     "Value": 27230,
                     "IconPath": "DM_Skill_01_27.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "출혈 효과",
@@ -12960,6 +13234,7 @@
                     "Text": "샤펀 컷",
                     "Value": 27250,
                     "IconPath": "DM_Skill_01_10.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "탁월한 기동성",
@@ -13007,6 +13282,7 @@
                     "Text": "제노사이드",
                     "Value": 27210,
                     "IconPath": "DM_Skill_01_29.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "잔인한 일격",
@@ -13054,6 +13330,7 @@
                     "Text": "라이징 클로",
                     "Value": 27100,
                     "IconPath": "DM_Skill_01_15.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -13101,6 +13378,7 @@
                     "Text": "데몬 비전",
                     "Value": 27120,
                     "IconPath": "DM_Skill_01_17.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 방출",
@@ -13148,6 +13426,7 @@
                     "Text": "데몬 그랩",
                     "Value": 27090,
                     "IconPath": "DM_Skill_01_14.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -13195,6 +13474,7 @@
                     "Text": "피어스 쏜",
                     "Value": 27110,
                     "IconPath": "DM_Skill_01_16.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -13242,6 +13522,7 @@
                     "Text": "하울링",
                     "Value": 27170,
                     "IconPath": "DM_Skill_01_18.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "재빠른 손놀림",
@@ -13289,6 +13570,7 @@
                     "Text": "데시메이트",
                     "Value": 27240,
                     "IconPath": "DM_Skill_01_28.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "출혈 효과",
@@ -13341,6 +13623,7 @@
                     "Text": "나이트메어",
                     "Value": 26090,
                     "IconPath": "RP_Skill_01_6.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "독 : 부식",
@@ -13388,6 +13671,7 @@
                     "Text": "쉐도우 닷",
                     "Value": 26070,
                     "IconPath": "RP_Skill_01_5.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "독 : 부식",
@@ -13435,6 +13719,7 @@
                     "Text": "스피릿 캐치",
                     "Value": 26060,
                     "IconPath": "RP_Skill_01_4.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "독 : 부식",
@@ -13482,6 +13767,7 @@
                     "Text": "스피닝 대거",
                     "Value": 26050,
                     "IconPath": "RP_Skill_01_3.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "독 : 부식",
@@ -13529,6 +13815,7 @@
                     "Text": "샤벨 스팅거",
                     "Value": 26110,
                     "IconPath": "RP_Skill_01_8.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "독 : 부식",
@@ -13576,6 +13863,7 @@
                     "Text": "이블리스토",
                     "Value": 26080,
                     "IconPath": "RP_Skill_01_7.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "독 : 부식",
@@ -13623,6 +13911,7 @@
                     "Text": "팬텀 댄서",
                     "Value": 26140,
                     "IconPath": "RP_Skill_01_22.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "독 : 부식",
@@ -13670,6 +13959,7 @@
                     "Text": "데스 사이드",
                     "Value": 26120,
                     "IconPath": "RP_Skill_01_9.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "독 : 부식",
@@ -13717,6 +14007,7 @@
                     "Text": "디스토션",
                     "Value": 26510,
                     "IconPath": "RP_Skill_01_10.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "그림자 충전",
@@ -13764,6 +14055,7 @@
                     "Text": "콜 오브 나이프",
                     "Value": 26550,
                     "IconPath": "RP_Skill_01_12.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "그림자 충전",
@@ -13811,6 +14103,7 @@
                     "Text": "쉐도우 스톰",
                     "Value": 26600,
                     "IconPath": "RP_Skill_01_21.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "그림자 충전",
@@ -13858,6 +14151,7 @@
                     "Text": "블링크",
                     "Value": 26520,
                     "IconPath": "RP_Skill_01_11.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "그림자 충전",
@@ -13905,6 +14199,7 @@
                     "Text": "블랙 미스트",
                     "Value": 26560,
                     "IconPath": "RP_Skill_01_13.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "그림자 충전",
@@ -13952,6 +14247,7 @@
                     "Text": "쉐도우 트랩",
                     "Value": 26570,
                     "IconPath": "RP_Skill_01_14.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "치명적인 그림자",
@@ -13999,6 +14295,7 @@
                     "Text": "라스트 그래피티",
                     "Value": 26800,
                     "IconPath": "RP_Skill_01_15.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "범위 증가",
@@ -14046,6 +14343,7 @@
                     "Text": "레이지 스피어",
                     "Value": 26810,
                     "IconPath": "RP_Skill_01_16.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "치명적인 단검",
@@ -14093,6 +14391,7 @@
                     "Text": "댄싱 오브 퓨리",
                     "Value": 26830,
                     "IconPath": "RP_Skill_01_18.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "날렵한 움직임",
@@ -14140,6 +14439,7 @@
                     "Text": "사일런트 스매셔",
                     "Value": 26820,
                     "IconPath": "RP_Skill_01_17.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "넓은 공격",
@@ -14192,6 +14492,7 @@
                     "Text": "래피드 샷",
                     "Value": 28020,
                     "IconPath": "HE_Skill_01_1.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "피해 증폭",
@@ -14239,6 +14540,7 @@
                     "Text": "아토믹 애로우",
                     "Value": 28040,
                     "IconPath": "HE_Skill_01_3.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -14286,6 +14588,7 @@
                     "Text": "애로우 해일",
                     "Value": 28070,
                     "IconPath": "HE_Skill_01_6.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "강화된 화살",
@@ -14333,6 +14636,7 @@
                     "Text": "애로우 샤워",
                     "Value": 28080,
                     "IconPath": "HE_Skill_01_7.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "재빠른 손놀림",
@@ -14380,6 +14684,7 @@
                     "Text": "이동 베기",
                     "Value": 28140,
                     "IconPath": "HE_Skill_01_13.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -14427,6 +14732,7 @@
                     "Text": "블레이드 스톰",
                     "Value": 28150,
                     "IconPath": "HE_Skill_01_14.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "원거리 타격",
@@ -14474,6 +14780,7 @@
                     "Text": "크레모아 지뢰",
                     "Value": 28190,
                     "IconPath": "HE_Skill_01_15.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "재빠른 손놀림",
@@ -14521,6 +14828,7 @@
                     "Text": "차징 샷",
                     "Value": 28090,
                     "IconPath": "HE_Skill_01_8.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "재빠른 조준",
@@ -14568,6 +14876,7 @@
                     "Text": "일제 사격",
                     "Value": 28030,
                     "IconPath": "HE_Skill_01_2.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "약육강식",
@@ -14615,6 +14924,7 @@
                     "Text": "샤프 슈터",
                     "Value": 28110,
                     "IconPath": "HE_Skill_01_10.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "급소 타격",
@@ -14662,6 +14972,7 @@
                     "Text": "DM-42",
                     "Value": 28120,
                     "IconPath": "HE_Skill_01_11.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -14709,6 +15020,7 @@
                     "Text": "집요한 추적",
                     "Value": 28210,
                     "IconPath": "HE_Skill_01_17.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "충돌 무시",
@@ -14756,6 +15068,7 @@
                     "Text": "회피 사격",
                     "Value": 28100,
                     "IconPath": "HE_Skill_01_9.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "재빠른 손놀림",
@@ -14803,6 +15116,7 @@
                     "Text": "급소 베기",
                     "Value": 28130,
                     "IconPath": "HE_Skill_01_12.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -14850,6 +15164,7 @@
                     "Text": "연막 화살",
                     "Value": 28060,
                     "IconPath": "HE_Skill_01_5.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -14897,6 +15212,7 @@
                     "Text": "그림자 화살",
                     "Value": 28200,
                     "IconPath": "HE_Skill_01_16.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "고속 충전",
@@ -14944,6 +15260,7 @@
                     "Text": "호크 샷",
                     "Value": 28250,
                     "IconPath": "HE_Skill_01_25.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -14991,6 +15308,7 @@
                     "Text": "스나이프",
                     "Value": 28220,
                     "IconPath": "HE_Skill_01_18.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -15043,6 +15361,7 @@
                     "Text": "나선의 추적자",
                     "Value": 29180,
                     "IconPath": "DH_Skill_01_9.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "통찰력",
@@ -15090,6 +15409,7 @@
                     "Text": "AT02 유탄",
                     "Value": 29120,
                     "IconPath": "DH_Skill_01_8.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "원거리 투척",
@@ -15137,6 +15457,7 @@
                     "Text": "사형 집행",
                     "Value": 29020,
                     "IconPath": "DH_Skill_01_4.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "가벼운 발놀림",
@@ -15184,6 +15505,7 @@
                     "Text": "플라즈마 불릿",
                     "Value": 29140,
                     "IconPath": "DH_Skill_01_10.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "원거리 사격",
@@ -15231,6 +15553,7 @@
                     "Text": "메테오 스트림",
                     "Value": 29100,
                     "IconPath": "DH_Skill_01_0.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -15278,6 +15601,7 @@
                     "Text": "썸머솔트샷",
                     "Value": 29210,
                     "IconPath": "DH_Skill_01_19.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -15325,6 +15649,7 @@
                     "Text": "이퀄리브리엄",
                     "Value": 29220,
                     "IconPath": "DH_Skill_01_20.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "고속 사격",
@@ -15372,6 +15697,7 @@
                     "Text": "데스파이어",
                     "Value": 29090,
                     "IconPath": "DH_Skill_01_5.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "재빠른 손놀림",
@@ -15419,6 +15745,7 @@
                     "Text": "민첩한 사격",
                     "Value": 29200,
                     "IconPath": "DH_Skill_01_16.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -15466,6 +15793,7 @@
                     "Text": "퀵 샷",
                     "Value": 29260,
                     "IconPath": "DH_Skill_01_24.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "재빠른 손놀림",
@@ -15513,6 +15841,7 @@
                     "Text": "잔혹한 추적자",
                     "Value": 29190,
                     "IconPath": "DH_Skill_01_17.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "재빠른 손놀림",
@@ -15560,6 +15889,7 @@
                     "Text": "종말의 전조",
                     "Value": 29040,
                     "IconPath": "DH_Skill_01_3.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "근접 사격",
@@ -15607,6 +15937,7 @@
                     "Text": "심판의 시간",
                     "Value": 29050,
                     "IconPath": "DH_Skill_01_38.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -15654,6 +15985,7 @@
                     "Text": "샷건 연사",
                     "Value": 29170,
                     "IconPath": "DH_Skill_01_14.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "근접 사격",
@@ -15701,6 +16033,7 @@
                     "Text": "샷건의 지배자",
                     "Value": 29110,
                     "IconPath": "DH_Skill_01_25.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "풀레인지",
@@ -15748,6 +16081,7 @@
                     "Text": "최후의 만찬",
                     "Value": 29230,
                     "IconPath": "DH_Skill_01_21.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -15795,6 +16129,7 @@
                     "Text": "스파이럴 플레임",
                     "Value": 29060,
                     "IconPath": "DH_Skill_01_1.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "냉기탄",
@@ -15842,6 +16177,7 @@
                     "Text": "대재앙",
                     "Value": 29080,
                     "IconPath": "DH_Skill_01_12.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "강인함",
@@ -15889,6 +16225,7 @@
                     "Text": "트리플 익스플로젼",
                     "Value": 29070,
                     "IconPath": "DH_Skill_01_7.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "통찰력",
@@ -15936,6 +16273,7 @@
                     "Text": "조준 사격",
                     "Value": 29240,
                     "IconPath": "DH_Skill_01_22.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "고속 탄환",
@@ -15983,6 +16321,7 @@
                     "Text": "퍼펙트 샷",
                     "Value": 29270,
                     "IconPath": "DH_Skill_01_26.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "출혈 효과",
@@ -16035,6 +16374,7 @@
                     "Text": "강화탄",
                     "Value": 30050,
                     "IconPath": "BS_Skill_01_0.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "갑옷 파괴",
@@ -16082,6 +16422,7 @@
                     "Text": "산탄",
                     "Value": 30070,
                     "IconPath": "BS_Skill_01_2.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "부위파괴 강화",
@@ -16129,6 +16470,7 @@
                     "Text": "개틀링건",
                     "Value": 30170,
                     "IconPath": "BS_Skill_01_12.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "강화된 사격",
@@ -16176,6 +16518,7 @@
                     "Text": "고압열탄",
                     "Value": 30060,
                     "IconPath": "BS_Skill_01_28.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "응축",
@@ -16223,6 +16566,7 @@
                     "Text": "곡사포",
                     "Value": 30090,
                     "IconPath": "BS_Skill_01_4.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "갑옷 파괴",
@@ -16270,6 +16614,7 @@
                     "Text": "네이팜탄",
                     "Value": 30180,
                     "IconPath": "BS_Skill_01_13.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "부위파괴 강화",
@@ -16317,6 +16662,7 @@
                     "Text": "다연장로켓포",
                     "Value": 30080,
                     "IconPath": "BS_Skill_01_3.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "화염 로켓",
@@ -16364,6 +16710,7 @@
                     "Text": "화염방사기",
                     "Value": 30120,
                     "IconPath": "BS_Skill_01_7.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "급소 공격",
@@ -16411,6 +16758,7 @@
                     "Text": "휘두르기",
                     "Value": 30140,
                     "IconPath": "BS_Skill_01_9.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -16458,6 +16806,7 @@
                     "Text": "공중 폭격",
                     "Value": 30110,
                     "IconPath": "BS_Skill_01_6.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "발포 준비",
@@ -16505,6 +16854,7 @@
                     "Text": "점프 포격",
                     "Value": 30150,
                     "IconPath": "BS_Skill_01_10.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "재빠른 점프",
@@ -16552,6 +16902,7 @@
                     "Text": "포탑 소환",
                     "Value": 30100,
                     "IconPath": "BS_Skill_01_5.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "고속 충전",
@@ -16599,6 +16950,7 @@
                     "Text": "플라즈마 스톰",
                     "Value": 30210,
                     "IconPath": "BS_Skill_01_21.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "재빠른 손놀림",
@@ -16646,6 +16998,7 @@
                     "Text": "중력 폭발",
                     "Value": 30200,
                     "IconPath": "BS_Skill_01_20.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "급소 포격",
@@ -16693,6 +17046,7 @@
                     "Text": "전방 포격",
                     "Value": 30190,
                     "IconPath": "BS_Skill_01_19.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "좌표 변경",
@@ -16740,6 +17094,7 @@
                     "Text": "미사일 폭격",
                     "Value": 30220,
                     "IconPath": "BS_Skill_01_22.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "원거리 설치",
@@ -16787,6 +17142,7 @@
                     "Text": "에너지 필드",
                     "Value": 30160,
                     "IconPath": "BS_Skill_01_11.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "집중",
@@ -16839,6 +17195,7 @@
                     "Text": "불릿 해일",
                     "Value": 35040,
                     "IconPath": "SC_Skill_01_3.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "재빠른 손놀림",
@@ -16886,6 +17243,7 @@
                     "Text": "과충전 배터리",
                     "Value": 35050,
                     "IconPath": "SC_Skill_01_4.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "배터리 충전",
@@ -16933,6 +17291,7 @@
                     "Text": "기동 타격",
                     "Value": 35180,
                     "IconPath": "SC_Skill_01_9.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "밀어내기",
@@ -16980,6 +17339,7 @@
                     "Text": "전술 사격",
                     "Value": 35170,
                     "IconPath": "SC_Skill_01_6.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "약점 포착",
@@ -17027,6 +17387,7 @@
                     "Text": "백플립 스트라이크",
                     "Value": 35150,
                     "IconPath": "SC_Skill_01_8.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "숙련된 움직임",
@@ -17074,6 +17435,7 @@
                     "Text": "고전압탄",
                     "Value": 35160,
                     "IconPath": "SC_Skill_01_5.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "급소 사격",
@@ -17121,6 +17483,7 @@
                     "Text": "펄스 파이어",
                     "Value": 35200,
                     "IconPath": "SC_Skill_01_7.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "뇌진탕",
@@ -17168,6 +17531,7 @@
                     "Text": "아발란체",
                     "Value": 35190,
                     "IconPath": "SC_Skill_01_11.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "강인함",
@@ -17215,6 +17579,7 @@
                     "Text": "명령 : M143 기관총",
                     "Value": 35140,
                     "IconPath": "SC_Skill_01_15.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "급소 사격",
@@ -17262,6 +17627,7 @@
                     "Text": "명령 : 액티브 펄스",
                     "Value": 35090,
                     "IconPath": "SC_Skill_01_13.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "넓은 공격",
@@ -17309,6 +17675,7 @@
                     "Text": "명령 : 플레어 빔",
                     "Value": 35080,
                     "IconPath": "SC_Skill_01_16.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "상흔",
@@ -17356,6 +17723,7 @@
                     "Text": "명령 : 블록케이드",
                     "Value": 35070,
                     "IconPath": "SC_Skill_01_14.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "일심동체",
@@ -17403,6 +17771,7 @@
                     "Text": "명령 : 카펫",
                     "Value": 35060,
                     "IconPath": "SC_Skill_01_12.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "일심동체",
@@ -17450,6 +17819,7 @@
                     "Text": "명령 : 베이비 드론",
                     "Value": 35100,
                     "IconPath": "SC_Skill_01_17.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "정교한 명령",
@@ -17497,6 +17867,7 @@
                     "Text": "명령 : 레이드 미사일",
                     "Value": 35110,
                     "IconPath": "SC_Skill_01_18.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "정교한 명령",
@@ -17544,6 +17915,7 @@
                     "Text": "어나힐레이션 모드",
                     "Value": 35130,
                     "IconPath": "SC_Skill_01_19.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "배터리 절약",
@@ -17591,6 +17963,7 @@
                     "Text": "이스케이프",
                     "Value": 35120,
                     "IconPath": "SC_Skill_01_20.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "탁월한 기동성",
@@ -17638,6 +18011,7 @@
                     "Text": "에너지 버스터",
                     "Value": 35210,
                     "IconPath": "SC_Skill_01_21.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "응축",
@@ -17690,6 +18064,7 @@
                     "Text": "나선의 추적자",
                     "Value": 38180,
                     "IconPath": "DH_Skill_01_9.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "통찰력",
@@ -17737,6 +18112,7 @@
                     "Text": "AT02 유탄",
                     "Value": 38120,
                     "IconPath": "DH_Skill_01_8.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "원거리 투척",
@@ -17784,6 +18160,7 @@
                     "Text": "퀵 스텝",
                     "Value": 38020,
                     "IconPath": "DH_Skill_01_32.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "생기 흡수",
@@ -17831,6 +18208,7 @@
                     "Text": "플라즈마 불릿",
                     "Value": 38140,
                     "IconPath": "DH_Skill_01_10.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "원거리 사격",
@@ -17878,6 +18256,7 @@
                     "Text": "메테오 스트림",
                     "Value": 38100,
                     "IconPath": "DH_Skill_01_35.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -17925,6 +18304,7 @@
                     "Text": "썸머솔트샷",
                     "Value": 38210,
                     "IconPath": "DH_Skill_01_19.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -17972,6 +18352,7 @@
                     "Text": "이퀄리브리엄",
                     "Value": 38220,
                     "IconPath": "DH_Skill_01_20.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "고속 사격",
@@ -18019,6 +18400,7 @@
                     "Text": "데스파이어",
                     "Value": 38090,
                     "IconPath": "DH_Skill_01_37.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "재빠른 손놀림",
@@ -18066,6 +18448,7 @@
                     "Text": "민첩한 사격",
                     "Value": 38200,
                     "IconPath": "DH_Skill_01_36.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "급소 노출",
@@ -18113,6 +18496,7 @@
                     "Text": "피스키퍼",
                     "Value": 38260,
                     "IconPath": "DH_Skill_01_34.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -18160,6 +18544,7 @@
                     "Text": "레인 오브 불릿",
                     "Value": 38190,
                     "IconPath": "DH_Skill_01_33.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "기습",
@@ -18207,6 +18592,7 @@
                     "Text": "심판의 시간",
                     "Value": 38050,
                     "IconPath": "DH_Skill_01_38.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -18254,6 +18640,7 @@
                     "Text": "샷건 연사",
                     "Value": 38170,
                     "IconPath": "DH_Skill_01_41.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "기습",
@@ -18301,6 +18688,7 @@
                     "Text": "최후의 만찬",
                     "Value": 38230,
                     "IconPath": "DH_Skill_01_21.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -18348,6 +18736,7 @@
                     "Text": "절멸의 탄환",
                     "Value": 38040,
                     "IconPath": "DH_Skill_01_39.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "사면 초가",
@@ -18395,6 +18784,7 @@
                     "Text": "마탄의 사수",
                     "Value": 38110,
                     "IconPath": "DH_Skill_01_40.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "무한의 마탄",
@@ -18442,6 +18832,7 @@
                     "Text": "스파이럴 플레임",
                     "Value": 38060,
                     "IconPath": "DH_Skill_01_1.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "냉기탄",
@@ -18489,6 +18880,7 @@
                     "Text": "대재앙",
                     "Value": 38080,
                     "IconPath": "DH_Skill_01_12.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "강인함",
@@ -18536,6 +18928,7 @@
                     "Text": "퍼펙트 샷",
                     "Value": 38270,
                     "IconPath": "DH_Skill_01_26.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "출혈 효과",
@@ -18583,6 +18976,7 @@
                     "Text": "포커스 샷",
                     "Value": 38240,
                     "IconPath": "DH_Skill_01_43.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "방향 전환",
@@ -18630,6 +19024,7 @@
                     "Text": "타겟 다운",
                     "Value": 38070,
                     "IconPath": "DH_Skill_01_42.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "재빠른 조준",
@@ -18682,6 +19077,7 @@
                     "Text": "필법 : 먹물세례",
                     "Value": 31200,
                     "IconPath": "YY_Skill_01_5.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "동글 방울",
@@ -18729,6 +19125,7 @@
                     "Text": "필법 : 흩뿌리기",
                     "Value": 31430,
                     "IconPath": "YY_Skill_01_12.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "동글 방울",
@@ -18776,6 +19173,7 @@
                     "Text": "묵법 : 먹오름",
                     "Value": 31440,
                     "IconPath": "YY_Skill_01_13.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마나 회복",
@@ -18823,6 +19221,7 @@
                     "Text": "필법 : 콩콩이",
                     "Value": 31210,
                     "IconPath": "YY_Skill_01_6.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "기운 강화",
@@ -18870,6 +19269,7 @@
                     "Text": "묵법 : 호접몽",
                     "Value": 31460,
                     "IconPath": "YY_Skill_01_15.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "동글 방울",
@@ -18917,6 +19317,7 @@
                     "Text": "묵법 : 난치기",
                     "Value": 31420,
                     "IconPath": "YY_Skill_01_11.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "동글 방울",
@@ -18964,6 +19365,7 @@
                     "Text": "묵법 : 범가르기",
                     "Value": 31490,
                     "IconPath": "YY_Skill_01_18.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "비호",
@@ -19011,6 +19413,7 @@
                     "Text": "필법 : 한획긋기",
                     "Value": 31470,
                     "IconPath": "YY_Skill_01_16.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "끈적한 먹물",
@@ -19058,6 +19461,7 @@
                     "Text": "묵법 : 달그리기",
                     "Value": 31500,
                     "IconPath": "YY_Skill_01_19.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "단단한 갑옷",
@@ -19105,6 +19509,7 @@
                     "Text": "묵법 : 미리내",
                     "Value": 31450,
                     "IconPath": "YY_Skill_01_14.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "단단한 갑옷",
@@ -19152,6 +19557,7 @@
                     "Text": "묵법 : 환영의 문",
                     "Value": 31220,
                     "IconPath": "YY_Skill_01_7.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "재빠른 손놀림",
@@ -19199,6 +19605,7 @@
                     "Text": "묵법 : 옹달샘",
                     "Value": 31230,
                     "IconPath": "YY_Skill_01_8.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "무력화 강화",
@@ -19246,6 +19653,7 @@
                     "Text": "묵법 : 해우물",
                     "Value": 31410,
                     "IconPath": "YY_Skill_01_10.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",
@@ -19293,6 +19701,7 @@
                     "Text": "묵법 : 두루미나래",
                     "Value": 31480,
                     "IconPath": "YY_Skill_01_17.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "재빠른 손놀림",
@@ -19340,6 +19749,7 @@
                     "Text": "필법 : 올려치기",
                     "Value": 31510,
                     "IconPath": "YY_Skill_01_20.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "동글 방울",
@@ -19387,6 +19797,7 @@
                     "Text": "묵법 : 해그리기",
                     "Value": 31400,
                     "IconPath": "YY_Skill_01_9.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "강인함",
@@ -19439,6 +19850,7 @@
                     "Text": "펼치기",
                     "Value": 32110,
                     "IconPath": "WA_Skill_01_4.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "기류 발생",
@@ -19486,6 +19898,7 @@
                     "Text": "내려찍기",
                     "Value": 32130,
                     "IconPath": "WA_Skill_01_5.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "기류 발생",
@@ -19533,6 +19946,7 @@
                     "Text": "회오리 걸음",
                     "Value": 32180,
                     "IconPath": "WA_Skill_01_8.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "재빠른 손놀림",
@@ -19580,6 +19994,7 @@
                     "Text": "몰아치기",
                     "Value": 32120,
                     "IconPath": "WA_Skill_01_10.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "역류",
@@ -19627,6 +20042,7 @@
                     "Text": "돌개바람",
                     "Value": 32170,
                     "IconPath": "WA_Skill_01_6.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "추가 공격",
@@ -19674,6 +20090,7 @@
                     "Text": "바람송곳",
                     "Value": 32250,
                     "IconPath": "WA_Skill_01_11.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "역류",
@@ -19721,6 +20138,7 @@
                     "Text": "마주바람",
                     "Value": 32230,
                     "IconPath": "WA_Skill_01_7.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -19768,6 +20186,7 @@
                     "Text": "칼바람",
                     "Value": 32260,
                     "IconPath": "WA_Skill_01_12.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "질풍검",
@@ -19815,6 +20234,7 @@
                     "Text": "소용돌이",
                     "Value": 32190,
                     "IconPath": "WA_Skill_01_17.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "뇌진탕",
@@ -19862,6 +20282,7 @@
                     "Text": "소나기",
                     "Value": 32150,
                     "IconPath": "WA_Skill_01_13.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "증기 획득",
@@ -19909,6 +20330,7 @@
                     "Text": "센바람",
                     "Value": 32160,
                     "IconPath": "WA_Skill_01_14.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "기분 좋은 바람",
@@ -19956,6 +20378,7 @@
                     "Text": "짙은 안개",
                     "Value": 32140,
                     "IconPath": "WA_Skill_01_16.png",
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "날렵한 움직임",
@@ -20003,6 +20426,7 @@
                     "Text": "봄바람",
                     "Value": 32220,
                     "IconPath": "WA_Skill_01_15.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -20050,6 +20474,7 @@
                     "Text": "날아가기",
                     "Value": 32200,
                     "IconPath": "WA_Skill_01_9.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "탁월한 기동성",
@@ -20097,6 +20522,7 @@
                     "Text": "싹쓸바람",
                     "Value": 32210,
                     "IconPath": "WA_Skill_01_18.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "재빠른 손놀림",
@@ -20144,6 +20570,7 @@
                     "Text": "뙤약볕",
                     "Value": 32240,
                     "IconPath": "WA_Skill_01_19.png",
+                    "IsCounter": false,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",

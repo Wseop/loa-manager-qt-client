@@ -40,6 +40,7 @@ void SkillManager::initializeSkillList()
             newSkill.setSkillName(skill.find("Text")->toString());
             newSkill.setSkillCode(skill.find("Value")->toInt());
             newSkill.setIconPath(skillIconPath.arg(skill.find("IconPath")->toString()));
+            newSkill.setCounter(skill.find("IsCounter")->toBool());
 
             // 스킬별 트라이포드 목록 추가
             const QJsonArray &tripods = skill.find("Tripods")->toArray();

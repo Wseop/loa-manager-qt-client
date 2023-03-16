@@ -1,7 +1,11 @@
 #include "weapon.h"
 
 Weapon::Weapon() :
-    Item(ItemType::Weapon)
+    Item(ItemType::Weapon),
+    mReforge(0),
+    mItemSet(ItemSet::size),
+    mSetLevel(0),
+    mbElla(false)
 {
 
 }

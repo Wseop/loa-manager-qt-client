@@ -1,7 +1,10 @@
 #include "armor.h"
 
 Armor::Armor() :
-    Item(ItemType::Armor)
+    Item(ItemType::Armor),
+    mReforge(0),
+    mItemSet(ItemSet::size),
+    mSetLevel(0)
 {
 
 }

@@ -13,6 +13,7 @@ enum class ArmorPart
 
 struct Elixir
 {
+    ArmorPart part;
     QString effect;
     int level;
 };

@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     api/api_manager.cpp \
+    api/response_parser.cpp \
     api/search_option.cpp \
     db/db_manager.cpp \
     db/document_builder.cpp \
@@ -53,6 +54,9 @@ SOURCES += \
 HEADERS += \
     api/api_manager.h \
     api/lostark_api.h \
+    api/response_auction.h \
+    api/response_market.h \
+    api/response_parser.h \
     api/search_option.h \
     db/db_enums.h \
     db/db_manager.h \

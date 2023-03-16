@@ -2,6 +2,7 @@
 #include "ui_smart_search_reforge.h"
 #include "ui/widget_manager.h"
 #include "resource/resource_manager.h"
+#include "api/response_parser.h"
 #include "api/api_manager.h"
 #include "api/search_option.h"
 
@@ -54,25 +55,22 @@ void SmartSearchReforge::refresh()
 
             QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
             connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, labelIndex](QNetworkReply *pReply){
-                // 데이터 parsing
                 QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
                 if (response.isNull())
                     return;
 
-                const QJsonObject &item = response.object().find("Items")->toArray()[0].toObject();
-                const QString &name = item.find("Name")->toString();
-                const int &recentPrice = item.find("RecentPrice")->toInt();
-                const int &minPrice = item.find("CurrentMinPrice")->toInt();
+                ResponseMarket responseMarket = ResponseParser::parseMarketItem(response);
+                const MarketItem &item = responseMarket.items.front();
 
                 // 가격 정보 업데이트
-                mRecentPriceLabels[labelIndex]->setText(QString("%L1").arg(recentPrice));
-                mMinPriceLabels[labelIndex]->setText(QString("%L1").arg(minPrice));
+                mRecentPriceLabels[labelIndex]->setText(QString("%L1").arg(item.recentPrice));
+                mMinPriceLabels[labelIndex]->setText(QString("%L1").arg(item.currentMinPrice));
 
                 // 개당 가격 업데이트
                 if (labelIndex < 3)
                 {
                     const int volumes[3] = {500, 1000, 1500};
-                    double efficiency = minPrice / (double)volumes[labelIndex];
+                    double efficiency = item.currentMinPrice / (double)volumes[labelIndex];
 
                     mEfficiencyLabels[labelIndex]->setText(QString::number(efficiency, 'f', 3));
                 }

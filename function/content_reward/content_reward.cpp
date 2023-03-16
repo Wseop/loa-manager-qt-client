@@ -2,6 +2,7 @@
 #include "ui_content_reward.h"
 #include "ui/widget_manager.h"
 #include "resource/resource_manager.h"
+#include "api/response_parser.h"
 #include "api/api_manager.h"
 #include "api/search_option.h"
 #include "db/db_manager.h"
@@ -286,15 +287,19 @@ void ContentReward::refreshTradablePrice()
             if (response.isNull())
                 return;
 
-            const QJsonObject &object = response.object().find("Items")->toArray().at(0).toObject();
-
             // 가격 정보 parsing
             int minPrice = 0;
 
             if (item == "1레벨 멸화")
-                minPrice = object.find("AuctionInfo")->toObject().find("BuyPrice")->toInt();
+            {
+                ResponseAuction responseAuction = ResponseParser::parseAuctionItem(response);
+                minPrice = responseAuction.items.front().AuctionInfo.buyPrice;
+            }
             else
-                minPrice = object.find("CurrentMinPrice")->toInt();
+            {
+                ResponseMarket responseMarket = ResponseParser::parseMarketItem(response);
+                minPrice = responseMarket.items.front().currentMinPrice;
+            }
 
             // 가격 update
             mTradablePrice[item] = minPrice;

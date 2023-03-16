@@ -1,6 +1,7 @@
 #include "smart_search_engravebook.h"
 #include "ui_smart_search_engravebook.h"
 #include "ui/widget_manager.h"
+#include "api/response_parser.h"
 #include "api/api_manager.h"
 #include "api/search_option.h"
 
@@ -135,29 +136,27 @@ void SmartSearchEngraveBook::searchEngraveBook(bool bResetPageNo)
 
 void SmartSearchEngraveBook::parseSearchResult(QNetworkReply *pReply)
 {
-    QJsonObject result = QJsonDocument::fromJson(pReply->readAll()).object();
+    QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
+    if (response.isNull())
+        return;
 
     // 검색 결과 parsing
-    const QJsonArray &items = result.find("Items")->toArray();
-    for (const QJsonValue& value : items)
+    ResponseMarket responseMarket = ResponseParser::parseMarketItem(response);
+
+    QList<MarketItem> &items = responseMarket.items;
+
+    for (const MarketItem &item : items)
     {
-        const QJsonObject &item = value.toObject();
-        const QString &name = item.find("Name")->toString();
-        const int &recentPrice = item.find("RecentPrice")->toInt();
-        const int &minPrice = item.find("CurrentMinPrice")->toInt();
-
-        if (name[0] == '[')
-            mClassEngraveKeys << name;
+        if (item.name[0] == '[')
+            mClassEngraveKeys << item.name;
         else
-            mBattleEngraveKeys << name;
+            mBattleEngraveKeys << item.name;
 
-        mEngravePrices[name] = {recentPrice, minPrice};
+        mEngravePrices[item.name] = {item.recentPrice, item.currentMinPrice};
     }
 
-    const int &maxPageSize = result.find("PageSize")->toInt();
-
     // 다음 페이지가 있다면 추가 검색
-    if (maxPageSize > mSearchPageNo)
+    if (responseMarket.pageSize > mSearchPageNo)
     {
         mSearchPageNo++;
         searchEngraveBook(false);

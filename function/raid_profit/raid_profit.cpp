@@ -1,6 +1,7 @@
 #include "raid_profit.h"
 #include "ui_raid_profit.h"
 #include "resource/resource_manager.h"
+#include "api/response_parser.h"
 #include "api/api_manager.h"
 #include "ui/widget_manager.h"
 #include "function/raid_profit/raid_profit_table.h"
@@ -213,9 +214,9 @@ void RaidProfit::refreshItemPrice()
             QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
             if (!response.isNull())
             {
-                const QJsonObject &item = response.object().find("Items")->toArray().first().toObject();
-                const QString &itemName = item.find("Name")->toString();
-                int itemPrice = item.find("CurrentMinPrice")->toInt();
+                ResponseMarket responseMarket = ResponseParser::parseMarketItem(response);
+                const QString &itemName = responseMarket.items.front().name;
+                int itemPrice = responseMarket.items.front().currentMinPrice;
 
                 if (itemName.contains("명예의 파편"))
                     mItemPrice["명예의 파편"] = itemPrice / (double)500;

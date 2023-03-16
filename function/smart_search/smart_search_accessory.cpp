@@ -2,6 +2,7 @@
 #include "ui_smart_search_accessory.h"
 #include "ui/widget_manager.h"
 #include "game/engrave/engrave_manager.h"
+#include "api/response_parser.h"
 #include "api/api_manager.h"
 
 #include <QLabel>
@@ -299,44 +300,38 @@ void SmartSearchAccessory::parseSearchResult(QNetworkReply *pReply)
     if (response.isNull())
         return;
 
-    // 악세서리 정보 parsing
-    const QJsonArray &items = response.object().find("Items")->toArray();
-    for (const QJsonValue& value : items)
+
+    ResponseAuction responseAuction = ResponseParser::parseAuctionItem(response);
+    const QList<AuctionItem> &items = responseAuction.items;
+
+    for (const AuctionItem &item : items)
     {
-        const QJsonObject &item = value.toObject();
-
+        // 악세 정보 parsing
         Accessory *pAccessory = new Accessory();
-        pAccessory->setItemName(item.find("Name")->toString());
-        pAccessory->setItemGrade(qStringToItemGrade(item.find("Grade")->toString()));
-        pAccessory->setQuality(item.find("GradeQuality")->toInt());
-        pAccessory->setIconPath(item.find("Icon")->toString());
+        pAccessory->setItemName(item.name);
+        pAccessory->setItemGrade(qStringToItemGrade(item.grade));
+        pAccessory->setQuality(item.quality);
+        pAccessory->setIconPath(item.icon);
 
-        const QJsonArray &options = item.find("Options")->toArray();
-        for (const QJsonValue& value : options)
+        const QList<AuctionItemOption> &options = item.options;
+
+        for (const AuctionItemOption &option : options)
         {
-            const QJsonObject &option = value.toObject();
-
-            const QString &type = option.find("Type")->toString();
-            const QString &optionName = option.find("OptionName")->toString();
-            const int &optionValue = option.find("Value")->toInt();
-
-            if (type == "STAT")
-                pAccessory->setAbility(qStringToAbility(optionName), optionValue);
-            else if (type == "ABILITY_ENGRAVE")
+            if (option.type == "STAT")
             {
-                if (option.find("IsPenalty")->toBool())
-                    pAccessory->addPenalty(optionName, optionValue);
+                pAccessory->setAbility(qStringToAbility(option.optionName), option.value);
+            }
+            else if (option.type == "ABILITY_ENGRAVE")
+            {
+                if (option.bPenalty)
+                    pAccessory->addPenalty(option.optionName, option.value);
                 else
-                    pAccessory->addEngrave(optionName, optionValue);
+                    pAccessory->addEngrave(option.optionName, option.value);
             }
         }
 
         // 가격 정보 parsing
-        const QJsonObject &auctionInfo = item.find("AuctionInfo")->toObject();
-        int buyPrice = auctionInfo.find("BuyPrice")->toInt();
-        int bidStartPrice = auctionInfo.find("BidStartPrice")->toInt();
-
-        mSearchResults.append({pAccessory, {buyPrice, bidStartPrice}});
+        mSearchResults.append({pAccessory, {item.AuctionInfo.buyPrice, item.AuctionInfo.bidStartPrice}});
     }
 
     if (mResponseCount == MAX_SEARCH_COUNT)

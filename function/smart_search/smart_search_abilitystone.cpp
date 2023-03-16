@@ -1,6 +1,7 @@
 #include "smart_search_abilitystone.h"
 #include "ui_smart_search_abilitystone.h"
 #include "ui/widget_manager.h"
+#include "api/response_parser.h"
 #include "api/api_manager.h"
 #include "api/search_option.h"
 #include "game/engrave/engrave_manager.h"
@@ -222,24 +223,25 @@ void SmartSearchAbilityStone::parseSearchResult(QNetworkReply *pReply)
     if (response.isNull())
         return;
 
+    ResponseAuction responseAuction = ResponseParser::parseAuctionItem(response);
+    const AuctionItem &item = responseAuction.items.front();
+
     // 검색 결과 parsing (최저가 1개)
-    const QJsonObject &item = response.object().find("Items")->toArray()[0].toObject();
-    const QJsonObject &auctionInfo = item.find("AuctionInfo")->toObject();
-    int buyPrice = auctionInfo.find("BuyPrice")->toInt();
-    int bidStartPrice = auctionInfo.find("BidStartPrice")->toInt();
+    int buyPrice = item.AuctionInfo.buyPrice;
+    int bidStartPrice = item.AuctionInfo.bidStartPrice;
 
     AbilityStone abilityStone;
-    abilityStone.setItemName(item.find("Name")->toString());
-    abilityStone.setItemGrade(qStringToItemGrade(item.find("Grade")->toString()));
+    abilityStone.setItemName(item.name);
+    abilityStone.setItemGrade(qStringToItemGrade(item.grade));
     abilityStone.setIconPath(":/image/item/abilitystone/0.png");
 
-    const QJsonArray &options = item.find("Options")->toArray();
-    for (const QJsonValue& value : options)
-    {
-        const QJsonObject &option = value.toObject();
-        const QString &engrave = option.find("OptionName")->toString();
+    const QList<AuctionItemOption> &options = item.options;
 
-        if (option.find("IsPenalty")->toBool())
+    for (const AuctionItemOption &option : options)
+    {
+        const QString &engrave = option.optionName;
+
+        if (option.bPenalty)
             abilityStone.addPenalty(engrave, 0);
         else
             abilityStone.addEngrave(engrave, 0);

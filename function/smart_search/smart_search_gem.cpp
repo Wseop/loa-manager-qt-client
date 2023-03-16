@@ -1,6 +1,7 @@
 #include "smart_search_gem.h"
 #include "ui_smart_search_gem.h"
 #include "ui/widget_manager.h"
+#include "api/response_parser.h"
 #include "api/api_manager.h"
 #include "api/search_option.h"
 #include "game/item/gem.h"
@@ -117,31 +118,25 @@ void SmartSearchGem::parseSearchResult(QNetworkReply *pReply)
     if (response.isNull())
         return;
 
-    const QJsonObject &item = response.object().find("Items")->toArray()[0].toObject();
-    const QString &itemName = item.find("Name")->toString();
+    ResponseAuction responseAuction = ResponseParser::parseAuctionItem(response);
+    const AuctionItem &item = responseAuction.items.front();
 
-    // 보석 타입 설정
+    // parsing 결과를 기반으로 보석 정보 생성
     GemType gemType;
-    if (itemName.contains("멸화"))
+    if (item.name.contains("멸화"))
         gemType = GemType::멸화;
     else
         gemType = GemType::홍염;
 
     Gem gem(gemType);
-    gem.setItemName(itemName);
-    gem.setItemGrade(qStringToItemGrade(item.find("Grade")->toString()));
-    gem.setIconPath(item.find("Icon")->toString());
+    gem.setItemName(item.name);
+    gem.setItemGrade(qStringToItemGrade(item.grade));
+    gem.setIconPath(item.icon);
 
-    // 보석 레벨 설정
-    if (itemName.startsWith("10"))
+    if (item.name.startsWith("10"))
         gem.setGemLevel(10);
     else
-        gem.setGemLevel(itemName[0].digitValue());
+        gem.setGemLevel(item.name[0].digitValue());
 
-    // 가격 parsing
-    const QJsonObject &auctionInfo = item.find("AuctionInfo")->toObject();
-    int buyPrice = auctionInfo.find("BuyPrice")->toInt();
-    int bidStartPrice = auctionInfo.find("BidStartPrice")->toInt();
-
-    updateUI(gem, {buyPrice, bidStartPrice});
+    updateUI(gem, {item.AuctionInfo.buyPrice, item.AuctionInfo.bidStartPrice});
 }

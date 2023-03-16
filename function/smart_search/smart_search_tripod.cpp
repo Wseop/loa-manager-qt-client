@@ -3,6 +3,7 @@
 #include "ui/widget_manager.h"
 #include "resource/resource_manager.h"
 #include "game/skill/skill_manager.h"
+#include "api/response_parser.h"
 #include "api/api_manager.h"
 #include "api/search_option.h"
 
@@ -209,16 +210,16 @@ void SmartSearchTripod::searchTripod(int skillCode, int tripodCode)
         if (response.isNull())
             return;
 
-        const QJsonArray &items = response.object().find("Items")->toArray();
+        ResponseAuction responseAuction = ResponseParser::parseAuctionItem(response);
+        const QList<AuctionItem> &items = responseAuction.items;
+
         if (items.size() == 0)
         {
             mTripodPriceLabels[skillCode][tripodCode]->setText("검색 결과 없음");
             return;
         }
 
-        // 가격 parsing
-        const QJsonObject &item = items[0].toObject();
-        int price = item.find("AuctionInfo")->toObject().find("BuyPrice")->toInt();
+        int price = items.front().AuctionInfo.buyPrice;
 
         // UI Update
         mTripodPriceLabels[skillCode][tripodCode]->setText(QString("%L1").arg(price));

@@ -143,10 +143,12 @@ void SmartSearchTripod::initializeSearchButton()
         {
             const QString &skillName = skillNames[i];
             const Skill &skill = skills[skillName];
+            const QList<Tripod> &tripods = skill.tripods();
+
+            if (tripods.size() == 0)
+                continue;
 
             addSkillWidget(skill, (i * 2) + 1);
-
-            const QList<Tripod> &tripods = skill.tripods();
 
             for (int j = 0; j < tripods.size(); j++)
             {

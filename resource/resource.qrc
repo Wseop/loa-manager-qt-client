@@ -923,6 +923,18 @@
         <file>tripod/Tripod_Tier_3_149.png</file>
         <file>tripod/Tripod_Tier_3_150.png</file>
         <file>tripod/Tripod_Tier_3_157.png</file>
+        <file>skill/DM_Skill_01_20.png</file>
+        <file>skill/DM_Skill_01_21.png</file>
+        <file>skill/DM_Skill_01_22.png</file>
+        <file>skill/DM_Skill_01_23.png</file>
+        <file>skill/DM_Skill_01_24.png</file>
+        <file>skill/DM_Skill_01_25.png</file>
+        <file>skill/SC_Skill_01_24.png</file>
+        <file>skill/SC_Skill_01_25.png</file>
+        <file>skill/SC_Skill_01_26.png</file>
+        <file>skill/SC_Skill_01_27.png</file>
+        <file>skill/SC_Skill_01_28.png</file>
+        <file>skill/SC_Skill_01_29.png</file>
     </qresource>
     <qresource prefix="/json">
         <file alias="engrave.json">engrave/engrave.json</file>

@@ -88,3 +88,10 @@ void Armor::addElixir(const Elixir &elixir)
 {
     mElixirs << elixir;
 }
+
+void Armor::addElixir(const QString &part, const QString &effect, int level)
+{
+    const QStringList parts = {"투구", "어깨", "상의", "하의", "장갑", "공용"};
+
+    addElixir({static_cast<ArmorPart>(parts.indexOf(part)), effect, level});
+}

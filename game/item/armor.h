@@ -46,6 +46,7 @@ public:
 
     QList<Elixir> elixirs() const;
     void addElixir(const Elixir &elixir);
+    void addElixir(const QString &part, const QString &effect, int level);
 
 private:
     ArmorPart mArmorPart;

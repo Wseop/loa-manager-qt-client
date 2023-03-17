@@ -26,6 +26,12 @@ public:
     static ResponseMarket parseMarketItem(QJsonDocument response);
 
 private:
+    static void parseItemInfo(const QJsonObject &itemInfo, Item *pItem);
+    static void parseItemTitle(const QJsonObject &itemTitle, Item *pItem);
+    static void parseItemPartBox(const QJsonObject &itemPartBox, Item *pItem);
+    static void parseSingleTextBox(const QString &singleTextBox, Item *pItem);
+    static void parseIndentStringGroup(const QJsonObject &indentStringGroup, Item *pItem);
+
     static Weapon *parseWeapon(const QJsonObject &object);
     static Armor *parseArmor(const QJsonObject &object);
     static Accessory *parseAccessory(const QJsonObject &object);

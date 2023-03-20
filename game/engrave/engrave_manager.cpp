@@ -84,7 +84,7 @@ QStringList EngraveManager::getPenalties() const
 
 const QString EngraveManager::iconPath(const QString &engrave) const
 {
-    QString iconPath = ":/engrave/image/engrave/%1.png";
+    QString iconPath = ":/image/engrave/%1.png";
     return iconPath.arg(mEngraveToCode[engrave]);
 }
 

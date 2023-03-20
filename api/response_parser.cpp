@@ -235,6 +235,8 @@ void ResponseParser::parseGem(QJsonDocument response, Character *pCharacter, uin
     }
 
     // 보석 정보 parsing 및 추가
+    QList<Gem*> newGems;
+
     for (int i = 0; i < gems.size(); i++)
     {
         const QJsonObject &gem = gems[i].toObject();
@@ -262,8 +264,15 @@ void ResponseParser::parseGem(QJsonDocument response, Character *pCharacter, uin
 
         pGem->setItemName(gemName);
 
-        pCharacter->addGem(pGem);
+        newGems << pGem;
     }
+
+    // 보석 레벨을 기준으로 내림차순 정렬
+    std::sort(newGems.begin(), newGems.end(), [&](Gem *a, Gem *b){
+        return a->gemLevel() > b->gemLevel();
+    });
+
+    pCharacter->setGems(newGems);
 
     // TODO. 다른 객체에서도 사용할 수 있도록 수정필요
     CharacterSearch::getInstance()->updateParseStatus(statusBit, pCharacter);

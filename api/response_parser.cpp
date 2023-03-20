@@ -572,9 +572,10 @@ void ResponseParser::parseIndentStringGroup(const QJsonObject &indentStringGroup
             int engraveNameStartIndex = engrave.indexOf(">") + QString(">").size();
             int engraveNameEndIndex = engrave.indexOf("</FONT>");
             int engraveValueStartIndex = engrave.indexOf("+") + QString("+").size();
+            int engraveValueEndIndex = engrave.indexOf("<BR>", engraveValueStartIndex);
 
             const QString &engraveName = engrave.sliced(engraveNameStartIndex, engraveNameEndIndex - engraveNameStartIndex);
-            int engraveValue = engrave.sliced(engraveValueStartIndex, 1).toInt();
+            int engraveValue = engrave.sliced(engraveValueStartIndex, engraveValueEndIndex - engraveValueStartIndex).toInt();
 
             if (ItemType::Accessory == pItem->itemType())
             {

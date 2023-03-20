@@ -21,6 +21,7 @@ public:
     ~Character();
 
     QList<Profile *> siblings() const;
+    void setSiblings (QList<Profile *> &siblings);
     void addSibling(Profile *pSibling);
 
     Profile *getProfile() const;

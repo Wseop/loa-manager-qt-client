@@ -87,6 +87,11 @@ QList<Profile *> Character::siblings() const
     return mSiblings;
 }
 
+void Character::setSiblings(QList<Profile *> &siblings)
+{
+    mSiblings = siblings;
+}
+
 void Character::addSibling(Profile *pSibling)
 {
     mSiblings << pSibling;

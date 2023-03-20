@@ -6,23 +6,41 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
+#include <algorithm>
+
 void ResponseParser::parseSibling(QJsonDocument response, Character *pCharacter, uint8_t statusBit)
 {
+    // TODO. 무한 대기 개선 필요
+    // Profile이 업데이트 될 때까지 대기
+    while (pCharacter->getProfile() == nullptr);
+
     const QJsonArray &siblings = response.array();
+    QList<Profile *> newSiblings;
 
     for (int i = 0; i < siblings.size(); i++)
     {
         const QJsonObject &sibling = siblings[i].toObject();
+        const QString &siblingName = sibling.find("CharacterName")->toString();
+
+        if (siblingName == pCharacter->getProfile()->characterName())
+            continue;
 
         Profile *pProfile = new Profile();
         pProfile->setServerName(sibling.find("ServerName")->toString());
-        pProfile->setCharacterName(sibling.find("CharacterName")->toString());
+        pProfile->setCharacterName(siblingName);
         pProfile->setCharacterLevel(sibling.find("CharacterLevel")->toInt());
         pProfile->setCharacterClass(sibling.find("CharacterClassName")->toString());
         pProfile->setItemLevel(sibling.find("ItemAvgLevel")->toString().remove(",").toDouble());
 
-        pCharacter->addSibling(pProfile);
+        newSiblings << pProfile;
     }
+
+    // 아이템 레벨을 기준으로 내림차순 정렬
+    std::sort(newSiblings.begin(), newSiblings.end(), [&](Profile *a, Profile *b){
+        return a->itemLevel() > b->itemLevel();
+    });
+
+    pCharacter->setSiblings(newSiblings);
 
     // TODO. 다른 객체에서도 사용할 수 있도록 수정필요
     CharacterSearch::getInstance()->updateParseStatus(statusBit, pCharacter);

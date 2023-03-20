@@ -10,9 +10,9 @@ QString Profile::serverName() const
     return mServerName;
 }
 
-void Profile::setServerName(const QString &newServerName)
+void Profile::setServerName(const QString &serverName)
 {
-    mServerName = newServerName;
+    mServerName = serverName;
 }
 
 QString Profile::characterName() const
@@ -20,9 +20,9 @@ QString Profile::characterName() const
     return mCharacterName;
 }
 
-void Profile::setCharacterName(const QString &newCharacterName)
+void Profile::setCharacterName(const QString &characterName)
 {
-    mCharacterName = newCharacterName;
+    mCharacterName = characterName;
 }
 
 int Profile::characterLevel() const
@@ -30,9 +30,9 @@ int Profile::characterLevel() const
     return mCharacterLevel;
 }
 
-void Profile::setCharacterLevel(int newCharacterLevel)
+void Profile::setCharacterLevel(int characterLevel)
 {
-    mCharacterLevel = newCharacterLevel;
+    mCharacterLevel = characterLevel;
 }
 
 QString Profile::characterClass() const
@@ -40,9 +40,9 @@ QString Profile::characterClass() const
     return mCharacterClass;
 }
 
-void Profile::setCharacterClass(const QString &newCharacterClass)
+void Profile::setCharacterClass(const QString &characterClass)
 {
-    mCharacterClass = newCharacterClass;
+    mCharacterClass = characterClass;
 }
 
 double Profile::itemLevel() const
@@ -50,9 +50,9 @@ double Profile::itemLevel() const
     return mItemLevel;
 }
 
-void Profile::setItemLevel(double newItemLevel)
+void Profile::setItemLevel(double itemLevel)
 {
-    mItemLevel = newItemLevel;
+    mItemLevel = itemLevel;
 }
 
 int Profile::expeditionLevel() const
@@ -60,9 +60,9 @@ int Profile::expeditionLevel() const
     return mExpeditionLevel;
 }
 
-void Profile::setExpeditionLevel(int newExpeditionLevel)
+void Profile::setExpeditionLevel(int expeditionLevel)
 {
-    mExpeditionLevel = newExpeditionLevel;
+    mExpeditionLevel = expeditionLevel;
 }
 
 QString Profile::title() const
@@ -70,9 +70,9 @@ QString Profile::title() const
     return mTitle;
 }
 
-void Profile::setTitle(const QString &newTitle)
+void Profile::setTitle(const QString &title)
 {
-    mTitle = newTitle;
+    mTitle = title;
 }
 
 QString Profile::guildName() const
@@ -80,9 +80,9 @@ QString Profile::guildName() const
     return mGuildName;
 }
 
-void Profile::setGuildName(const QString &newGuildName)
+void Profile::setGuildName(const QString &guildName)
 {
-    mGuildName = newGuildName;
+    mGuildName = guildName;
 }
 
 int Profile::totalSkillPoint() const
@@ -90,9 +90,9 @@ int Profile::totalSkillPoint() const
     return mTotalSkillPoint;
 }
 
-void Profile::setTotalSkillPoint(int newTotalSkillPoint)
+void Profile::setTotalSkillPoint(int totalSkillPoint)
 {
-    mTotalSkillPoint = newTotalSkillPoint;
+    mTotalSkillPoint = totalSkillPoint;
 }
 
 QHash<Ability, int> Profile::ability() const
@@ -105,12 +105,22 @@ void Profile::addAbility(Ability ability, int value)
     mAbility[ability] = value;
 }
 
+int Profile::attack() const
+{
+    return mAttack;
+}
+
+void Profile::setAttack(int attack)
+{
+    mAttack = attack;
+}
+
 int Profile::maxHp() const
 {
     return mMaxHp;
 }
 
-void Profile::setMaxHp(int newMaxHp)
+void Profile::setMaxHp(int maxHp)
 {
-    mMaxHp = newMaxHp;
+    mMaxHp = maxHp;
 }

@@ -53,7 +53,9 @@ void ResponseParser::parseProfile(QJsonDocument response, Character *pCharacter,
 
         if (type == "최대 생명력")
             pProfile->setMaxHp(value);
-        else if (type != "공격력")
+        else if (type == "공격력")
+            pProfile->setAttack(value);
+        else
             pProfile->addAbility(qStringToAbility(type), value);
     }
 

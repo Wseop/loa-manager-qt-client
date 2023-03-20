@@ -12,37 +12,40 @@ public:
     Profile();
 
     QString serverName() const;
-    void setServerName(const QString &newServerName);
+    void setServerName(const QString &serverName);
 
     QString characterName() const;
-    void setCharacterName(const QString &newCharacterName);
+    void setCharacterName(const QString &characterName);
 
     int characterLevel() const;
-    void setCharacterLevel(int newCharacterLevel);
+    void setCharacterLevel(int characterLevel);
 
     QString characterClass() const;
-    void setCharacterClass(const QString &newCharacterClass);
+    void setCharacterClass(const QString &characterClass);
 
     double itemLevel() const;
-    void setItemLevel(double newItemLevel);
+    void setItemLevel(double itemLevel);
 
     int expeditionLevel() const;
-    void setExpeditionLevel(int newExpeditionLevel);
+    void setExpeditionLevel(int expeditionLevel);
 
     QString title() const;
-    void setTitle(const QString &newTitle);
+    void setTitle(const QString &title);
 
     QString guildName() const;
-    void setGuildName(const QString &newGuildName);
+    void setGuildName(const QString &guildName);
 
     int totalSkillPoint() const;
-    void setTotalSkillPoint(int newTotalSkillPoint);
+    void setTotalSkillPoint(int totalSkillPoint);
 
     QHash<Ability, int> ability() const;
     void addAbility(Ability ability, int value);
 
+    int attack() const;
+    void setAttack(int attack);
+
     int maxHp() const;
-    void setMaxHp(int newMaxHp);
+    void setMaxHp(int maxHp);
 
 private:
     QString mServerName;
@@ -56,6 +59,7 @@ private:
     QString mGuildName;
     int mTotalSkillPoint;
     QHash<Ability, int> mAbility;
+    int mAttack;
     int mMaxHp;
 };
 

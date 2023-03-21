@@ -93,7 +93,7 @@ void CharacterInfo::addProfileInfo(const Profile *pProfile)
 void CharacterInfo::addSiblingSelector(const QList<Profile*> &siblings)
 {
     // 보유 캐릭터 목록 추가
-    QStringList characterList = {QString("보유 캐릭터\n(%1)").arg(siblings.size())};
+    QStringList characterList = {QString("보유 캐릭터\n(%1)").arg(siblings.size() + 1)};
     QString itemText = "[%1 Lv.%2]\n%3";
 
     for (const Profile *pSibling : siblings)

@@ -32,8 +32,8 @@ AbilityStoneInfo::~AbilityStoneInfo()
         delete pWidget;
     mWidgets.clear();
 
-    for (QLayout *pLayout : mLayouts)
-        delete pLayout;
+    for (auto rIter = mLayouts.rbegin(); rIter != mLayouts.rend(); rIter++)
+        delete *rIter;
     mLayouts.clear();
 
     delete ui;

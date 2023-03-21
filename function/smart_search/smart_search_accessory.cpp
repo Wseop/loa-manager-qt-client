@@ -55,8 +55,9 @@ SmartSearchAccessory::~SmartSearchAccessory()
         delete pWidget;
     for (QWidget* pWidget : mWidgets)
         delete pWidget;
-    for (QLayout* pLayout : mLayouts)
-        delete pLayout;
+    for (auto rIter = mLayouts.rbegin(); rIter != mLayouts.rend(); rIter++)
+        delete *rIter;
+    mLayouts.clear();
 
     clearResult();
 

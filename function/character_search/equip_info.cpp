@@ -16,7 +16,7 @@ EquipInfo::EquipInfo(const Item *pEquip) :
     if (pEquip == nullptr)
     {
         QLabel *pLabel = WidgetManager::createLabel("장비 미착용");
-        ui->vLayoutRight->addWidget(pLabel);
+        ui->vLayout2->addWidget(pLabel);
         mWidgets << pLabel;
         return;
     }
@@ -75,8 +75,8 @@ EquipInfo::~EquipInfo()
         delete pWidget;
     mWidgets.clear();
 
-    for (QLayout *pLayout : mLayouts)
-        delete pLayout;
+    for (auto rIter = mLayouts.rbegin(); rIter != mLayouts.rend(); rIter++)
+        delete *rIter;
     mLayouts.clear();
 
     delete ui;
@@ -88,14 +88,14 @@ void EquipInfo::initializeIcon(const QString &iconPath, ItemGrade itemGrade)
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
     QLabel *pIcon = WidgetManager::createIcon(iconPath, pNetworkManager, itemGradeToBGColor(itemGrade));
-    ui->vLayoutLeft->addWidget(pIcon);
+    ui->vLayout1->addWidget(pIcon);
     mWidgets << pIcon;
 }
 
 void EquipInfo::initializeQualityBar(int quality)
 {
     QProgressBar *pQualityBar = WidgetManager::createQualityBar(quality, 50, 25);
-    ui->vLayoutLeft->addWidget(pQualityBar);
+    ui->vLayout1->addWidget(pQualityBar);
     mWidgets << pQualityBar;
 }
 
@@ -103,8 +103,8 @@ void EquipInfo::initializeReforgeLevel(int reforge, int itemLevel, ItemGrade ite
 {
     QString text = QString("+%1 (%2)").arg(reforge).arg(itemLevel);
     QLabel *pLabelReforgeLevel = WidgetManager::createLabel(text, 10, itemGradeToTextColor(itemGrade), 100);
-    ui->vLayoutRight->addWidget(pLabelReforgeLevel);
-    ui->vLayoutRight->setAlignment(pLabelReforgeLevel, Qt::AlignLeft);
+    ui->vLayout2->addWidget(pLabelReforgeLevel);
+    ui->vLayout2->setAlignment(pLabelReforgeLevel, Qt::AlignLeft);
     mWidgets << pLabelReforgeLevel;
 }
 
@@ -112,8 +112,8 @@ void EquipInfo::initializeItemSet(ItemSet itemSet, int setLevel)
 {
     QString text = QString("%1 Lv.%2").arg(itemSetToQString(itemSet)).arg(setLevel);
     QLabel *pLabelItemSet = WidgetManager::createLabel(text, 10, "", 100);
-    ui->vLayoutRight->addWidget(pLabelItemSet);
-    ui->vLayoutRight->setAlignment(pLabelItemSet, Qt::AlignLeft);
+    ui->vLayout2->addWidget(pLabelItemSet);
+    ui->vLayout2->setAlignment(pLabelItemSet, Qt::AlignLeft);
     mWidgets << pLabelItemSet;
 }
 
@@ -121,7 +121,7 @@ void EquipInfo::initializeElixir(const QList<Elixir> &elixirs, ArmorPart part)
 {
     QHBoxLayout *pHLayout = new QHBoxLayout();
     pHLayout->setSpacing(5);
-    ui->vLayoutRight->addLayout(pHLayout);
+    ui->vLayout2->addLayout(pHLayout);
     mLayouts << pHLayout;
 
     for (const Elixir &elixir : elixirs)
@@ -146,7 +146,7 @@ void EquipInfo::initializeElla(bool bElla)
         pLabelElla->setStyleSheet(QString("QLabel { border: 1px solid black; "
                                           "         border-radius: 5px; padding: 2px;"
                                           "         color: %1 }").arg(itemGradeToTextColor(ItemGrade::에스더)));
-        ui->vLayoutRight->addWidget(pLabelElla);
+        ui->vLayout2->addWidget(pLabelElla);
         mWidgets << pLabelElla;
     }
 }

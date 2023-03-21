@@ -360,6 +360,10 @@ void CharacterInfo::initializeGemLayout()
     addLayoutTitle("홍염 보석", ui->vLayoutGem2);
 
     addGemInfo(mpCharacter->getGems());
+    addHLine(ui->vLayoutGem1);
+    addHLine(ui->vLayoutGem2);
+
+    addGemLevelAvgInfo(mpCharacter->getGems());
 }
 
 void CharacterInfo::addGemInfo(const QList<Gem *> &gems)
@@ -383,6 +387,49 @@ void CharacterInfo::addGemInfo(const QList<Gem *> &gems)
         pVLayout->addWidget(pGemInfo);
         pVLayout->setAlignment(pGemInfo, Qt::AlignLeft);
         mWidgets << pGemInfo;
+    }
+}
+
+void CharacterInfo::addGemLevelAvgInfo(const QList<Gem *> &gems)
+{
+    int levelSum[] = {0, 0};
+    int count[] = {0, 0};
+
+    // 보석 타입별 레벨 및 갯수 계산
+    for (const Gem *pGem : gems)
+    {
+        if (pGem->gemType() == GemType::멸화)
+        {
+            count[0]++;
+            levelSum[0] += pGem->gemLevel();
+        }
+        else if (pGem->gemType() == GemType::홍염)
+        {
+            count[1]++;
+            levelSum[1] += pGem->gemLevel();
+        }
+    }
+
+    // 보석 타입별 평균 레벨 정보 추가
+    QList<QVBoxLayout*> layouts = {ui->vLayoutGem1, ui->vLayoutGem2};
+
+    for (int i = 0; i < 2; i++)
+    {
+        QString typeStr;
+
+        if (i == 0)
+            typeStr = "멸화";
+        else if (i == 1)
+            typeStr = "홍염";
+
+        addLayoutTitle(QString("%1 평균 레벨").arg(typeStr), layouts[i]);
+
+        if (count[i] > 0)
+        {
+            QLabel *pLabelGemLevelAvg = WidgetManager::createLabel(QString::number(levelSum[i] / (double)count[i], 'f', 2), 12);
+            layouts[i]->addWidget(pLabelGemLevelAvg);
+            mWidgets << pLabelGemLevelAvg;
+        }
     }
 }
 

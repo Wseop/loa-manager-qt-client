@@ -37,6 +37,7 @@ private:
 
     void initializeGemLayout();
     void addGemInfo(const QList<Gem*> &gems);
+    void addGemLevelAvgInfo(const QList<Gem*> &gems);
 
     void initializeSkillLayout();
     void addSkillInfo(const QList<Skill*> &skills);

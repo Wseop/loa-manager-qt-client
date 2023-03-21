@@ -17227,7 +17227,36 @@
                             "IconIndex": 65
                         }
                     ]
+                },
+                {
+                    "Text": "포격 : 곡사포",
+                    "Value": -1,
+                    "IconPath": "BS_Skill_01_15.png",
+                    "IsCounter": false,
+                    "Tripods": []
+                },
+                {
+                    "Text": "포격 : 집중포화",
+                    "Value": -1,
+                    "IconPath": "BS_Skill_01_18.png",
+                    "IsCounter": false,
+                    "Tripods": []
+                },
+                {
+                    "Text": "포격 : 에너지 포",
+                    "Value": -1,
+                    "IconPath": "BS_Skill_01_8.png",
+                    "IsCounter": false,
+                    "Tripods": []
+                },
+                {
+                    "Text": "포격 : 절대 영역",
+                    "Value": -1,
+                    "IconPath": "BS_Skill_01_25.png",
+                    "IsCounter": false,
+                    "Tripods": []
                 }
+
             ]
         },
         {

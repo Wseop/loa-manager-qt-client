@@ -935,6 +935,10 @@
         <file>skill/SC_Skill_01_27.png</file>
         <file>skill/SC_Skill_01_28.png</file>
         <file>skill/SC_Skill_01_29.png</file>
+        <file>skill/BS_Skill_01_8.png</file>
+        <file>skill/BS_Skill_01_15.png</file>
+        <file>skill/BS_Skill_01_18.png</file>
+        <file>skill/BS_Skill_01_25.png</file>
     </qresource>
     <qresource prefix="/json">
         <file alias="engrave.json">engrave/engrave.json</file>

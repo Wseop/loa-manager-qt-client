@@ -1,9 +1,11 @@
 #include "character_search.h"
 #include "ui_character_search.h"
 #include "ui/widget_manager.h"
+#include "ui/font_manager.h"
 #include "api/api_manager.h"
 #include "api/response_parser.h"
 #include "game/character/character.h"
+#include "function/character_search/character_info.h"
 
 #include <QGroupBox>
 #include <QLineEdit>
@@ -26,7 +28,12 @@ CharacterSearch::CharacterSearch() :
     ui->setupUi(this);
     ui->hLayoutInput->setAlignment(Qt::AlignHCenter);
 
+    qRegisterMetaType<Character*>("Character*");
+    connect(this, &CharacterSearch::parseFinished, this, &CharacterSearch::renderCharacter);
+    connect(this, &CharacterSearch::searchRequested, this, &CharacterSearch::searchCharacter);
+
     initializeInputUI();
+    initializeCharacterTab();
     initializeParser();
 }
 
@@ -34,6 +41,14 @@ CharacterSearch::~CharacterSearch()
 {
     mpLineEditCharacterName = nullptr;
     mpSearchButton = nullptr;
+
+    for (auto iter = mCharacters.begin(); iter != mCharacters.end(); iter++)
+        delete *iter;
+    mCharacters.clear();
+
+    for (auto iter = mCharacterInfos.begin(); iter != mCharacterInfos.end(); iter++)
+        delete *iter;
+    mCharacterInfos.clear();
 
     for (QWidget *pWidget : mWidgets)
         delete pWidget;
@@ -73,6 +88,23 @@ void CharacterSearch::initializeInputUI()
     });
 }
 
+void CharacterSearch::initializeCharacterTab()
+{
+    ui->tabCharacter->setStyleSheet("QWidget { background-color: #F0F0F0 }");
+    ui->tabCharacter->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, 10));
+
+    // 캐릭터 탭 close시 해당 캐릭터의 메모리 release
+    connect(ui->tabCharacter, &QTabWidget::tabCloseRequested, this, [&](int index){
+        const QString &characterName = ui->tabCharacter->tabText(index);
+
+        delete mCharacterInfos[characterName];
+        mCharacterInfos.remove(characterName);
+
+        delete mCharacters[characterName];
+        mCharacters.remove(characterName);
+    });
+}
+
 void CharacterSearch::initializeParser()
 {
     mParsers << &ResponseParser::parseSibling;
@@ -91,7 +123,13 @@ void CharacterSearch::searchCharacter(const QString &characterName)
 
     if (mCharacters.contains(characterName))
     {
-        // TODO. 해당 캐릭터로 UI 전환
+        // 이미 검색된 캐릭터인 경우 해당 캐릭터로 tab 변경
+        for (int i = 0; i < ui->tabCharacter->count(); i++)
+        {
+            if (ui->tabCharacter->tabText(i) == characterName)
+                ui->tabCharacter->setCurrentIndex(i);
+        }
+
         mpLineEditCharacterName->clear();
         return;
     }
@@ -120,6 +158,8 @@ void CharacterSearch::searchCharacter(const QString &characterName)
                     delete pCharacter;
                     mpSearchButton->setEnabled(true);
                 }
+
+                updateParseStatus(static_cast<uint8_t>(1 << i), pCharacter);
                 return;
             }
 
@@ -137,7 +177,16 @@ void CharacterSearch::searchCharacter(const QString &characterName)
 
 void CharacterSearch::renderCharacter(Character *pCharacter)
 {
-    bool breakPoint = true;
+    const QString &characterName = pCharacter->getProfile()->getCharacterName();
+    CharacterInfo *pCharacterInfo = new CharacterInfo(pCharacter);
+
+    // 캐릭터 탭 추가
+    int index = ui->tabCharacter->addTab(pCharacterInfo, characterName);
+    ui->tabCharacter->setCurrentIndex(index);
+    mCharacterInfos[characterName] = pCharacterInfo;
+
+    mpLineEditCharacterName->clear();
+    mpSearchButton->setEnabled(true);
 }
 
 void CharacterSearch::start()
@@ -150,12 +199,7 @@ void CharacterSearch::updateParseStatus(uint8_t bit, Character *pCharacter)
     mParseStatus |= bit;
 
     if (mParseStatus == STATUS_PARSE_FINISHED)
-    {
-        renderCharacter(pCharacter);
-
-        mpLineEditCharacterName->clear();
-        mpSearchButton->setEnabled(true);
-    }
+        emit parseFinished(pCharacter);
 }
 
 CharacterSearch *CharacterSearch::getInstance()

@@ -21,6 +21,7 @@ private:
     ~CharacterSearch();
 
     void initializeInputUI();
+    void initializeCharacterTab();
     void initializeParser();
 
     void searchCharacter(const QString &characterName);
@@ -44,6 +45,7 @@ private:
     uint8_t mParseStatus;
 
     QHash<QString, Character *> mCharacters;
+    QHash<QString, class CharacterInfo *> mCharacterInfos;
 
     class QLineEdit *mpLineEditCharacterName;
     class QPushButton *mpSearchButton;
@@ -52,6 +54,10 @@ private:
 
 private:
     static CharacterSearch *mpInstance;
+
+signals:
+    void parseFinished(Character *pCharacter);
+    void searchRequested(const QString &characterName);
 };
 
 #endif // CHARACTER_SEARCH_H

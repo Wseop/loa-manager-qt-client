@@ -24,6 +24,16 @@
      </property>
     </widget>
    </item>
+   <item>
+    <widget class="QTabWidget" name="tabCharacter">
+     <property name="currentIndex">
+      <number>-1</number>
+     </property>
+     <property name="tabsClosable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources/>

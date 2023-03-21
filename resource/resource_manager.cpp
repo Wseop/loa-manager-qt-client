@@ -10,6 +10,7 @@ ResourceManager *ResourceManager::mpInstance = nullptr;
 ResourceManager::ResourceManager()
 {
     initializeIconPath();
+    initializeEquipSetName();
 }
 
 ResourceManager::~ResourceManager()
@@ -43,6 +44,20 @@ void ResourceManager::initializeIconPath()
 
             mIconPath[name] = reforgeIconPath.arg(id1).arg(id2);
         }
+    }
+}
+
+void ResourceManager::initializeEquipSetName()
+{
+    QJsonObject equipSetName = loadJson("equip_set_name");
+    const QStringList &list = equipSetName.find("List")->toVariant().toStringList();
+
+    for (const QString &setName : list)
+    {
+        const QStringList &itemNames = equipSetName.find(setName)->toVariant().toStringList();
+
+        for (const QString &itemName : itemNames)
+            mEquipSetNames[setName] << itemName;
     }
 }
 
@@ -86,4 +101,12 @@ QString ResourceManager::iconPath(QString item)
         return "";
     else
         return mIconPath[item];
+}
+
+QStringList ResourceManager::equipSetNames(QString itemSet)
+{
+    if (!mEquipSetNames.contains(itemSet))
+        return {};
+    else
+        return mEquipSetNames[itemSet];
 }

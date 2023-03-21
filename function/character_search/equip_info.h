@@ -25,7 +25,8 @@ private:
     void addQualityBar(int quality);
 
     void initializeLayout2(const Item *pEquip, ItemType itemType);
-    void addReforgeLevelInfo(int reforge, int itemLevel, ItemGrade itemGrade);
+    void addItemSourceInfo(ItemSet itemSet, const QString &itemName, ItemGrade itemGrade);
+    void addReforgeLevelInfo(int reforge, int itemLevel);
     void addItemSetInfo(ItemSet itemSet, int setLevel);
     void addElixirInfo(const QList<Elixir> &elixirs, ArmorPart part);
     void addEllaInfo(bool bElla);

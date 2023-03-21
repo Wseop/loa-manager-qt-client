@@ -13,6 +13,7 @@ private:
     ~ResourceManager();
 
     void initializeIconPath();
+    void initializeEquipSetName();
 
 public:
     static ResourceManager *getInstance();
@@ -21,12 +22,14 @@ public:
 public:
     QJsonObject loadJson(QString fileName);
     QString iconPath(QString item);
+    QStringList equipSetNames(QString itemSet);
 
 private:
     static ResourceManager *mpInstance;
 
 private:
     QHash<QString, QString> mIconPath;
+    QHash<QString, QStringList> mEquipSetNames;
 };
 
 #endif // RESOURCEMANAGER_H

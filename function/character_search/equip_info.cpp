@@ -2,6 +2,7 @@
 #include "ui_equip_info.h"
 #include "ui/widget_manager.h"
 #include "game/item/weapon.h"
+#include "resource/resource_manager.h"
 
 #include <QLabel>
 #include <QProgressBar>
@@ -86,7 +87,6 @@ void EquipInfo::initializeLayout2(const Item *pEquip, ItemType itemType)
 {
     int reforge = 0;
     int itemLevel = 0;
-    ItemGrade itemGrade = ItemGrade::size;
     ItemSet itemSet = ItemSet::size;
     int setLevel = 0;
     QList<Elixir> elixirs;
@@ -99,7 +99,6 @@ void EquipInfo::initializeLayout2(const Item *pEquip, ItemType itemType)
 
         reforge = pWeapon->reforge();
         itemLevel = pWeapon->itemLevel();
-        itemGrade = pWeapon->itemGrade();
         itemSet = pWeapon->itemSet();
         setLevel = pWeapon->setLevel();
         bElla = pWeapon->ella();
@@ -110,14 +109,14 @@ void EquipInfo::initializeLayout2(const Item *pEquip, ItemType itemType)
 
         reforge = pArmor->reforge();
         itemLevel = pArmor->itemLevel();
-        itemGrade = pArmor->itemGrade();
         itemSet = pArmor->itemSet();
         setLevel = pArmor->setLevel();
         elixirs = pArmor->elixirs();
         part = pArmor->armorPart();
     }
 
-    addReforgeLevelInfo(reforge, itemLevel, itemGrade);
+    addItemSourceInfo(itemSet, pEquip->itemName(), pEquip->itemGrade());
+    addReforgeLevelInfo(reforge, itemLevel);
     addItemSetInfo(itemSet, setLevel);
 
     if (itemType == ItemType::Weapon)
@@ -126,10 +125,48 @@ void EquipInfo::initializeLayout2(const Item *pEquip, ItemType itemType)
         addElixirInfo(elixirs, part);
 }
 
-void EquipInfo::addReforgeLevelInfo(int reforge, int itemLevel, ItemGrade itemGrade)
+void EquipInfo::addItemSourceInfo(ItemSet itemSet, const QString &itemName, ItemGrade itemGrade)
+{
+    QString text;
+
+    if (itemSet == ItemSet::size || itemGrade == ItemGrade::에스더)
+        text = itemGradeToQString(itemGrade);
+    else
+    {
+        // 군단장 제작 장비의 경우 해당하는 군단장명 탐색
+        const QStringList &setNames = ResourceManager::getInstance()->equipSetNames(itemSetToQString(itemSet));
+
+        for (int i = 0; i < setNames.size(); i++)
+        {
+            if (itemName.contains(setNames[i]))
+            {
+                if (i < 2)
+                    text = "일리아칸";
+                else if (i < 4)
+                    text = "하브";
+                else if (i == 4)
+                    text = "노브";
+                else if (i == 5)
+                    text = "발비";
+                break;
+            }
+        }
+    }
+
+    QLabel *pLabelItemSource = WidgetManager::createLabel(text, 10, "", 100);
+    pLabelItemSource->setStyleSheet(QString("QLabel { border: 1px solid black; "
+                                    "         border-radius: 5px;"
+                                    "         padding: 2px;"
+                                    "         color: %1 }").arg(itemGradeToTextColor(itemGrade)));
+    ui->vLayout2->addWidget(pLabelItemSource);
+    ui->vLayout2->setAlignment(pLabelItemSource, Qt::AlignLeft);
+    mWidgets << pLabelItemSource;
+}
+
+void EquipInfo::addReforgeLevelInfo(int reforge, int itemLevel)
 {
     QString text = QString("+%1 (%2)").arg(reforge).arg(itemLevel);
-    QLabel *pLabelReforgeLevel = WidgetManager::createLabel(text, 10, itemGradeToTextColor(itemGrade), 100);
+    QLabel *pLabelReforgeLevel = WidgetManager::createLabel(text, 10, "", 100);
     ui->vLayout2->addWidget(pLabelReforgeLevel);
     ui->vLayout2->setAlignment(pLabelReforgeLevel, Qt::AlignLeft);
     mWidgets << pLabelReforgeLevel;

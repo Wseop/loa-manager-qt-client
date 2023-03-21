@@ -271,9 +271,9 @@ void CharacterInfo::addElixirInfo(const QList<Armor *> &armors)
 
             // 투구, 장갑의 세트효과 추출
             if (pArmor->armorPart() == ArmorPart::Head && elixir.effect.contains("("))
-                elixirSetHead = elixir.effect.sliced(0, 2);
+                elixirSetHead = elixir.effect.sliced(0, elixir.effect.indexOf("(") - 1);
             else if (pArmor->armorPart() == ArmorPart::Hand && elixir.effect.contains("("))
-                elixirSetHand = elixir.effect.sliced(0, 2);
+                elixirSetHand = elixir.effect.sliced(0, elixir.effect.indexOf("(") - 1);
         }
     }
 

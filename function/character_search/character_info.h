@@ -28,6 +28,7 @@ private:
     void initializeEquipLayout();
     void addArmorInfo(const QList<Armor*> &armors);
     void addWeaponInfo(const Weapon *pWeapon);
+    void addElixirInfo(const QList<Armor*> &armors);
 
     void initializeAccessoryLayout();
     void addAccessoryInfo(const QList<Accessory*> &accessories);

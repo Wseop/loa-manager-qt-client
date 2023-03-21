@@ -226,6 +226,10 @@ void CharacterInfo::initializeEquipLayout()
 
     // 무기 정보 추가
     addWeaponInfo(mpCharacter->getWeapon());
+    addHLine(ui->vLayoutEquip);
+
+    // 엘릭서 정보 추가
+    addElixirInfo(mpCharacter->getArmors());
 }
 
 void CharacterInfo::addArmorInfo(const QList<Armor *> &armors)
@@ -247,6 +251,56 @@ void CharacterInfo::addWeaponInfo(const Weapon *pWeapon)
     ui->vLayoutEquip->addWidget(pWeaponInfo);
     ui->vLayoutEquip->setAlignment(pWeaponInfo, Qt::AlignLeft);
     mWidgets << pWeaponInfo;
+}
+
+void CharacterInfo::addElixirInfo(const QList<Armor *> &armors)
+{
+    int totalLevel = 0;
+    QString elixirSetHead = "질서";
+    QString elixirSetHand = "혼돈";
+
+    for (const Armor *pArmor : armors)
+    {
+        const QList<Elixir> &elixirs = pArmor->elixirs();
+
+        for (const Elixir &elixir : elixirs)
+        {
+            // 엘릭서 레벨 합계 계산
+            if (pArmor->armorPart() == elixir.part || elixir.part == ArmorPart::size)
+                totalLevel += elixir.level;
+
+            // 투구, 장갑의 세트효과 추출
+            if (pArmor->armorPart() == ArmorPart::Head && elixir.effect.contains("("))
+                elixirSetHead = elixir.effect.sliced(0, 2);
+            else if (pArmor->armorPart() == ArmorPart::Hand && elixir.effect.contains("("))
+                elixirSetHand = elixir.effect.sliced(0, 2);
+        }
+    }
+
+    addLayoutTitle("엘릭서 정보", ui->vLayoutEquip);
+
+    // 엘릭서 레벨 정보 추가
+    QLabel *pLabelTotalLevel = WidgetManager::createLabel(QString("연성 레벨 합 : %1").arg(totalLevel), 12);
+    ui->vLayoutEquip->addWidget(pLabelTotalLevel);
+    ui->vLayoutEquip->setAlignment(pLabelTotalLevel, Qt::AlignHCenter);
+    mWidgets << pLabelTotalLevel;
+
+    // 엘릭서 세트 활성화 정보 추가
+    int enableLevel[] = {35, 40};
+
+    if (elixirSetHead == elixirSetHand)
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            if (totalLevel >= enableLevel[i])
+            {
+                QLabel *pLabelSetLevel = WidgetManager::createLabel(QString("%1 %2단계 활성화").arg(elixirSetHead).arg(i + 1), 12, "#36AF21");
+                ui->vLayoutEquip->addWidget(pLabelSetLevel);
+                ui->vLayoutEquip->setAlignment(pLabelSetLevel, Qt::AlignHCenter);
+                mWidgets << pLabelSetLevel;
+            }
+        }
+    }
 }
 
 void CharacterInfo::initializeAccessoryLayout()

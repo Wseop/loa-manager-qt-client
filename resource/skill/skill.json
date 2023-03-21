@@ -3435,7 +3435,7 @@
                     "Text": "퍼니싱 드로",
                     "Value": 45700,
                     "IconPath": "BK_Skill_01_28.png",
-                    "IsCounter": false,
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "마력 조절",
@@ -3771,7 +3771,7 @@
                     "Text": "와일드 스톰프",
                     "Value": 45220,
                     "IconPath": "BK_Skill_01_16.png",
-                    "IsCounter": false,
+                    "IsCounter": true,
                     "Tripods": [
                         {
                             "Text": "빠른 준비",

@@ -22,7 +22,7 @@ void ResponseParser::parseSibling(QJsonDocument response, Character *pCharacter,
         const QJsonObject &sibling = siblings[i].toObject();
         const QString &siblingName = sibling.find("CharacterName")->toString();
 
-        if (siblingName == pCharacter->getProfile()->characterName())
+        if (siblingName == pCharacter->getProfile()->getCharacterName())
             continue;
 
         Profile *pProfile = new Profile();
@@ -37,7 +37,7 @@ void ResponseParser::parseSibling(QJsonDocument response, Character *pCharacter,
 
     // 아이템 레벨을 기준으로 내림차순 정렬
     std::sort(newSiblings.begin(), newSiblings.end(), [&](Profile *a, Profile *b){
-        return a->itemLevel() > b->itemLevel();
+        return a->getItemLevel() > b->getItemLevel();
     });
 
     pCharacter->setSiblings(newSiblings);
@@ -54,6 +54,7 @@ void ResponseParser::parseProfile(QJsonDocument response, Character *pCharacter,
     pProfile->setExpeditionLevel(profile.find("ExpeditionLevel")->toInt());
     pProfile->setTitle(profile.find("Title")->toString());
     pProfile->setGuildName(profile.find("GuildName")->toString());
+    pProfile->setUsingSkillPoint(profile.find("UsingSkillPoint")->toInt());
     pProfile->setTotalSkillPoint(profile.find("TotalSkillPoint")->toInt());
     pProfile->setServerName(profile.find("ServerName")->toString());
     pProfile->setCharacterName(profile.find("CharacterName")->toString());
@@ -122,7 +123,7 @@ void ResponseParser::parseSkill(QJsonDocument response, Character *pCharacter, u
     while (pCharacter->getProfile() == nullptr);
 
     // 해당 직업의 스킬 목록 생성
-    const QString &characterClass = pCharacter->getProfile()->characterClass();
+    const QString &characterClass = pCharacter->getProfile()->getCharacterClass();
     QHash<QString, Skill> characterSkills = SkillManager::getInstance()->skills(characterClass);
 
     const QJsonArray &skills = response.array();

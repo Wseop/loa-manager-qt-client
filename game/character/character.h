@@ -20,7 +20,7 @@ public:
     Character();
     ~Character();
 
-    QList<Profile *> siblings() const;
+    QList<Profile *> getSiblings() const;
     void setSiblings (QList<Profile *> &siblings);
     void addSibling(Profile *pSibling);
 
@@ -30,9 +30,11 @@ public:
     Weapon *getWeapon() const;
     void setWeapon(Weapon *pWeapon);
 
+    QList<Armor *> getArmors() const;
     Armor *getArmor(ArmorPart part) const;
     void setArmor(Armor *pArmor);
 
+    QList<Accessory *> getAccessories() const;
     Accessory *getAccessory(AccessoryPart part, int index) const;
     void setAccessory(Accessory *pAccessory, int index);
 
@@ -48,10 +50,11 @@ public:
     Card *getCard() const;
     void setCard(Card *pCard);
 
-    QList<Gem *> gems() const;
+    QList<Gem *> getGems() const;
+    void setGems(const QList<Gem *> &gems);
     void addGem(Gem *pGem);
 
-    QList<Skill *> skills() const;
+    QList<Skill *> getSkills() const;
     void addSkill(Skill *pSkill);
 
 private:

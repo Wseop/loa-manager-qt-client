@@ -82,7 +82,7 @@ Character::~Character()
     mSkills.clear();
 }
 
-QList<Profile *> Character::siblings() const
+QList<Profile *> Character::getSiblings() const
 {
     return mSiblings;
 }
@@ -123,6 +123,11 @@ void Character::setWeapon(Weapon *pWeapon)
     mpWeapon = pWeapon;
 }
 
+QList<Armor *> Character::getArmors() const
+{
+    return mArmors;
+}
+
 Armor *Character::getArmor(ArmorPart part) const
 {
     if (part == ArmorPart::size)
@@ -139,6 +144,11 @@ void Character::setArmor(Armor *pArmor)
         delete mArmors[index];
 
     mArmors[index] = pArmor;
+}
+
+QList<Accessory *> Character::getAccessories() const
+{
+    return mAccessories;
 }
 
 Accessory *Character::getAccessory(AccessoryPart part, int index) const
@@ -226,9 +236,14 @@ void Character::setCard(Card *pCard)
     mpCard = pCard;
 }
 
-QList<Gem *> Character::gems() const
+QList<Gem *> Character::getGems() const
 {
     return mGems;
+}
+
+void Character::setGems(const QList<Gem *> &gems)
+{
+    mGems = gems;
 }
 
 void Character::addGem(Gem *pGem)
@@ -237,7 +252,7 @@ void Character::addGem(Gem *pGem)
         mGems << pGem;
 }
 
-QList<Skill *> Character::skills() const
+QList<Skill *> Character::getSkills() const
 {
     return mSkills;
 }

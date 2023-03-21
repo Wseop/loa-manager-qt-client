@@ -226,7 +226,6 @@ void CharacterInfo::initializeEquipLayout()
 
     // 무기 정보 추가
     addWeaponInfo(mpCharacter->getWeapon());
-    addHLine(ui->vLayoutEquip);
 
     // 엘릭서 정보 추가
     addElixirInfo(mpCharacter->getArmors());
@@ -261,6 +260,9 @@ void CharacterInfo::addElixirInfo(const QList<Armor *> &armors)
 
     for (const Armor *pArmor : armors)
     {
+        if (pArmor == nullptr)
+            continue;
+
         const QList<Elixir> &elixirs = pArmor->elixirs();
 
         for (const Elixir &elixir : elixirs)
@@ -360,9 +362,6 @@ void CharacterInfo::initializeGemLayout()
     addLayoutTitle("홍염 보석", ui->vLayoutGem2);
 
     addGemInfo(mpCharacter->getGems());
-    addHLine(ui->vLayoutGem1);
-    addHLine(ui->vLayoutGem2);
-
     addGemLevelAvgInfo(mpCharacter->getGems());
 }
 
@@ -437,16 +436,66 @@ void CharacterInfo::initializeSkillLayout()
 {
     ui->vLayoutSkill->setAlignment(Qt::AlignTop);
 
+    // 트라이포드 활성화 정보 추가
+    addTripodLevelInfo(mpCharacter->getSkills());
+
+    // 스킬 정보 추가
     const Profile *pProfile = mpCharacter->getProfile();
     const QString titleText = QString("스킬 (%1/%2)").arg(pProfile->getUsingSkillPoint()).arg(pProfile->getTotalSkillPoint());
-
-    addLayoutTitle(titleText, ui->vLayoutSkill);
-
-    addSkillInfo(mpCharacter->getSkills());
+    addSkillInfo(titleText, mpCharacter->getSkills());
 }
 
-void CharacterInfo::addSkillInfo(const QList<Skill *> &skills)
+void CharacterInfo::addTripodLevelInfo(const QList<Skill *> &skills)
 {
+    addLayoutTitle("트라이포드 활성화 정보", ui->vLayoutSkill);
+
+    // 4레벨, 5레벨 활성화 count 계산
+    int enableCount[2] = {0, 0};
+
+    for (const Skill *pSkill : skills)
+    {
+        const QList<Tripod> &tripods = pSkill->tripods();
+
+        for (const Tripod &tripod : tripods)
+        {
+            if (tripod.isSelected())
+            {
+                if (tripod.tripodLevel() == 4)
+                    enableCount[0]++;
+                else if (tripod.tripodLevel() == 5)
+                    enableCount[1]++;
+            }
+        }
+    }
+
+    // 레벨 활성화 정보 추가
+    QLabel *pLabelTripodTotal = WidgetManager::createLabel(QString("4, 5레벨 트라이포드 활성화 (%1 / %2)").arg(enableCount[0] + enableCount[1]).arg(18), 12, "", 300);
+    ui->vLayoutSkill->addWidget(pLabelTripodTotal);
+    ui->vLayoutSkill->setAlignment(pLabelTripodTotal, Qt::AlignHCenter);
+    mWidgets << pLabelTripodTotal;
+
+    QHBoxLayout *pHLayout = new QHBoxLayout();
+    pHLayout->setAlignment(Qt::AlignHCenter);
+    ui->vLayoutSkill->addLayout(pHLayout);
+    mLayouts << pHLayout;
+
+    for (int i = 0; i < 2; i++)
+    {
+        QLabel *pLabelTripod = WidgetManager::createLabel(QString("%1레벨 : %2").arg(i + 4).arg(enableCount[i]), 10);
+        pLabelTripod->setStyleSheet("QLabel { border: 1px solid black;"
+                                    "         border-radius: 5px;"
+                                    "         padding: 2px }");
+        pHLayout->addWidget(pLabelTripod);
+        mWidgets << pLabelTripod;
+    }
+}
+
+void CharacterInfo::addSkillInfo(const QString &title, const QList<Skill *> &skills)
+{
+    // title 추가
+    addLayoutTitle(title, ui->vLayoutSkill);
+
+    // 스킬 정보 추가
     int count = 0;
 
     for (const Skill *pSkill : skills)

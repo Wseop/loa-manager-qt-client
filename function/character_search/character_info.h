@@ -40,7 +40,8 @@ private:
     void addGemLevelAvgInfo(const QList<Gem*> &gems);
 
     void initializeSkillLayout();
-    void addSkillInfo(const QList<Skill*> &skills);
+    void addTripodLevelInfo(const QList<Skill*> &skills);
+    void addSkillInfo(const QString &title, const QList<Skill*> &skills);
 
     void addHLine(QLayout *pLayout);
     void addLayoutTitle(const QString &title, QLayout *pLayout);

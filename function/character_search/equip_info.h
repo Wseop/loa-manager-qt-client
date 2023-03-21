@@ -20,12 +20,15 @@ public:
     ~EquipInfo();
 
 private:
-    void initializeIcon(const QString &iconPath, ItemGrade itemGrade);
-    void initializeQualityBar(int quality);
-    void initializeReforgeLevel(int reforge, int itemLevel, ItemGrade itemGrade);
-    void initializeItemSet(ItemSet itemSet, int setLevel);
-    void initializeElixir(const QList<Elixir> &elixirs, ArmorPart part);
-    void initializeElla(bool bElla);
+    void initializeLayout1(const Item *pEquip, ItemType itemType);
+    void addEquipIcon(const QString &iconPath, ItemGrade itemGrade);
+    void addQualityBar(int quality);
+
+    void initializeLayout2(const Item *pEquip, ItemType itemType);
+    void addReforgeLevelInfo(int reforge, int itemLevel, ItemGrade itemGrade);
+    void addItemSetInfo(ItemSet itemSet, int setLevel);
+    void addElixirInfo(const QList<Elixir> &elixirs, ArmorPart part);
+    void addEllaInfo(bool bElla);
 
 private:
     Ui::EquipInfo *ui;

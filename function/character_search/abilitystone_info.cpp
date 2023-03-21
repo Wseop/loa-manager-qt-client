@@ -15,15 +15,13 @@ AbilityStoneInfo::AbilityStoneInfo(const AbilityStone *pAbilityStone) :
     if (pAbilityStone == nullptr)
     {
         QLabel *pLabel = WidgetManager::createLabel("어빌리티 스톤 미착용");
-        ui->vLayoutRight->addWidget(pLabel);
+        ui->vLayout2->addWidget(pLabel);
         mWidgets << pLabel;
         return;
     }
 
-    initializeIcon(pAbilityStone->iconPath(), pAbilityStone->itemGrade());
-    initializeItemNameInfo(pAbilityStone->itemName(), pAbilityStone->itemGrade());
-    initializeEngraveInfo(pAbilityStone->getEngraves(), pAbilityStone);
-    initializePenaltyInfo(pAbilityStone->getPenalties().at(0), pAbilityStone->getPenaltyValue(pAbilityStone->getPenalties().at(0)));
+    initializeLayout1(pAbilityStone);
+    initializeLayout2(pAbilityStone);
 }
 
 AbilityStoneInfo::~AbilityStoneInfo()
@@ -39,56 +37,68 @@ AbilityStoneInfo::~AbilityStoneInfo()
     delete ui;
 }
 
-void AbilityStoneInfo::initializeIcon(const QString &iconPath, ItemGrade itemGrade)
+void AbilityStoneInfo::initializeLayout1(const AbilityStone *pAbilityStone)
+{
+    addAbilityStoneIcon(pAbilityStone->iconPath(), pAbilityStone->itemGrade());
+}
+
+void AbilityStoneInfo::addAbilityStoneIcon(const QString &iconPath, ItemGrade itemGrade)
 {
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
     QLabel *pIcon = WidgetManager::createIcon(iconPath, pNetworkManager, itemGradeToBGColor(itemGrade));
-    ui->vLayoutLeft->addWidget(pIcon);
+    ui->vLayout1->addWidget(pIcon);
     mWidgets << pIcon;
 }
 
-void AbilityStoneInfo::initializeItemNameInfo(const QString &itemName, ItemGrade itemGrade)
+void AbilityStoneInfo::initializeLayout2(const AbilityStone *pAbilityStone)
 {
-    QHBoxLayout *pHLayout = createHLayout();
+    addItemNameInfo(pAbilityStone->itemName(), pAbilityStone->itemGrade());
+    addEngraveInfo(pAbilityStone->getEngraves(), pAbilityStone->getPenalties(), pAbilityStone);
+}
+
+void AbilityStoneInfo::addItemNameInfo(const QString &itemName, ItemGrade itemGrade)
+{
+    QHBoxLayout *pHLayout = createHLayout(ui->vLayout2);
 
     QLabel *pLabelItemName = WidgetManager::createLabel(itemName, 10, itemGradeToTextColor(itemGrade), 125);
     pHLayout->addWidget(pLabelItemName);
     mWidgets << pLabelItemName;
 }
 
-void AbilityStoneInfo::initializeEngraveInfo(const QStringList &engraves, const AbilityStone *pAbilityStone)
+void AbilityStoneInfo::addEngraveInfo(const QStringList &engraves, const QStringList &penalties, const AbilityStone *pAbilityStone)
 {
-    QHBoxLayout *pHLayout = createHLayout();
+    const QList<QStringList> engraveList = {engraves, penalties};
+    const QStringList textColor = {"#FFA500", "red"};
 
-    for (const QString &engrave : engraves)
+    for (int i = 0; i < 2; i++)
     {
-        QString text = QString("%1 +%2").arg(engrave).arg(pAbilityStone->getEngraveValue(engrave));
+        QHBoxLayout *pHLayout = createHLayout(ui->vLayout2);
 
-        QLabel *pLabelEngrave = WidgetManager::createLabel(text, 10, "#FFA500", 100);
-        pHLayout->addWidget(pLabelEngrave);
-        mWidgets << pLabelEngrave;
+        for (const QString &engrave : engraveList[i])
+        {
+            QString text = "%1 +%2";
+
+            if (i == 0)
+                text = text.arg(engrave).arg(pAbilityStone->getEngraveValue(engrave));
+            else if (i == 1)
+                text = text.arg(engrave).arg(pAbilityStone->getPenaltyValue(engrave));
+
+            QLabel *pLabelEngrave = WidgetManager::createLabel(text, 10, textColor[i], 100);
+            pHLayout->addWidget(pLabelEngrave);
+            mWidgets << pLabelEngrave;
+        }
     }
 }
 
-void AbilityStoneInfo::initializePenaltyInfo(const QString &penalty, int value)
-{
-    QHBoxLayout *pHLayout = createHLayout();
-    QString text = QString("%1 +%2").arg(penalty).arg(value);
-
-    QLabel *pLabelPenalty = WidgetManager::createLabel(text, 10, "red", 100);
-    pHLayout->addWidget(pLabelPenalty);
-    mWidgets << pLabelPenalty;
-}
-
-QHBoxLayout *AbilityStoneInfo::createHLayout()
+QHBoxLayout *AbilityStoneInfo::createHLayout(QVBoxLayout *pLayout)
 {
     QHBoxLayout *pHLayout = new QHBoxLayout();
 
     pHLayout->setSpacing(5);
-    ui->vLayoutRight->addLayout(pHLayout);
-    ui->vLayoutRight->setAlignment(pHLayout, Qt::AlignLeft);
+    pLayout->addLayout(pHLayout);
+    pLayout->setAlignment(pHLayout, Qt::AlignLeft);
     mLayouts << pHLayout;
 
     return pHLayout;

@@ -18,11 +18,14 @@ public:
     ~BraceletInfo();
 
 private:
-    void initializeIcon(const QString &iconPath, ItemGrade itemGrade);
-    void initializeEffectInfo(const QList<QPair<QString, int>> &effects);
-    void initializeSpecialEffectInfo(const QList<QPair<QString, int>> &specialEffects);
+    void initializeLayout1(const Bracelet *pBracelet);
+    void addBraceletIcon(const QString &iconPath, ItemGrade itemGrade);
 
-    class QHBoxLayout *createHLayout();
+    void initializeLayout2(const Bracelet *pBracelet);
+    void addEffectInfo(const QList<QPair<QString, int>> &effects);
+    void addSpecialEffectInfo(const QList<QPair<QString, int>> &specialEffects);
+
+    class QHBoxLayout *createHLayout(class QVBoxLayout *pLayout);
 
 private:
     Ui::BraceletInfo *ui;

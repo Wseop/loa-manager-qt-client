@@ -19,10 +19,13 @@ public:
     ~GemInfo();
 
 private:
-    void initializeIcon(const QString &iconPath, ItemGrade itemGrade);
-    void initializeGemLevelInfo(int gemLevel, ItemGrade itemGrade);
-    void initializeGemTypeInfo(GemType gemType, ItemGrade itemGrade);
-    void initializeSkillNameInfo(const QString &skillName);
+    void initializeLayout1(const Gem *pGem);
+    void addGemIcon(const QString &iconPath, ItemGrade itemGrade);
+    void addGemLevelInfo(int gemLevel, ItemGrade itemGrade);
+
+    void initializeLayout2(const Gem *pGem);
+    void addGemTypeInfo(GemType gemType, ItemGrade itemGrade);
+    void addSkillNameInfo(const QString &skillName);
 
 private:
     Ui::GemInfo *ui;

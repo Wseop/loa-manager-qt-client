@@ -15,14 +15,14 @@
   </property>
   <layout class="QHBoxLayout" name="hLayoutMain">
    <item>
-    <layout class="QVBoxLayout" name="vLayoutLeft">
+    <layout class="QVBoxLayout" name="vLayout1">
      <property name="spacing">
       <number>0</number>
      </property>
     </layout>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="vLayoutRight">
+    <layout class="QVBoxLayout" name="vLayout2">
      <property name="spacing">
       <number>0</number>
      </property>

@@ -19,14 +19,16 @@ public:
     ~AccessoryInfo();
 
 private:
-    void initializeIcon(const QString &iconPath, ItemGrade itemGrade);
-    void initializeQualityBar(int quality);
-    void initializeItemGradeInfo(ItemGrade itemGrade);
-    void initializeAbilityInfo(const QHash<Ability, int> &abilities);
-    void initializeEngraveInfo(const QStringList &engraves, const Accessory *pAccessory);
-    void initializePenaltyInfo(const QStringList &penalties, const Accessory *pAccessory);
+    void initializeLayout1(const Accessory *pAccessory);
+    void addAccessoryIcon(const QString &iconPath, ItemGrade itemGrade);
+    void addQualityBar(int quality);
 
-    class QHBoxLayout *createHLayout();
+    void initializeLayout2(const Accessory *pAccessory);
+    void addItemGradeInfo(ItemGrade itemGrade);
+    void addAbilityInfo(const QHash<Ability, int> &abilities);
+    void addEngraveInfo(const QStringList &engraves, const QStringList &penalties, const Accessory *pAccessory);
+
+    class QHBoxLayout *createHLayout(class QVBoxLayout *pLayout);
 
 private:
     Ui::AccessoryInfo *ui;

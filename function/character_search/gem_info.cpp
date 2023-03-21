@@ -11,10 +11,8 @@ GemInfo::GemInfo(const Gem *pGem) :
 {
     ui->setupUi(this);
 
-    initializeIcon(pGem->iconPath(), pGem->itemGrade());
-    initializeGemLevelInfo(pGem->gemLevel(), pGem->itemGrade());
-    initializeGemTypeInfo(pGem->gemType(), pGem->itemGrade());
-    initializeSkillNameInfo(pGem->skillName());
+    initializeLayout1(pGem);
+    initializeLayout2(pGem);
 }
 
 GemInfo::~GemInfo()
@@ -30,27 +28,39 @@ GemInfo::~GemInfo()
     delete ui;
 }
 
-void GemInfo::initializeIcon(const QString &iconPath, ItemGrade itemGrade)
+void GemInfo::initializeLayout1(const Gem *pGem)
+{
+    addGemIcon(pGem->iconPath(), pGem->itemGrade());
+    addGemLevelInfo(pGem->gemLevel(), pGem->itemGrade());
+}
+
+void GemInfo::addGemIcon(const QString &iconPath, ItemGrade itemGrade)
 {
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
     QLabel *pIcon = WidgetManager::createIcon(iconPath, pNetworkManager, itemGradeToBGColor(itemGrade));
-    ui->vLayoutLeft->addWidget(pIcon);
+    ui->vLayout1->addWidget(pIcon);
     mWidgets << pIcon;
 }
 
-void GemInfo::initializeGemLevelInfo(int gemLevel, ItemGrade itemGrade)
+void GemInfo::addGemLevelInfo(int gemLevel, ItemGrade itemGrade)
 {
     QString text = QString("Lv.%1").arg(gemLevel);
     QLabel *pLabelGemLevel = WidgetManager::createLabel(text, 10, "", 50);
     pLabelGemLevel->setStyleSheet(QString("QLabel { border: 1px solid black; border-radius: 5px; padding: 2px; "
                                   "         color: %1}").arg(itemGradeToTextColor(itemGrade)));
-    ui->vLayoutLeft->addWidget(pLabelGemLevel);
+    ui->vLayout1->addWidget(pLabelGemLevel);
     mWidgets << pLabelGemLevel;
 }
 
-void GemInfo::initializeGemTypeInfo(GemType gemType, ItemGrade itemGrade)
+void GemInfo::initializeLayout2(const Gem *pGem)
+{
+    addGemTypeInfo(pGem->gemType(), pGem->itemGrade());
+    addSkillNameInfo(pGem->skillName());
+}
+
+void GemInfo::addGemTypeInfo(GemType gemType, ItemGrade itemGrade)
 {
     QString text;
 
@@ -62,14 +72,14 @@ void GemInfo::initializeGemTypeInfo(GemType gemType, ItemGrade itemGrade)
         return;
 
     QLabel *pLabelGemType = WidgetManager::createLabel(text, 10, itemGradeToTextColor(itemGrade));
-    ui->vLayoutRight->addWidget(pLabelGemType);
-    ui->vLayoutRight->setAlignment(pLabelGemType, Qt::AlignLeft);
+    ui->vLayout2->addWidget(pLabelGemType);
+    ui->vLayout2->setAlignment(pLabelGemType, Qt::AlignLeft);
     mWidgets << pLabelGemType;
 }
 
-void GemInfo::initializeSkillNameInfo(const QString &skillName)
+void GemInfo::addSkillNameInfo(const QString &skillName)
 {
     QLabel *pLabelSkillName = WidgetManager::createLabel(skillName);
-    ui->vLayoutRight->addWidget(pLabelSkillName);
+    ui->vLayout2->addWidget(pLabelSkillName);
     mWidgets << pLabelSkillName;
 }

@@ -21,52 +21,8 @@ EquipInfo::EquipInfo(const Item *pEquip) :
         return;
     }
 
-    QString iconPath = pEquip->iconPath();
-    ItemGrade itemGrade = pEquip->itemGrade();
-    int quality = 0;
-    int reforge = 0;
-    int itemLevel = 0;
-    ItemSet itemSet = ItemSet::size;
-    int setLevel = 0;
-    bool bElla = false;
-    QList<Elixir> elixirs;
-    ArmorPart part = ArmorPart::size;
-
-    if (pEquip->itemType() == ItemType::Weapon)
-    {
-        const Weapon *pWeapon = static_cast<const Weapon*>(pEquip);
-
-        quality = pWeapon->quality();
-        reforge = pWeapon->reforge();
-        itemLevel = pWeapon->itemLevel();
-        itemSet = pWeapon->itemSet();
-        setLevel = pWeapon->setLevel();
-        bElla = pWeapon->ella();
-    }
-    else if (pEquip->itemType() == ItemType::Armor)
-    {
-        const Armor *pArmor = static_cast<const Armor*>(pEquip);
-
-        quality = pArmor->quality();
-        reforge = pArmor->reforge();
-        itemLevel = pArmor->itemLevel();
-        itemSet = pArmor->itemSet();
-        setLevel = pArmor->setLevel();
-        elixirs = pArmor->elixirs();
-        part = pArmor->armorPart();
-    }
-    else
-        return;
-
-    initializeIcon(iconPath, itemGrade);
-    initializeQualityBar(quality);
-    initializeReforgeLevel(reforge, itemLevel, itemGrade);
-    initializeItemSet(itemSet, setLevel);
-
-    if (pEquip->itemType() == ItemType::Weapon)
-        initializeElla(bElla);
-    else if (pEquip->itemType() == ItemType::Armor)
-        initializeElixir(elixirs, part);
+    initializeLayout1(pEquip, pEquip->itemType());
+    initializeLayout2(pEquip, pEquip->itemType());
 }
 
 EquipInfo::~EquipInfo()
@@ -82,7 +38,34 @@ EquipInfo::~EquipInfo()
     delete ui;
 }
 
-void EquipInfo::initializeIcon(const QString &iconPath, ItemGrade itemGrade)
+void EquipInfo::initializeLayout1(const Item *pEquip, ItemType itemType)
+{
+    QString iconPath;
+    ItemGrade itemGrade = ItemGrade::size;
+    int quality = 0;
+
+    if (itemType == ItemType::Weapon)
+    {
+        const Weapon *pWeapon = static_cast<const Weapon*>(pEquip);
+
+        iconPath = pWeapon->iconPath();
+        itemGrade = pWeapon->itemGrade();
+        quality = pWeapon->quality();
+    }
+    else if (itemType == ItemType::Armor)
+    {
+        const Armor *pArmor = static_cast<const Armor*>(pEquip);
+
+        iconPath = pArmor->iconPath();
+        itemGrade = pArmor->itemGrade();
+        quality = pArmor->quality();
+    }
+
+    addEquipIcon(iconPath, itemGrade);
+    addQualityBar(quality);
+}
+
+void EquipInfo::addEquipIcon(const QString &iconPath, ItemGrade itemGrade)
 {
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
@@ -92,14 +75,58 @@ void EquipInfo::initializeIcon(const QString &iconPath, ItemGrade itemGrade)
     mWidgets << pIcon;
 }
 
-void EquipInfo::initializeQualityBar(int quality)
+void EquipInfo::addQualityBar(int quality)
 {
     QProgressBar *pQualityBar = WidgetManager::createQualityBar(quality, 50, 25);
     ui->vLayout1->addWidget(pQualityBar);
     mWidgets << pQualityBar;
 }
 
-void EquipInfo::initializeReforgeLevel(int reforge, int itemLevel, ItemGrade itemGrade)
+void EquipInfo::initializeLayout2(const Item *pEquip, ItemType itemType)
+{
+    int reforge = 0;
+    int itemLevel = 0;
+    ItemGrade itemGrade = ItemGrade::size;
+    ItemSet itemSet = ItemSet::size;
+    int setLevel = 0;
+    QList<Elixir> elixirs;
+    ArmorPart part = ArmorPart::size;
+    bool bElla = false;
+
+    if (itemType == ItemType::Weapon)
+    {
+        const Weapon *pWeapon = static_cast<const Weapon*>(pEquip);
+
+        reforge = pWeapon->reforge();
+        itemLevel = pWeapon->itemLevel();
+        itemGrade = pWeapon->itemGrade();
+        itemSet = pWeapon->itemSet();
+        setLevel = pWeapon->setLevel();
+        bElla = pWeapon->ella();
+    }
+    else if (itemType == ItemType::Armor)
+    {
+        const Armor *pArmor = static_cast<const Armor*>(pEquip);
+
+        reforge = pArmor->reforge();
+        itemLevel = pArmor->itemLevel();
+        itemGrade = pArmor->itemGrade();
+        itemSet = pArmor->itemSet();
+        setLevel = pArmor->setLevel();
+        elixirs = pArmor->elixirs();
+        part = pArmor->armorPart();
+    }
+
+    addReforgeLevelInfo(reforge, itemLevel, itemGrade);
+    addItemSetInfo(itemSet, setLevel);
+
+    if (itemType == ItemType::Weapon)
+        addEllaInfo(bElla);
+    else if (itemType == ItemType::Armor)
+        addElixirInfo(elixirs, part);
+}
+
+void EquipInfo::addReforgeLevelInfo(int reforge, int itemLevel, ItemGrade itemGrade)
 {
     QString text = QString("+%1 (%2)").arg(reforge).arg(itemLevel);
     QLabel *pLabelReforgeLevel = WidgetManager::createLabel(text, 10, itemGradeToTextColor(itemGrade), 100);
@@ -108,7 +135,7 @@ void EquipInfo::initializeReforgeLevel(int reforge, int itemLevel, ItemGrade ite
     mWidgets << pLabelReforgeLevel;
 }
 
-void EquipInfo::initializeItemSet(ItemSet itemSet, int setLevel)
+void EquipInfo::addItemSetInfo(ItemSet itemSet, int setLevel)
 {
     QString text = QString("%1 Lv.%2").arg(itemSetToQString(itemSet)).arg(setLevel);
     QLabel *pLabelItemSet = WidgetManager::createLabel(text, 10, "", 100);
@@ -117,7 +144,7 @@ void EquipInfo::initializeItemSet(ItemSet itemSet, int setLevel)
     mWidgets << pLabelItemSet;
 }
 
-void EquipInfo::initializeElixir(const QList<Elixir> &elixirs, ArmorPart part)
+void EquipInfo::addElixirInfo(const QList<Elixir> &elixirs, ArmorPart part)
 {
     QHBoxLayout *pHLayout = new QHBoxLayout();
     pHLayout->setSpacing(5);
@@ -138,7 +165,7 @@ void EquipInfo::initializeElixir(const QList<Elixir> &elixirs, ArmorPart part)
     }
 }
 
-void EquipInfo::initializeElla(bool bElla)
+void EquipInfo::addEllaInfo(bool bElla)
 {
     if (bElla)
     {

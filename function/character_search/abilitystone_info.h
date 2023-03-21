@@ -18,12 +18,14 @@ public:
     ~AbilityStoneInfo();
 
 private:
-    void initializeIcon(const QString &iconPath, ItemGrade itemGrade);
-    void initializeItemNameInfo(const QString &itemName, ItemGrade itemGrade);
-    void initializeEngraveInfo(const QStringList &engraves, const AbilityStone *pAbilityStone);
-    void initializePenaltyInfo(const QString &penalty, int value);
+    void initializeLayout1(const AbilityStone *pAbilityStone);
+    void addAbilityStoneIcon(const QString &iconPath, ItemGrade itemGrade);
 
-    class QHBoxLayout *createHLayout();
+    void initializeLayout2(const AbilityStone *pAbilityStone);
+    void addItemNameInfo(const QString &itemName, ItemGrade itemGrade);
+    void addEngraveInfo(const QStringList &engraves, const QStringList &penalties, const AbilityStone *pAbilityStone);
+
+    class QHBoxLayout *createHLayout(class QVBoxLayout *pLayout);
 
 private:
     Ui::AbilityStoneInfo *ui;

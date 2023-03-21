@@ -15,14 +15,13 @@ BraceletInfo::BraceletInfo(const Bracelet *pBracelet) :
     if (pBracelet == nullptr)
     {
         QLabel *pLabel = WidgetManager::createLabel("팔찌 미착용");
-        ui->vLayoutRight->addWidget(pLabel);
+        ui->vLayout2->addWidget(pLabel);
         mWidgets << pLabel;
         return;
     }
 
-    initializeIcon(pBracelet->iconPath(), pBracelet->itemGrade());
-    initializeEffectInfo(pBracelet->effects());
-    initializeSpecialEffectInfo(pBracelet->specialEffects());
+    initializeLayout1(pBracelet);
+    initializeLayout2(pBracelet);
 }
 
 BraceletInfo::~BraceletInfo()
@@ -38,21 +37,32 @@ BraceletInfo::~BraceletInfo()
     delete ui;
 }
 
-void BraceletInfo::initializeIcon(const QString &iconPath, ItemGrade itemGrade)
+void BraceletInfo::initializeLayout1(const Bracelet *pBracelet)
+{
+    addBraceletIcon(pBracelet->iconPath(), pBracelet->itemGrade());
+}
+
+void BraceletInfo::addBraceletIcon(const QString &iconPath, ItemGrade itemGrade)
 {
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
     QLabel *pIcon = WidgetManager::createIcon(iconPath, pNetworkManager, itemGradeToBGColor(itemGrade));
-    ui->vLayoutLeft->addWidget(pIcon);
+    ui->vLayout1->addWidget(pIcon);
     mWidgets << pIcon;
 }
 
-void BraceletInfo::initializeEffectInfo(const QList<QPair<QString, int> > &effects)
+void BraceletInfo::initializeLayout2(const Bracelet *pBracelet)
+{
+    addEffectInfo(pBracelet->effects());
+    addSpecialEffectInfo(pBracelet->specialEffects());
+}
+
+void BraceletInfo::addEffectInfo(const QList<QPair<QString, int> > &effects)
 {
     for (const QPair<QString, int> &effect : effects)
     {
-        QHBoxLayout *pHLayout = createHLayout();
+        QHBoxLayout *pHLayout = createHLayout(ui->vLayout2);
         QString text = QString("%1 +%2").arg(effect.first).arg(effect.second);
 
         QLabel *pLabelEffect = WidgetManager::createLabel(text);
@@ -61,9 +71,9 @@ void BraceletInfo::initializeEffectInfo(const QList<QPair<QString, int> > &effec
     }
 }
 
-void BraceletInfo::initializeSpecialEffectInfo(const QList<QPair<QString, int> > &specialEffects)
+void BraceletInfo::addSpecialEffectInfo(const QList<QPair<QString, int> > &specialEffects)
 {
-    QHBoxLayout *pHLayout = createHLayout();
+    QHBoxLayout *pHLayout = createHLayout(ui->vLayout2);
 
     for (const QPair<QString, int> &specialEffect : specialEffects)
     {
@@ -74,13 +84,13 @@ void BraceletInfo::initializeSpecialEffectInfo(const QList<QPair<QString, int> >
     }
 }
 
-QHBoxLayout *BraceletInfo::createHLayout()
+QHBoxLayout *BraceletInfo::createHLayout(QVBoxLayout *pLayout)
 {
     QHBoxLayout *pHLayout = new QHBoxLayout();
 
     pHLayout->setSpacing(5);
-    ui->vLayoutRight->addLayout(pHLayout);
-    ui->vLayoutRight->setAlignment(pHLayout, Qt::AlignLeft);
+    pLayout->addLayout(pHLayout);
+    pLayout->setAlignment(pHLayout, Qt::AlignLeft);
     mLayouts << pHLayout;
 
     return pHLayout;

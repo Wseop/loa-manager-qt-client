@@ -406,7 +406,7 @@ void ResponseParser::parseItemTitle(const QJsonObject &itemTitle, Item *pItem)
     int itemLevel = 0;
     int itemTier = 0;
 
-    if (itemLevelIndex != -1)
+    if (itemLevelIndex != -1 && itemTierIndex != -1)
     {
         // 아이템 레벨 정수 위치로 index 설정
         int startIndex = itemLevelIndex + 7;
@@ -477,17 +477,24 @@ void ResponseParser::parseItemPartBox(const QJsonObject &itemPartBox, Item *pIte
             Accessory *pAccessory = static_cast<Accessory*>(pItem);
             int abilityStartIndex = 0;
             int valueStartIndex = element001.indexOf("+");
+            int valueEndIndex = element001.indexOf("<BR>");
 
             while (valueStartIndex != -1)
             {
                 const QString &ability = element001.sliced(abilityStartIndex, 2);
-                int abilityValue = element001.sliced(valueStartIndex + QString("+").size(), 3).toInt();
+
+                valueStartIndex += QString("+").size();
+                if (valueEndIndex == -1)
+                    valueEndIndex = element001.size();
+
+                int abilityValue = element001.sliced(valueStartIndex, valueEndIndex - valueStartIndex).toInt();
 
                 pAccessory->setAbility(qStringToAbility(ability), abilityValue);
 
                 // 다음 특성 위치로 index 설정
                 abilityStartIndex = element001.indexOf(">") + QString(">").size();
-                valueStartIndex = element001.indexOf("+", valueStartIndex + 1);
+                valueStartIndex = element001.indexOf("+", valueStartIndex);
+                valueEndIndex = element001.indexOf("<BR>", valueEndIndex + 1);
             }
         }
     }
@@ -529,10 +536,14 @@ void ResponseParser::parseItemPartBox(const QJsonObject &itemPartBox, Item *pIte
                 {
                     // 효과명과 값 parsing 후 추가
                     int valueStartIndex = effectStr.indexOf("+") + QString("+").size();
-                    const QString &effect = effectStr.sliced(0, valueStartIndex - 2);
-                    int value = effectStr.sliced(valueStartIndex, effectStr.size() - valueStartIndex).toInt();
 
-                    pBracelet->addEffect(effect, value);
+                    if (valueStartIndex != 0)
+                    {
+                        const QString &effect = effectStr.sliced(0, valueStartIndex - 2);
+                        int value = effectStr.sliced(valueStartIndex, effectStr.size() - valueStartIndex).toInt();
+
+                        pBracelet->addEffect(effect, value);
+                    }
                 }
 
                 // 다음 효과 탐색

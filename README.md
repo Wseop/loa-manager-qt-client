@@ -4,7 +4,7 @@ Lostark OpenAPI를 활용한 편의기능 제공 앱
 - **Compiler** : MinGW 11.2.0 64-bit for c++
 - **Framework** : Qt 6.4.0
 - **Database** : mongocxx-driver r3.7.0
-## 기능 (지속적으로 추가중입니다.)
+## 기능
 ### 캐릭터 탭
 - **[캐릭터 검색](https://github.com/Wseop/QT_LoaManager/tree/main/function/character_search)** - 캐릭터의 전반적인 정보를 한눈에 확인할 수 있도록 캐릭터 정보를 재가공하여 제공
 ### 시세 탭

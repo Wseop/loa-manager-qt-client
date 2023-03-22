@@ -22,6 +22,7 @@ void ResponseParser::parseSibling(QJsonDocument response, Character *pCharacter,
         const QJsonObject &sibling = siblings[i].toObject();
         const QString &siblingName = sibling.find("CharacterName")->toString();
 
+        // 검색 대상 캐릭터는 보유 캐릭터 목록에서 제외
         if (siblingName == pCharacter->getProfile()->getCharacterName())
             continue;
 

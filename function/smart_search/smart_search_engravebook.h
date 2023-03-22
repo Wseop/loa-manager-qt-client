@@ -2,6 +2,7 @@
 #define SMART_SEARCH_ENGRAVEBOOK_H
 
 #include "function/smart_search/smart_search_menu.h"
+#include "api/response_market.h"
 
 #include <QWidget>
 
@@ -32,10 +33,7 @@ private:
 
     int mSearchPageNo;
 
-    QStringList mBattleEngraveKeys;
-    QStringList mClassEngraveKeys;
-
-    QHash<QString, QPair<int, int>> mEngravePrices;
+    QList<MarketItem> mSearchResults;
     QList<QWidget*> mPriceWidgets;
 
     QList<class QGridLayout*> mLayouts;

@@ -30,7 +30,8 @@ private:
     QStringList mCategories;
     QList<QList<Item>> mItems;
 
-    QList<class QLabel*> mRecentPriceLabels;
+    QList<class QLabel*> mYDayAvgPriceLabels;
+    QList<QLabel*> mRecentPriceLabels;
     QList<QLabel*> mMinPriceLabels;
     QList<QLabel*> mEfficiencyLabels;
 

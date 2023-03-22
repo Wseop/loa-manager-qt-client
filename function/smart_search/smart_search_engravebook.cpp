@@ -48,7 +48,7 @@ void SmartSearchEngraveBook::refresh()
 void SmartSearchEngraveBook::initializeUI()
 {
     const QStringList categories = {"[전투 각인]", "[직업 각인]"};
-    const QStringList attributes = {"#", "각인서", "최근 거래가", "최저가"};
+    const QStringList attributes = {"#", "각인서", "전일 평균 거래가", "최근 거래가", "최저가"};
 
     // 전투, 직업 각인 table 초기 세팅
     for (int i = 0; i < categories.size(); i++)
@@ -70,43 +70,37 @@ void SmartSearchEngraveBook::updateUI()
 {
     clearUI();
 
-    const QList<QStringList*> engraveKeys = {&mBattleEngraveKeys, &mClassEngraveKeys};
+    int rows[2] = {2, 2};
 
-    for (int i = 0; i < engraveKeys.size(); i++)
+    for (const MarketItem &item : mSearchResults)
     {
-        int row = 2;
-        const QStringList *keys = engraveKeys[i];
+        int layoutIndex = item.name.contains("[") ? 1 : 0;
 
-        for (const QString& key : *keys)
-        {
-            const int &recentPrice = mEngravePrices[key].first;
-            const int &minPrice = mEngravePrices[key].second;
+        QFrame *pHLine = WidgetManager::createLine(QFrame::HLine);
+        mLayouts[layoutIndex]->addWidget(pHLine, rows[layoutIndex]++, 0, 1, -1);
+        mPriceWidgets.append(pHLine);
 
-            QFrame *pHLine = WidgetManager::createLine(QFrame::HLine);
-            mLayouts[i]->addWidget(pHLine, row++, 0, 1, -1);
-            mPriceWidgets.append(pHLine);
+        QLabel *pIcon = WidgetManager::createIcon(":/image/item/book/0.png", nullptr);
+        mLayouts[layoutIndex]->addWidget(pIcon, rows[layoutIndex], 0);
+        mLayouts[layoutIndex]->setAlignment(pIcon, Qt::AlignHCenter);
+        mPriceWidgets.append(pIcon);
 
-            QLabel *pIcon = WidgetManager::createIcon(":/image/item/book/0.png", nullptr);
-            mLayouts[i]->addWidget(pIcon, row, 0);
-            mLayouts[i]->setAlignment(pIcon, Qt::AlignHCenter);
-            mPriceWidgets.append(pIcon);
+        QLabel *pLabelName = WidgetManager::createLabel(item.name, 10, itemGradeToTextColor(ItemGrade::전설));
+        mLayouts[layoutIndex]->addWidget(pLabelName, rows[layoutIndex], 1);
+        mPriceWidgets.append(pLabelName);
 
-            QLabel *pLabelName = WidgetManager::createLabel(key, 10, itemGradeToTextColor(ItemGrade::전설));
-            mLayouts[i]->addWidget(pLabelName, row, 1);
-            mPriceWidgets.append(pLabelName);
+        QLabel *pLabelYDayAvgPrice = WidgetManager::createLabel(QString("%L1").arg(item.yDayAvgPrice));
+        mLayouts[layoutIndex]->addWidget(pLabelYDayAvgPrice, rows[layoutIndex], 2);
+        mPriceWidgets.append(pLabelYDayAvgPrice);
 
-            QLabel *pLabelRecentPrice = WidgetManager::createLabel(QString("%L1").arg(recentPrice), 10);
-            mLayouts[i]->addWidget(pLabelRecentPrice, row, 2);
-            mPriceWidgets.append(pLabelRecentPrice);
+        QLabel *pLabelRecentPrice = WidgetManager::createLabel(QString("%L1").arg(item.recentPrice));
+        mLayouts[layoutIndex]->addWidget(pLabelRecentPrice, rows[layoutIndex], 3);
+        mPriceWidgets.append(pLabelRecentPrice);
 
-            QLabel *pLabelMinPrice = WidgetManager::createLabel(QString("%L1").arg(minPrice), 10);
-            mLayouts[i]->addWidget(pLabelMinPrice, row++, 3);
-            mPriceWidgets.append(pLabelMinPrice);
-        }
+        QLabel *pLabelMinPrice = WidgetManager::createLabel(QString("%L1").arg(item.currentMinPrice));
+        mLayouts[layoutIndex]->addWidget(pLabelMinPrice, rows[layoutIndex]++, 4);
+        mPriceWidgets.append(pLabelMinPrice);
     }
-
-    mBattleEngraveKeys.clear();
-    mClassEngraveKeys.clear();
 }
 
 void SmartSearchEngraveBook::clearUI()
@@ -140,20 +134,11 @@ void SmartSearchEngraveBook::parseSearchResult(QNetworkReply *pReply)
     if (response.isNull())
         return;
 
-    // 검색 결과 parsing
     ResponseMarket responseMarket = ResponseParser::parseMarketItem(response);
-
     QList<MarketItem> &items = responseMarket.items;
 
     for (const MarketItem &item : items)
-    {
-        if (item.name[0] == '[')
-            mClassEngraveKeys << item.name;
-        else
-            mBattleEngraveKeys << item.name;
-
-        mEngravePrices[item.name] = {item.recentPrice, item.currentMinPrice};
-    }
+        mSearchResults << item;
 
     // 다음 페이지가 있다면 추가 검색
     if (responseMarket.pageSize > mSearchPageNo)

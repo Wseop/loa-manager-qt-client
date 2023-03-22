@@ -30,6 +30,8 @@ SmartSearchReforge::SmartSearchReforge(QLayout *pLayout) :
 
 SmartSearchReforge::~SmartSearchReforge()
 {
+    for (QLabel* pLabel : mYDayAvgPriceLabels)
+        delete pLabel;
     for (QLabel* pLabel : mRecentPriceLabels)
         delete pLabel;
     for (QLabel* pLabel : mMinPriceLabels)
@@ -64,6 +66,7 @@ void SmartSearchReforge::refresh()
                 const MarketItem &item = responseMarket.items.front();
 
                 // 가격 정보 업데이트
+                mYDayAvgPriceLabels[labelIndex]->setText(QString("%L1").arg(item.yDayAvgPrice));
                 mRecentPriceLabels[labelIndex]->setText(QString("%L1").arg(item.recentPrice));
                 mMinPriceLabels[labelIndex]->setText(QString("%L1").arg(item.currentMinPrice));
 
@@ -129,7 +132,8 @@ void SmartSearchReforge::loadResource()
 void SmartSearchReforge::initializeUI()
 {
     // 속성 label 추가
-    const QStringList attributes = {"#", "재료", "최근 거래가", "현재 최저가", "개당 가격"};
+    const QStringList attributes = {"#", "재료", "전일 평균 거래가", "최근 거래가", "현재 최저가", "개당 가격"};
+
     for (int col = 0; col < attributes.size(); col++)
     {
         QLabel *pLabelAttribute = WidgetManager::createLabel(attributes[col], 14);
@@ -139,6 +143,7 @@ void SmartSearchReforge::initializeUI()
 
     // 아이템 목록 추가
     int row = 1;
+
     for (int i = 0; i < mCategories.size(); i++)
     {
         for (const Item& item : mItems[i])
@@ -153,24 +158,35 @@ void SmartSearchReforge::initializeUI()
             ui->gridReforge->addWidget(pIcon, row, col++);
             mWidgets.append(pIcon);
 
+            // 아이템명
             QString itemName = "";
+
             if (mCategories[i] == "파괴석" || mCategories[i] == "수호석")
                 itemName = item.itemName() + " x10";
             else
                 itemName = item.itemName();
+
             QLabel *pLabelName = WidgetManager::createLabel(itemName, 10, itemGradeToTextColor(item.itemGrade()));
             ui->gridReforge->addWidget(pLabelName, row, col++);
             mWidgets.append(pLabelName);
 
-            QLabel *pLabelRecentPrice = WidgetManager::createLabel("-", 10);
+            // 전일 평균 거래가
+            QLabel *pLabelYDayAvgPrice = WidgetManager::createLabel("-");
+            ui->gridReforge->addWidget(pLabelYDayAvgPrice, row, col++);
+            mYDayAvgPriceLabels.append(pLabelYDayAvgPrice);
+
+            // 최근 거래가
+            QLabel *pLabelRecentPrice = WidgetManager::createLabel("-");
             ui->gridReforge->addWidget(pLabelRecentPrice, row, col++);
             mRecentPriceLabels.append(pLabelRecentPrice);
 
-            QLabel *pLabelMinPrice = WidgetManager::createLabel("-", 10);
+            // 현재 최저가
+            QLabel *pLabelMinPrice = WidgetManager::createLabel("-");
             ui->gridReforge->addWidget(pLabelMinPrice, row, col++);
             mMinPriceLabels.append(pLabelMinPrice);
 
-            QLabel *pLabelEfficiency = WidgetManager::createLabel("-", 10);
+            // 개당 가격
+            QLabel *pLabelEfficiency = WidgetManager::createLabel("-");
             ui->gridReforge->addWidget(pLabelEfficiency, row, col++);
             mEfficiencyLabels.append(pLabelEfficiency);
 

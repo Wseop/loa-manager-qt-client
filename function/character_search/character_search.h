@@ -7,6 +7,10 @@
 #include <functional>
 
 class Character;
+class CharacterInfo;
+
+class QLineEdit;
+class QPushButton;
 
 namespace Ui {
 class CharacterSearch;
@@ -20,7 +24,8 @@ private:
     CharacterSearch();
     ~CharacterSearch();
 
-    void initializeInputUI();
+    void initializeSignal();
+    void initializeInputLayout();
     void initializeCharacterTab();
     void initializeParser();
 
@@ -45,10 +50,10 @@ private:
     uint8_t mParseStatus;
 
     QHash<QString, Character *> mCharacters;
-    QHash<QString, class CharacterInfo *> mCharacterInfos;
+    QHash<QString, CharacterInfo *> mCharacterInfos;
 
-    class QLineEdit *mpLineEditCharacterName;
-    class QPushButton *mpSearchButton;
+    QLineEdit *mpLineEditCharacterName;
+    QPushButton *mpSearchButton;
     QList<QWidget *> mWidgets;
     QList<QLayout *> mLayouts;
 

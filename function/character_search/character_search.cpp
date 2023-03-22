@@ -26,13 +26,9 @@ CharacterSearch::CharacterSearch() :
     mpSearchButton(nullptr)
 {
     ui->setupUi(this);
-    ui->hLayoutInput->setAlignment(Qt::AlignHCenter);
 
-    qRegisterMetaType<Character*>("Character*");
-    connect(this, &CharacterSearch::parseFinished, this, &CharacterSearch::renderCharacter);
-    connect(this, &CharacterSearch::searchRequested, this, &CharacterSearch::searchCharacter);
-
-    initializeInputUI();
+    initializeSignal();
+    initializeInputLayout();
     initializeCharacterTab();
     initializeParser();
 }
@@ -61,8 +57,18 @@ CharacterSearch::~CharacterSearch()
     delete ui;
 }
 
-void CharacterSearch::initializeInputUI()
+void CharacterSearch::initializeSignal()
 {
+    qRegisterMetaType<Character*>("Character*");
+    connect(this, &CharacterSearch::parseFinished, this, &CharacterSearch::renderCharacter);
+    connect(this, &CharacterSearch::searchRequested, this, &CharacterSearch::searchCharacter);
+}
+
+void CharacterSearch::initializeInputLayout()
+{
+    ui->hLayoutInput->setAlignment(Qt::AlignHCenter);
+
+    // Layout 구성
     QGroupBox *pGroupInput = WidgetManager::createGroupBox("");
     ui->hLayoutInput->addWidget(pGroupInput);
     mWidgets << pGroupInput;
@@ -72,17 +78,22 @@ void CharacterSearch::initializeInputUI()
     pGroupInput->setLayout(pHLayoutInput);
     mLayouts << pHLayoutInput;
 
+    // 캐릭터명 입력창 추가
     mpLineEditCharacterName = WidgetManager::createLineEdit(nullptr, "캐릭터명을 입력해주세요.");
     pHLayoutInput->addWidget(mpLineEditCharacterName);
     mWidgets << mpLineEditCharacterName;
+
+    // 캐릭터명 입력창에서 Enter 입력 시 검색 시작
     connect(mpLineEditCharacterName, &QLineEdit::returnPressed, this, [&](){
         if (mpSearchButton->isEnabled())
             searchCharacter(mpLineEditCharacterName->text());
     });
 
+    // 검색 버튼 추가
     mpSearchButton = WidgetManager::createPushButton("검색", 10, 100, 25);
     pHLayoutInput->addWidget(mpSearchButton);
     mWidgets << mpSearchButton;
+
     connect(mpSearchButton, &QPushButton::released, this, [&](){
         searchCharacter(mpLineEditCharacterName->text());
     });
@@ -141,7 +152,7 @@ void CharacterSearch::searchCharacter(const QString &characterName)
     Character *pCharacter = new Character();
     mCharacters[characterName] = pCharacter;
 
-    // 캐릭터 정보 검색
+    // 캐릭터 검색 시작
     for (int i = static_cast<int>(LostarkApi::Sibling); i <= static_cast<int>(LostarkApi::Gem); i++)
     {
         QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
@@ -170,7 +181,7 @@ void CharacterSearch::searchCharacter(const QString &characterName)
                 return;
             }
 
-
+            // 검색 결과 parsing 진행
             QThread *pThreadParser = QThread::create(mParsers[i], response, pCharacter, static_cast<uint8_t>(1 << i));
             connect(pThreadParser, &QThread::finished, pThreadParser, &QThread::deleteLater);
             pThreadParser->start();

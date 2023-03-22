@@ -73,8 +73,10 @@ void AccessoryInfo::addItemGradeInfo(ItemGrade itemGrade)
     QHBoxLayout *pHLayout = createHLayout(ui->vLayout2);
 
     QLabel *pLabelItemGrade = WidgetManager::createLabel(itemGradeToQString(itemGrade), 10, "", 50);
-    pLabelItemGrade->setStyleSheet(QString("QLabel { border: 1px solid black; border-radius: 5px; padding: 2px;"
-                                   "         color: %1 }").arg(itemGradeToTextColor(itemGrade)));
+    pLabelItemGrade->setStyleSheet(QString("QLabel { border: 1px solid black; "
+                                           "         border-radius: 5px; "
+                                           "         padding: 2px;"
+                                           "         color: %1 }").arg(itemGradeToTextColor(itemGrade)));
     pHLayout->addWidget(pLabelItemGrade);
     mWidgets << pLabelItemGrade;
 }
@@ -85,7 +87,7 @@ void AccessoryInfo::addAbilityInfo(const QHash<Ability, int> &abilities)
 
     for (auto iter = abilities.begin(); iter != abilities.end(); iter++)
     {
-        QString text = QString("%1 +%2").arg(abilityToQString(iter.key())).arg(iter.value());
+        const QString text = QString("%1 +%2").arg(abilityToQString(iter.key())).arg(iter.value());
 
         QLabel *pLabelAbility = WidgetManager::createLabel(text, 10, "", 75);
         pHLayout->addWidget(pLabelAbility);

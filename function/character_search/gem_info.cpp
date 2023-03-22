@@ -46,10 +46,13 @@ void GemInfo::addGemIcon(const QString &iconPath, ItemGrade itemGrade)
 
 void GemInfo::addGemLevelInfo(int gemLevel, ItemGrade itemGrade)
 {
-    QString text = QString("Lv.%1").arg(gemLevel);
+    const QString text = QString("Lv.%1").arg(gemLevel);
+
     QLabel *pLabelGemLevel = WidgetManager::createLabel(text, 10, "", 50);
-    pLabelGemLevel->setStyleSheet(QString("QLabel { border: 1px solid black; border-radius: 5px; padding: 2px; "
-                                  "         color: %1}").arg(itemGradeToTextColor(itemGrade)));
+    pLabelGemLevel->setStyleSheet(QString("QLabel { border: 1px solid black; "
+                                          "         border-radius: 5px; "
+                                          "         padding: 2px; "
+                                          "         color: %1 }").arg(itemGradeToTextColor(itemGrade)));
     ui->vLayout1->addWidget(pLabelGemLevel);
     mWidgets << pLabelGemLevel;
 }

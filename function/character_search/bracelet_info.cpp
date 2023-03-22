@@ -63,7 +63,7 @@ void BraceletInfo::addEffectInfo(const QList<QPair<QString, int> > &effects)
     for (const QPair<QString, int> &effect : effects)
     {
         QHBoxLayout *pHLayout = createHLayout(ui->vLayout2);
-        QString text = QString("%1 +%2").arg(effect.first).arg(effect.second);
+        const QString text = QString("%1 +%2").arg(effect.first).arg(effect.second);
 
         QLabel *pLabelEffect = WidgetManager::createLabel(text);
         pHLayout->addWidget(pLabelEffect);
@@ -78,7 +78,9 @@ void BraceletInfo::addSpecialEffectInfo(const QList<QPair<QString, int> > &speci
     for (const QPair<QString, int> &specialEffect : specialEffects)
     {
         QLabel *pLabelEffect = WidgetManager::createLabel(specialEffect.first);
-        pLabelEffect->setStyleSheet("QLabel { border: 1px solid black; border-radius: 5px; padding: 2px }");
+        pLabelEffect->setStyleSheet("QLabel { border: 1px solid black; "
+                                    "         border-radius: 5px; "
+                                    "         padding: 2px }");
         pHLayout->addWidget(pLabelEffect);
         mWidgets << pLabelEffect;
     }

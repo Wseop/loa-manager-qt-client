@@ -114,7 +114,7 @@
        <item>
         <layout class="QVBoxLayout" name="vLayoutSkill">
          <property name="spacing">
-          <number>0</number>
+          <number>1</number>
          </property>
         </layout>
        </item>

@@ -129,11 +129,12 @@ void EquipInfo::addItemSourceInfo(ItemSet itemSet, const QString &itemName, Item
 {
     QString text;
 
+    // 군단장 제작 장비가 아니면 아이템 등급으로 표시
     if (itemSet == ItemSet::size || itemGrade == ItemGrade::에스더)
         text = itemGradeToQString(itemGrade);
     else
     {
-        // 군단장 제작 장비의 경우 해당하는 군단장명 탐색
+        // 군단장 제작 장비의 경우 해당하는 군단장명으로 표시
         const QStringList &setNames = ResourceManager::getInstance()->equipSetNames(itemSetToQString(itemSet));
 
         for (int i = 0; i < setNames.size(); i++)
@@ -155,9 +156,9 @@ void EquipInfo::addItemSourceInfo(ItemSet itemSet, const QString &itemName, Item
 
     QLabel *pLabelItemSource = WidgetManager::createLabel(text, 10, "", 100);
     pLabelItemSource->setStyleSheet(QString("QLabel { border: 1px solid black; "
-                                    "         border-radius: 5px;"
-                                    "         padding: 2px;"
-                                    "         color: %1 }").arg(itemGradeToTextColor(itemGrade)));
+                                            "         border-radius: 5px;"
+                                            "         padding: 2px;"
+                                            "         color: %1 }").arg(itemGradeToTextColor(itemGrade)));
     ui->vLayout2->addWidget(pLabelItemSource);
     ui->vLayout2->setAlignment(pLabelItemSource, Qt::AlignLeft);
     mWidgets << pLabelItemSource;
@@ -165,7 +166,8 @@ void EquipInfo::addItemSourceInfo(ItemSet itemSet, const QString &itemName, Item
 
 void EquipInfo::addReforgeLevelInfo(int reforge, int itemLevel)
 {
-    QString text = QString("+%1 (%2)").arg(reforge).arg(itemLevel);
+    const QString text = QString("+%1 (%2)").arg(reforge).arg(itemLevel);
+
     QLabel *pLabelReforgeLevel = WidgetManager::createLabel(text, 10, "", 100);
     ui->vLayout2->addWidget(pLabelReforgeLevel);
     ui->vLayout2->setAlignment(pLabelReforgeLevel, Qt::AlignLeft);
@@ -174,7 +176,8 @@ void EquipInfo::addReforgeLevelInfo(int reforge, int itemLevel)
 
 void EquipInfo::addItemSetInfo(ItemSet itemSet, int setLevel)
 {
-    QString text = QString("%1 Lv.%2").arg(itemSetToQString(itemSet)).arg(setLevel);
+    const QString text = QString("%1 Lv.%2").arg(itemSetToQString(itemSet)).arg(setLevel);
+
     QLabel *pLabelItemSet = WidgetManager::createLabel(text, 10, "", 100);
     ui->vLayout2->addWidget(pLabelItemSet);
     ui->vLayout2->setAlignment(pLabelItemSet, Qt::AlignLeft);
@@ -190,12 +193,15 @@ void EquipInfo::addElixirInfo(const QList<Elixir> &elixirs, ArmorPart part)
 
     for (const Elixir &elixir : elixirs)
     {
-        // 활성화가 가능한 엘릭서 정보만 추가
+        // 활성화된 엘릭서 정보만 추가
         if (elixir.part == ArmorPart::size || part == elixir.part)
         {
-            QString text = QString("%1 Lv.%2").arg(elixir.effect).arg(elixir.level);
+            const QString text = QString("%1 Lv.%2").arg(elixir.effect).arg(elixir.level);
+
             QLabel *pLabelElixir = WidgetManager::createLabel(text, 10, "", 130);
-            pLabelElixir->setStyleSheet("QLabel { border: 1px solid black; border-radius: 5px; padding: 2px }");
+            pLabelElixir->setStyleSheet("QLabel { border: 1px solid black; "
+                                        "         border-radius: 5px; "
+                                        "         padding: 2px }");
             pHLayout->addWidget(pLabelElixir);
             mWidgets << pLabelElixir;
         }
@@ -208,7 +214,8 @@ void EquipInfo::addEllaInfo(bool bElla)
     {
         QLabel *pLabelElla = WidgetManager::createLabel("엘라 부여", 10, "", 100);
         pLabelElla->setStyleSheet(QString("QLabel { border: 1px solid black; "
-                                          "         border-radius: 5px; padding: 2px;"
+                                          "         border-radius: 5px; "
+                                          "         padding: 2px;"
                                           "         color: %1 }").arg(itemGradeToTextColor(ItemGrade::에스더)));
         ui->vLayout2->addWidget(pLabelElla);
         mWidgets << pLabelElla;

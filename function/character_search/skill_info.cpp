@@ -71,7 +71,9 @@ void SkillInfo::addCounterLabel(bool bCounter)
         return;
 
     QLabel *pLabelCounter = WidgetManager::createLabel("카운터", 10, "", 50);
-    pLabelCounter->setStyleSheet("QLabel { border: 1px solid black; border-radius: 5px; padding: 2px }");
+    pLabelCounter->setStyleSheet("QLabel { border: 1px solid black; "
+                                 "         border-radius: 5px; "
+                                 "         padding: 2px }");
     ui->vLayoutSkill2->addWidget(pLabelCounter);
     ui->vLayoutSkill2->setAlignment(pLabelCounter, Qt::AlignHCenter);
     mWidgets << pLabelCounter;
@@ -110,7 +112,9 @@ void SkillInfo::addTripodTitle(const QString &titleText)
 {
     QLabel *pLabelTripodTitle = WidgetManager::createLabel(titleText);
     pLabelTripodTitle->setFixedWidth(320);
-    pLabelTripodTitle->setStyleSheet("QLabel { border: 1px solid black; border-radius: 5px; padding: 2px }");
+    pLabelTripodTitle->setStyleSheet("QLabel { border: 1px solid black; "
+                                     "         border-radius: 5px; "
+                                     "         padding: 2px }");
     ui->hLayoutTripodTitle->addWidget(pLabelTripodTitle);
     mWidgets << pLabelTripodTitle;
 }
@@ -135,15 +139,12 @@ void SkillInfo::addTripodInfo(const Tripod &tripod)
     mWidgets << pLabelTripodName;
 
     // 트라이포드 레벨
-    QString text = "Lv.%1";
-
-    if (tripod.maxLevel() == 1)
-        text = text.arg("1 최대");
-    else
-        text = text.arg(tripod.tripodLevel());
+    const QString text = tripod.maxLevel() == 1 ? "Lv.1 최대" : QString("Lv.%1").arg(tripod.tripodLevel());
 
     QLabel *pLabelTripodLevel = WidgetManager::createLabel(text, 10, "", 75);
-    pLabelTripodLevel->setStyleSheet("QLabel { border: 1px solid black; border-radius: 5px; padding: 2px }");
+    pLabelTripodLevel->setStyleSheet("QLabel { border: 1px solid black; "
+                                     "         border-radius: 5px; "
+                                     "         padding: 2px }");
     pVLayout->addWidget(pLabelTripodLevel);
     pVLayout->setAlignment(pLabelTripodLevel, Qt::AlignHCenter);
     mWidgets << pLabelTripodLevel;

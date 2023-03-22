@@ -19,8 +19,8 @@ public:
 
 private:
     void initializeProfileLayout();
-    void addProfileInfo(const Profile *pProfile);
     void addSiblingSelector(const QList<Profile*> &siblings);
+    void addProfileInfo(const Profile *pProfile);
     void addAbilityInfo(const QHash<Ability, int> &abilities);
     void addEngraveInfo(const Engrave *pEngrave);
     void addCardInfo(const Card *pCard);

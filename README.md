@@ -2,7 +2,7 @@
 Lostark OpenAPI를 활용한 편의기능 제공 앱
 ## 개발 환경
 - **Compiler** : MinGW 11.2.0 64-bit for c++
-- **Framework** : Qt 6.4.0
+- **Framework** : Qt Createor 9.0.1 (Qt Version. 6.4.0 MinGW 64-bit)
 - **Database** : mongocxx-driver r3.7.0
 ## 기능
 ### 캐릭터 탭

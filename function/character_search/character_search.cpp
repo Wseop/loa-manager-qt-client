@@ -139,6 +139,7 @@ void CharacterSearch::searchCharacter(const QString &characterName)
 
     // 캐릭터 객체 생성
     Character *pCharacter = new Character();
+    mCharacters[characterName] = pCharacter;
 
     // 캐릭터 정보 검색
     for (int i = static_cast<int>(LostarkApi::Sibling); i <= static_cast<int>(LostarkApi::Gem); i++)
@@ -149,21 +150,26 @@ void CharacterSearch::searchCharacter(const QString &characterName)
 
             if (response.isNull())
             {
+                // sibling 결과가 null이면 존재하지 않는 캐릭터
+                // 객체 삭제 후 결과 parsing 중지
                 if (i == 0)
                 {
                     QMessageBox msgBox;
                     msgBox.setText("캐릭터 정보가 없습니다.");
                     msgBox.exec();
 
-                    delete pCharacter;
+                    delete mCharacters[characterName];
+                    mCharacters.remove(characterName);
                     mpSearchButton->setEnabled(true);
+                    return;
                 }
 
+                // 존재하는 캐릭터이지만 특정 검색 결과가 존재하지 않는 경우
+                // parsing 없이 진행 상태만 업데이트
                 updateParseStatus(static_cast<uint8_t>(1 << i), pCharacter);
                 return;
             }
 
-            mCharacters[characterName] = pCharacter;
 
             QThread *pThreadParser = QThread::create(mParsers[i], response, pCharacter, static_cast<uint8_t>(1 << i));
             connect(pThreadParser, &QThread::finished, pThreadParser, &QThread::deleteLater);

@@ -59,8 +59,6 @@ CharacterSearch::~CharacterSearch()
 
 void CharacterSearch::initializeSignal()
 {
-    qRegisterMetaType<Character*>("Character*");
-    connect(this, &CharacterSearch::parseFinished, this, &CharacterSearch::renderCharacter);
     connect(this, &CharacterSearch::searchRequested, this, &CharacterSearch::searchCharacter);
 }
 
@@ -181,8 +179,10 @@ void CharacterSearch::searchCharacter(const QString &characterName)
                 return;
             }
 
-            // 검색 결과 parsing 진행
-            QThread *pThreadParser = QThread::create(mParsers[i], response, pCharacter, static_cast<uint8_t>(1 << i));
+            QThread *pThreadParser = QThread::create(mParsers[i], response, pCharacter);
+            connect(pThreadParser, &QThread::finished, this, [&, i, pCharacter](){
+                updateParseStatus(static_cast<uint8_t>(1 << i), pCharacter);
+            });
             connect(pThreadParser, &QThread::finished, pThreadParser, &QThread::deleteLater);
             pThreadParser->start();
         });
@@ -216,7 +216,7 @@ void CharacterSearch::updateParseStatus(uint8_t bit, Character *pCharacter)
     mParseStatus |= bit;
 
     if (mParseStatus == STATUS_PARSE_FINISHED)
-        emit parseFinished(pCharacter);
+        renderCharacter(pCharacter);
 }
 
 CharacterSearch *CharacterSearch::getInstance()

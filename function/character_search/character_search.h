@@ -46,7 +46,7 @@ private:
 
     const uint8_t STATUS_PARSE_FINISHED = 0x7F;
 
-    QList<std::function<void(QJsonDocument, Character *, uint8_t)>> mParsers;
+    QList<std::function<void(QJsonDocument, Character *)>> mParsers;
     uint8_t mParseStatus;
 
     QHash<QString, Character *> mCharacters;

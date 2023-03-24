@@ -1,14 +1,13 @@
 #include "response_parser.h"
 #include "game/skill/skill_manager.h"
 #include "game/item/rune.h"
-#include "function/character_search/character_search.h"
 
 #include <QJsonObject>
 #include <QJsonArray>
 
 #include <algorithm>
 
-void ResponseParser::parseSibling(QJsonDocument response, Character *pCharacter, uint8_t statusBit)
+void ResponseParser::parseSibling(QJsonDocument response, Character *pCharacter)
 {
     // TODO. 무한 대기 개선 필요
     // Profile이 업데이트 될 때까지 대기
@@ -42,12 +41,9 @@ void ResponseParser::parseSibling(QJsonDocument response, Character *pCharacter,
     });
 
     pCharacter->setSiblings(newSiblings);
-
-    // TODO. 다른 객체에서도 사용할 수 있도록 수정필요
-    CharacterSearch::getInstance()->updateParseStatus(statusBit, pCharacter);
 }
 
-void ResponseParser::parseProfile(QJsonDocument response, Character *pCharacter, uint8_t statusBit)
+void ResponseParser::parseProfile(QJsonDocument response, Character *pCharacter)
 {
     const QJsonObject &profile = response.object();
 
@@ -80,12 +76,9 @@ void ResponseParser::parseProfile(QJsonDocument response, Character *pCharacter,
     }
 
     pCharacter->setProfile(pProfile);
-
-    // TODO. 다른 객체에서도 사용할 수 있도록 수정필요
-    CharacterSearch::getInstance()->updateParseStatus(statusBit, pCharacter);
 }
 
-void ResponseParser::parseEquipment(QJsonDocument response, Character *pCharacter, uint8_t statusBit)
+void ResponseParser::parseEquipment(QJsonDocument response, Character *pCharacter)
 {
     const QJsonArray &equipments = response.array();
     const QStringList armorTypes = {"투구", "상의", "하의", "장갑", "어깨"};
@@ -112,12 +105,9 @@ void ResponseParser::parseEquipment(QJsonDocument response, Character *pCharacte
         else if (type == "팔찌")
             pCharacter->setBracelet(parseBracelet(equipment));
     }
-
-    // TODO. 다른 객체에서도 사용할 수 있도록 수정필요
-    CharacterSearch::getInstance()->updateParseStatus(statusBit, pCharacter);
 }
 
-void ResponseParser::parseSkill(QJsonDocument response, Character *pCharacter, uint8_t statusBit)
+void ResponseParser::parseSkill(QJsonDocument response, Character *pCharacter)
 {
     // TODO. 무한 대기 개선 필요
     // Profile이 업데이트 될 때까지 대기
@@ -167,12 +157,9 @@ void ResponseParser::parseSkill(QJsonDocument response, Character *pCharacter, u
             pCharacter->addSkill(pSkill);
         }
     }
-
-    // TODO. 다른 객체에서도 사용할 수 있도록 수정필요
-    CharacterSearch::getInstance()->updateParseStatus(statusBit, pCharacter);
 }
 
-void ResponseParser::parseEngrave(QJsonDocument response, Character *pCharacter, uint8_t statusBit)
+void ResponseParser::parseEngrave(QJsonDocument response, Character *pCharacter)
 {
     const QJsonArray &engraves = response.object().find("Effects")->toArray();
     Engrave *pEngrave = new Engrave();
@@ -193,12 +180,9 @@ void ResponseParser::parseEngrave(QJsonDocument response, Character *pCharacter,
     }
 
     pCharacter->setEngrave(pEngrave);
-
-    // TODO. 다른 객체에서도 사용할 수 있도록 수정필요
-    CharacterSearch::getInstance()->updateParseStatus(statusBit, pCharacter);
 }
 
-void ResponseParser::parseCard(QJsonDocument response, Character *pCharacter, uint8_t statusBit)
+void ResponseParser::parseCard(QJsonDocument response, Character *pCharacter)
 {
     const QJsonArray &cardEffects = response.object().find("Effects")->toArray();
     Card *pCard = new Card();
@@ -213,12 +197,9 @@ void ResponseParser::parseCard(QJsonDocument response, Character *pCharacter, ui
     }
 
     pCharacter->setCard(pCard);
-
-    // TODO. 다른 객체에서도 사용할 수 있도록 수정필요
-    CharacterSearch::getInstance()->updateParseStatus(statusBit, pCharacter);
 }
 
-void ResponseParser::parseGem(QJsonDocument response, Character *pCharacter, uint8_t statusBit)
+void ResponseParser::parseGem(QJsonDocument response, Character *pCharacter)
 {
     const QJsonObject &gemObject = response.object();
     const QJsonArray &gems = gemObject.find("Gems")->toArray();
@@ -275,9 +256,6 @@ void ResponseParser::parseGem(QJsonDocument response, Character *pCharacter, uin
     });
 
     pCharacter->setGems(newGems);
-
-    // TODO. 다른 객체에서도 사용할 수 있도록 수정필요
-    CharacterSearch::getInstance()->updateParseStatus(statusBit, pCharacter);
 }
 
 ResponseAuction ResponseParser::parseAuctionItem(QJsonDocument response)

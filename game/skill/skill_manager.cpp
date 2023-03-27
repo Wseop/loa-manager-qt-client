@@ -87,10 +87,16 @@ void SkillManager::destroyInstance()
 
 QStringList SkillManager::skillNames(const QString &_class) const
 {
-    return mSkillNames[_class];
+    if (mSkillNames.contains(_class))
+        return mSkillNames[_class];
+    else
+        return {};
 }
 
 QHash<QString, Skill> SkillManager::skills(const QString &_class) const
 {
-    return mSkills[_class];
+    if (mSkills.contains(_class))
+        return mSkills[_class];
+    else
+        return {};
 }

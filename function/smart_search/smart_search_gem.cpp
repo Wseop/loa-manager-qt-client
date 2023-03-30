@@ -1,9 +1,9 @@
 #include "smart_search_gem.h"
 #include "ui_smart_search_gem.h"
 #include "ui/widget_manager.h"
-#include "api/response_parser.h"
 #include "api/api_manager.h"
-#include "api/search_option.h"
+#include "api/lostark/response_parser.h"
+#include "api/lostark/search_option.h"
 #include "game/item/gem.h"
 
 #include <QLabel>
@@ -56,7 +56,7 @@ void SmartSearchGem::refresh()
             searchOption.setPageNo(1);
             searchOption.setSortCondition("ASC");
 
-            ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Auction, QJsonDocument(searchOption.toJsonObject()).toJson());
+            ApiManager::getInstance()->post(pNetworkManager, ApiType::Lostark, static_cast<int>(LostarkApi::Auction), QJsonDocument(searchOption.toJsonObject()).toJson());
         }
     }
 }

@@ -2,9 +2,9 @@
 #include "ui_content_reward.h"
 #include "ui/widget_manager.h"
 #include "resource/resource_manager.h"
-#include "api/response_parser.h"
 #include "api/api_manager.h"
-#include "api/search_option.h"
+#include "api/lostark/response_parser.h"
+#include "api/lostark/search_option.h"
 #include "db/db_manager.h"
 #include "function/content_reward/content_reward_table.h"
 #include "function/content_reward/content_reward_adder.h"
@@ -316,9 +316,9 @@ void ContentReward::refreshTradablePrice()
         SearchOption *pSearchOption = mSearchOptions[i];
 
         if (item == "1레벨 멸화")
-            ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Auction, QJsonDocument(pSearchOption->toJsonObject()).toJson());
+            ApiManager::getInstance()->post(pNetworkManager, ApiType::Lostark, static_cast<int>(LostarkApi::Auction), QJsonDocument(pSearchOption->toJsonObject()).toJson());
         else
-            ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Market, QJsonDocument(pSearchOption->toJsonObject()).toJson());
+            ApiManager::getInstance()->post(pNetworkManager, ApiType::Lostark, static_cast<int>(LostarkApi::Market), QJsonDocument(pSearchOption->toJsonObject()).toJson());
     }
 }
 

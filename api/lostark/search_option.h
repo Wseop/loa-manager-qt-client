@@ -1,7 +1,7 @@
 #ifndef SEARCHOPTION_H
 #define SEARCHOPTION_H
 
-#include "api/lostark_api.h"
+#include "api/lostark/lostark_api.h"
 #include "game/item/item_grade.h"
 
 #include <QJsonObject>

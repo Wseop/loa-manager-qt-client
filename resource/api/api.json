@@ -1,54 +1,71 @@
 {
-    "Api": [
+	"List": ["Lostark", "LoaManager"],
+    "Lostark": [
         {
-                "Index": 0,
-                "RequestURL": "https://developer-lostark.game.onstove.com/characters/%1/siblings",
-                "Type": "GET"
+            "RequestURL": "https://developer-lostark.game.onstove.com/characters/%1/siblings",
+            "Type": "GET"
         },
         {
-                "Index": 1,
-                "RequestURL": "https://developer-lostark.game.onstove.com/armories/characters/%1/profiles",
-                "Type": "GET"
+            "RequestURL": "https://developer-lostark.game.onstove.com/armories/characters/%1/profiles",
+            "Type": "GET"
         },
         {
-                "Index": 2,
-                "RequestURL": "https://developer-lostark.game.onstove.com/armories/characters/%1/equipment",
-                "Type": "GET"
+            "RequestURL": "https://developer-lostark.game.onstove.com/armories/characters/%1/equipment",
+            "Type": "GET"
         },
         {
-                "Index": 3,
-                "RequestURL": "https://developer-lostark.game.onstove.com/armories/characters/%1/combat-skills",
-                "Type": "GET"
+            "RequestURL": "https://developer-lostark.game.onstove.com/armories/characters/%1/combat-skills",
+            "Type": "GET"
         },
         {
-                "Index": 4,
-                "RequestURL": "https://developer-lostark.game.onstove.com/armories/characters/%1/engravings",
-                "Type": "GET"
+            "RequestURL": "https://developer-lostark.game.onstove.com/armories/characters/%1/engravings",
+            "Type": "GET"
         },
         {
-                "Index": 5,
-                "RequestURL": "https://developer-lostark.game.onstove.com/armories/characters/%1/cards",
-                "Type": "GET"
+            "RequestURL": "https://developer-lostark.game.onstove.com/armories/characters/%1/cards",
+            "Type": "GET"
         },
         {
-                "Index": 6,
-                "RequestURL": "https://developer-lostark.game.onstove.com/armories/characters/%1/gems",
-                "Type": "GET"
+            "RequestURL": "https://developer-lostark.game.onstove.com/armories/characters/%1/gems",
+            "Type": "GET"
         },
         {
-                "Index": 7,
-                "RequestURL": "https://developer-lostark.game.onstove.com/armories/characters/%1/collectibles",
-                "Type": "GET"
+            "RequestURL": "https://developer-lostark.game.onstove.com/armories/characters/%1/collectibles",
+            "Type": "GET"
         },
         {
-                "Index": 8,
-                "RequestURL": "https://developer-lostark.game.onstove.com/auctions/items",
-                "Type": "POST"
+            "RequestURL": "https://developer-lostark.game.onstove.com/auctions/items",
+            "Type": "POST"
         },
         {
-                "Index": 9,
-                "RequestURL": "https://developer-lostark.game.onstove.com/markets/items",
-                "Type": "POST"
+            "RequestURL": "https://developer-lostark.game.onstove.com/markets/items",
+            "Type": "POST"
+        }
+    ],
+    "LoaManager": [
+        {
+            "RequestURL": "https://localhost:44306/admin/%1",
+            "Type": "GET"
+        },
+        {
+            "RequestURL": "https://localhost:44306/apikey",
+            "Type": "GET"
+        },
+        {
+            "RequestURL": "https://localhost:44306/rewardchaos/level/%1",
+            "Type": "GET"
+        },
+        {
+            "RequestURL": "https://localhost:44306/rewardchaos",
+            "Type": "POST"
+        },
+        {
+            "RequestURL": "https://localhost:44306/rewardguardian/level/%1",
+            "Type": "GET"
+        },
+        {
+            "RequestURL": "https://localhost:44306/rewardguardian",
+            "Type": "POST"
         }
     ]
 }

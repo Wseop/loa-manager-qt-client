@@ -1,9 +1,13 @@
 #ifndef APIMANAGER_H
 #define APIMANAGER_H
 
-#include "api/lostark_api.h"
-
 #include <QObject>
+#include <QHash>
+
+enum class ApiType
+{
+    Lostark, LoaManager
+};
 
 class QNetworkAccessManager;
 
@@ -15,8 +19,8 @@ private:
     ApiManager();
     ~ApiManager();
 
-    void loadApiKey();
-    void loadRequestUrl();
+    void initializeRequestUrl();
+    void initializeApiKey();
 
     const QString &getApiKey();
 
@@ -24,15 +28,17 @@ public:
     static ApiManager *getInstance();
     static void destroyInstance();
 
-    void get(QNetworkAccessManager *pNetworkManager, LostarkApi api, QString param);
-    void post(QNetworkAccessManager *pNetworkManager, LostarkApi api, QByteArray data);
+    void get(QNetworkAccessManager *pNetworkManager, ApiType apiType, int urlIndex, QString param);
+    void post(QNetworkAccessManager *pNetworkManager, ApiType apiType, int urlIndex, QByteArray data);
 
 private:
     static ApiManager *mpInstance;
 
+    // Lostark Api key
     QStringList mApiKeys;
     int mKeyIndex;
-    QStringList mRequestUrls;
+
+    QHash<ApiType, QStringList> mRequestURLs;
 };
 
 #endif // APIMANAGER_H

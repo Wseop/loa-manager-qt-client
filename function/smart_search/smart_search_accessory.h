@@ -2,7 +2,7 @@
 #define SMART_SEARCH_ACCESSORY_H
 
 #include "function/smart_search/smart_search_menu.h"
-#include "api/search_option.h"
+#include "api/lostark/search_option.h"
 #include "game/item/accessory.h"
 
 #include <QWidget>

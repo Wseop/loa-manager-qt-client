@@ -3,7 +3,8 @@
 #include "ui/widget_manager.h"
 #include "ui/font_manager.h"
 #include "api/api_manager.h"
-#include "api/response_parser.h"
+#include "api/lostark/lostark_api.h"
+#include "api/lostark/response_parser.h"
 #include "game/character/character.h"
 #include "function/character_search/character_info.h"
 
@@ -188,7 +189,7 @@ void CharacterSearch::searchCharacter(const QString &characterName)
         });
         connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-        ApiManager::getInstance()->get(pNetworkManager, static_cast<LostarkApi>(i), characterName);
+        ApiManager::getInstance()->get(pNetworkManager, ApiType::Lostark, i, characterName);
     }
 }
 

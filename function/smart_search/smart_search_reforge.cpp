@@ -2,9 +2,9 @@
 #include "ui_smart_search_reforge.h"
 #include "ui/widget_manager.h"
 #include "resource/resource_manager.h"
-#include "api/response_parser.h"
 #include "api/api_manager.h"
-#include "api/search_option.h"
+#include "api/lostark/response_parser.h"
+#include "api/lostark/search_option.h"
 
 #include <QLabel>
 #include <QGroupBox>
@@ -89,7 +89,7 @@ void SmartSearchReforge::refresh()
             searchOption.setPageNo(1);
             searchOption.setSortCondition("ASC");
 
-            ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Market, QJsonDocument(searchOption.toJsonObject()).toJson());
+            ApiManager::getInstance()->post(pNetworkManager, ApiType::Lostark, static_cast<int>(LostarkApi::Market), QJsonDocument(searchOption.toJsonObject()).toJson());
 
             labelIndex++;
         }

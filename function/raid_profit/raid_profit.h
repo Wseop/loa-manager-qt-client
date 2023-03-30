@@ -2,7 +2,7 @@
 #define RAID_PROFIT_H
 
 #include "function/function_widget.h"
-#include "api/search_option.h"
+#include "api/lostark/search_option.h"
 
 #include <QWidget>
 

@@ -3,9 +3,9 @@
 #include "ui/widget_manager.h"
 #include "resource/resource_manager.h"
 #include "game/skill/skill_manager.h"
-#include "api/response_parser.h"
 #include "api/api_manager.h"
-#include "api/search_option.h"
+#include "api/lostark/response_parser.h"
+#include "api/lostark/search_option.h"
 
 #include <QLabel>
 #include <QComboBox>
@@ -237,7 +237,7 @@ void SmartSearchTripod::searchTripod(int skillCode, int tripodCode)
     searchOption.setSortCondition("ASC");
     searchOption.setSkillOption(skillCode, tripodCode, 5, 5);
 
-    ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Auction, QJsonDocument(searchOption.toJsonObject()).toJson());
+    ApiManager::getInstance()->post(pNetworkManager, ApiType::Lostark, static_cast<int>(LostarkApi::Auction), QJsonDocument(searchOption.toJsonObject()).toJson());
 }
 
 void SmartSearchTripod::addSkillWidget(const Skill &skill, int row)

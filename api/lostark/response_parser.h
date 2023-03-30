@@ -1,8 +1,8 @@
 #ifndef RESPONSEPARSER_H
 #define RESPONSEPARSER_H
 
-#include "api/response_auction.h"
-#include "api/response_market.h"
+#include "api/lostark/response_auction.h"
+#include "api/lostark/response_market.h"
 #include "game/character/character.h"
 
 #include <QJsonDocument>

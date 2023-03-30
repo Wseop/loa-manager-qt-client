@@ -2,8 +2,8 @@
 #include "ui_smart_search_accessory.h"
 #include "ui/widget_manager.h"
 #include "game/engrave/engrave_manager.h"
-#include "api/response_parser.h"
 #include "api/api_manager.h"
+#include "api/lostark/response_parser.h"
 
 #include <QLabel>
 #include <QPushButton>
@@ -289,7 +289,7 @@ void SmartSearchAccessory::searchAccessory()
         connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
         mSearchOptions[i]->setPageNo(mSearchPage);
-        ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Auction, QJsonDocument(mSearchOptions[i]->toJsonObject()).toJson());
+        ApiManager::getInstance()->post(pNetworkManager, ApiType::Lostark, static_cast<int>(LostarkApi::Auction), QJsonDocument(mSearchOptions[i]->toJsonObject()).toJson());
     }
 }
 

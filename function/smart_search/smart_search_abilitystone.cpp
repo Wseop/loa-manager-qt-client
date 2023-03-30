@@ -1,9 +1,9 @@
 #include "smart_search_abilitystone.h"
 #include "ui_smart_search_abilitystone.h"
 #include "ui/widget_manager.h"
-#include "api/response_parser.h"
 #include "api/api_manager.h"
-#include "api/search_option.h"
+#include "api/lostark/response_parser.h"
+#include "api/lostark/search_option.h"
 #include "game/engrave/engrave_manager.h"
 #include "util/util.h"
 
@@ -211,7 +211,7 @@ void SmartSearchAbilityStone::searchAbilityStone()
             if (mpPenaltySelector->currentIndex() != 0)
                 searchOption.setEtcOption(EtcOptionCode::Engrave, EngraveManager::getInstance()->getEngraveCode(mpPenaltySelector->currentText()));
 
-            ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Auction, QJsonDocument(searchOption.toJsonObject()).toJson());
+            ApiManager::getInstance()->post(pNetworkManager, ApiType::Lostark, static_cast<int>(LostarkApi::Auction), QJsonDocument(searchOption.toJsonObject()).toJson());
         }
     }
 }

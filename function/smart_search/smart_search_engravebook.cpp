@@ -1,9 +1,9 @@
 #include "smart_search_engravebook.h"
 #include "ui_smart_search_engravebook.h"
 #include "ui/widget_manager.h"
-#include "api/response_parser.h"
 #include "api/api_manager.h"
-#include "api/search_option.h"
+#include "api/lostark/response_parser.h"
+#include "api/lostark/search_option.h"
 
 #include <algorithm>
 #include <QLabel>
@@ -125,7 +125,7 @@ void SmartSearchEngraveBook::searchEngraveBook(bool bResetPageNo)
     searchOption.setPageNo(mSearchPageNo);
     searchOption.setSortCondition("DESC");
 
-    ApiManager::getInstance()->post(pNetworkManager, LostarkApi::Market, QJsonDocument(searchOption.toJsonObject()).toJson());
+    ApiManager::getInstance()->post(pNetworkManager, ApiType::Lostark, static_cast<int>(LostarkApi::Market), QJsonDocument(searchOption.toJsonObject()).toJson());
 }
 
 void SmartSearchEngraveBook::parseSearchResult(QNetworkReply *pReply)

@@ -9,7 +9,6 @@
 #include "function/content_reward/content_reward.h"
 #include "function/raid_profit/raid_profit.h"
 #include "resource/resource_manager.h"
-#include "api/api_manager.h"
 
 #include <QFile>
 #include <QJsonArray>
@@ -33,9 +32,6 @@ LoaManager::LoaManager() :
     initFunction();
     initMenuButton();
     initAdminButton();
-
-    // initialize ApiManager
-    ApiManager::getInstance();
 
     this->setWindowIcon(QIcon(":/Home.ico"));
     this->setWindowTitle(mMainSetting.find("Version")->toString());

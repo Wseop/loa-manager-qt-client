@@ -1,8 +1,14 @@
 #include "admin_login.h"
 #include "ui_admin_login.h"
 #include "ui/font_manager.h"
-#include "db/db_manager.h"
+#include "api/api_manager.h"
+#include "api/loamanager/loamanager_api.h"
+
 #include <QMessageBox>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QJsonObject>
+#include <QJsonDocument>
 
 extern bool gbAdmin;
 
@@ -18,11 +24,13 @@ AdminLogin::AdminLogin() :
 
     loadAdminKey();
 
-    connect(ui->leInputKey, &QLineEdit::returnPressed, this, [&](){
+    connect(ui->leInputKey, &QLineEdit::returnPressed, this, [&]()
+    {
         if (mAdminKey == "")
             return;
 
         QString input = ui->leInputKey->text();
+
         if (input == mAdminKey)
         {
             gbAdmin = true;
@@ -44,13 +52,18 @@ AdminLogin::~AdminLogin()
 
 void AdminLogin::loadAdminKey()
 {
-    DbManager *pDbManager = DbManager::getInstance();
-    bsoncxx::builder::stream::document filter{};
-    filter << "Type" << 0;
+    QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
 
-    pDbManager->lock();
-    QJsonObject result = pDbManager->findDocument(Collection::Admin, filter.extract());
-    pDbManager->unlock();
+    connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&](QNetworkReply *pReply)
+    {
+        QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
 
-    mAdminKey = result.find("Key")->toString();
+        if (response.isNull())
+            return;
+
+        mAdminKey = response.object().find("key")->toString();
+    });
+    connect(pNetworkManager,&QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
+
+    ApiManager::getInstance()->get(pNetworkManager, ApiType::LoaManager, static_cast<int>(LoamanagerApi::Admin), "0");
 }

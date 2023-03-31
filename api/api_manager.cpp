@@ -123,7 +123,6 @@ void ApiManager::post(QNetworkAccessManager *pNetworkManager, ApiType apiType, i
     {
         request.setRawHeader("accept", "application/json");
         request.setRawHeader("authorization", QString("bearer %1").arg(getApiKey()).toUtf8());
-        request.setRawHeader("Content-Type", "application/json");
     }
     else if (apiType == ApiType::LoaManager)
     {
@@ -135,6 +134,7 @@ void ApiManager::post(QNetworkAccessManager *pNetworkManager, ApiType apiType, i
     else
         return;
 
+    request.setRawHeader("Content-Type", "application/json");
     request.setUrl(QUrl(url));
     pNetworkManager->post(request, data);
 }

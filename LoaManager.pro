@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     api/api_manager.cpp \
+    api/loamanager/requestbody_builder.cpp \
     api/lostark/response_parser.cpp \
     api/lostark/search_option.cpp \
     db/db_manager.cpp \
@@ -61,6 +62,7 @@ SOURCES += \
 HEADERS += \
     api/api_manager.h \
     api/loamanager/loamanager_api.h \
+    api/loamanager/requestbody_builder.h \
     api/lostark/lostark_api.h \
     api/lostark/response_auction.h \
     api/lostark/response_market.h \

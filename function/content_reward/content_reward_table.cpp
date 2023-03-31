@@ -16,16 +16,6 @@ ContentRewardTable::ContentRewardTable(const QString &content, const QStringList
 {
     ui->setupUi(this);
 
-    if (mContent == "카오스 던전")
-    {
-        mStages = {2, 2, 2, 1};
-    }
-    else
-    {
-        for (int i = 0; i < mContentLevels.size(); i++)
-            mStages.append(1);
-    }
-
     initializeUIContentLevel();
     initializeUIDropTable();
 }
@@ -47,22 +37,27 @@ ContentRewardTable::~ContentRewardTable()
     delete ui;
 }
 
-void ContentRewardTable::refreshRewardData(const QHash<QString, RewardData> &newRewardData)
+void ContentRewardTable::refreshRewardData(const QHash<QString, RewardData> newRewardData)
 {
     const QStringList &levels = mCountLabel.keys();
+
     for (const QString &level : levels)
     {
         mRewardData[level] = newRewardData[level];
 
         int dataCount = mRewardData[level].dataCount;
+
         if (dataCount == 0)
             continue;
 
         mCountLabel[level]->setText(QString::number(dataCount));
 
         const QList<int> &itemCounts = mRewardData[level].itemCounts;
+
         for (int i = 0; i < itemCounts.size(); i++)
+        {
             mItemCountLabels[level][i]->setText(QString("%L1").arg(itemCounts[i] / (double)dataCount, 0, 'f', 2));
+        }
     }
 }
 
@@ -70,6 +65,7 @@ void ContentRewardTable::refreshTradablePrice(const QHash<QString, int> &newTrad
 {
     // 아이템 시세 업데이트
     const QStringList &tradables = newTradablePrice.keys();
+
     for (const QString &tradable : tradables)
     {
         if (tradable == "명예의 파편 주머니(소)")
@@ -84,10 +80,10 @@ void ContentRewardTable::refreshTradablePrice(const QHash<QString, int> &newTrad
 
     // UI 업데이트
     const QStringList &levels = mGoldLabel.keys();
+
     for (const QString &level : levels)
     {
-        const QString dropTableKey = mContent == "카오스 던전" ? level.chopped(1) : level;
-        const QStringList &items = mDropTable[dropTableKey];
+        const QStringList &items = mDropTable[level];
         int dataCount = mRewardData[level].dataCount;
         QList<int> &itemCounts = mRewardData[level].itemCounts;
         double totalGold = 0;
@@ -95,10 +91,12 @@ void ContentRewardTable::refreshTradablePrice(const QHash<QString, int> &newTrad
         for (int i = 0; i < items.size(); i++)
         {
             const QString &item = items[i];
+
             if (!mTradablePrice.contains(item))
                 continue;
 
             bool selected = false;
+
             if (item == "명예의 파편" || item == "보석")
                 selected = tradableSelector[item]->isChecked();
             else if (item.contains("파괴강석"))
@@ -130,22 +128,13 @@ void ContentRewardTable::initializeUIContentLevel()
 
     for (int i = 0; i < mContentLevels.size(); i++)
     {
-        for (int j = 0; j < mStages[i]; j++)
-        {
-            QLabel *pLabelLevel = nullptr;
+        QLabel *pLabelLevel = WidgetManager::createLabel(mContentLevels[i]);
+        ui->gridTable->addWidget(pLabelLevel, row++, 0);
+        mWidgets.append(pLabelLevel);
 
-            if (mContent == "카오스 던전")
-                pLabelLevel = WidgetManager::createLabel(mContentLevels[i] + QString::number(j + 1));
-            else
-                pLabelLevel = WidgetManager::createLabel(mContentLevels[i]);
-
-            ui->gridTable->addWidget(pLabelLevel, row++, 0);
-            mWidgets.append(pLabelLevel);
-
-            QFrame *pHLine2 = WidgetManager::createLine(QFrame::HLine);
-            ui->gridTable->addWidget(pHLine2, row++, 0, 1, -1);
-            mWidgets.append(pHLine2);
-        }
+        QFrame *pHLine2 = WidgetManager::createLine(QFrame::HLine);
+        ui->gridTable->addWidget(pHLine2, row++, 0, 1, -1);
+        mWidgets.append(pHLine2);
     }
 
     QFrame *pVLine = WidgetManager::createLine(QFrame::VLine);
@@ -164,41 +153,37 @@ void ContentRewardTable::initializeUIDropTable()
     // 보상 평균 획득량 layout
     for (int i = 0; i < mContentLevels.size(); i++)
     {
-        for (int j = 0; j < mStages[i]; j++)
+        const QStringList &items = mDropTable[mContentLevels[i]];
+        int itemCol = 2;
+
+        for (const QString &item : items)
         {
-            const QStringList &items = mDropTable[mContentLevels[i]];
-            int itemCol = 2;
+            const QString &level = mContentLevels[i];
 
-            for (const QString &item : items)
-            {
-                QString level = mContentLevels[i];
-                if (mContent == "카오스 던전")
-                    level += QString::number(j + 1);
+            QVBoxLayout *pVLayout = new QVBoxLayout();
+            ui->gridTable->addLayout(pVLayout, row, itemCol++);
+            mLayouts.append(pVLayout);
 
-                QVBoxLayout *pVLayout = new QVBoxLayout();
-                ui->gridTable->addLayout(pVLayout, row, itemCol++);
-                mLayouts.append(pVLayout);
+            const QString &iconPath = ResourceManager::getInstance()->iconPath(item);
 
-                QString iconPath = ResourceManager::getInstance()->iconPath(item);
-                QLabel *pLabelItem = nullptr;
-                if (iconPath != "")
-                    pLabelItem = WidgetManager::createIcon(iconPath, nullptr);
-                else
-                    pLabelItem = WidgetManager::createLabel(item, 10, "", 50, 50);
-                pVLayout->addWidget(pLabelItem);
-                pVLayout->setAlignment(pLabelItem, Qt::AlignHCenter);
-                mWidgets.append(pLabelItem);
+            QLabel *pLabelItem = nullptr;
+            if (iconPath != "")
+                pLabelItem = WidgetManager::createIcon(iconPath, nullptr);
+            else
+                pLabelItem = WidgetManager::createLabel(item, 10, "", 50, 50);
+            pVLayout->addWidget(pLabelItem);
+            pVLayout->setAlignment(pLabelItem, Qt::AlignHCenter);
+            mWidgets.append(pLabelItem);
 
-                QLabel *pLabelCount = WidgetManager::createLabel("-", 10, "", 100, 25);
-                pLabelCount->setStyleSheet("QLabel { border: 1px solid black }");
-                pVLayout->addWidget(pLabelCount);
-                pVLayout->setAlignment(pLabelCount, Qt::AlignBottom);
-                mItemCountLabels[level].append(pLabelCount);
-                mWidgets.append(pLabelCount);
-            }
-            row += 2;
-            col = col > itemCol ? col : itemCol;
+            QLabel *pLabelCount = WidgetManager::createLabel("-", 10, "", 100, 25);
+            pLabelCount->setStyleSheet("QLabel { border: 1px solid black }");
+            pVLayout->addWidget(pLabelCount);
+            pVLayout->setAlignment(pLabelCount, Qt::AlignBottom);
+            mItemCountLabels[level].append(pLabelCount);
+            mWidgets.append(pLabelCount);
         }
+        row += 2;
+        col = col > itemCol ? col : itemCol;
     }
 
     ui->gridTable->addWidget(pLabel, 0, 2, 1, col - 2, Qt::AlignHCenter);
@@ -223,19 +208,14 @@ void ContentRewardTable::initializeUIGold(int col)
 
     for (int i = 0; i < mContentLevels.size(); i++)
     {
-        for (int j = 0; j < mStages[i]; j++)
-        {
-            QString level = mContentLevels[i];
-            if (mContent == "카오스 던전")
-                level += QString::number(j + 1);
+        const QString &level = mContentLevels[i];
 
-            QLabel *pLabelGold = WidgetManager::createLabel("-");
-            ui->gridTable->addWidget(pLabelGold, row++, col);
-            mGoldLabel[level] = pLabelGold;
-            mWidgets.append(pLabelGold);
+        QLabel *pLabelGold = WidgetManager::createLabel("-");
+        ui->gridTable->addWidget(pLabelGold, row++, col);
+        mGoldLabel[level] = pLabelGold;
+        mWidgets.append(pLabelGold);
 
-            row++;
-        }
+        row++;
     }
 
     QFrame *pVLine = WidgetManager::createLine(QFrame::VLine);
@@ -253,18 +233,13 @@ void ContentRewardTable::initializeUIGold(int col)
 
     for (int i = 0; i < mContentLevels.size(); i++)
     {
-        for (int j = 0; j < mStages[i]; j++)
-        {
-            QString level = mContentLevels[i];
-            if (mContent == "카오스 던전")
-                level += QString::number(j + 1);
+        const QString &level = mContentLevels[i];
 
-            QLabel *pLabelCount = WidgetManager::createLabel("-");
-            ui->gridTable->addWidget(pLabelCount, row++, col);
-            mCountLabel[level] = pLabelCount;
-            mWidgets.append(pLabelCount);
+        QLabel *pLabelCount = WidgetManager::createLabel("-");
+        ui->gridTable->addWidget(pLabelCount, row++, col);
+        mCountLabel[level] = pLabelCount;
+        mWidgets.append(pLabelCount);
 
-            row++;
-        }
+        row++;
     }
 }

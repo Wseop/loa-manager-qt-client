@@ -1,8 +1,6 @@
 #ifndef CONTENT_REWARD_ADDER_H
 #define CONTENT_REWARD_ADDER_H
 
-#include "db/db_enums.h"
-
 #include <QWidget>
 
 namespace Ui {
@@ -26,15 +24,11 @@ private:
     void insertData();
 
 private:
-    static void tInsertData(Collection collection, int count, QString level, QStringList items, QList<int> itemCounts);
-
-private:
     Ui::ContentRewardAdder *ui;
 
     QStringList mContents;
     QHash<QString, QStringList> mContentLevels;
     QHash<QString, QStringList> mDropTable;
-    QList<int> mStages;
     QHash<QString, int> mItemIndex;
 
     class QComboBox *mpContentSelector;

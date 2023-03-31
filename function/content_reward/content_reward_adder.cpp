@@ -1,22 +1,24 @@
 #include "content_reward_adder.h"
 #include "ui_content_reward_adder.h"
 #include "ui/widget_manager.h"
-#include "db/document_builder.h"
-#include "db/db_manager.h"
+#include "api/api_manager.h"
+#include "api/loamanager/requestbody_builder.h"
+#include "api/loamanager/loamanager_api.h"
 
 #include <QComboBox>
 #include <QPushButton>
 #include <QLabel>
 #include <QLineEdit>
 #include <QIntValidator>
-#include <QThread>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QJsonDocument>
 
 ContentRewardAdder::ContentRewardAdder(const QStringList &contents, const QHash<QString, QStringList> &contentLevels, const QHash<QString, QStringList> &dropTable) :
     ui(new Ui::ContentRewardAdder),
     mContents(contents),
     mContentLevels(contentLevels),
     mDropTable(dropTable),
-    mStages({2, 2, 2, 1}),
     mpContentSelector(nullptr),
     mpCurrentLevelSelector(nullptr),
     mpInputValidator(new QIntValidator())
@@ -84,10 +86,7 @@ void ContentRewardAdder::initializeLevelSelector()
 
             for (int i = 0; i < levels.size(); i++)
             {
-                for (int j = 0; j < mStages[i]; j++)
-                {
-                    levelItems << levels[i] + QString::number(j + 1);
-                }
+                levelItems << levels[i];
             }
         }
         else
@@ -99,9 +98,6 @@ void ContentRewardAdder::initializeLevelSelector()
         pLevelSelector->hide();
         ui->hLayoutSelector->addWidget(pLevelSelector);
         mLevelSelectors.append(pLevelSelector);
-        connect(pLevelSelector, &QComboBox::currentIndexChanged, this, [&](int index){
-
-        });
     }
 
     mpCurrentLevelSelector = mLevelSelectors[0];
@@ -119,7 +115,7 @@ void ContentRewardAdder::initializeInsertButton()
 
 void ContentRewardAdder::initializeDataInputTable()
 {
-    const QStringList items = {"데이터 누적량", "실링", "명예의 파편", "파괴석", "수호석", "돌파석", "보석", "전설 악세", "유물 악세", "고대 악세"};
+    const QStringList items = {"데이터 누적량", "실링", "명예의 파편", "파괴석", "수호석", "돌파석", "보석"};
 
     for (int i = 0; i < items.size(); i++)
     {
@@ -141,53 +137,40 @@ void ContentRewardAdder::initializeDataInputTable()
     mItemIndex["경이로운 명예의 돌파석"] = 5;
     mItemIndex["찬란한 명예의 돌파석"] = 5;
     mItemIndex["보석"] = 6;
-    mItemIndex["전설 악세"] = 7;
-    mItemIndex["유물 악세"] = 8;
-    mItemIndex["고대 악세"] = 9;
 }
 
 void ContentRewardAdder::insertData()
 {
     const QString &content = mpContentSelector->currentText();
-    int count = mLineEdits[0]->text().toInt();
     const QString &level = mpCurrentLevelSelector->currentText();
 
-    QStringList items;
-    if (content == "카오스 던전")
-        items = mDropTable[level.chopped(1)];
-    else
-        items = mDropTable[level];
-
+    int count = mLineEdits[0]->text().toInt();
+    QStringList items = mDropTable[level];
     QList<int> itemCounts;
+
     for (const QString &item : items)
     {
         const QString& text = mLineEdits[mItemIndex[item]]->text();
+
         if (text == "")
             return;
 
         itemCounts.append(text.toInt());
     }
 
-    Collection collection = content == "카오스 던전" ? Collection::Reward_Chaos : Collection::Reward_Guardian;
+    QJsonObject requestBody = RequestBodyBuilder::buildRewardBody(level, count, items, itemCounts);
 
-    QThread *pInsertThread = QThread::create(tInsertData, collection, count, level, items, itemCounts);
-    connect(pInsertThread, &QThread::finished, pInsertThread, &QThread::deleteLater);
-    pInsertThread->start();
+    QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
+
+    connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
+
+    int urlIndex = content == "카오스 던전" ? static_cast<int>(LoamanagerApi::PostRewardChaos) :
+                                            static_cast<int>(LoamanagerApi::PostRewardGuardian);
+
+    ApiManager::getInstance()->post(pNetworkManager, ApiType::LoaManager, urlIndex, QJsonDocument(requestBody).toJson());
 
     for (QLineEdit *pLineEdit : mLineEdits)
         pLineEdit->clear();
 
     this->close();
-}
-
-void ContentRewardAdder::tInsertData(Collection collection, int count, QString level, QStringList items, QList<int> itemCounts)
-{
-    DbManager *pDbManager = DbManager::getInstance();
-
-    bsoncxx::builder::stream::document doc = DocumentBuilder::buildDocumentContentsReward(count, level, items, itemCounts);
-    bsoncxx::builder::stream::document dummyFilter = {};
-
-    pDbManager->lock();
-    pDbManager->insertDocument(collection, doc.extract(), dummyFilter.extract(), true);
-    pDbManager->unlock();
 }

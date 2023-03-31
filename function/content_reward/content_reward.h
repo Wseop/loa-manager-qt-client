@@ -46,6 +46,8 @@ private:
     void refreshRewardData();
     void refreshTradablePrice();
 
+    void parseResponseData(QJsonDocument response, bool bRefreshTable);
+
 public:
     static ContentReward *getInstance();
     static void destroyInstance();
@@ -64,7 +66,9 @@ private:
     QHash<QString, QStringList> mDropTable;
     QHash<QString, RewardData> mRewardData;
     QHash<QString, int> mTradablePrice;
-    int mTradableResponseCount;
+
+    int mTotalLevels;
+    int mResponseCount;
 
     // 거래소, 경매장 검색
     QList<class SearchOption*> mSearchOptions;

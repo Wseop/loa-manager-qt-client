@@ -13,8 +13,6 @@ SOURCES += \
     api/loamanager/requestbody_builder.cpp \
     api/lostark/response_parser.cpp \
     api/lostark/search_option.cpp \
-    db/db_manager.cpp \
-    db/document_builder.cpp \
     function/auction_calculator/auction_calculator.cpp \
     function/character_search/abilitystone_info.cpp \
     function/character_search/accessory_info.cpp \
@@ -68,9 +66,6 @@ HEADERS += \
     api/lostark/response_market.h \
     api/lostark/response_parser.h \
     api/lostark/search_option.h \
-    db/db_enums.h \
-    db/db_manager.h \
-    db/document_builder.h \
     function/auction_calculator/auction_calculator.h \
     function/character_search/abilitystone_info.h \
     function/character_search/accessory_info.h \
@@ -150,16 +145,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
-win32: LIBS += -L$$PWD/../../../mongo-cxx-driver/lib/ -llibbsoncxx.dll
-
-INCLUDEPATH += $$PWD/../../../mongo-cxx-driver/include
-DEPENDPATH += $$PWD/../../../mongo-cxx-driver/include
-
-win32: LIBS += -L$$PWD/../../../mongo-cxx-driver/lib/ -llibmongocxx.dll
-
-INCLUDEPATH += $$PWD/../../../mongo-cxx-driver/include
-DEPENDPATH += $$PWD/../../../mongo-cxx-driver/include
 
 RESOURCES += \
     resource/resource.qrc

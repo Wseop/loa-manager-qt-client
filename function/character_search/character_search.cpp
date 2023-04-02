@@ -233,6 +233,11 @@ void CharacterSearch::updateCharacterSetting(Character *pCharacter)
     characterSetting.ability = extractAbility(pProfile->getAbility());
     characterSetting.elixir = extractElixir(pCharacter->getArmors());
 
+    // 세팅이 비어있으면 업데이트 X
+    if (characterSetting.itemSet == "" || characterSetting.ability == "" ||
+        characterSetting.engrave == "" || characterSetting.engraveLevel == "")
+        return;
+
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
 
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
@@ -244,12 +249,18 @@ void CharacterSearch::updateCharacterSetting(Character *pCharacter)
 
 QString CharacterSearch::extractItemSet(const Weapon *pWeapon, const QList<Armor *> &armors)
 {
-    QList<int> setCount(static_cast<int>(ItemSet::size), 0);
+    QList<int> setCount(static_cast<int>(ItemSet::size) + 1, 0);
+
+    if (pWeapon == nullptr)
+        return "";
 
     setCount[static_cast<int>(pWeapon->itemSet())]++;
 
     for (const Armor *pArmor : armors)
     {
+        if (pArmor == nullptr)
+            return "";
+
         setCount[static_cast<int>(pArmor->itemSet())]++;
     }
 
@@ -268,6 +279,9 @@ QString CharacterSearch::extractItemSet(const Weapon *pWeapon, const QList<Armor
 
 QString CharacterSearch::extractEngrave(const Engrave *pEngrave)
 {
+    if (pEngrave == nullptr)
+        return "";
+
     const QStringList &engraves = pEngrave->getEngraves();
 
     EngraveManager *pEngraveManager = EngraveManager::getInstance();
@@ -289,6 +303,9 @@ QString CharacterSearch::extractEngrave(const Engrave *pEngrave)
 
 QString CharacterSearch::extractEngraveLevel(const Engrave *pEngrave)
 {
+    if (pEngrave == nullptr)
+        return "";
+
     const QStringList &engraves = pEngrave->getEngraves();
 
     QString ret;
@@ -346,6 +363,9 @@ QString CharacterSearch::extractElixir(const QList<Armor *> &armors)
 
     for (const Armor *pArmor : armors)
     {
+        if (pArmor == nullptr)
+            return "";
+
         const QList<Elixir> &elixirs = pArmor->elixirs();
 
         for (const Elixir &elixir : elixirs)

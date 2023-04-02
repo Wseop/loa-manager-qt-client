@@ -3,17 +3,17 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-QByteArray RequestBodyBuilder::buildRewardBody(QString level, int count, QStringList items, QList<int> itemCounts)
+QByteArray RequestBodyBuilder::buildRewardBody(const Reward &reward)
 {
     QJsonObject rewardBody;
 
-    rewardBody.insert("level", level);
-    rewardBody.insert("count", count);
+    rewardBody.insert("level", reward.level);
+    rewardBody.insert("count", reward.count);
 
-    for (int i = 0; i < items.size(); i++)
+    for (int i = 0; i < reward.items.size(); i++)
     {
-        const QString &item = items[i];
-        int itemCount = itemCounts[i];
+        const QString &item = reward.items[i];
+        int itemCount = reward.itemCounts[i];
 
         QString key;
 

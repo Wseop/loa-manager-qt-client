@@ -2,6 +2,7 @@
 #define LOAMANAGER_API_H
 
 #include <QString>
+#include <QStringList>
 
 enum class LoamanagerApi
 {
@@ -13,6 +14,14 @@ enum class LoamanagerApi
     PostRewardGuardian,
     GetCharacterSetting,
     PostCharacterSetting
+};
+
+struct Reward
+{
+    QString level;
+    int count;
+    QStringList items;
+    QList<int> itemCounts;
 };
 
 struct CharacterSetting

@@ -6,7 +6,7 @@
 class RequestBodyBuilder
 {
 public:
-    static QByteArray buildRewardBody(QString level, int count, QStringList items, QList<int> itemCounts);
+    static QByteArray buildRewardBody(const Reward &reward);
     static QByteArray buildCharacterSettingBody(const CharacterSetting &characterSetting);
 };
 

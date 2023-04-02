@@ -251,11 +251,13 @@ QString CharacterSearch::extractItemSet(const Weapon *pWeapon, const QList<Armor
 {
     QList<int> setCount(static_cast<int>(ItemSet::size) + 1, 0);
 
+    // 무기 세트효과 카운트
     if (pWeapon == nullptr)
         return "";
 
     setCount[static_cast<int>(pWeapon->itemSet())]++;
 
+    // 방어구 세트효과 카운트
     for (const Armor *pArmor : armors)
     {
         if (pArmor == nullptr)
@@ -264,6 +266,7 @@ QString CharacterSearch::extractItemSet(const Weapon *pWeapon, const QList<Armor
         setCount[static_cast<int>(pArmor->itemSet())]++;
     }
 
+    // 카운팅된 세트효과 문자열로 변환
     QString itemSet;
 
     for (int i = 0; i < setCount.size(); i++)

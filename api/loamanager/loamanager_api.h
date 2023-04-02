@@ -8,7 +8,9 @@ enum class LoamanagerApi
     GetRewardChaos,
     PostRewardChaos,
     GetRewardGuardian,
-    PostRewardGuardian
+    PostRewardGuardian,
+    GetCharacterSetting,
+    PostCharacterSetting
 };
 
 #endif // LOAMANAGER_API_H

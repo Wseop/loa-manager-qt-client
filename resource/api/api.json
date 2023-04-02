@@ -1,5 +1,5 @@
 {
-	"List": ["Lostark", "LoaManager"],
+    "List": ["Lostark", "LoaManager"],
     "Lostark": [
         {
             "RequestURL": "https://developer-lostark.game.onstove.com/characters/%1/siblings",
@@ -65,6 +65,14 @@
         },
         {
             "RequestURL": "https://localhost:44306/rewardguardian",
+            "Type": "POST"
+        },
+        {
+            "RequestURL": "https://localhost:44306/charactersetting/class/%1",
+            "Type": "GET"
+        },
+        {
+            "RequestURL": "https://localhost:44306/charactersetting",
             "Type": "POST"
         }
     ]

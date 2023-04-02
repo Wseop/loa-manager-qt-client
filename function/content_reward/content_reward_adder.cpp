@@ -158,6 +158,8 @@ void ContentRewardAdder::insertData()
         itemCounts.append(text.toInt());
     }
 
+    Reward reward = {level, count, items, itemCounts};
+
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
 
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
@@ -165,7 +167,7 @@ void ContentRewardAdder::insertData()
     int urlIndex = content == "카오스 던전" ? static_cast<int>(LoamanagerApi::PostRewardChaos) :
                                             static_cast<int>(LoamanagerApi::PostRewardGuardian);
 
-    ApiManager::getInstance()->post(pNetworkManager, ApiType::LoaManager, urlIndex, RequestBodyBuilder::buildRewardBody(level, count, items, itemCounts));
+    ApiManager::getInstance()->post(pNetworkManager, ApiType::LoaManager, urlIndex, RequestBodyBuilder::buildRewardBody(reward));
 
     for (QLineEdit *pLineEdit : mLineEdits)
         pLineEdit->clear();

@@ -1,6 +1,9 @@
 #include "requestbody_builder.h"
 
-QJsonObject RequestBodyBuilder::buildRewardBody(QString level, int count, QStringList items, QList<int> itemCounts)
+#include <QJsonDocument>
+#include <QJsonObject>
+
+QByteArray RequestBodyBuilder::buildRewardBody(QString level, int count, QStringList items, QList<int> itemCounts)
 {
     QJsonObject rewardBody;
 
@@ -30,5 +33,6 @@ QJsonObject RequestBodyBuilder::buildRewardBody(QString level, int count, QStrin
         rewardBody.insert(key, itemCount);
     }
 
-    return rewardBody;
+    return QJsonDocument(rewardBody).toJson();
+}
 }

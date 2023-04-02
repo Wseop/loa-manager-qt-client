@@ -35,4 +35,21 @@ QByteArray RequestBodyBuilder::buildRewardBody(QString level, int count, QString
 
     return QJsonDocument(rewardBody).toJson();
 }
+
+QByteArray RequestBodyBuilder::buildCharacterSettingBody(const CharacterSetting &characterSetting)
+{
+    QJsonObject body;
+
+    body.insert("characterName", characterSetting.characterName);
+    body.insert("className", characterSetting.className);
+    body.insert("itemLevel", characterSetting.itemLevel);
+    body.insert("itemSet", characterSetting.itemSet);
+    body.insert("engrave", characterSetting.engrave);
+    body.insert("engraveLevel", characterSetting.engraveLevel);
+    body.insert("ability", characterSetting.ability);
+
+    if (characterSetting.elixir != "")
+        body.insert("elixir", characterSetting.elixir);
+
+    return QJsonDocument(body).toJson();
 }

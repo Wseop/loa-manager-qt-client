@@ -2,12 +2,16 @@
 #define CHARACTER_SEARCH_H
 
 #include "function/function_widget.h"
+#include "game/character/ability.h"
 
 #include <QWidget>
 #include <functional>
 
 class Character;
 class CharacterInfo;
+class Weapon;
+class Armor;
+class Engrave;
 
 class QLineEdit;
 class QPushButton;
@@ -31,6 +35,13 @@ private:
 
     void searchCharacter(const QString &characterName);
     void renderCharacter(Character *pCharacter);
+    void updateCharacterSetting(Character *pCharacter);
+
+    QString extractItemSet(const Weapon *pWeapon, const QList<Armor *> &armors);
+    QString extractEngrave(const Engrave *pEngrave);
+    QString extractEngraveLevel(const Engrave *pEngrave);
+    QString extractAbility(const QHash<Ability, int> &ability);
+    QString extractElixir(const QList<Armor *> &armors);
 
 public:
     void start() override;

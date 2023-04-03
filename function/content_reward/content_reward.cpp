@@ -267,10 +267,24 @@ void ContentReward::refreshRewardData()
                 if (response.isNull())
                     return;
 
+                QList<Reward> rewards = ResponseParser::parseRewards(response);
+
+                for (const Reward &reward : rewards)
+                {
+                    RewardData rewardData {reward.count, reward.itemCounts};
+
+                    mRewardData[reward.level] += rewardData;
+                }
+
                 if (mResponseCount == mTotalLevels)
-                    parseResponseData(response, true);
-                else
-                    parseResponseData(response, false);
+                {
+                    for (ContentRewardTable *pRewardTable : mRewardTables)
+                    {
+                        pRewardTable->refreshRewardData(mRewardData);
+                    }
+
+                    refreshTradablePrice();
+                }
             });
             connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
@@ -334,47 +348,6 @@ void ContentReward::refreshTradablePrice()
             ApiManager::getInstance()->post(pNetworkManager, ApiType::Lostark, static_cast<int>(LostarkApi::Auction), QJsonDocument(pSearchOption->toJsonObject()).toJson());
         else
             ApiManager::getInstance()->post(pNetworkManager, ApiType::Lostark, static_cast<int>(LostarkApi::Market), QJsonDocument(pSearchOption->toJsonObject()).toJson());
-    }
-}
-
-void ContentReward::parseResponseData(QJsonDocument response, bool bRefreshTable)
-{
-    const QJsonArray &rewardDatas = response.array();
-
-    for (const QJsonValue &value : rewardDatas)
-    {
-        const QJsonObject &object = value.toObject();
-
-        const QString &level = object.find("level")->toString();
-        const int dataCount = object.find("count")->toInt();
-
-        QStringList keys;
-
-        if (level.back().isDigit())
-            keys = {"silling", "shard", "destruction", "protection", "leapStone", "gem"};
-        else
-            keys = {"destruction", "protection", "leapStone"};
-
-        const QStringList &dropTable = mDropTable[level];
-
-        RewardData rewardData {dataCount, QList<int>(dropTable.size(), 0)};
-
-        for (int i = 0; i < keys.size(); i++)
-        {
-            rewardData.itemCounts[i] = object.find(keys[i])->toInt();
-        }
-
-        mRewardData[level] += rewardData;
-    }
-
-    if (bRefreshTable)
-    {
-        for (ContentRewardTable *pRewardTable : mRewardTables)
-        {
-            pRewardTable->refreshRewardData(mRewardData);
-        }
-
-        refreshTradablePrice();
     }
 }
 

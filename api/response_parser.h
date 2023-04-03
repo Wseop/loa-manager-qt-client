@@ -3,6 +3,7 @@
 
 #include "api/lostark/response_auction.h"
 #include "api/lostark/response_market.h"
+#include "api/loamanager/loamanager_api.h"
 #include "game/character/character.h"
 
 #include <QJsonDocument>
@@ -10,7 +11,7 @@
 class ResponseParser
 {
 public:
-    // CHARACTERS & ARMORIES
+    // Lostark - CHARACTERS & ARMORIES
     static void parseSibling(QJsonDocument response, Character *pCharacter);
     static void parseProfile(QJsonDocument response, Character *pCharacter);
     static void parseEquipment(QJsonDocument response, Character *pCharacter);
@@ -19,11 +20,14 @@ public:
     static void parseCard(QJsonDocument response, Character *pCharacter);
     static void parseGem(QJsonDocument response, Character *pCharacter);
 
-    // AUCTIONS
+    // Lostark - AUCTIONS
     static ResponseAuction parseAuctionItem(QJsonDocument response);
 
-    // MARKETS
+    // Lostark - MARKETS
     static ResponseMarket parseMarketItem(QJsonDocument response);
+
+    // LoaManager - Reward
+    static QList<Reward> parseRewards(QJsonDocument response);
 
 private:
     static void parseItemInfo(const QJsonObject &itemInfo, Item *pItem);

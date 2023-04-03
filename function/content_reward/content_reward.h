@@ -46,8 +46,6 @@ private:
     void refreshRewardData();
     void refreshTradablePrice();
 
-    void parseResponseData(QJsonDocument response, bool bRefreshTable);
-
 public:
     static ContentReward *getInstance();
     static void destroyInstance();

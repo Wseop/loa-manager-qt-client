@@ -338,6 +338,40 @@ ResponseMarket ResponseParser::parseMarketItem(QJsonDocument response)
     return responseMarket;
 }
 
+QList<Reward> ResponseParser::parseRewards(QJsonDocument response)
+{
+    const QJsonArray rewardDatas = response.array();
+
+    QList<Reward> rewards;
+
+    for (const QJsonValue &value : rewardDatas)
+    {
+        const QJsonObject &object = value.toObject();
+
+        Reward reward;
+
+        reward.level = object.find("level")->toString();
+        reward.count = object.find("count")->toInt();
+
+        QStringList keys;
+
+        if (reward.level.back().isDigit())
+            keys = {"silling", "shard", "destruction", "protection", "leapStone", "gem"};
+        else
+            keys = {"destruction", "protection", "leapStone"};
+
+        for (const QString &key : keys)
+        {
+            reward.items << key;
+            reward.itemCounts << object.find(key)->toInt();
+        }
+
+        rewards << reward;
+    }
+
+    return rewards;
+}
+
 void ResponseParser::parseItemInfo(const QJsonObject &itemInfo, Item *pItem)
 {
     const QStringList armorParts = {"투구", "어깨", "상의", "하의", "장갑"};

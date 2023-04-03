@@ -10,9 +10,9 @@ CONFIG += c++17
 
 SOURCES += \
     api/api_manager.cpp \
-    api/loamanager/requestbody_builder.cpp \
-    api/lostark/response_parser.cpp \
     api/lostark/search_option.cpp \
+    api/requestbody_builder.cpp \
+    api/response_parser.cpp \
     function/auction_calculator/auction_calculator.cpp \
     function/character_search/abilitystone_info.cpp \
     function/character_search/accessory_info.cpp \
@@ -60,12 +60,12 @@ SOURCES += \
 HEADERS += \
     api/api_manager.h \
     api/loamanager/loamanager_api.h \
-    api/loamanager/requestbody_builder.h \
     api/lostark/lostark_api.h \
     api/lostark/response_auction.h \
     api/lostark/response_market.h \
-    api/lostark/response_parser.h \
     api/lostark/search_option.h \
+    api/requestbody_builder.h \
+    api/response_parser.h \
     function/auction_calculator/auction_calculator.h \
     function/character_search/abilitystone_info.h \
     function/character_search/accessory_info.h \

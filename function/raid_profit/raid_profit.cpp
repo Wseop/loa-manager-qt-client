@@ -1,7 +1,7 @@
 #include "raid_profit.h"
 #include "ui_raid_profit.h"
 #include "resource/resource_manager.h"
-#include "api/lostark/response_parser.h"
+#include "api/response_parser.h"
 #include "api/api_manager.h"
 #include "ui/widget_manager.h"
 #include "function/raid_profit/raid_profit_table.h"

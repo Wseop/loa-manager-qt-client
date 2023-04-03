@@ -2,7 +2,7 @@
 #include "ui_content_reward_adder.h"
 #include "ui/widget_manager.h"
 #include "api/api_manager.h"
-#include "api/loamanager/requestbody_builder.h"
+#include "api/requestbody_builder.h"
 #include "api/loamanager/loamanager_api.h"
 
 #include <QComboBox>

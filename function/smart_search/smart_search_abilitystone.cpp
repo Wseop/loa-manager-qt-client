@@ -2,7 +2,7 @@
 #include "ui_smart_search_abilitystone.h"
 #include "ui/widget_manager.h"
 #include "api/api_manager.h"
-#include "api/lostark/response_parser.h"
+#include "api/response_parser.h"
 #include "api/lostark/search_option.h"
 #include "game/engrave/engrave_manager.h"
 #include "util/util.h"

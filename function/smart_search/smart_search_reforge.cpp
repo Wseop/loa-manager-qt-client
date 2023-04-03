@@ -3,7 +3,7 @@
 #include "ui/widget_manager.h"
 #include "resource/resource_manager.h"
 #include "api/api_manager.h"
-#include "api/lostark/response_parser.h"
+#include "api/response_parser.h"
 #include "api/lostark/search_option.h"
 
 #include <QLabel>

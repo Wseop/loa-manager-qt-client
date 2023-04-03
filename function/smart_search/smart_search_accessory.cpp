@@ -3,7 +3,7 @@
 #include "ui/widget_manager.h"
 #include "game/engrave/engrave_manager.h"
 #include "api/api_manager.h"
-#include "api/lostark/response_parser.h"
+#include "api/response_parser.h"
 
 #include <QLabel>
 #include <QPushButton>

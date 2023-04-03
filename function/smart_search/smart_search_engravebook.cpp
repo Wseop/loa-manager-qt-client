@@ -2,7 +2,7 @@
 #include "ui_smart_search_engravebook.h"
 #include "ui/widget_manager.h"
 #include "api/api_manager.h"
-#include "api/lostark/response_parser.h"
+#include "api/response_parser.h"
 #include "api/lostark/search_option.h"
 
 #include <algorithm>

@@ -636,6 +636,9 @@ Armor *ResponseParser::parseArmor(const QJsonObject &object)
         const QString &type = element.find("type")->toString();
         const QVariant &value = element.find("value")->toVariant();
 
+        if (value.isNull())
+            continue;
+
         if (type == "ItemTitle")
             parseItemTitle(value.toJsonObject(), pArmor);
         else if (type == "ItemPartBox")

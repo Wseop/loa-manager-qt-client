@@ -372,6 +372,44 @@ QList<Reward> ResponseParser::parseRewards(QJsonDocument response)
     return rewards;
 }
 
+CharacterSetting ResponseParser::parseCharacterSetting(QJsonDocument response)
+{
+    const QJsonObject &object = response.object();
+
+    CharacterSetting characterSetting;
+
+    characterSetting.characterName = object.find("characterName")->toString();
+    characterSetting.className = object.find("className")->toString();
+    characterSetting.itemLevel = object.find("itemLevel")->toDouble();
+    characterSetting.itemSet = object.find("itemSet")->toString();
+    characterSetting.engrave = object.find("engrave")->toString();
+    characterSetting.engraveLevel = object.find("engraveLevel")->toString();
+    characterSetting.ability = object.find("ability")->toString();
+
+    QVariant elixir = object.find("elixir")->toVariant();
+
+    if (elixir.isNull())
+        characterSetting.elixir = "";
+    else
+        characterSetting.elixir = elixir.toString();
+
+    return characterSetting;
+}
+
+QList<CharacterSetting> ResponseParser::parseCharacterSettings(QJsonDocument response)
+{
+    const QJsonArray &array = response.array();
+
+    QList<CharacterSetting> characterSettings;
+
+    for (const QJsonValue &value : array)
+    {
+        characterSettings << parseCharacterSetting(QJsonDocument::fromVariant(value.toVariant()));
+    }
+
+    return characterSettings;
+}
+
 void ResponseParser::parseItemInfo(const QJsonObject &itemInfo, Item *pItem)
 {
     const QStringList armorParts = {"투구", "어깨", "상의", "하의", "장갑"};

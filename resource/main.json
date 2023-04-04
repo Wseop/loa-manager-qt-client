@@ -1,9 +1,9 @@
 {
-    "Version": "LoaManager v1.1.3",
+    "Version": "LoaManager v1.2.0",
     "Menu": [
         {
             "Title": "캐릭터",
-            "List": ["캐릭터 검색"]
+            "List": ["캐릭터 검색", "직업별 세팅\n통계"]
         },
         {
             "Title": "시세",

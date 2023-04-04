@@ -11,7 +11,7 @@
 class ResponseParser
 {
 public:
-    // Lostark - CHARACTERS & ARMORIES
+    // LostarkApi
     static void parseSibling(QJsonDocument response, Character *pCharacter);
     static void parseProfile(QJsonDocument response, Character *pCharacter);
     static void parseEquipment(QJsonDocument response, Character *pCharacter);
@@ -20,14 +20,13 @@ public:
     static void parseCard(QJsonDocument response, Character *pCharacter);
     static void parseGem(QJsonDocument response, Character *pCharacter);
 
-    // Lostark - AUCTIONS
     static ResponseAuction parseAuctionItem(QJsonDocument response);
-
-    // Lostark - MARKETS
     static ResponseMarket parseMarketItem(QJsonDocument response);
 
-    // LoaManager - Reward
+    // LoaManagerApi
     static QList<Reward> parseRewards(QJsonDocument response);
+    static CharacterSetting parseCharacterSetting(QJsonDocument response);
+    static QList<CharacterSetting> parseCharacterSettings(QJsonDocument response);
 
 private:
     static void parseItemInfo(const QJsonObject &itemInfo, Item *pItem);

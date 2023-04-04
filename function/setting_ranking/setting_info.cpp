@@ -1,19 +1,21 @@
 #include "setting_info.h"
 #include "ui_setting_info.h"
 #include "ui/widget_manager.h"
+#include "ui/font_manager.h"
 #include "game/engrave/engrave_manager.h"
 
 #include <QLabel>
 #include <QGroupBox>
 
-SettingInfo::SettingInfo(CharacterSetting characterSetting, int count, int total) :
-    ui(new Ui::SettingInfo),
-    mCharacterSetting(characterSetting)
+SettingInfo::SettingInfo(CharacterSetting characterSetting, int rank, int count, int total) :
+    ui(new Ui::SettingInfo)
 {
     ui->setupUi(this);
+    ui->hLayoutMain->setAlignment(Qt::AlignCenter);
 
-    initializeTitleLayout(count, total);
-    initializeInfoLayout();
+    initializeLayoutRatio(rank, count, total);
+    initializeLayoutInfo(characterSetting);
+    initializeLayoutEngrave(characterSetting.engrave, characterSetting.engraveLevel);
 }
 
 SettingInfo::~SettingInfo()
@@ -29,21 +31,96 @@ SettingInfo::~SettingInfo()
     delete ui;
 }
 
-void SettingInfo::initializeTitleLayout(int count, int total)
+void SettingInfo::initializeLayoutRatio(int rank, int count, int total)
 {
-    ui->hLayoutTitle->setAlignment(Qt::AlignCenter);
+    QLabel *pLabelRank = createLabel(QString("[%1위]").arg(rank), 12, 100,
+                                     "QLabel { border-radius: 5px;"
+                                     "         padding: 2px;"
+                                     "         background-color: black; "
+                                     "         color: white; }");
+    ui->vLayoutRatio->addWidget(pLabelRank);
 
-    addTitleInfo(mCharacterSetting.itemSet, extractClassEngrave(mCharacterSetting.engrave, mCharacterSetting.engraveLevel));
-    addRatioInfo(count, total);
+    QLabel *pLabelCount = createLabel(QString("%1 캐릭터").arg(count), 11, 100, "");
+    ui->vLayoutRatio->addWidget(pLabelCount);
+
+    double ratio = (count / static_cast<double>(total)) * 100;
+
+    QLabel *pLabelRatio = createLabel(QString("(%1%)").arg(ratio, 0, 'f', 2), 11, 100, "");
+    ui->vLayoutRatio->addWidget(pLabelRatio);
 }
 
-void SettingInfo::initializeInfoLayout()
+void SettingInfo::initializeLayoutInfo(const CharacterSetting &characterSetting)
 {
-    ui->hLayoutInfo->setAlignment(Qt::AlignCenter);
+    QLabel *pLabelItemSet = createLabel(characterSetting.itemSet, 12, 0,
+                                        "QLabel { border-radius: 5px;"
+                                        "         padding: 2px;"
+                                        "         background-color: black; "
+                                        "         color: #D7AC87; }");
+    ui->hLayoutInfo->addWidget(pLabelItemSet);
 
-    addAbilityInfo(mCharacterSetting.ability);
-    addEngraveInfo(mCharacterSetting.engrave, mCharacterSetting.engraveLevel);
-    addElixirInfo(mCharacterSetting.elixir);
+    QLabel *pLabelClassEngrave = createLabel(extractClassEngrave(characterSetting.engrave, characterSetting.engraveLevel),
+                                             12, 0,
+                                             "QLabel { border-radius: 5px;"
+                                             "         padding: 2px;"
+                                             "         background-color: black; "
+                                             "         color: #F99200; }");
+    ui->hLayoutInfo->addWidget(pLabelClassEngrave);
+
+    QLabel *pLabelAbility = createLabel(characterSetting.ability, 12, 0,
+                                        "QLabel { border-radius: 5px;"
+                                        "         padding: 2px;"
+                                        "         background-color: black; "
+                                        "         color: white; }");
+    ui->hLayoutInfo->addWidget(pLabelAbility);
+
+    QLabel *pLabelElixir = createLabel(characterSetting.elixir, 12, 0,
+                                       "QLabel { border-radius: 5px;"
+                                       "         padding: 2px;"
+                                       "         background-color: black; "
+                                       "         color: #00B700; }");
+    ui->hLayoutInfo->addWidget(pLabelElixir);
+}
+
+void SettingInfo::initializeLayoutEngrave(const QString &engrave, const QString &engraveLevel)
+{
+    ui->groupEngrave->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, 10));
+
+    EngraveManager *pEngraveManager = EngraveManager::getInstance();
+
+    QList<QHBoxLayout *> layouts = {ui->hLayoutEngrave3, ui->hLayoutEngrave2, ui->hLayoutEngrave1};
+
+    for (int i = 0; i < engraveLevel.size(); i++)
+    {
+        int engraveCode = engrave.sliced(i * 3, 3).toInt();
+        const QString &engraveName = pEngraveManager->getEngraveByCode(engraveCode);
+
+        QVBoxLayout *pVLayout = new QVBoxLayout();
+        layouts[engraveLevel[i].digitValue() - 1]->addLayout(pVLayout);
+        mLayouts << pVLayout;
+
+        QLabel *pEngraveIcon = WidgetManager::createIcon(pEngraveManager->iconPath(engraveName), nullptr);
+        pVLayout->addWidget(pEngraveIcon);
+        mWidgets << pEngraveIcon;
+
+        QLabel *pLabelLevel = WidgetManager::createLabel(engraveLevel[i], 10, "", 50);
+        pVLayout->addWidget(pLabelLevel);
+        mWidgets << pLabelLevel;
+    }
+}
+
+QLabel *SettingInfo::createLabel(const QString &text, int fontSize, int width, const QString &style)
+{
+    QLabel *pLabel = WidgetManager::createLabel(text, fontSize);
+
+    if (width != 0)
+        pLabel->setFixedWidth(width);
+
+    if (style != "")
+        pLabel->setStyleSheet(style);
+
+    mWidgets << pLabel;
+
+    return pLabel;
 }
 
 QString SettingInfo::extractClassEngrave(const QString &engrave, const QString &engraveLevel)
@@ -70,101 +147,4 @@ QString SettingInfo::extractClassEngrave(const QString &engrave, const QString &
     }
 
     return classEngrave;
-}
-
-void SettingInfo::addTitleInfo(const QString &itemSet, const QString &classEngrave)
-{
-    QString title = QString("%1 %2").arg(itemSet, classEngrave);
-    QLabel *pLabelTitle = WidgetManager::createLabel(title, 14, "", 500);
-
-    pLabelTitle->setStyleSheet("QLabel { border-radius: 5px;"
-                               "         padding: 2px;"
-                               "         background-color: black;"
-                               "         color: white; }");
-    ui->hLayoutTitle->addWidget(pLabelTitle);
-    mWidgets << pLabelTitle;
-}
-
-void SettingInfo::addRatioInfo(int count, int total)
-{
-    QString text = QString("%1캐릭터 (%2%)").arg(count).arg((count / (double)total) * 100, 0, 'f', 2);
-    QLabel *pLabelRatio = WidgetManager::createLabel(text, 14);
-
-    pLabelRatio->setStyleSheet("QLabel { border-radius: 5px;"
-                               "         padding: 2px;"
-                               "         background-color: black;"
-                               "         color: white; }");
-    ui->hLayoutTitle->addWidget(pLabelRatio);
-    mWidgets << pLabelRatio;
-}
-
-void SettingInfo::addAbilityInfo(const QString &ability)
-{
-    QHBoxLayout *pHLayout = createGroupBox("특성");
-    QLabel *pLabelAbility = WidgetManager::createLabel(ability, 12);
-
-    pHLayout->addWidget(pLabelAbility);
-    mWidgets << pLabelAbility;
-}
-
-void SettingInfo::addEngraveInfo(const QString &engrave, const QString &engraveLevel)
-{
-    QHBoxLayout *pEngraveLayout = createGroupBox("각인");
-    QList<QHBoxLayout *> hLayouts(3, nullptr);
-
-    for (int i = 2; i >= 0; i--)
-    {
-        QHBoxLayout *pHLayout = new QHBoxLayout();
-
-        pEngraveLayout->addLayout(pHLayout);
-        hLayouts[i] = pHLayout;
-        mLayouts << pHLayout;
-    }
-
-    EngraveManager *pEngraveManager = EngraveManager::getInstance();
-
-    for (int i = 0; i < engraveLevel.size(); i++)
-    {
-        const QString &engraveName = pEngraveManager->getEngraveByCode(engrave.sliced(i * 3, 3).toInt());
-        int level = engraveLevel[i].digitValue();
-
-        QVBoxLayout *pVLayout = new QVBoxLayout();
-
-        hLayouts[level - 1]->addLayout(pVLayout);
-        mLayouts << pVLayout;
-
-        QLabel *pEngraveIcon = WidgetManager::createIcon(pEngraveManager->iconPath(engraveName), nullptr);
-
-        pVLayout->addWidget(pEngraveIcon);
-        mWidgets << pEngraveIcon;
-
-        QLabel *pLabelLevel = WidgetManager::createLabel(QString::number(level), 10, "", 50);
-
-        pVLayout->addWidget(pLabelLevel);
-        mWidgets << pLabelLevel;
-    }
-}
-
-void SettingInfo::addElixirInfo(const QString &elixir)
-{
-    QHBoxLayout *pHLayout = createGroupBox("엘릭서 세트 효과");
-    QLabel *pLabelElixir = WidgetManager::createLabel(elixir, 12);
-
-    pHLayout->addWidget(pLabelElixir);
-    mWidgets << pLabelElixir;
-}
-
-QHBoxLayout *SettingInfo::createGroupBox(const QString &title)
-{
-    QGroupBox *pGroupBox = WidgetManager::createGroupBox(title, 14);
-
-    ui->hLayoutInfo->addWidget(pGroupBox);
-    //mWidgets << pGroupBox;
-
-    QHBoxLayout *pHLayout = new QHBoxLayout();
-
-    pGroupBox->setLayout(pHLayout);
-    mLayouts << pHLayout;
-
-    return pHLayout;
 }

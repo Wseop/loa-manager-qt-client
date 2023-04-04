@@ -222,6 +222,7 @@ void SettingRanking::renderCharacterSettings()
         const QString &settingId = settingCount.first;
 
         SettingInfo *pSettingInfo = new SettingInfo(mCharacterSettings[settingId].first(),
+                                                    i + 1,
                                                     settingCount.second,
                                                     mNumOfCharacterSettings);
 

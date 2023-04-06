@@ -12,7 +12,7 @@ enum class AccessoryPart
     Necklace = 0, Earring = 1, Ring = 3
 };
 
-class Accessory : public Item, public Engrave
+class Accessory : public Item
 {
 public:
     Accessory();
@@ -26,10 +26,13 @@ public:
     QHash<Ability, int> abilities() const;
     void setAbility(Ability ability, int value);
 
+    Engrave *getEngrave() const;
+
 private:
     AccessoryPart mAccessoryPart;
     int mQuality;
     QHash<Ability, int> mAbilities;
+    Engrave *mpEngrave;
 };
 
 #endif // ACCESSORY_H

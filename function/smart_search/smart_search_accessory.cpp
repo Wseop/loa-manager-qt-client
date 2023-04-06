@@ -325,9 +325,9 @@ void SmartSearchAccessory::parseSearchResult(QNetworkReply *pReply)
             else if (option.type == "ABILITY_ENGRAVE")
             {
                 if (option.bPenalty)
-                    pAccessory->addPenalty(option.optionName, option.value);
+                    pAccessory->getEngrave()->addPenalty(option.optionName, option.value);
                 else
-                    pAccessory->addEngrave(option.optionName, option.value);
+                    pAccessory->getEngrave()->addEngrave(option.optionName, option.value);
             }
         }
 
@@ -349,8 +349,8 @@ void SmartSearchAccessory::addSearchResult()
         // 각인값의 합으로 layout index 설정
         int layoutIndex = 0;
 
-        const QStringList &engraves = pAccessory->getEngraves();
-        int sumOfEngraveValue = pAccessory->getEngraveValue(engraves[0]) + pAccessory->getEngraveValue(engraves[1]);
+        const QStringList &engraves = pAccessory->getEngrave()->getEngraves();
+        int sumOfEngraveValue = pAccessory->getEngrave()->getEngraveValue(engraves[0]) + pAccessory->getEngrave()->getEngraveValue(engraves[1]);
 
         if (pAccessory->itemGrade() == ItemGrade::유물)
             layoutIndex = sumOfEngraveValue - 6;
@@ -462,18 +462,18 @@ QVBoxLayout *SmartSearchAccessory::createEngraveLayout(const Accessory *pAccesso
     QVBoxLayout *pEngraveLayout = new QVBoxLayout();
     mItemLayouts.append(pEngraveLayout);
 
-    const QStringList &engraves = pAccessory->getEngraves();
+    const QStringList &engraves = pAccessory->getEngrave()->getEngraves();
     for (const QString& engrave : engraves)
     {
-        QLabel *pLabelEngrave = WidgetManager::createLabel(QString("%1 +%2").arg(engrave).arg(pAccessory->getEngraveValue(engrave)));
+        QLabel *pLabelEngrave = WidgetManager::createLabel(QString("%1 +%2").arg(engrave).arg(pAccessory->getEngrave()->getEngraveValue(engrave)));
         pEngraveLayout->addWidget(pLabelEngrave);
         mItemWidgets.append(pLabelEngrave);
     }
 
-    const QStringList &penalties = pAccessory->getPenalties();
+    const QStringList &penalties = pAccessory->getEngrave()->getPenalties();
     for (const QString& penalty : penalties)
     {
-        QLabel *pLabelEngrave = WidgetManager::createLabel(QString("%1 +%2").arg(penalty).arg(pAccessory->getPenaltyValue(penalty)), 10, "red");
+        QLabel *pLabelEngrave = WidgetManager::createLabel(QString("%1 +%2").arg(penalty).arg(pAccessory->getEngrave()->getPenaltyValue(penalty)), 10, "red");
         pEngraveLayout->addWidget(pLabelEngrave);
         mItemWidgets.append(pLabelEngrave);
     }

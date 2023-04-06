@@ -65,7 +65,7 @@ void AccessoryInfo::initializeLayout2(const Accessory *pAccessory)
 {
     addItemGradeInfo(pAccessory->itemGrade());
     addAbilityInfo(pAccessory->abilities());
-    addEngraveInfo(pAccessory->getEngraves(), pAccessory->getPenalties(), pAccessory);
+    addEngraveInfo(pAccessory->getEngrave()->getEngraves(), pAccessory->getEngrave()->getPenalties(), pAccessory);
 }
 
 void AccessoryInfo::addItemGradeInfo(ItemGrade itemGrade)
@@ -109,9 +109,9 @@ void AccessoryInfo::addEngraveInfo(const QStringList &engraves, const QStringLis
             QString text = "%1 +%2";
 
             if (i == 0)
-                text = text.arg(engrave).arg(pAccessory->getEngraveValue(engrave));
+                text = text.arg(engrave).arg(pAccessory->getEngrave()->getEngraveValue(engrave));
             else if (i == 1)
-                text = text.arg(engrave).arg(pAccessory->getPenaltyValue(engrave));
+                text = text.arg(engrave).arg(pAccessory->getEngrave()->getPenaltyValue(engrave));
 
             QLabel *pLabelEngrave = WidgetManager::createLabel(text, 10, textColor[i], 100);
             pHLayout->addWidget(pLabelEngrave);

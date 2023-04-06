@@ -652,16 +652,16 @@ void ResponseParser::parseIndentStringGroup(const QJsonObject &indentStringGroup
             if (ItemType::Accessory == pItem->itemType())
             {
                 if (engraveName.contains("감소"))
-                    static_cast<Accessory*>(pItem)->addPenalty(engraveName, engraveValue);
+                    static_cast<Accessory*>(pItem)->getEngrave()->addPenalty(engraveName, engraveValue);
                 else
-                    static_cast<Accessory*>(pItem)->addEngrave(engraveName, engraveValue);
+                    static_cast<Accessory*>(pItem)->getEngrave()->addEngrave(engraveName, engraveValue);
             }
             else if (ItemType::AbilityStone == pItem->itemType())
             {
                 if (engraveName.contains("감소"))
-                    static_cast<AbilityStone*>(pItem)->addPenalty(engraveName, engraveValue);
+                    static_cast<AbilityStone*>(pItem)->getEngrave()->addPenalty(engraveName, engraveValue);
                 else
-                    static_cast<AbilityStone*>(pItem)->addEngrave(engraveName, engraveValue);
+                    static_cast<AbilityStone*>(pItem)->getEngrave()->addEngrave(engraveName, engraveValue);
             }
         }
     }

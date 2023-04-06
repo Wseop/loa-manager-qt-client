@@ -1,7 +1,8 @@
 #include "accessory.h"
 
 Accessory::Accessory() :
-    Item(ItemType::Accessory)
+    Item(ItemType::Accessory),
+    mpEngrave(new Engrave)
 {
 
 }
@@ -34,4 +35,9 @@ QHash<Ability, int> Accessory::abilities() const
 void Accessory::setAbility(Ability ability, int value)
 {
     mAbilities[ability] = value;
+}
+
+Engrave *Accessory::getEngrave() const
+{
+    return mpEngrave;
 }

@@ -55,7 +55,7 @@ void AbilityStoneInfo::addAbilityStoneIcon(const QString &iconPath, ItemGrade it
 void AbilityStoneInfo::initializeLayout2(const AbilityStone *pAbilityStone)
 {
     addItemNameInfo(pAbilityStone->itemName(), pAbilityStone->itemGrade());
-    addEngraveInfo(pAbilityStone->getEngraves(), pAbilityStone->getPenalties(), pAbilityStone);
+    addEngraveInfo(pAbilityStone->getEngrave()->getEngraves(), pAbilityStone->getEngrave()->getPenalties(), pAbilityStone);
 }
 
 void AbilityStoneInfo::addItemNameInfo(const QString &itemName, ItemGrade itemGrade)
@@ -81,9 +81,9 @@ void AbilityStoneInfo::addEngraveInfo(const QStringList &engraves, const QString
             QString text = "%1 +%2";
 
             if (i == 0)
-                text = text.arg(engrave).arg(pAbilityStone->getEngraveValue(engrave));
+                text = text.arg(engrave).arg(pAbilityStone->getEngrave()->getEngraveValue(engrave));
             else if (i == 1)
-                text = text.arg(engrave).arg(pAbilityStone->getPenaltyValue(engrave));
+                text = text.arg(engrave).arg(pAbilityStone->getEngrave()->getPenaltyValue(engrave));
 
             QLabel *pLabelEngrave = WidgetManager::createLabel(text, 10, textColor[i], 100);
             pHLayout->addWidget(pLabelEngrave);

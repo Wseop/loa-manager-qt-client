@@ -84,7 +84,7 @@ void SmartSearchAbilityStone::refresh()
         ui->gridResult->addWidget(pLabelName, row, 1);
         mResultWidgets.append(pLabelName);
 
-        const QStringList &engraves = abilityStone.getEngraves();
+        const QStringList &engraves = abilityStone.getEngrave()->getEngraves();
         for (int i = 0; i < engraves.size(); i++)
         {
             QLabel *pLabelEngrave = WidgetManager::createLabel(engraves[i]);
@@ -92,7 +92,7 @@ void SmartSearchAbilityStone::refresh()
             mResultWidgets.append(pLabelEngrave);
         }
 
-        QLabel *pLabelPenalty = WidgetManager::createLabel(abilityStone.getPenalties().at(0), 10, "red");
+        QLabel *pLabelPenalty = WidgetManager::createLabel(abilityStone.getEngrave()->getPenalties().at(0), 10, "red");
         ui->gridResult->addWidget(pLabelPenalty, row, 4);
         mResultWidgets.append(pLabelPenalty);
 
@@ -243,9 +243,9 @@ void SmartSearchAbilityStone::parseSearchResult(QNetworkReply *pReply)
         const QString &engrave = option.optionName;
 
         if (option.bPenalty)
-            abilityStone.addPenalty(engrave, 0);
+            abilityStone.getEngrave()->addPenalty(engrave, 0);
         else
-            abilityStone.addEngrave(engrave, 0);
+            abilityStone.getEngrave()->addEngrave(engrave, 0);
     }
 
     // 검색 결과 추가

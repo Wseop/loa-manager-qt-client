@@ -7,7 +7,7 @@ Lostark OpenAPI를 활용한 편의기능 제공 앱
 ## 기능
 ### 캐릭터 탭
 - **[캐릭터 검색](https://github.com/Wseop/QT_LoaManager/tree/main/function/character_search)** - 캐릭터의 전반적인 정보를 한눈에 확인할 수 있도록 캐릭터 정보를 재가공하여 제공
-- **[직업별 세팅 통계](https://github.com/Wseop/QT_LoaManager/tree/main/function/setting_ranking)** - 직업별로 어떤 세팅을 채용하는지에 대한 정보를 채용률이 높은 순으로 제공
+- **[직업별 세팅 통계](https://github.com/Wseop/QT_LoaManager/tree/main/function/setting_ranking)** - 직업별로 많이 사용하는 세팅 정보를 사용률이 높은 순으로 제공
 ### 시세 탭
 - **[거래소/경매장 검색](https://github.com/Wseop/QT_LoaManager/tree/main/function/smart_search)** - 옵션 선택을 최소화할 수 있도록 카테고리 별로 거래소/경매장 검색 기능 제공
   - **각인서** : 전체 '전설' 각인서의 가격 정보 제공

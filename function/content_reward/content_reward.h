@@ -82,6 +82,8 @@ private:
     // reward adder
     class ContentRewardAdder *mpRewardAdder;
 
+    class QLabel *mpLabelInfo;
+
     QList<QWidget*> mWidgets;
     QList<QLayout*> mLayouts;
 };

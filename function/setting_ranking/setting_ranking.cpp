@@ -23,6 +23,7 @@ SettingRanking::SettingRanking() :
     ui(new Ui::SettingRanking),
     mNumOfCharacterSettings(0),
     mpClassSelector(nullptr),
+    mpSearchButton(nullptr),
     mpInfo(nullptr)
 {
     ui->setupUi(this);
@@ -34,6 +35,9 @@ SettingRanking::~SettingRanking()
 {
     delete mpClassSelector;
     mpClassSelector = nullptr;
+
+    delete mpSearchButton;
+    mpSearchButton = nullptr;
 
     delete mpInfo;
     mpInfo = nullptr;
@@ -87,10 +91,13 @@ void SettingRanking::initializeClassSelector()
 
 void SettingRanking::initializeSearchButton()
 {
-    QPushButton *pSearchButton = WidgetManager::createPushButton("검색");
+    mpSearchButton = WidgetManager::createPushButton("검색");
 
-    connect(pSearchButton, &QPushButton::released, this, [&]()
+    connect(mpSearchButton, &QPushButton::released, this, [&]()
     {
+        mpSearchButton->setDisabled(true);
+        mpInfo->setText("데이터 불러오는 중...");
+
         QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
 
         connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&](QNetworkReply *pReply)
@@ -105,9 +112,9 @@ void SettingRanking::initializeSearchButton()
                                        mpClassSelector->currentText());
     });
 
-    ui->hLayoutInput->addWidget(pSearchButton);
-    ui->hLayoutInput->setAlignment(pSearchButton, Qt::AlignCenter);
-    mWidgets << pSearchButton;
+    ui->hLayoutInput->addWidget(mpSearchButton);
+    ui->hLayoutInput->setAlignment(mpSearchButton, Qt::AlignCenter);
+    mWidgets << mpSearchButton;
 }
 
 void SettingRanking::initializeInfo()
@@ -132,11 +139,11 @@ void SettingRanking::mappingCharacterSettings(QList<CharacterSetting> characterS
         delete pWidget;
     mOutput.clear();
 
-    mpInfo->setText("데이터 처리 중...");
-
     // mapping
-    for (CharacterSetting &characterSetting : characterSettings)
+    for (int i = 0; i < characterSettings.size(); i++)
     {
+        CharacterSetting &characterSetting = characterSettings[i];
+
         if (characterSetting.elixir == "" ||
             characterSetting.itemSet.contains("배신") ||
             characterSetting.engraveLevel.size() < 5 ||
@@ -229,6 +236,8 @@ void SettingRanking::renderCharacterSettings()
         ui->vLayoutOutput->addWidget(pSettingInfo);
         mOutput << pSettingInfo;
     }
+
+    mpSearchButton->setEnabled(true);
 }
 
 void SettingRanking::start()

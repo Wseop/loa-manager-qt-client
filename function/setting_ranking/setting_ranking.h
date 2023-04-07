@@ -7,6 +7,7 @@
 #include <QWidget>
 
 class QComboBox;
+class QPushButton;
 class QLabel;
 
 namespace Ui {
@@ -46,6 +47,7 @@ private:
     int mNumOfCharacterSettings;
 
     QComboBox *mpClassSelector;
+    QPushButton *mpSearchButton;
     QLabel *mpInfo;
     QList<QWidget*> mOutput;
 

@@ -33,7 +33,8 @@ ContentReward::ContentReward() :
     mResponseCount(0),
     mpContentSelector(nullptr),
     mpSelectedTable(nullptr),
-    mpRewardAdder(nullptr)
+    mpRewardAdder(nullptr),
+    mpLabelInfo(nullptr)
 {
     ui->setupUi(this);
     ui->hLayoutSelector->setAlignment(Qt::AlignHCenter);
@@ -202,6 +203,11 @@ void ContentReward::initializeTradableSelector()
 
 void ContentReward::initializeRewardTable()
 {
+    // 로딩 메세지
+    mpLabelInfo = WidgetManager::createLabel("데이터 불러오는 중...", 16);
+    ui->vLayoutMain->addWidget(mpLabelInfo);
+    ui->vLayoutMain->setAlignment(mpLabelInfo, Qt::AlignCenter);
+
     for (const QString &content : mContents)
     {
         ContentRewardTable *pContentRewardTable = new ContentRewardTable(content, mContentLevels[content], mDropTable);
@@ -339,6 +345,10 @@ void ContentReward::refreshTradablePrice()
                     pRewardTable->refreshTradablePrice(mTradablePrice, mTradableSelector);
                 }
             }
+
+            // 로딩 메세지 제거
+            delete mpLabelInfo;
+            mpLabelInfo = nullptr;
         });
         connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 

@@ -44,35 +44,35 @@
     ],
     "LoaManager": [
         {
-            "RequestURL": "https://localhost:44306/admin/%1",
+            "RequestURL": "https://loamanagerapi.azurewebsites.net/admin/%1",
             "Type": "GET"
         },
         {
-            "RequestURL": "https://localhost:44306/apikey",
+            "RequestURL": "https://loamanagerapi.azurewebsites.net/apikey",
             "Type": "GET"
         },
         {
-            "RequestURL": "https://localhost:44306/rewardchaos/level/%1",
+            "RequestURL": "https://loamanagerapi.azurewebsites.net/rewardchaos/level/%1",
             "Type": "GET"
         },
         {
-            "RequestURL": "https://localhost:44306/rewardchaos",
+            "RequestURL": "https://loamanagerapi.azurewebsites.net/rewardchaos",
             "Type": "POST"
         },
         {
-            "RequestURL": "https://localhost:44306/rewardguardian/level/%1",
+            "RequestURL": "https://loamanagerapi.azurewebsites.net/rewardguardian/level/%1",
             "Type": "GET"
         },
         {
-            "RequestURL": "https://localhost:44306/rewardguardian",
+            "RequestURL": "https://loamanagerapi.azurewebsites.net/rewardguardian",
             "Type": "POST"
         },
         {
-            "RequestURL": "https://localhost:44306/charactersetting/class/%1",
+            "RequestURL": "https://loamanagerapi.azurewebsites.net/charactersetting/class/%1",
             "Type": "GET"
         },
         {
-            "RequestURL": "https://localhost:44306/charactersetting",
+            "RequestURL": "https://loamanagerapi.azurewebsites.net/charactersetting",
             "Type": "POST"
         }
     ]

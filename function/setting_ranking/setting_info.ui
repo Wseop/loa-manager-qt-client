@@ -33,6 +33,13 @@
       <layout class="QHBoxLayout" name="hLayoutEngrave">
        <item>
         <widget class="QGroupBox" name="groupEngrave">
+         <property name="font">
+          <font>
+           <family>나눔스퀘어_ac Bold</family>
+           <pointsize>10</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="title">
           <string>각인</string>
          </property>

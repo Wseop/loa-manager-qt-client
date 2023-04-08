@@ -25,7 +25,6 @@ private:
     void initializeLayoutEngrave(const QString &engrave, const QString &engraveLevel);
 
     QLabel *createLabel(const QString &text, int fontSize, int width, const QString &style);
-    QString extractClassEngrave(const QString &engrave, const QString &engraveLevel);
 
 private:
     Ui::SettingInfo *ui;

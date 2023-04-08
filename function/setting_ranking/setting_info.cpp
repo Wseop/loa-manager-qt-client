@@ -58,14 +58,6 @@ void SettingInfo::initializeLayoutInfo(const CharacterSetting &characterSetting)
                                         "         color: #D7AC87; }");
     ui->hLayoutInfo->addWidget(pLabelItemSet);
 
-    QLabel *pLabelClassEngrave = createLabel(extractClassEngrave(characterSetting.engrave, characterSetting.engraveLevel),
-                                             12, 0,
-                                             "QLabel { border-radius: 5px;"
-                                             "         padding: 2px;"
-                                             "         background-color: black; "
-                                             "         color: #F99200; }");
-    ui->hLayoutInfo->addWidget(pLabelClassEngrave);
-
     QLabel *pLabelAbility = createLabel(characterSetting.ability, 12, 0,
                                         "QLabel { border-radius: 5px;"
                                         "         padding: 2px;"
@@ -83,11 +75,10 @@ void SettingInfo::initializeLayoutInfo(const CharacterSetting &characterSetting)
 
 void SettingInfo::initializeLayoutEngrave(const QString &engrave, const QString &engraveLevel)
 {
-    ui->groupEngrave->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, 10));
-
     EngraveManager *pEngraveManager = EngraveManager::getInstance();
-
     QList<QHBoxLayout *> layouts = {ui->hLayoutEngrave3, ui->hLayoutEngrave2, ui->hLayoutEngrave1};
+
+    QStringList engraveSummaries(3);
 
     for (int i = 0; i < engraveLevel.size(); i++)
     {
@@ -105,7 +96,19 @@ void SettingInfo::initializeLayoutEngrave(const QString &engrave, const QString 
         QLabel *pLabelLevel = WidgetManager::createLabel(engraveLevel[i], 10, "", 50);
         pVLayout->addWidget(pLabelLevel);
         mWidgets << pLabelLevel;
+
+        engraveSummaries[engraveLevel[i].digitValue() - 1] += engraveName.front();
     }
+
+    QString engraveSummary;
+
+    for (int i = engraveSummaries.size() - 1; i >= 0; i--)
+    {
+        engraveSummary += engraveSummaries[i];
+    }
+
+    ui->groupEngrave->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, 12));
+    ui->groupEngrave->setTitle(QString("각인 (%1)").arg(engraveSummary));
 }
 
 QLabel *SettingInfo::createLabel(const QString &text, int fontSize, int width, const QString &style)
@@ -121,30 +124,4 @@ QLabel *SettingInfo::createLabel(const QString &text, int fontSize, int width, c
     mWidgets << pLabel;
 
     return pLabel;
-}
-
-QString SettingInfo::extractClassEngrave(const QString &engrave, const QString &engraveLevel)
-{
-    EngraveManager *pEngraveManager = EngraveManager::getInstance();
-    QString classEngrave = "";
-
-    for (int i = 0; i < engraveLevel.size(); i++)
-    {
-        int engraveCode = engrave.sliced(i * 3, 3).toInt();
-        const QString &engraveName = pEngraveManager->getEngraveByCode(engraveCode);
-
-        if (pEngraveManager->isClassEngrave(engraveName))
-        {
-            if (classEngrave == "")
-            {
-                classEngrave = engraveName;
-            }
-            else
-            {
-                classEngrave += "|" + engraveName;
-            }
-        }
-    }
-
-    return classEngrave;
 }

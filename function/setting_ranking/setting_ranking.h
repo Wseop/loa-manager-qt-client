@@ -25,12 +25,16 @@ private:
     void initializeInputLayout();
     void initializeClassSelector();
     void initializeSearchButton();
-    void initializeInfo();
+    void initializeHelp();
 
-    void mappingCharacterSettings(QList<CharacterSetting> characterSettings);
+    void initializeOutputLayout();
+
+    QList<CharacterSetting> filterCharacterSettings(const QList<CharacterSetting> &characterSettings);
     void sortEngraveSetting(QString &engrave, QString &engraveLevel);
+    QList<QList<CharacterSetting>> classifyByClassEngrave(const QList<CharacterSetting> &characterSettings);
+    void classifyBySetting(const QList<QList<CharacterSetting>> &characterSettings);
 
-    void renderCharacterSettings();
+    void showCharacterSettings();
 
 public:
     void start() override;
@@ -42,15 +46,16 @@ public:
 private:
     Ui::SettingRanking *ui;
 
-    QHash<QString, QList<CharacterSetting>> mCharacterSettings;
-    QList<QPair<QString, int>> mSettingCounts;
-    int mNumOfCharacterSettings;
+    QList<int> mClassEngraveCodes;
+    int mTotalDataCount;
+    QList<int> mDataCounts;
+    QList<QHash<QString, QList<CharacterSetting>>> mCharacterSettings;  // [직업각인][세팅ID] = 세팅 목록
+    QList<QList<QPair<QString, int>>> mSettingCounts;  // 세팅ID에 해당하는 세팅 목록의 size
 
     QComboBox *mpClassSelector;
     QPushButton *mpSearchButton;
-    QLabel *mpInfo;
-    QList<QWidget*> mOutput;
 
+    QList<QWidget*> mOutputs;
     QList<QWidget*> mWidgets;
     QList<QLayout*> mLayouts;
 

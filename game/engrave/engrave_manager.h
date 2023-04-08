@@ -19,7 +19,8 @@ public:
 public:
     QStringList getEngraves() const;
     QStringList getBattleEngraves() const;
-    QStringList getClassEngraves() const;
+    QStringList getClassEngraves(const QString &characterClass) const;
+    QStringList getAllClassEngraves() const;
     QStringList getPenalties() const;
 
     const QString iconPath(const QString &engrave) const;
@@ -38,7 +39,7 @@ private:
     QHash<int, QString> mCodeToEngrave;
 
     QStringList mBattleEngraves;
-    QStringList mClassEngraves;
+    QHash<QString, QStringList> mClassEngraves;
     QStringList mPenalties;
 };
 

@@ -41,7 +41,7 @@ void EngraveManager::initalizeEngraveList()
         else if (cls.isEmpty())
             mBattleEngraves << text;
         else
-            mClassEngraves << text;
+            mClassEngraves[cls] << text;
     }
 }
 
@@ -72,9 +72,24 @@ QStringList EngraveManager::getBattleEngraves() const
     return mBattleEngraves;
 }
 
-QStringList EngraveManager::getClassEngraves() const
+QStringList EngraveManager::getClassEngraves(const QString &characterClass) const
 {
-    return mClassEngraves;
+    if (!mClassEngraves.contains(characterClass))
+        return QStringList(0);
+
+    return mClassEngraves[characterClass];
+}
+
+QStringList EngraveManager::getAllClassEngraves() const
+{
+    QStringList classEngraves;
+
+    for (auto iter = mClassEngraves.begin(); iter != mClassEngraves.end(); iter++)
+    {
+        classEngraves << iter.value();
+    }
+
+    return classEngraves;
 }
 
 QStringList EngraveManager::getPenalties() const
@@ -90,7 +105,13 @@ const QString EngraveManager::iconPath(const QString &engrave) const
 
 bool EngraveManager::isClassEngrave(const QString &engrave)
 {
-    return mClassEngraves.contains(engrave);
+    for (auto iter = mClassEngraves.begin(); iter != mClassEngraves.end(); iter++)
+    {
+        if (iter.value().contains(engrave))
+            return true;
+    }
+
+    return false;
 }
 
 bool EngraveManager::isPenalty(const QString &engrave)

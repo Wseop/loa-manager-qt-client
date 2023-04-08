@@ -102,7 +102,7 @@ void SmartSearchAccessory::initializeOption()
     // 전투, 직업 각인
     QStringList engraves = {"선택 안함"};
     QStringList battleEngraves = EngraveManager::getInstance()->getBattleEngraves();
-    QStringList classEngraves = EngraveManager::getInstance()->getClassEngraves();
+    QStringList classEngraves = EngraveManager::getInstance()->getAllClassEngraves();
     std::sort(battleEngraves.begin(), battleEngraves.end());
     std::sort(classEngraves.begin(), classEngraves.end());
     engraves << battleEngraves << classEngraves;

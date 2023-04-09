@@ -10,13 +10,17 @@
 #include "function/content_reward/content_reward.h"
 #include "function/raid_profit/raid_profit.h"
 #include "resource/resource_manager.h"
+#include "api/api_manager.h"
 
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
+#include <QLabel>
 #include <QPushButton>
 #include <QGroupBox>
 #include <QHBoxLayout>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
 
 bool gbAdmin = false;
 
@@ -24,15 +28,17 @@ LoaManager::LoaManager() :
     ui(new Ui::LoaManager),
     mMainSetting(ResourceManager::getInstance()->loadJson("main")),
     mpAdminLogin(new AdminLogin()),
-    mpAdminButton(nullptr)
+    mpAdminButton(nullptr),
+    mpLabelVersionInfo(nullptr)
 {
     ui->setupUi(this);
     ui->hLayoutMenu->setAlignment(Qt::AlignLeft);
     ui->vLayoutContents->setAlignment(Qt::AlignTop);
 
-    initFunction();
-    initMenuButton();
-    initAdminButton();
+    initializeFunction();
+    initializeMenuButton();
+    initializeVersionInfo();
+    initializeAdminButton();
 
     this->setWindowIcon(QIcon(":/Home.ico"));
     this->setWindowTitle(mMainSetting.find("Version")->toString());
@@ -43,6 +49,8 @@ LoaManager::~LoaManager()
 {
     delete mpAdminLogin;
     delete mpAdminButton;
+
+    delete mpLabelVersionInfo;
 
     for (QPushButton* pButton : mMenuButtons)
         delete pButton;
@@ -55,7 +63,7 @@ LoaManager::~LoaManager()
     delete ui;
 }
 
-void LoaManager::initFunction()
+void LoaManager::initializeFunction()
 {
     // main.json의 메뉴 list 순서에 맞게 등록
     mFunctions << CharacterSearch::getInstance();
@@ -72,7 +80,7 @@ void LoaManager::initFunction()
     }
 }
 
-void LoaManager::initMenuButton()
+void LoaManager::initializeMenuButton()
 {
     int menuIndex = 0;
     const QJsonArray &menus = mMainSetting.find("Menu")->toArray();
@@ -117,7 +125,7 @@ void LoaManager::initMenuButton()
     }
 }
 
-void LoaManager::initAdminButton()
+void LoaManager::initializeAdminButton()
 {
     mpAdminButton = WidgetManager::createPushButton("관리자 로그인");
     ui->hLayoutAdmin->addWidget(mpAdminButton);
@@ -125,5 +133,40 @@ void LoaManager::initAdminButton()
     connect(mpAdminButton, &QPushButton::released, this, [&](){
         mpAdminLogin->show();
     });
+}
+
+void LoaManager::initializeVersionInfo()
+{
+    const QString &versionInfo = mMainSetting.find("Version")->toString();
+
+    mpLabelVersionInfo = WidgetManager::createLabel("", 10, "", 500, 50);
+    ui->hLayoutAdmin->addWidget(mpLabelVersionInfo);
+
+    QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
+
+    connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, versionInfo](QNetworkReply *pReply)
+    {
+        QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
+
+        if (response.isNull())
+        {
+            mpLabelVersionInfo->setText("Failed to load version info.");
+            return;
+        }
+
+        if (versionInfo == response.object().find("key")->toString())
+        {
+            mpLabelVersionInfo->setText("최신 버전입니다.");
+            mpLabelVersionInfo->setStyleSheet("QLabel { color: blue }");
+        }
+        else
+        {
+            mpLabelVersionInfo->setText("업데이트가 필요합니다.\n(https://github.com/Wseop/QT_LoaManager/releases)");
+            mpLabelVersionInfo->setStyleSheet("QLabel { color: red }");
+        }
+    });
+    connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
+
+    ApiManager::getInstance()->get(pNetworkManager, ApiType::LoaManager, static_cast<int>(LoamanagerApi::Admin), "1");
 }
 

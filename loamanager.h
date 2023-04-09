@@ -18,9 +18,10 @@ public:
     ~LoaManager();
 
 private:
-    void initFunction();
-    void initMenuButton();
-    void initAdminButton();
+    void initializeFunction();
+    void initializeMenuButton();
+    void initializeAdminButton();
+    void initializeVersionInfo();
 
 private:
     Ui::LoaManager *ui;
@@ -29,9 +30,14 @@ private:
 
     // function
     QList<QWidget*> mFunctions;
+
     // admin button
     class AdminLogin* mpAdminLogin;
     QPushButton *mpAdminButton;
+
+    // version
+    class QLabel *mpLabelVersionInfo;
+
     QList<QPushButton*> mMenuButtons;
 
     QList<QWidget*> mWidgets;

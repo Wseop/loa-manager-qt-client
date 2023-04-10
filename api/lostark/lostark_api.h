@@ -3,14 +3,8 @@
 
 enum class LostarkApi
 {
+    Character,
     Sibling,
-    Profile,
-    Equipment,
-    Skill,
-    Engrave,
-    Card,
-    Gem,
-    Collectible,
     Auction,
     Market,
     Size

@@ -296,7 +296,7 @@ void ContentReward::refreshRewardData()
 
             LoamanagerApi api = content == "카오스 던전" ? LoamanagerApi::GetRewardChaos : LoamanagerApi::GetRewardGuardian;
 
-            ApiManager::getInstance()->get(pNetworkManager, ApiType::LoaManager, static_cast<int>(api), contentLevel);
+            ApiManager::getInstance()->get(pNetworkManager, ApiType::LoaManager, static_cast<int>(api), contentLevel, "");
         }
     }
 }

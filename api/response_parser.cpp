@@ -7,13 +7,13 @@
 
 #include <algorithm>
 
-void ResponseParser::parseSibling(QJsonDocument response, Character *pCharacter)
+void ResponseParser::parseSibling(QVariant response, Character *pCharacter)
 {
     // TODO. 무한 대기 개선 필요
     // Profile이 업데이트 될 때까지 대기
     while (pCharacter->getProfile() == nullptr);
 
-    const QJsonArray &siblings = response.array();
+    const QJsonArray &siblings = response.toJsonArray();
     QList<Profile *> newSiblings;
 
     for (int i = 0; i < siblings.size(); i++)
@@ -43,9 +43,9 @@ void ResponseParser::parseSibling(QJsonDocument response, Character *pCharacter)
     pCharacter->setSiblings(newSiblings);
 }
 
-void ResponseParser::parseProfile(QJsonDocument response, Character *pCharacter)
+void ResponseParser::parseProfile(QVariant response, Character *pCharacter)
 {
-    const QJsonObject &profile = response.object();
+    const QJsonObject &profile = response.toJsonObject();
 
     Profile *pProfile = new Profile();
     pProfile->setExpeditionLevel(profile.find("ExpeditionLevel")->toInt());
@@ -78,9 +78,9 @@ void ResponseParser::parseProfile(QJsonDocument response, Character *pCharacter)
     pCharacter->setProfile(pProfile);
 }
 
-void ResponseParser::parseEquipment(QJsonDocument response, Character *pCharacter)
+void ResponseParser::parseEquipment(QVariant response, Character *pCharacter)
 {
-    const QJsonArray &equipments = response.array();
+    const QJsonArray &equipments = response.toJsonArray();
     const QStringList armorTypes = {"투구", "상의", "하의", "장갑", "어깨"};
     int earringCount = 0;
     int ringCount = 0;
@@ -107,7 +107,7 @@ void ResponseParser::parseEquipment(QJsonDocument response, Character *pCharacte
     }
 }
 
-void ResponseParser::parseSkill(QJsonDocument response, Character *pCharacter)
+void ResponseParser::parseSkill(QVariant response, Character *pCharacter)
 {
     // TODO. 무한 대기 개선 필요
     // Profile이 업데이트 될 때까지 대기
@@ -117,7 +117,7 @@ void ResponseParser::parseSkill(QJsonDocument response, Character *pCharacter)
     const QString &characterClass = pCharacter->getProfile()->getCharacterClass();
     QHash<QString, Skill> characterSkills = SkillManager::getInstance()->skills(characterClass);
 
-    const QJsonArray &skills = response.array();
+    const QJsonArray &skills = response.toJsonArray();
 
     for (int i = 0; i < skills.size(); i++)
     {
@@ -159,9 +159,9 @@ void ResponseParser::parseSkill(QJsonDocument response, Character *pCharacter)
     }
 }
 
-void ResponseParser::parseEngrave(QJsonDocument response, Character *pCharacter)
+void ResponseParser::parseEngrave(QVariant response, Character *pCharacter)
 {
-    const QJsonArray &engraves = response.object().find("Effects")->toArray();
+    const QJsonArray &engraves = response.toJsonObject().find("Effects")->toArray();
     Engrave *pEngrave = new Engrave();
 
     for (int i = 0; i < engraves.size(); i++)
@@ -182,9 +182,9 @@ void ResponseParser::parseEngrave(QJsonDocument response, Character *pCharacter)
     pCharacter->setEngrave(pEngrave);
 }
 
-void ResponseParser::parseCard(QJsonDocument response, Character *pCharacter)
+void ResponseParser::parseCard(QVariant response, Character *pCharacter)
 {
-    const QJsonArray &cardEffects = response.object().find("Effects")->toArray();
+    const QJsonArray &cardEffects = response.toJsonObject().find("Effects")->toArray();
     Card *pCard = new Card();
 
     for (int i = 0; i < cardEffects.size(); i++)
@@ -199,9 +199,9 @@ void ResponseParser::parseCard(QJsonDocument response, Character *pCharacter)
     pCharacter->setCard(pCard);
 }
 
-void ResponseParser::parseGem(QJsonDocument response, Character *pCharacter)
+void ResponseParser::parseGem(QVariant response, Character *pCharacter)
 {
-    const QJsonObject &gemObject = response.object();
+    const QJsonObject &gemObject = response.toJsonObject();
     const QJsonArray &gems = gemObject.find("Gems")->toArray();
     const QJsonArray &effects = gemObject.find("Effects")->toArray();
 

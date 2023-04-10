@@ -2,35 +2,11 @@
     "List": ["Lostark", "LoaManager"],
     "Lostark": [
         {
+            "RequestURL": "https://developer-lostark.game.onstove.com/armories/characters/%1",
+            "Type": "GET"
+        },
+        {
             "RequestURL": "https://developer-lostark.game.onstove.com/characters/%1/siblings",
-            "Type": "GET"
-        },
-        {
-            "RequestURL": "https://developer-lostark.game.onstove.com/armories/characters/%1/profiles",
-            "Type": "GET"
-        },
-        {
-            "RequestURL": "https://developer-lostark.game.onstove.com/armories/characters/%1/equipment",
-            "Type": "GET"
-        },
-        {
-            "RequestURL": "https://developer-lostark.game.onstove.com/armories/characters/%1/combat-skills",
-            "Type": "GET"
-        },
-        {
-            "RequestURL": "https://developer-lostark.game.onstove.com/armories/characters/%1/engravings",
-            "Type": "GET"
-        },
-        {
-            "RequestURL": "https://developer-lostark.game.onstove.com/armories/characters/%1/cards",
-            "Type": "GET"
-        },
-        {
-            "RequestURL": "https://developer-lostark.game.onstove.com/armories/characters/%1/gems",
-            "Type": "GET"
-        },
-        {
-            "RequestURL": "https://developer-lostark.game.onstove.com/armories/characters/%1/collectibles",
             "Type": "GET"
         },
         {

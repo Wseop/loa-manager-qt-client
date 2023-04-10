@@ -28,7 +28,7 @@ public:
     static ApiManager *getInstance();
     static void destroyInstance();
 
-    void get(QNetworkAccessManager *pNetworkManager, ApiType apiType, int urlIndex, QString param);
+    void get(QNetworkAccessManager *pNetworkManager, ApiType apiType, int urlIndex, const QString &param, const QString &query);
     void post(QNetworkAccessManager *pNetworkManager, ApiType apiType, int urlIndex, QByteArray data);
 
 private:

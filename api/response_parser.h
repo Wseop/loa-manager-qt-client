@@ -12,13 +12,13 @@ class ResponseParser
 {
 public:
     // LostarkApi
-    static void parseSibling(QJsonDocument response, Character *pCharacter);
-    static void parseProfile(QJsonDocument response, Character *pCharacter);
-    static void parseEquipment(QJsonDocument response, Character *pCharacter);
-    static void parseSkill(QJsonDocument response, Character *pCharacter);
-    static void parseEngrave(QJsonDocument response, Character *pCharacter);
-    static void parseCard(QJsonDocument response, Character *pCharacter);
-    static void parseGem(QJsonDocument response, Character *pCharacter);
+    static void parseSibling(QVariant response, Character *pCharacter);
+    static void parseProfile(QVariant response, Character *pCharacter);
+    static void parseEquipment(QVariant response, Character *pCharacter);
+    static void parseSkill(QVariant response, Character *pCharacter);
+    static void parseEngrave(QVariant response, Character *pCharacter);
+    static void parseCard(QVariant response, Character *pCharacter);
+    static void parseGem(QVariant response, Character *pCharacter);
 
     static ResponseAuction parseAuctionItem(QJsonDocument response);
     static ResponseMarket parseMarketItem(QJsonDocument response);

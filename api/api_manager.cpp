@@ -57,7 +57,7 @@ void ApiManager::initializeApiKey()
     });
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    get(pNetworkManager, ApiType::LoaManager, static_cast<int>(LoamanagerApi::ApiKey), "");
+    get(pNetworkManager, ApiType::LoaManager, static_cast<int>(LoamanagerApi::ApiKey), "", "");
 }
 
 const QString &ApiManager::getApiKey()
@@ -85,12 +85,15 @@ void ApiManager::destroyInstance()
     mpInstance = nullptr;
 }
 
-void ApiManager::get(QNetworkAccessManager *pNetworkManager, ApiType apiType, int urlIndex, QString param)
+void ApiManager::get(QNetworkAccessManager *pNetworkManager, ApiType apiType, int urlIndex, const QString &param, const QString &query)
 {
     QString url = mRequestURLs[apiType][urlIndex];
 
     if (param != "")
         url = url.arg(param);
+
+    if (query != "")
+        url += query;
 
     QNetworkRequest request;
 

@@ -124,13 +124,13 @@ void CharacterSearch::initializeCharacterTab()
 
 void CharacterSearch::initializeParser()
 {
-    mParsers << &ResponseParser::parseSibling;
     mParsers << &ResponseParser::parseProfile;
     mParsers << &ResponseParser::parseEquipment;
     mParsers << &ResponseParser::parseSkill;
     mParsers << &ResponseParser::parseEngrave;
     mParsers << &ResponseParser::parseCard;
     mParsers << &ResponseParser::parseGem;
+    mParsers << &ResponseParser::parseSibling;
 }
 
 void CharacterSearch::searchCharacter(const QString &characterName)
@@ -158,50 +158,88 @@ void CharacterSearch::searchCharacter(const QString &characterName)
     Character *pCharacter = new Character();
     mCharacters[characterName] = pCharacter;
 
-    // 캐릭터 검색 시작
-    for (int i = static_cast<int>(LostarkApi::Sibling); i <= static_cast<int>(LostarkApi::Gem); i++)
+    // 캐릭터 검색
+    static const QString query = "?filters=profiles%2Bequipment%2Bcombat-skills%2Bengravings%2Bcards%2Bgems";
+    static const QStringList objectKeys = {"ArmoryProfile", "ArmoryEquipment", "ArmorySkills", "ArmoryEngraving", "ArmoryCard", "ArmoryGem"};
+
+    QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
+
+    connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, characterName, pCharacter](QNetworkReply *pReply)
     {
-        QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
-        connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, i, characterName, pCharacter](QNetworkReply *pReply)
+        QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
+
+        if (response.isNull())
         {
-            QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
+            // 존재하지 않는 캐릭터 -> 메세지 출력 및 캐릭터 객체 제거
+            QMessageBox msgBox;
+            msgBox.setText("캐릭터 정보가 없습니다.");
+            msgBox.exec();
 
-            if (response.isNull())
+            delete pCharacter;
+            mCharacters.remove(characterName);
+            mpSearchButton->setEnabled(true);
+            return;
+        }
+
+        // 결과 parsing
+        const QJsonObject &object = response.object();
+
+        for (int i = 0; i < objectKeys.size(); i++)
+        {
+            auto value = object.find(objectKeys[i]);
+
+            if (value->isNull())
             {
-                // sibling 결과가 null이면 존재하지 않는 캐릭터
-                // 객체 삭제 후 결과 parsing 중지
-                if (i == 0)
-                {
-                    QMessageBox msgBox;
-                    msgBox.setText("캐릭터 정보가 없습니다.");
-                    msgBox.exec();
-
-                    delete mCharacters[characterName];
-                    mCharacters.remove(characterName);
-                    mpSearchButton->setEnabled(true);
-                    return;
-                }
-
-                // 존재하는 캐릭터이지만 특정 검색 결과가 존재하지 않는 경우
-                // parsing 없이 진행 상태만 업데이트
                 updateParseStatus(static_cast<uint8_t>(1 << i), pCharacter);
-                return;
             }
-
-            QThread *pThreadParser = QThread::create(mParsers[i], response, pCharacter);
-
-            connect(pThreadParser, &QThread::finished, this, [&, i, pCharacter]()
+            else
             {
-                updateParseStatus(static_cast<uint8_t>(1 << i), pCharacter);
+                QThread *pThreadParser = QThread::create(mParsers[i], value->toVariant(), pCharacter);
+
+                connect(pThreadParser, &QThread::finished, this, [&, i, pCharacter]()
+                {
+                    updateParseStatus(static_cast<uint8_t>(1 << i), pCharacter);
+                });
+                connect(pThreadParser, &QThread::finished, pThreadParser, &QThread::deleteLater);
+
+                pThreadParser->start();
+            }
+        }
+    });
+
+    ApiManager::getInstance()->get(pNetworkManager, ApiType::Lostark, static_cast<int>(LostarkApi::Character), characterName, query);
+
+    searchCharacterSibling(characterName, pCharacter);
+}
+
+void CharacterSearch::searchCharacterSibling(const QString &characterName, Character *pCharacter)
+{
+    QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
+
+    connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, pCharacter](QNetworkReply *pReply)
+    {
+        QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
+
+        if (response.isNull())
+        {
+            updateParseStatus(static_cast<uint8_t>(1 << 6), pCharacter);
+        }
+        else
+        {
+            QThread *pThreadParser = QThread::create(mParsers.back(), response.toVariant(), pCharacter);
+
+            connect(pThreadParser, &QThread::finished, this, [&, pCharacter]()
+            {
+                updateParseStatus(static_cast<uint8_t>(1 << 6), pCharacter);
             });
             connect(pThreadParser, &QThread::finished, pThreadParser, &QThread::deleteLater);
 
             pThreadParser->start();
-        });
-        connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
+        }
+    });
+    connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-        ApiManager::getInstance()->get(pNetworkManager, ApiType::Lostark, i, characterName);
-    }
+    ApiManager::getInstance()->get(pNetworkManager, ApiType::Lostark, static_cast<int>(LostarkApi::Sibling), characterName, "");
 }
 
 void CharacterSearch::renderCharacter(Character *pCharacter)
@@ -358,8 +396,8 @@ QString CharacterSearch::extractAbility(const QHash<Ability, int> &ability)
 
 QString CharacterSearch::extractElixir(const QList<Armor *> &armors)
 {
-    const QString elixirEffectHead = "질서";
-    const QString elixirEffectHand = "혼돈";
+    static const QString elixirEffectHead = "질서";
+    static const QString elixirEffectHand = "혼돈";
 
     int totalLevel = 0;
     QString head, hand;

@@ -34,6 +34,7 @@ private:
     void initializeParser();
 
     void searchCharacter(const QString &characterName);
+    void searchCharacterSibling(const QString &characterName, Character *pCharacter);
     void renderCharacter(Character *pCharacter);
     void updateCharacterSetting(Character *pCharacter);
 
@@ -57,7 +58,7 @@ private:
 
     const uint8_t STATUS_PARSE_FINISHED = 0x7F;
 
-    QList<std::function<void(QJsonDocument, Character *)>> mParsers;
+    QList<std::function<void(QVariant, Character *)>> mParsers;
     uint8_t mParseStatus;
 
     QHash<QString, Character *> mCharacters;

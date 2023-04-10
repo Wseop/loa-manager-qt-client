@@ -149,7 +149,7 @@ void SettingRanking::initializeSearchButton()
 
         ApiManager::getInstance()->get(pNetworkManager, ApiType::LoaManager,
                                        static_cast<int>(LoamanagerApi::GetCharacterSetting),
-                                       mpClassSelector->currentText());
+                                       mpClassSelector->currentText(), "");
     });
 
     ui->hLayoutInput->addWidget(mpSearchButton);

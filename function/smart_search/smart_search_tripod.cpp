@@ -220,7 +220,7 @@ void SmartSearchTripod::searchTripod(int skillCode, int tripodCode)
             return;
         }
 
-        int price = items.front().AuctionInfo.buyPrice;
+        int price = items.front().auctionInfo.buyPrice;
 
         // UI Update
         mTripodPriceLabels[skillCode][tripodCode]->setText(QString("%L1").arg(price));

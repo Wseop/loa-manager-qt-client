@@ -3,6 +3,7 @@
 
 #include "function/smart_search/smart_search_menu.h"
 #include "game/item/abilitystone.h"
+#include "api/lostark/response_auction.h"
 
 #include <QWidget>
 
@@ -33,7 +34,7 @@ private:
 
     QList<class QComboBox*> mEngraveSelectors;
     QComboBox *mpPenaltySelector;
-    QList<QPair<AbilityStone, Price>> mSearchResults;
+    QList<QPair<AbilityStone, AuctionInfo>> mSearchResults;
     int mTotalSearchCount;
     int mCurrentSearchCount;
 

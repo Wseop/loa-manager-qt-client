@@ -63,7 +63,7 @@ void SmartSearchGem::refresh()
 
 void SmartSearchGem::initializeUI()
 {
-    const QStringList attributes[2] = {{"#", "멸화", "즉시 구매가\n(최소 입찰가)"}, {"#", "홍염", "즉시 구매가\n(최소 입찰가)"}};
+    const QStringList attributes[2] = {{"#", "멸화", "최소 입찰가", "즉시 구매가"}, {"#", "홍염", "최소 입찰가", "즉시 구매가"}};
     const QList<QGridLayout*> layouts = {ui->gridLeft, ui->gridRight};
 
     for (int i = 0; i < layouts.size(); i++)
@@ -78,7 +78,7 @@ void SmartSearchGem::initializeUI()
     }
 }
 
-void SmartSearchGem::updateUI(const Gem gem, Price price)
+void SmartSearchGem::updateUI(const Gem gem, AuctionInfo auctionInfo)
 {
     QGridLayout *pLayout = gem.gemType() == GemType::멸화 ? ui->gridLeft : ui->gridRight;
     int row = (2 * gem.gemLevel()) - 9;
@@ -90,17 +90,23 @@ void SmartSearchGem::updateUI(const Gem gem, Price price)
     pLayout->addWidget(pHLine, row++, 0, 1, -1);
     mGemWidgets.append(pHLine);
 
+    int col = 0;
+
     QLabel *pIcon = WidgetManager::createIcon(gem.iconPath(), pIconLoader, itemGradeToBGColor(gem.itemGrade()));
-    pLayout->addWidget(pIcon, row, 0, Qt::AlignHCenter);
+    pLayout->addWidget(pIcon, row, col++, Qt::AlignHCenter);
     mGemWidgets.append(pIcon);
 
     QLabel *pLabelName = WidgetManager::createLabel(gem.itemName(), 10, itemGradeToTextColor(gem.itemGrade()), 300);
-    pLayout->addWidget(pLabelName, row, 1, Qt::AlignHCenter);
+    pLayout->addWidget(pLabelName, row, col++, Qt::AlignHCenter);
     mGemWidgets.append(pLabelName);
 
-    QLabel *pLabelPrice = WidgetManager::createLabel(QString("%L1\n(%L2)").arg(price.buyPrice).arg(price.bidStartPrice), 10, "", 300, 50);
-    pLayout->addWidget(pLabelPrice, row, 2, Qt::AlignHCenter);
-    mGemWidgets.append(pLabelPrice);
+    QLabel *pLabelBidStart = WidgetManager::createLabel(QString("%L1").arg(auctionInfo.bidStartPrice), 10, "", 300, 50);
+    pLayout->addWidget(pLabelBidStart, row, col++, Qt::AlignHCenter);
+    mGemWidgets.append(pLabelBidStart);
+
+    QLabel *pLabelBuyPrice = WidgetManager::createLabel(QString("%L1").arg(auctionInfo.buyPrice), 10, "", 300, 50);
+    pLayout->addWidget(pLabelBuyPrice, row, col, Qt::AlignHCenter);
+    mGemWidgets.append(pLabelBuyPrice);
 }
 
 void SmartSearchGem::clearUI()
@@ -138,5 +144,5 @@ void SmartSearchGem::parseSearchResult(QNetworkReply *pReply)
     else
         gem.setGemLevel(item.name[0].digitValue());
 
-    updateUI(gem, {item.AuctionInfo.buyPrice, item.AuctionInfo.bidStartPrice});
+    updateUI(gem, item.auctionInfo);
 }

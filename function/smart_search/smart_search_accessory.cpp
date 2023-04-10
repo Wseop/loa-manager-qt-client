@@ -332,7 +332,7 @@ void SmartSearchAccessory::parseSearchResult(QNetworkReply *pReply)
         }
 
         // 가격 정보 parsing
-        mSearchResults.append({pAccessory, {item.AuctionInfo.buyPrice, item.AuctionInfo.bidStartPrice}});
+        mSearchResults.append({pAccessory, item.auctionInfo});
     }
 
     if (mResponseCount == MAX_SEARCH_COUNT)
@@ -481,13 +481,13 @@ QVBoxLayout *SmartSearchAccessory::createEngraveLayout(const Accessory *pAccesso
     return pEngraveLayout;
 }
 
-QLabel *SmartSearchAccessory::createLabelPrice(const Price &price)
+QLabel *SmartSearchAccessory::createLabelPrice(const AuctionInfo &auctionInfo)
 {
     QLabel *pLabelPrice = nullptr;
-    if (price.buyPrice != 0)
-        pLabelPrice = WidgetManager::createLabel(QString("%L1\n(%L2)").arg(price.buyPrice).arg(price.bidStartPrice), 10, "", 200, 50);
+    if (auctionInfo.buyPrice != 0)
+        pLabelPrice = WidgetManager::createLabel(QString("%L1\n(%L2)").arg(auctionInfo.buyPrice).arg(auctionInfo.bidStartPrice), 10, "", 200, 50);
     else
-        pLabelPrice = WidgetManager::createLabel(QString("%L1\n(%L2)").arg("-").arg(price.bidStartPrice), 10, "", 200, 50);
+        pLabelPrice = WidgetManager::createLabel(QString("%L1\n(%L2)").arg("-").arg(auctionInfo.bidStartPrice), 10, "", 200, 50);
     mItemWidgets.append(pLabelPrice);
     return pLabelPrice;
 }

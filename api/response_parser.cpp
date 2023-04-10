@@ -282,9 +282,9 @@ ResponseAuction ResponseParser::parseAuctionItem(QJsonDocument response)
 
         const QJsonObject &auctionInfo = item.find("AuctionInfo")->toObject();
 
-        auctionItem.AuctionInfo.startPrice = auctionInfo.find("StartPrice")->toInt();
-        auctionItem.AuctionInfo.buyPrice = auctionInfo.find("BuyPrice")->toInt();
-        auctionItem.AuctionInfo.bidStartPrice = auctionInfo.find("BidStartPrice")->toInt();
+        auctionItem.auctionInfo.startPrice = auctionInfo.find("StartPrice")->toInt();
+        auctionItem.auctionInfo.buyPrice = auctionInfo.find("BuyPrice")->toInt();
+        auctionItem.auctionInfo.bidStartPrice = auctionInfo.find("BidStartPrice")->toInt();
 
         const QJsonArray &options = item.find("Options")->toArray();
 

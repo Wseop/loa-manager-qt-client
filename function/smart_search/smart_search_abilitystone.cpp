@@ -70,35 +70,41 @@ void SmartSearchAbilityStone::refresh()
     for (const auto& searchResult : mSearchResults)
     {
         const AbilityStone &abilityStone = searchResult.first;
-        const Price &price = searchResult.second;
+        const AuctionInfo &auctionInfo = searchResult.second;
 
         QFrame *pHLine = WidgetManager::createLine(QFrame::HLine);
         ui->gridResult->addWidget(pHLine, ++row, 0, 1, -1);
         mResultWidgets.append(pHLine);
 
+        int col = 0;
+
         QLabel *pIcon = WidgetManager::createIcon(abilityStone.iconPath(), nullptr, itemGradeToBGColor(abilityStone.itemGrade()));
-        ui->gridResult->addWidget(pIcon, ++row, 0);
+        ui->gridResult->addWidget(pIcon, ++row, col++);
         mResultWidgets.append(pIcon);
 
         QLabel *pLabelName = WidgetManager::createLabel(abilityStone.itemName(), 10, itemGradeToTextColor(abilityStone.itemGrade()));
-        ui->gridResult->addWidget(pLabelName, row, 1);
+        ui->gridResult->addWidget(pLabelName, row, col++);
         mResultWidgets.append(pLabelName);
 
         const QStringList &engraves = abilityStone.getEngrave()->getEngraves();
         for (int i = 0; i < engraves.size(); i++)
         {
             QLabel *pLabelEngrave = WidgetManager::createLabel(engraves[i]);
-            ui->gridResult->addWidget(pLabelEngrave, row, 2 + i);
+            ui->gridResult->addWidget(pLabelEngrave, row, col++);
             mResultWidgets.append(pLabelEngrave);
         }
 
         QLabel *pLabelPenalty = WidgetManager::createLabel(abilityStone.getEngrave()->getPenalties().at(0), 10, "red");
-        ui->gridResult->addWidget(pLabelPenalty, row, 4);
+        ui->gridResult->addWidget(pLabelPenalty, row, col++);
         mResultWidgets.append(pLabelPenalty);
 
-        QLabel *pLabelPrice = WidgetManager::createLabel(QString("%L1\n(%L2)").arg(price.buyPrice).arg(price.bidStartPrice), 10, "", 200, 50);
-        ui->gridResult->addWidget(pLabelPrice, row++, 5);
-        mResultWidgets.append(pLabelPrice);
+        QLabel *pLabelBidStart = WidgetManager::createLabel(QString("%L1").arg(auctionInfo.bidStartPrice), 10, "", 200, 50);
+        ui->gridResult->addWidget(pLabelBidStart, row, col++);
+        mResultWidgets.append(pLabelBidStart);
+
+        QLabel *pLabelBuyPrice = WidgetManager::createLabel(QString("%L1").arg(auctionInfo.buyPrice), 10, "", 200, 50);
+        ui->gridResult->addWidget(pLabelBuyPrice, row++, col);
+        mResultWidgets.append(pLabelBuyPrice);
     }
 }
 
@@ -153,7 +159,7 @@ void SmartSearchAbilityStone::initializeEngraveSelector()
 
 void SmartSearchAbilityStone::initializeResultUI()
 {
-    const QStringList attributes = {"#", "아이템명", "각인1", "각인2", "감소", "즉시 구매가\n(최소 입찰가)"};
+    const QStringList attributes = {"#", "아이템명", "각인1", "각인2", "감소", "최소 입찰가", "즉시 구매가"};
 
     for (int col = 0; col < attributes.size(); col++)
     {
@@ -225,11 +231,9 @@ void SmartSearchAbilityStone::parseSearchResult(QNetworkReply *pReply)
         return;
 
     ResponseAuction responseAuction = ResponseParser::parseAuctionItem(response);
-    const AuctionItem &item = responseAuction.items.front();
 
     // 검색 결과 parsing (최저가 1개)
-    int buyPrice = item.AuctionInfo.buyPrice;
-    int bidStartPrice = item.AuctionInfo.bidStartPrice;
+    const AuctionItem &item = responseAuction.items.front();
 
     AbilityStone abilityStone;
     abilityStone.setItemName(item.name);
@@ -249,7 +253,7 @@ void SmartSearchAbilityStone::parseSearchResult(QNetworkReply *pReply)
     }
 
     // 검색 결과 추가
-    mSearchResults.append({abilityStone, {buyPrice, bidStartPrice}});
+    mSearchResults.append({abilityStone, item.auctionInfo});
 
     // 검색 완료 시 UI 갱신
     if (mTotalSearchCount == mCurrentSearchCount)

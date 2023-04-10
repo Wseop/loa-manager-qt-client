@@ -3,6 +3,7 @@
 
 #include "function/smart_search/smart_search_menu.h"
 #include "api/lostark/search_option.h"
+#include "api/lostark/response_auction.h"
 #include "game/item/accessory.h"
 
 #include <QWidget>
@@ -47,7 +48,7 @@ private:
     class QProgressBar* createQualityBar(const int &quality);
     class QVBoxLayout* createAbilityLayout(const QHash<Ability, int> &abilities);
     QVBoxLayout *createEngraveLayout(const Accessory *pAccessory);
-    QLabel *createLabelPrice(const Price &price);
+    QLabel *createLabelPrice(const AuctionInfo &auctionInfo);
 
 private:
     Ui::SmartSearchAccessory *ui;
@@ -65,7 +66,7 @@ private:
     int mAddCount;
     int mResponseCount;
     QList<class SearchOption*> mSearchOptions;
-    QList<QPair<Accessory*, Price>> mSearchResults;
+    QList<QPair<Accessory*, AuctionInfo>> mSearchResults;
 
     // 검색 결과 ui
     QList<int> mCurrentLayoutRows;

@@ -14,6 +14,13 @@ struct AuctionItemOption
     QString className;
 };
 
+struct AuctionInfo
+{
+    int startPrice;
+    int buyPrice;
+    int bidStartPrice;
+};
+
 struct AuctionItem
 {
     QString name;
@@ -22,12 +29,7 @@ struct AuctionItem
     QString icon;
     int quality;
 
-    struct
-    {
-        int startPrice;
-        int buyPrice;
-        int bidStartPrice;
-    } AuctionInfo;
+    AuctionInfo auctionInfo;
 
     QList<AuctionItemOption> options;
 };

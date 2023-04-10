@@ -326,7 +326,7 @@ void ContentReward::refreshTradablePrice()
             if (item == "1레벨 멸화")
             {
                 ResponseAuction responseAuction = ResponseParser::parseAuctionItem(response);
-                minPrice = responseAuction.items.front().AuctionInfo.buyPrice;
+                minPrice = responseAuction.items.front().auctionInfo.buyPrice;
             }
             else
             {

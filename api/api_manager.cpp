@@ -47,8 +47,9 @@ void ApiManager::initializeApiKey()
 {
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
 
-    connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&](QNetworkReply *pReply){
-        QJsonArray keys = QJsonDocument::fromJson(pReply->readAll()).array();
+    connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&](QNetworkReply *pReply)
+    {
+        const QJsonArray &keys = QJsonDocument::fromJson(pReply->readAll()).array();
 
         for (const QJsonValue &value : keys)
         {

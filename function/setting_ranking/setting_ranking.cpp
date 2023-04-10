@@ -343,7 +343,7 @@ void SettingRanking::showCharacterSettings()
         double usageRate = (mDataCounts[i] / static_cast<double>(mTotalDataCount)) * 100;
 
         QLabel *pLabelUsageRate = WidgetManager::createLabel(QString("%1 (%2%)").arg(classEngrave).arg(usageRate, 0, 'f', 2),
-                                                             14);
+                                                             14, "", 500);
         pLabelUsageRate->setStyleSheet("QLabel { border-radius: 5px;"
                                        "         padding: 2px;"
                                        "         background-color: black; "

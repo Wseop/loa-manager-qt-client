@@ -2,27 +2,9 @@
 #define CONTENT_REWARD_H
 
 #include "function/function_widget.h"
+#include "api/loamanager/loamanager_api.h"
 
 #include <QWidget>
-
-struct RewardData
-{
-    int dataCount;
-    QList<int> itemCounts;
-
-    RewardData &operator+=(const RewardData &rewardData)
-    {
-        if (this->itemCounts.size() == rewardData.itemCounts.size())
-        {
-            this->dataCount += rewardData.dataCount;
-
-            for (int i = 0; i < this->itemCounts.size(); i++)
-                this->itemCounts[i] += rewardData.itemCounts[i];
-        }
-
-        return *this;
-    }
-};
 
 namespace Ui {
 class ContentReward;
@@ -62,7 +44,7 @@ private:
     QStringList mContents;
     QHash<QString, QStringList> mContentLevels;
     QHash<QString, QStringList> mDropTable;
-    QHash<QString, RewardData> mRewardData;
+    QHash<QString, Reward> mRewardData;
     QHash<QString, int> mTradablePrice;
 
     int mTotalLevels;

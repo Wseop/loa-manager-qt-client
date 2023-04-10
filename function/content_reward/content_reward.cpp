@@ -101,7 +101,7 @@ void ContentReward::initializeContentData()
 
             mContentLevels[content] << level;
             mDropTable[level] = object.find("ItemList")->toVariant().toStringList();
-            mRewardData[level] = {0, QList<int>(mDropTable[level].size(), 0)};
+            mRewardData[level] = {level, 0, {}, QList<int>(mDropTable[level].size(), 0)};
 
             mTotalLevels++;
         }
@@ -250,7 +250,7 @@ void ContentReward::refreshRewardData()
 
     for (const QString &level : levels)
     {
-        mRewardData[level] = {0, QList<int>(mDropTable[level].size(), 0)};
+        mRewardData[level] = {level, 0, {}, QList<int>(mDropTable[level].size(), 0)};
     }
 
     mResponseCount = 0;
@@ -277,9 +277,7 @@ void ContentReward::refreshRewardData()
 
                 for (const Reward &reward : rewards)
                 {
-                    RewardData rewardData {reward.count, reward.itemCounts};
-
-                    mRewardData[reward.level] += rewardData;
+                    mRewardData[reward.level] += reward;
                 }
 
                 if (mResponseCount == mTotalLevels)

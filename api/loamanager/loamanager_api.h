@@ -22,6 +22,21 @@ struct Reward
     int count;
     QStringList items;
     QList<int> itemCounts;
+
+    Reward &operator+=(const Reward &reward)
+    {
+        if (this->itemCounts.size() == reward.itemCounts.size())
+        {
+            this->count += reward.count;
+
+            for (int i = 0; i < this->itemCounts.size(); i++)
+            {
+                this->itemCounts[i] += reward.itemCounts[i];
+            }
+        }
+
+        return *this;
+    }
 };
 
 struct CharacterSetting

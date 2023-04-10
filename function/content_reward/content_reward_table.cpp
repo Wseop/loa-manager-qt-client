@@ -37,7 +37,7 @@ ContentRewardTable::~ContentRewardTable()
     delete ui;
 }
 
-void ContentRewardTable::refreshRewardData(const QHash<QString, RewardData> newRewardData)
+void ContentRewardTable::refreshRewardData(const QHash<QString, Reward> newRewardData)
 {
     const QStringList &levels = mCountLabel.keys();
 
@@ -45,7 +45,7 @@ void ContentRewardTable::refreshRewardData(const QHash<QString, RewardData> newR
     {
         mRewardData[level] = newRewardData[level];
 
-        int dataCount = mRewardData[level].dataCount;
+        int dataCount = mRewardData[level].count;
 
         if (dataCount == 0)
             continue;
@@ -84,7 +84,7 @@ void ContentRewardTable::refreshTradablePrice(const QHash<QString, int> &newTrad
     for (const QString &level : levels)
     {
         const QStringList &items = mDropTable[level];
-        int dataCount = mRewardData[level].dataCount;
+        int dataCount = mRewardData[level].count;
         QList<int> &itemCounts = mRewardData[level].itemCounts;
         double totalGold = 0;
 

@@ -17,7 +17,7 @@ public:
     ContentRewardTable(const QString &content, const QStringList &contentLevels, const QHash<QString, QStringList> &dropTable);
     ~ContentRewardTable();
 
-    void refreshRewardData(const QHash<QString, RewardData> newRewardData);
+    void refreshRewardData(const QHash<QString, Reward> newRewardData);
     void refreshTradablePrice(const QHash<QString, int> &newTradablePrice, const QHash<QString, class QCheckBox*> &tradableSelector);
 
 private:
@@ -31,7 +31,7 @@ private:
     QString mContent;
     QStringList mContentLevels;
     QHash<QString, QStringList> mDropTable;
-    QHash<QString, RewardData> mRewardData;
+    QHash<QString, Reward> mRewardData;
     QHash<QString, double> mTradablePrice;
 
     QHash<QString, QList<class QLabel*>> mItemCountLabels;

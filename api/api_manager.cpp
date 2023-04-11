@@ -13,10 +13,12 @@
 ApiManager *ApiManager::mpInstance = nullptr;
 
 ApiManager::ApiManager() :
-    mKeyIndex(0)
+    mLostarkKeyIndex(0)
 {
-    initializeRequestUrl();
-    initializeApiKey();
+    const QJsonObject resource = ResourceManager::getInstance()->loadJson("api");
+
+    initializeRequestUrl(resource);
+    initializeApiKey(resource);
 }
 
 ApiManager::~ApiManager()
@@ -24,14 +26,13 @@ ApiManager::~ApiManager()
 
 }
 
-void ApiManager::initializeRequestUrl()
+void ApiManager::initializeRequestUrl(const QJsonObject &resource)
 {
-    const QJsonObject json = ResourceManager::getInstance()->loadJson("api");
-    const QStringList &keys = json.find("List")->toVariant().toStringList();
+    const QStringList &keys = resource.find("List")->toVariant().toStringList();
 
     for (int i = 0; i < keys.size(); i++)
     {
-        const QJsonArray &apis = json.find(keys[i])->toArray();
+        const QJsonArray &apis = resource.find(keys[i])->toArray();
 
         for (const QJsonValue &value : apis)
         {
@@ -43,8 +44,12 @@ void ApiManager::initializeRequestUrl()
     }
 }
 
-void ApiManager::initializeApiKey()
+void ApiManager::initializeApiKey(const QJsonObject &resource)
 {
+    // LoaManager Api Key 초기화
+    mLoaManagerApiKey = resource.find("LoaManagerApiKey")->toString();
+
+    // Lostark Api Key 초기화
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
 
     connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&](QNetworkReply *pReply)
@@ -53,7 +58,7 @@ void ApiManager::initializeApiKey()
 
         for (const QJsonValue &value : keys)
         {
-            mApiKeys << value.toObject().find("key")->toString();
+            mLostarkApiKeys << value.toObject().find("key")->toString();
         }
     });
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
@@ -61,12 +66,12 @@ void ApiManager::initializeApiKey()
     get(pNetworkManager, ApiType::LoaManager, static_cast<int>(LoamanagerApi::ApiKey), "", "");
 }
 
-const QString &ApiManager::getApiKey()
+const QString &ApiManager::getLostarkApiKey()
 {
-    if (mKeyIndex >= mApiKeys.size())
-        mKeyIndex = 0;
+    if (mLostarkKeyIndex >= mLostarkApiKeys.size())
+        mLostarkKeyIndex = 0;
 
-    return mApiKeys[mKeyIndex++];
+    return mLostarkApiKeys[mLostarkKeyIndex++];
 }
 
 ApiManager *ApiManager::getInstance()
@@ -101,14 +106,15 @@ void ApiManager::get(QNetworkAccessManager *pNetworkManager, ApiType apiType, in
     if (apiType == ApiType::Lostark)
     {
         request.setRawHeader("accept", "application/json");
-        request.setRawHeader("authorization", QString("bearer %1").arg(getApiKey()).toUtf8());
+        request.setRawHeader("authorization", QString("bearer %1").arg(getLostarkApiKey()).toUtf8());
     }
     else if (apiType == ApiType::LoaManager)
     {
         QSslConfiguration conf = request.sslConfiguration();
-
         conf.setPeerVerifyMode(QSslSocket::VerifyNone);
         request.setSslConfiguration(conf);
+
+        request.setRawHeader("ApiKey", mLoaManagerApiKey.toUtf8());
     }
     else
         return;
@@ -126,14 +132,15 @@ void ApiManager::post(QNetworkAccessManager *pNetworkManager, ApiType apiType, i
     if (apiType == ApiType::Lostark)
     {
         request.setRawHeader("accept", "application/json");
-        request.setRawHeader("authorization", QString("bearer %1").arg(getApiKey()).toUtf8());
+        request.setRawHeader("authorization", QString("bearer %1").arg(getLostarkApiKey()).toUtf8());
     }
     else if (apiType == ApiType::LoaManager)
     {
         QSslConfiguration conf = request.sslConfiguration();
         conf.setPeerVerifyMode(QSslSocket::VerifyNone);
-
         request.setSslConfiguration(conf);
+
+        request.setRawHeader("ApiKey", mLoaManagerApiKey.toUtf8());
     }
     else
         return;

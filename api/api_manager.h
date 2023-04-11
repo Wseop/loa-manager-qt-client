@@ -19,10 +19,10 @@ private:
     ApiManager();
     ~ApiManager();
 
-    void initializeRequestUrl();
-    void initializeApiKey();
+    void initializeRequestUrl(const QJsonObject &resource);
+    void initializeApiKey(const QJsonObject &resource);
 
-    const QString &getApiKey();
+    const QString &getLostarkApiKey();
 
 public:
     static ApiManager *getInstance();
@@ -34,9 +34,10 @@ public:
 private:
     static ApiManager *mpInstance;
 
-    // Lostark Api key
-    QStringList mApiKeys;
-    int mKeyIndex;
+    QStringList mLostarkApiKeys;
+    int mLostarkKeyIndex;
+
+    QString mLoaManagerApiKey;
 
     QHash<ApiType, QStringList> mRequestURLs;
 };

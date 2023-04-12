@@ -39,7 +39,5 @@ private:
     class QLabel *mpLabelVersionInfo;
 
     QList<QPushButton*> mMenuButtons;
-
-    QList<QWidget*> mWidgets;
 };
 #endif // LOAMANAGER_H

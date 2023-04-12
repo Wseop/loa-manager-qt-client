@@ -47,19 +47,6 @@ LoaManager::LoaManager() :
 
 LoaManager::~LoaManager()
 {
-    delete mpAdminLogin;
-    delete mpAdminButton;
-
-    delete mpLabelVersionInfo;
-
-    for (QPushButton* pButton : mMenuButtons)
-        delete pButton;
-    mMenuButtons.clear();
-
-    for (QWidget* pWidget : mWidgets)
-        delete pWidget;
-    mWidgets.clear();
-
     delete ui;
 }
 
@@ -93,7 +80,7 @@ void LoaManager::initializeMenuButton()
 
         QGroupBox *pMenuGroup = WidgetManager::createGroupBox(title);
         ui->hLayoutMenu->addWidget(pMenuGroup);
-        mWidgets.append(pMenuGroup);
+
         QHBoxLayout *pLayout = new QHBoxLayout();
         pMenuGroup->setLayout(pLayout);
 

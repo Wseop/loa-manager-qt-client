@@ -17,7 +17,6 @@ AccessoryInfo::AccessoryInfo(const Accessory *pAccessory) :
     {
         QLabel *pLabel = WidgetManager::createLabel("악세 미착용");
         ui->vLayout2->addWidget(pLabel);
-        mWidgets << pLabel;
         return;
     }
 
@@ -27,14 +26,6 @@ AccessoryInfo::AccessoryInfo(const Accessory *pAccessory) :
 
 AccessoryInfo::~AccessoryInfo()
 {
-    for (QWidget *pWidget : mWidgets)
-        delete pWidget;
-    mWidgets.clear();
-
-    for (auto rIter = mLayouts.rbegin(); rIter != mLayouts.rend(); rIter++)
-        delete *rIter;
-    mLayouts.clear();
-
     delete ui;
 }
 
@@ -51,14 +42,12 @@ void AccessoryInfo::addAccessoryIcon(const QString &iconPath, ItemGrade itemGrad
 
     QLabel *pIcon = WidgetManager::createIcon(iconPath, pNetworkManager, itemGradeToBGColor(itemGrade));
     ui->vLayout1->addWidget(pIcon);
-    mWidgets << pIcon;
 }
 
 void AccessoryInfo::addQualityBar(int quality)
 {
     QProgressBar *pQualityBar = WidgetManager::createQualityBar(quality, 50, 25);
     ui->vLayout1->addWidget(pQualityBar);
-    mWidgets << pQualityBar;
 }
 
 void AccessoryInfo::initializeLayout2(const Accessory *pAccessory)
@@ -78,7 +67,6 @@ void AccessoryInfo::addItemGradeInfo(ItemGrade itemGrade)
                                            "         padding: 2px;"
                                            "         color: %1 }").arg(itemGradeToTextColor(itemGrade)));
     pHLayout->addWidget(pLabelItemGrade);
-    mWidgets << pLabelItemGrade;
 }
 
 void AccessoryInfo::addAbilityInfo(const QHash<Ability, int> &abilities)
@@ -91,7 +79,6 @@ void AccessoryInfo::addAbilityInfo(const QHash<Ability, int> &abilities)
 
         QLabel *pLabelAbility = WidgetManager::createLabel(text, 10, "", 75);
         pHLayout->addWidget(pLabelAbility);
-        mWidgets << pLabelAbility;
     }
 }
 
@@ -115,7 +102,6 @@ void AccessoryInfo::addEngraveInfo(const QStringList &engraves, const QStringLis
 
             QLabel *pLabelEngrave = WidgetManager::createLabel(text, 10, textColor[i], 100);
             pHLayout->addWidget(pLabelEngrave);
-            mWidgets << pLabelEngrave;
         }
     }
 }
@@ -127,7 +113,6 @@ QHBoxLayout *AccessoryInfo::createHLayout(QVBoxLayout *pLayout)
     pHLayout->setSpacing(5);
     pLayout->addLayout(pHLayout);
     pLayout->setAlignment(pHLayout, Qt::AlignLeft);
-    mLayouts << pHLayout;
 
     return pHLayout;
 }

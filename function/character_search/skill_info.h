@@ -37,9 +37,6 @@ private:
 
 private:
     Ui::SkillInfo *ui;
-
-    QList<QWidget*> mWidgets;
-    QList<QLayout*> mLayouts;
 };
 
 #endif // SKILL_INFO_H

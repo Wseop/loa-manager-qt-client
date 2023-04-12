@@ -46,9 +46,6 @@ private:
     QHash<int, QHash<int, class QLabel*>> mTripodPriceLabels;
     QList<QWidget*> mResultWidgets;
     QList<QLayout*> mResultLayouts;
-
-    QList<QWidget*> mWidgets;
-    QList<QLayout*> mLayouts;
 };
 
 #endif // SMART_SEARCH_TRIPOD_H

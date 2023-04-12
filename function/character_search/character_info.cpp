@@ -31,14 +31,6 @@ CharacterInfo::CharacterInfo(Character *pCharacter) :
 
 CharacterInfo::~CharacterInfo()
 {
-    for (QWidget *pWidget : mWidgets)
-        delete pWidget;
-    mWidgets.clear();
-
-    for (auto rIter = mLayouts.rbegin(); rIter != mLayouts.rend(); rIter++)
-        delete *rIter;
-    mLayouts.clear();
-
     delete ui;
 }
 
@@ -79,7 +71,6 @@ void CharacterInfo::addSiblingSelector(const QList<Profile*> &siblings)
     for (int i = 0; i < pComboBoxSibling->count(); i++)
         pComboBoxSibling->setItemData(i, Qt::AlignCenter, Qt::TextAlignmentRole);
     ui->vLayoutProfile->addWidget(pComboBoxSibling);
-    mWidgets << pComboBoxSibling;
 
     // 보유 캐릭터 목록에서 선택한 캐릭터로 검색
     connect(pComboBoxSibling, &QComboBox::currentIndexChanged, this, [&](int index){
@@ -107,7 +98,6 @@ void CharacterInfo::addProfileInfo(const Profile *pProfile)
 
         QLabel *pLabel = WidgetManager::createLabel(labelTexts[i], 12);
         ui->vLayoutProfile->addWidget(pLabel);
-        mWidgets << pLabel;
 
         if (i == 0)
             pLabel->setStyleSheet(labelStyle.arg("#B178FF"));
@@ -128,7 +118,6 @@ void CharacterInfo::addAbilityInfo(const QHash<Ability, int> &abilities)
 
         QLabel *pLabelAbility = WidgetManager::createLabel(text.arg(abilityToQString(ability)).arg(abilities[ability]), 12);
         ui->vLayoutProfile->addWidget(pLabelAbility);
-        mWidgets << pLabelAbility;
     }
 }
 
@@ -155,7 +144,6 @@ void CharacterInfo::addEngraveInfo(const Engrave *pEngrave)
             QVBoxLayout* pVLayout = new QVBoxLayout();
             ui->vLayoutProfile->addLayout(pVLayout);
             vLayouts[j] = pVLayout;
-            mLayouts << pVLayout;
         }
 
         // 각인 정보 추가
@@ -165,15 +153,12 @@ void CharacterInfo::addEngraveInfo(const Engrave *pEngrave)
 
             QHBoxLayout *pHLayout = new QHBoxLayout();
             vLayouts[level - 1]->addLayout(pHLayout);
-            mLayouts << pHLayout;
 
             QLabel *pEngraveIcon = WidgetManager::createIcon(pEngraveManager->iconPath(engrave), nullptr);
             pHLayout->addWidget(pEngraveIcon);
-            mWidgets << pEngraveIcon;
 
             QLabel *pLabelEngraveLevel = WidgetManager::createLabel(QString("Lv.%1").arg(level), 10, textColor, 50);
             pHLayout->addWidget(pLabelEngraveLevel);
-            mWidgets << pLabelEngraveLevel;
         }
     }
 }
@@ -193,7 +178,6 @@ void CharacterInfo::addCardInfo(const Card *pCard)
     {
         QLabel *pLabelCardSet = WidgetManager::createLabel(text.arg(cardSet.first).arg(cardSet.second), 10);
         ui->vLayoutProfile->addWidget(pLabelCardSet);
-        mWidgets << pLabelCardSet;
     }
 }
 
@@ -231,7 +215,6 @@ void CharacterInfo::addArmorInfo(const QList<Armor *> &armors)
 
         ui->vLayoutEquip->addWidget(pArmorInfo);
         ui->vLayoutEquip->setAlignment(pArmorInfo, Qt::AlignLeft);
-        mWidgets << pArmorInfo;
     }
 }
 
@@ -241,7 +224,6 @@ void CharacterInfo::addWeaponInfo(const Weapon *pWeapon)
 
     ui->vLayoutEquip->addWidget(pWeaponInfo);
     ui->vLayoutEquip->setAlignment(pWeaponInfo, Qt::AlignLeft);
-    mWidgets << pWeaponInfo;
 }
 
 void CharacterInfo::addElixirInfo(const QList<Armor *> &armors)
@@ -277,7 +259,6 @@ void CharacterInfo::addElixirInfo(const QList<Armor *> &armors)
     QLabel *pLabelTotalLevel = WidgetManager::createLabel(QString("연성 레벨 합 : %1").arg(elixirLevelSum), 12);
     ui->vLayoutEquip->addWidget(pLabelTotalLevel);
     ui->vLayoutEquip->setAlignment(pLabelTotalLevel, Qt::AlignHCenter);
-    mWidgets << pLabelTotalLevel;
 
     // 엘릭서 세트효과 활성화 정보 추가
     QList<int> enableLevels = {35, 40};
@@ -291,7 +272,6 @@ void CharacterInfo::addElixirInfo(const QList<Armor *> &armors)
                 QLabel *pLabelSetLevel = WidgetManager::createLabel(QString("%1 %2단계 활성화").arg(elixirEffectHead).arg(i + 1), 12, itemGradeToTextColor(ItemGrade::고급));
                 ui->vLayoutEquip->addWidget(pLabelSetLevel);
                 ui->vLayoutEquip->setAlignment(pLabelSetLevel, Qt::AlignHCenter);
-                mWidgets << pLabelSetLevel;
             }
         }
     }
@@ -322,7 +302,6 @@ void CharacterInfo::addAccessoryInfo(const QList<Accessory *> &accessories)
 
         ui->vLayoutAccessory->addWidget(pAccInfo);
         ui->vLayoutAccessory->setAlignment(pAccInfo, Qt::AlignLeft);
-        mWidgets << pAccInfo;
     }
 }
 
@@ -332,7 +311,6 @@ void CharacterInfo::addAbilityStoneInfo(const AbilityStone *pAbilityStone)
 
     ui->vLayoutAccessory->addWidget(pAbilityStoneInfo);
     ui->vLayoutAccessory->setAlignment(pAbilityStoneInfo, Qt::AlignLeft);
-    mWidgets << pAbilityStoneInfo;
 }
 
 void CharacterInfo::addBraceletInfo(const Bracelet *pBracelet)
@@ -341,7 +319,6 @@ void CharacterInfo::addBraceletInfo(const Bracelet *pBracelet)
 
     ui->vLayoutAccessory->addWidget(pBraceletInfo);
     ui->vLayoutAccessory->setAlignment(pBraceletInfo, Qt::AlignLeft);
-    mWidgets << pBraceletInfo;
 }
 
 void CharacterInfo::initializeGemLayout()
@@ -377,7 +354,6 @@ void CharacterInfo::addGemInfo(const QList<Gem *> &gems)
 
         pVLayout->addWidget(pGemInfo);
         pVLayout->setAlignment(pGemInfo, Qt::AlignLeft);
-        mWidgets << pGemInfo;
     }
 }
 
@@ -411,7 +387,6 @@ void CharacterInfo::addGemLevelAvgInfo(const QList<Gem *> &gems)
         {
             QLabel *pLabelGemLevelAvg = WidgetManager::createLabel(QString::number(levelSum[i] / (double)count[i], 'f', 2), 12);
             layouts[i]->addWidget(pLabelGemLevelAvg);
-            mWidgets << pLabelGemLevelAvg;
         }
     }
 }
@@ -459,12 +434,10 @@ void CharacterInfo::addTripodLevelInfo(const QList<Skill *> &skills)
     QLabel *pLabelTripodTotal = WidgetManager::createLabel(QString("4, 5레벨 트라이포드 활성화 (%1 / %2)").arg(enableCount[0] + enableCount[1]).arg(MAX_TRIPOD), 12, "", 300);
     ui->vLayoutSkill->addWidget(pLabelTripodTotal);
     ui->vLayoutSkill->setAlignment(pLabelTripodTotal, Qt::AlignHCenter);
-    mWidgets << pLabelTripodTotal;
 
     QHBoxLayout *pHLayout = new QHBoxLayout();
     pHLayout->setAlignment(Qt::AlignHCenter);
     ui->vLayoutSkill->addLayout(pHLayout);
-    mLayouts << pHLayout;
 
     for (int i = 0; i < 2; i++)
     {
@@ -473,7 +446,6 @@ void CharacterInfo::addTripodLevelInfo(const QList<Skill *> &skills)
                                     "         border-radius: 5px;"
                                     "         padding: 2px }");
         pHLayout->addWidget(pLabelTripod);
-        mWidgets << pLabelTripod;
     }
 }
 
@@ -495,7 +467,6 @@ void CharacterInfo::addSkillInfo(const QString &title, const QList<Skill *> &ski
 
             SkillInfo *pSkillInfo = new SkillInfo(pSkill);
             ui->vLayoutSkill->addWidget(pSkillInfo);
-            mWidgets << pSkillInfo;
 
             count++;
         }
@@ -506,7 +477,6 @@ void CharacterInfo::addHLine(QLayout *pLayout)
 {
     QFrame *pHLine = WidgetManager::createLine(QFrame::HLine);
     pLayout->addWidget(pHLine);
-    mWidgets << pHLine;
 }
 
 void CharacterInfo::addLayoutTitle(const QString &title, QLayout *pLayout)
@@ -517,5 +487,4 @@ void CharacterInfo::addLayoutTitle(const QString &title, QLayout *pLayout)
                                "         background-color: black; "
                                "         color: white; }");
     pLayout->addWidget(pLabelTitle);
-    mWidgets << pLabelTitle;
 }

@@ -49,36 +49,6 @@ ContentReward::ContentReward() :
 
 ContentReward::~ContentReward()
 {
-    for (SearchOption *pSearchOption : mSearchOptions)
-        delete pSearchOption;
-    mSearchOptions.clear();
-
-    if (mpContentSelector != nullptr)
-    {
-        delete mpContentSelector;
-        mpContentSelector = nullptr;
-    }
-
-    for (auto iter = mTradableSelector.begin(); iter != mTradableSelector.end(); iter++)
-        delete iter.value();
-    mTradableSelector.clear();
-
-    for (ContentRewardTable *pRewardTable : mRewardTables)
-        delete pRewardTable;
-    mRewardTables.clear();
-
-    if (mpRewardAdder != nullptr)
-        delete mpRewardAdder;
-    mpRewardAdder = nullptr;
-
-    for (QWidget *pWidget : mWidgets)
-        delete pWidget;
-    mWidgets.clear();
-
-    for (auto rIter = mLayouts.rbegin(); rIter != mLayouts.rend(); rIter++)
-        delete *rIter;
-    mLayouts.clear();
-
     delete ui;
 }
 
@@ -148,11 +118,9 @@ void ContentReward::initializeContentSelector()
 {
     QGroupBox *pGroupContentSelector = WidgetManager::createGroupBox("컨텐츠 선택");
     ui->hLayoutSelector->addWidget(pGroupContentSelector);
-    mWidgets.append(pGroupContentSelector);
 
     QHBoxLayout *pLayoutContentSelector = new QHBoxLayout();
     pGroupContentSelector->setLayout(pLayoutContentSelector);
-    mLayouts.append(pLayoutContentSelector);
 
     mpContentSelector = WidgetManager::createComboBox(mContents);
     pLayoutContentSelector->addWidget(mpContentSelector);
@@ -167,12 +135,10 @@ void ContentReward::initializeTradableSelector()
 {
     QGroupBox *pGroupTradableSelector = WidgetManager::createGroupBox("골드 가치에 포함");
     ui->hLayoutSelector->addWidget(pGroupTradableSelector);
-    mWidgets.append(pGroupTradableSelector);
 
     QHBoxLayout *pLayoutTradableSelector = new QHBoxLayout();
     pLayoutTradableSelector->setSpacing(10);
     pGroupTradableSelector->setLayout(pLayoutTradableSelector);
-    mLayouts.append(pLayoutTradableSelector);
 
     const QStringList items = {"명예의 파편", "파괴석", "수호석", "돌파석", "보석"};
 
@@ -180,11 +146,9 @@ void ContentReward::initializeTradableSelector()
     {
         QVBoxLayout *pLayoutCheckBox = new QVBoxLayout();
         pLayoutTradableSelector->addLayout(pLayoutCheckBox);
-        mLayouts.append(pLayoutCheckBox);
 
         QLabel *pLabelCheckBox = WidgetManager::createLabel(item);
         pLayoutCheckBox->addWidget(pLabelCheckBox);
-        mWidgets.append(pLabelCheckBox);
 
         QCheckBox *pCheckBox = new QCheckBox();
         pCheckBox->setChecked(true);
@@ -227,7 +191,6 @@ void ContentReward::initializeRewardAdder()
 
     QPushButton *pButtonInsertData = WidgetManager::createPushButton("데이터 추가");
     ui->hLayoutSelector->addWidget(pButtonInsertData);
-    mWidgets.append(pButtonInsertData);
 
     connect(pButtonInsertData, &QPushButton::released, this, [&]()
     {

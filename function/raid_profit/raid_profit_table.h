@@ -34,9 +34,6 @@ private:
 
     QList<class QLabel*> mGoldLabels;
     QList<QLabel*> mProfitLabels;
-
-    QList<QWidget*> mWidgets;
-    QList<QLayout*> mLayouts;
 };
 
 #endif // RAID_PROFIT_TABLE_H

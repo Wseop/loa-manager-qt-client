@@ -33,7 +33,6 @@ private:
     QList<QStringList> mSearchList;
 
     QList<QWidget*> mGemWidgets;
-    QList<QWidget*> mWidgets;
 };
 
 #endif // SMART_SEARCH_GEM_H

@@ -17,14 +17,6 @@ GemInfo::GemInfo(const Gem *pGem) :
 
 GemInfo::~GemInfo()
 {
-    for (QWidget *pWidget : mWidgets)
-        delete pWidget;
-    mWidgets.clear();
-
-    for (auto rIter = mLayouts.rbegin(); rIter != mLayouts.rend(); rIter++)
-        delete *rIter;
-    mLayouts.clear();
-
     delete ui;
 }
 
@@ -41,7 +33,6 @@ void GemInfo::addGemIcon(const QString &iconPath, ItemGrade itemGrade)
 
     QLabel *pIcon = WidgetManager::createIcon(iconPath, pNetworkManager, itemGradeToBGColor(itemGrade));
     ui->vLayout1->addWidget(pIcon);
-    mWidgets << pIcon;
 }
 
 void GemInfo::addGemLevelInfo(int gemLevel, ItemGrade itemGrade)
@@ -54,7 +45,6 @@ void GemInfo::addGemLevelInfo(int gemLevel, ItemGrade itemGrade)
                                           "         padding: 2px; "
                                           "         color: %1 }").arg(itemGradeToTextColor(itemGrade)));
     ui->vLayout1->addWidget(pLabelGemLevel);
-    mWidgets << pLabelGemLevel;
 }
 
 void GemInfo::initializeLayout2(const Gem *pGem)
@@ -77,12 +67,10 @@ void GemInfo::addGemTypeInfo(GemType gemType, ItemGrade itemGrade)
     QLabel *pLabelGemType = WidgetManager::createLabel(text, 10, itemGradeToTextColor(itemGrade));
     ui->vLayout2->addWidget(pLabelGemType);
     ui->vLayout2->setAlignment(pLabelGemType, Qt::AlignLeft);
-    mWidgets << pLabelGemType;
 }
 
 void GemInfo::addSkillNameInfo(const QString &skillName)
 {
     QLabel *pLabelSkillName = WidgetManager::createLabel(skillName);
     ui->vLayout2->addWidget(pLabelSkillName);
-    mWidgets << pLabelSkillName;
 }

@@ -66,8 +66,6 @@ private:
 
     QLineEdit *mpLineEditCharacterName;
     QPushButton *mpSearchButton;
-    QList<QWidget *> mWidgets;
-    QList<QLayout *> mLayouts;
 
 private:
     static CharacterSearch *mpInstance;

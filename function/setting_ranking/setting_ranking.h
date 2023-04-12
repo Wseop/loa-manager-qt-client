@@ -73,10 +73,6 @@ private:
     QList<QVBoxLayout*> mOverallLayouts;
 
     QList<QWidget*> mOutputs;
-    QList<QLayout*> mOutputLayouts;
-
-    QList<QWidget*> mWidgets;
-    QList<QLayout*> mLayouts;
 
 private:
     static SettingRanking *mpInstance;

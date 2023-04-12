@@ -36,30 +36,6 @@ ContentRewardAdder::ContentRewardAdder(const QStringList &contents, const QHash<
 
 ContentRewardAdder::~ContentRewardAdder()
 {
-    if (mpContentSelector != nullptr)
-        delete mpContentSelector;
-    mpContentSelector = nullptr;
-
-    for (QComboBox *pLevelSelector : mLevelSelectors)
-        delete pLevelSelector;
-    mLevelSelectors.clear();
-
-    if (mpInputValidator != nullptr)
-        delete mpInputValidator;
-    mpInputValidator = nullptr;
-
-    for (QLineEdit *pLineEdit : mLineEdits)
-        delete pLineEdit;
-    mLineEdits.clear();
-
-    for (QWidget *pWidget : mWidgets)
-        delete pWidget;
-    mWidgets.clear();
-
-    for (auto rIter = mLayouts.rbegin(); rIter != mLayouts.rend(); rIter++)
-        delete *rIter;
-    mLayouts.clear();
-
     delete ui;
 }
 
@@ -108,7 +84,6 @@ void ContentRewardAdder::initializeInsertButton()
 {
     QPushButton *pInsertButton = WidgetManager::createPushButton("데이터 추가", 10, 100, 27);
     ui->hLayoutSelector->addWidget(pInsertButton);
-    mWidgets.append(pInsertButton);
 
     connect(pInsertButton, &QPushButton::released, this, &ContentRewardAdder::insertData);
 }
@@ -121,7 +96,6 @@ void ContentRewardAdder::initializeDataInputTable()
     {
         QLabel *pLabelItem = WidgetManager::createLabel(items[i], 12);
         ui->gridInputTable->addWidget(pLabelItem, 0, i);
-        mWidgets.append(pLabelItem);
 
         QLineEdit *pLineEdit = WidgetManager::createLineEdit(mpInputValidator, "", 10, 100, 25);
         ui->gridInputTable->addWidget(pLineEdit, 1, i);

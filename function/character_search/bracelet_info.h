@@ -29,9 +29,6 @@ private:
 
 private:
     Ui::BraceletInfo *ui;
-
-    QList<QWidget*> mWidgets;
-    QList<QLayout*> mLayouts;
 };
 
 #endif // BRACELET_INFO_H

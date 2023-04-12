@@ -48,19 +48,6 @@ SmartSearchAccessory::SmartSearchAccessory(QLayout *pLayout) :
 
 SmartSearchAccessory::~SmartSearchAccessory()
 {
-    delete mpSearchButton;
-    delete mpButtonSearchMore;
-
-    for (QWidget* pWidget : mOptionSelectors)
-        delete pWidget;
-    for (QWidget* pWidget : mWidgets)
-        delete pWidget;
-    for (auto rIter = mLayouts.rbegin(); rIter != mLayouts.rend(); rIter++)
-        delete *rIter;
-    mLayouts.clear();
-
-    clearResult();
-
     delete ui;
 }
 
@@ -123,11 +110,9 @@ void SmartSearchAccessory::initializeOptionSelector()
     {
         QGroupBox *pGroup = WidgetManager::createGroupBox(groupTitles[i]);
         ui->hLayoutOption->addWidget(pGroup);
-        mWidgets.append(pGroup);
 
         QHBoxLayout *pLayout = new QHBoxLayout();
         pGroup->setLayout(pLayout);
-        mLayouts.append(pLayout);
 
         QComboBox *pOptionSelector = WidgetManager::createComboBox(mOptionItems[i]);
         pLayout->addWidget(pOptionSelector);
@@ -173,7 +158,8 @@ void SmartSearchAccessory::initializeSearchButton()
     ui->hLayoutOption->addWidget(mpSearchButton);
 
     // 검색 버튼 기능 구현
-    connect(mpSearchButton, &QPushButton::released, this, [&](){
+    connect(mpSearchButton, &QPushButton::released, this, [&]()
+    {
         mpSearchButton->setDisabled(true);
 
         // 각인이 선택되지 않은 경우 검색 중단
@@ -222,7 +208,6 @@ void SmartSearchAccessory::initializeResultUI()
                 pLabelAttribute = WidgetManager::createLabel(attributes[j], 12, "", 200, 50);
 
             mResultLayouts[i]->addWidget(pLabelAttribute, 0, j);
-            mWidgets.append(pLabelAttribute);
         }
     }
 }
@@ -300,7 +285,6 @@ void SmartSearchAccessory::parseSearchResult(QNetworkReply *pReply)
     QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
     if (response.isNull())
         return;
-
 
     ResponseAuction responseAuction = ResponseParser::parseAuctionItem(response);
     const QList<AuctionItem> &items = responseAuction.items;
@@ -380,7 +364,8 @@ void SmartSearchAccessory::addSearchResult()
     }
 
     // UI 업데이트 후 3초뒤 검색버튼 활성화
-    QTimer::singleShot(3000, this, [&](){
+    QTimer::singleShot(3000, this, [&]()
+    {
         mpSearchButton->setEnabled(true);
     });
 }

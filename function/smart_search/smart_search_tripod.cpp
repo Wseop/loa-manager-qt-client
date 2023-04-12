@@ -40,13 +40,6 @@ SmartSearchTripod::SmartSearchTripod(QLayout *pLayout) :
 
 SmartSearchTripod::~SmartSearchTripod()
 {
-    clearResult();
-    delete mpClassSelector;
-    for (QWidget* pWidget : mWidgets)
-        delete pWidget;
-    for (auto rIter = mLayouts.rbegin(); rIter != mLayouts.rend(); rIter++)
-        delete *rIter;
-    mLayouts.clear();
     delete ui;
 }
 
@@ -72,11 +65,9 @@ void SmartSearchTripod::initializeClassSelector()
     QGroupBox *pGroupClassSelector = WidgetManager::createGroupBox("직업 선택");
     pGroupClassSelector->setMaximumWidth(9 + 200 + 9);
     ui->hLayoutMenu->addWidget(pGroupClassSelector);
-    mWidgets.append(pGroupClassSelector);
 
     QHBoxLayout *pLayout = new QHBoxLayout();
     pGroupClassSelector->setLayout(pLayout);
-    mLayouts.append(pLayout);
 
     mpClassSelector = WidgetManager::createComboBox(classes);
     pLayout->addWidget(mpClassSelector);
@@ -88,15 +79,12 @@ void SmartSearchTripod::initializePriceFilter()
     QGroupBox *pGroupPriceFilter = WidgetManager::createGroupBox("가격 필터");
     pGroupPriceFilter->setMaximumWidth(9 + 200 + 9);
     ui->hLayoutMenu->addWidget(pGroupPriceFilter);
-    mWidgets.append(pGroupPriceFilter);
 
     QHBoxLayout *pLayout = new QHBoxLayout();
     pGroupPriceFilter->setLayout(pLayout);
-    mLayouts.append(pLayout);
 
     QLineEdit *pPriceFilter = WidgetManager::createLineEdit(mpPriceValidator, "금액 입력");
     pLayout->addWidget(pPriceFilter);
-    mWidgets.append(pPriceFilter);
 
     // 값 입력 시 필터링 금액 업데이트
     connect(pPriceFilter, &QLineEdit::textChanged, this, [&](const QString &price){
@@ -130,7 +118,6 @@ void SmartSearchTripod::initializeSearchButton()
 {
     QPushButton *pSearchButton = WidgetManager::createPushButton("검색");
     ui->hLayoutMenu->addWidget(pSearchButton);
-    mWidgets.append(pSearchButton);
 
     // 검색 버튼 기능 구현
     connect(pSearchButton, &QPushButton::released, this, [&](){
@@ -172,7 +159,6 @@ void SmartSearchTripod::initializeResultUI()
     {
         QLabel *pLabelAttribute = WidgetManager::createLabel(attributes[i], 12);
         ui->gridResult->addWidget(pLabelAttribute, 0, col, 1, colSpans[i], Qt::AlignHCenter);
-        mWidgets.append(pLabelAttribute);
 
         col += colSpans[i];
 
@@ -180,7 +166,6 @@ void SmartSearchTripod::initializeResultUI()
         {
             QFrame *pVLine = WidgetManager::createLine(QFrame::VLine);
             ui->gridResult->addWidget(pVLine, 0, col, -1, 1);
-            mWidgets.append(pVLine);
 
             col += 1;
         }

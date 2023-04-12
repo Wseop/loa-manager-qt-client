@@ -33,9 +33,6 @@ private:
 
 private:
     Ui::EquipInfo *ui;
-
-    QList<QWidget*> mWidgets;
-    QList<QLayout*> mLayouts;
 };
 
 #endif // EQUIP_INFO_H

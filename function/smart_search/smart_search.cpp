@@ -30,10 +30,6 @@ SmartSearch::SmartSearch() :
 
 SmartSearch::~SmartSearch()
 {
-    for (QWidget* pWidget : mWidgets)
-        delete pWidget;
-    for (SmartSearchMenu* pMenu : mMenuWidgets)
-        delete pMenu;
     delete ui;
 }
 
@@ -64,7 +60,6 @@ void SmartSearch::initializeMenu()
     {
         QPushButton *pMenuButton = WidgetManager::createPushButton(mMenuNames[i]);
         ui->hLayoutMenu->addWidget(pMenuButton);
-        mWidgets.append(pMenuButton);
 
         connect(pMenuButton, &QPushButton::released, this, [&, i, pMenuButton](){
             if (mpSelectedMenuButton != nullptr)

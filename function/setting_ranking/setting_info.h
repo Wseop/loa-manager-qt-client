@@ -28,9 +28,6 @@ private:
 
 private:
     Ui::SettingInfo *ui;
-
-    QList<QWidget*> mWidgets;
-    QList<QLayout*> mLayouts;
 };
 
 #endif // SETTING_INFO_H

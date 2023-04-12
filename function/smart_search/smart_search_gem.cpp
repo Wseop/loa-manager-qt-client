@@ -30,9 +30,6 @@ SmartSearchGem::SmartSearchGem(QLayout *pLayout) :
 
 SmartSearchGem::~SmartSearchGem()
 {
-    for (QWidget* pWidget : mWidgets)
-        delete pWidget;
-    clearUI();
     delete ui;
 }
 
@@ -73,7 +70,6 @@ void SmartSearchGem::initializeUI()
         {
             QLabel *pLabel = WidgetManager::createLabel(attributes[i][j], 14, "", 200, 50);
             layouts[i]->addWidget(pLabel, 0, j, Qt::AlignHCenter);
-            mWidgets.append(pLabel);
         }
     }
 }
@@ -113,7 +109,6 @@ void SmartSearchGem::clearUI()
 {
     for (QWidget* pWidget : mGemWidgets)
         delete pWidget;
-
     mGemWidgets.clear();
 }
 

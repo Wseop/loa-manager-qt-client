@@ -36,8 +36,6 @@ private:
     QList<class SmartSearchMenu*> mMenuWidgets;
     SmartSearchMenu *mpSelectedMenu;
     class QPushButton* mpSelectedMenuButton;
-
-    QList<QWidget*> mWidgets;
 };
 
 #endif // SMART_SEARCH_H

@@ -34,13 +34,12 @@ private:
 
     QList<class QComboBox*> mEngraveSelectors;
     QComboBox *mpPenaltySelector;
+
     QList<QPair<AbilityStone, AuctionInfo>> mSearchResults;
     int mTotalSearchCount;
     int mCurrentSearchCount;
 
     QList<QWidget*> mResultWidgets;
-    QList<QWidget*> mWidgets;
-    QList<QLayout*> mLayouts;
 };
 
 #endif // SMART_SEARCH_ABILITYSTONE_H

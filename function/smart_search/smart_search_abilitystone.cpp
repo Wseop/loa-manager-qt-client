@@ -39,19 +39,6 @@ SmartSearchAbilityStone::SmartSearchAbilityStone(QLayout *pLayout) :
 
 SmartSearchAbilityStone::~SmartSearchAbilityStone()
 {
-    clearResult();
-
-    for (QComboBox* pEngraveSelector : mEngraveSelectors)
-        delete pEngraveSelector;
-    delete mpPenaltySelector;
-
-    for (QWidget* pWidget : mWidgets)
-        delete pWidget;
-
-    for (auto rIter = mLayouts.rbegin(); rIter != mLayouts.rend(); rIter++)
-        delete *rIter;
-    mLayouts.clear();
-
     delete ui;
 }
 
@@ -122,11 +109,9 @@ void SmartSearchAbilityStone::initializeEngraveSelector()
 
     QGroupBox *pGroupEngrave = WidgetManager::createGroupBox("각인 선택");
     ui->hLayoutMenu->addWidget(pGroupEngrave);
-    mWidgets.append(pGroupEngrave);
 
     QHBoxLayout *pLayoutGroupEngrave = new QHBoxLayout();
     pGroupEngrave->setLayout(pLayoutGroupEngrave);
-    mLayouts.append(pLayoutGroupEngrave);
 
     for (int i = 0; i < MAX_SELECTOR; i++)
     {
@@ -141,11 +126,9 @@ void SmartSearchAbilityStone::initializeEngraveSelector()
 
     QGroupBox *pGroupPenalty = WidgetManager::createGroupBox("감소 각인 선택");
     ui->hLayoutMenu->addWidget(pGroupPenalty);
-    mWidgets.append(pGroupPenalty);
 
     QHBoxLayout *pLayoutGroupPenalty = new QHBoxLayout();
     pGroupPenalty->setLayout(pLayoutGroupPenalty);
-    mLayouts.append(pLayoutGroupPenalty);
 
     mpPenaltySelector = WidgetManager::createComboBox(penalties);
     pLayoutGroupPenalty->addWidget(mpPenaltySelector);
@@ -154,7 +137,6 @@ void SmartSearchAbilityStone::initializeEngraveSelector()
     QPushButton *pButtonSearch = WidgetManager::createPushButton("검색");
     connect(pButtonSearch, &QPushButton::released, this, &SmartSearchAbilityStone::searchAbilityStone);
     ui->hLayoutMenu->addWidget(pButtonSearch);
-    mWidgets.append(pButtonSearch);
 }
 
 void SmartSearchAbilityStone::initializeResultUI()
@@ -165,7 +147,6 @@ void SmartSearchAbilityStone::initializeResultUI()
     {
         QLabel *pLabelAttribute = WidgetManager::createLabel(attributes[col], 12, "", 200, 50);
         ui->gridResult->addWidget(pLabelAttribute, 0, col);
-        mWidgets.append(pLabelAttribute);
     }
 }
 

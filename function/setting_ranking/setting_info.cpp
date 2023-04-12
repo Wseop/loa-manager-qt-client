@@ -20,14 +20,6 @@ SettingInfo::SettingInfo(CharacterSetting characterSetting, int rank, int count,
 
 SettingInfo::~SettingInfo()
 {
-    for (QWidget *pWidget : mWidgets)
-        delete pWidget;
-    mWidgets.clear();
-
-    for (auto rIter = mLayouts.rbegin(); rIter != mLayouts.rend(); rIter++)
-        delete *rIter;
-    mLayouts.clear();
-
     delete ui;
 }
 
@@ -87,15 +79,12 @@ void SettingInfo::initializeLayoutEngrave(const QString &engrave, const QString 
 
         QVBoxLayout *pVLayout = new QVBoxLayout();
         layouts[engraveLevel[i].digitValue() - 1]->addLayout(pVLayout);
-        mLayouts << pVLayout;
 
         QLabel *pEngraveIcon = WidgetManager::createIcon(pEngraveManager->iconPath(engraveName), nullptr);
         pVLayout->addWidget(pEngraveIcon);
-        mWidgets << pEngraveIcon;
 
         QLabel *pLabelLevel = WidgetManager::createLabel(engraveLevel[i], 10, "", 50);
         pVLayout->addWidget(pLabelLevel);
-        mWidgets << pLabelLevel;
 
         engraveSummaries[engraveLevel[i].digitValue() - 1] += engraveName.front();
     }
@@ -120,8 +109,6 @@ QLabel *SettingInfo::createLabel(const QString &text, int fontSize, int width, c
 
     if (style != "")
         pLabel->setStyleSheet(style);
-
-    mWidgets << pLabel;
 
     return pLabel;
 }

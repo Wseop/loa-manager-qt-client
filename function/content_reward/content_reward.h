@@ -65,9 +65,6 @@ private:
     class ContentRewardAdder *mpRewardAdder;
 
     class QLabel *mpLabelInfo;
-
-    QList<QWidget*> mWidgets;
-    QList<QLayout*> mLayouts;
 };
 
 #endif // CONTENT_REWARD_H

@@ -50,9 +50,6 @@ private:
     Ui::CharacterInfo *ui;
 
     Character *mpCharacter;
-
-    QList<QWidget *> mWidgets;
-    QList<QLayout *> mLayouts;
 };
 
 #endif // CHARACTER_INFO_H

@@ -30,19 +30,6 @@ SmartSearchReforge::SmartSearchReforge(QLayout *pLayout) :
 
 SmartSearchReforge::~SmartSearchReforge()
 {
-    for (QLabel* pLabel : mYDayAvgPriceLabels)
-        delete pLabel;
-    for (QLabel* pLabel : mRecentPriceLabels)
-        delete pLabel;
-    for (QLabel* pLabel : mMinPriceLabels)
-        delete pLabel;
-    for (QLabel* pLabel : mEfficiencyLabels)
-        delete pLabel;
-    for (QWidget* pWidget : mWidgets)
-        delete pWidget;
-    for (auto rIter = mLayouts.rbegin(); rIter != mLayouts.rend(); rIter++)
-        delete *rIter;
-    mLayouts.clear();
     delete ui;
 }
 
@@ -138,7 +125,6 @@ void SmartSearchReforge::initializeUI()
     {
         QLabel *pLabelAttribute = WidgetManager::createLabel(attributes[col], 14);
         ui->gridReforge->addWidget(pLabelAttribute, 0, col);
-        mWidgets.append(pLabelAttribute);
     }
 
     // 아이템 목록 추가
@@ -152,11 +138,9 @@ void SmartSearchReforge::initializeUI()
 
             QFrame *pHLine = WidgetManager::createLine(QFrame::HLine);
             ui->gridReforge->addWidget(pHLine, row++, 0, 1, -1);
-            mWidgets.append(pHLine);
 
             QLabel *pIcon = WidgetManager::createIcon(item.iconPath(), nullptr, itemGradeToBGColor(item.itemGrade()));
             ui->gridReforge->addWidget(pIcon, row, col++);
-            mWidgets.append(pIcon);
 
             // 아이템명
             QString itemName = "";
@@ -168,7 +152,6 @@ void SmartSearchReforge::initializeUI()
 
             QLabel *pLabelName = WidgetManager::createLabel(itemName, 10, itemGradeToTextColor(item.itemGrade()));
             ui->gridReforge->addWidget(pLabelName, row, col++);
-            mWidgets.append(pLabelName);
 
             // 전일 평균 거래가
             QLabel *pLabelYDayAvgPrice = WidgetManager::createLabel("-");

@@ -16,7 +16,6 @@ AbilityStoneInfo::AbilityStoneInfo(const AbilityStone *pAbilityStone) :
     {
         QLabel *pLabel = WidgetManager::createLabel("어빌리티 스톤 미착용");
         ui->vLayout2->addWidget(pLabel);
-        mWidgets << pLabel;
         return;
     }
 
@@ -26,14 +25,6 @@ AbilityStoneInfo::AbilityStoneInfo(const AbilityStone *pAbilityStone) :
 
 AbilityStoneInfo::~AbilityStoneInfo()
 {
-    for (QWidget *pWidget : mWidgets)
-        delete pWidget;
-    mWidgets.clear();
-
-    for (auto rIter = mLayouts.rbegin(); rIter != mLayouts.rend(); rIter++)
-        delete *rIter;
-    mLayouts.clear();
-
     delete ui;
 }
 
@@ -49,7 +40,6 @@ void AbilityStoneInfo::addAbilityStoneIcon(const QString &iconPath, ItemGrade it
 
     QLabel *pIcon = WidgetManager::createIcon(iconPath, pNetworkManager, itemGradeToBGColor(itemGrade));
     ui->vLayout1->addWidget(pIcon);
-    mWidgets << pIcon;
 }
 
 void AbilityStoneInfo::initializeLayout2(const AbilityStone *pAbilityStone)
@@ -64,7 +54,6 @@ void AbilityStoneInfo::addItemNameInfo(const QString &itemName, ItemGrade itemGr
 
     QLabel *pLabelItemName = WidgetManager::createLabel(itemName, 10, itemGradeToTextColor(itemGrade), 125);
     pHLayout->addWidget(pLabelItemName);
-    mWidgets << pLabelItemName;
 }
 
 void AbilityStoneInfo::addEngraveInfo(const QStringList &engraves, const QStringList &penalties, const AbilityStone *pAbilityStone)
@@ -87,7 +76,6 @@ void AbilityStoneInfo::addEngraveInfo(const QStringList &engraves, const QString
 
             QLabel *pLabelEngrave = WidgetManager::createLabel(text, 10, textColor[i], 100);
             pHLayout->addWidget(pLabelEngrave);
-            mWidgets << pLabelEngrave;
         }
     }
 }
@@ -99,7 +87,6 @@ QHBoxLayout *AbilityStoneInfo::createHLayout(QVBoxLayout *pLayout)
     pHLayout->setSpacing(5);
     pLayout->addLayout(pHLayout);
     pLayout->setAlignment(pHLayout, Qt::AlignLeft);
-    mLayouts << pHLayout;
 
     return pHLayout;
 }

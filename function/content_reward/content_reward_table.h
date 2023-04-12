@@ -37,9 +37,6 @@ private:
     QHash<QString, QList<class QLabel*>> mItemCountLabels;
     QHash<QString, QLabel*> mGoldLabel;
     QHash<QString, QLabel*> mCountLabel;
-
-    QList<QWidget*> mWidgets;
-    QList<QLayout*> mLayouts;
 };
 
 #endif // CONTENT_REWARD_TABLE_H

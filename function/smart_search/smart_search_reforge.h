@@ -34,9 +34,6 @@ private:
     QList<QLabel*> mRecentPriceLabels;
     QList<QLabel*> mMinPriceLabels;
     QList<QLabel*> mEfficiencyLabels;
-
-    QList<QLayout*> mLayouts;
-    QList<QWidget*> mWidgets;
 };
 
 #endif // SMART_SEARCH_REFORGE_H

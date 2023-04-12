@@ -19,14 +19,6 @@ SkillInfo::SkillInfo(const Skill *pSkill) :
 
 SkillInfo::~SkillInfo()
 {
-    for (QWidget *pWidget : mWidgets)
-        delete pWidget;
-    mWidgets.clear();
-
-    for (auto rIter = mLayouts.rbegin(); rIter != mLayouts.rend(); rIter++)
-        delete *rIter;
-    mLayouts.clear();
-
     delete ui;
 }
 
@@ -40,14 +32,12 @@ void SkillInfo::addSkillIcon(const QString &iconPath)
 {
     QLabel *pIcon = WidgetManager::createIcon(iconPath, nullptr);
     ui->vLayoutSkill1->addWidget(pIcon);
-    mWidgets << pIcon;
 }
 
 void SkillInfo::addSkillLevelLabel(int skillLevel)
 {
     QLabel *pLabelSkillLevel = WidgetManager::createLabel(QString("Lv.%1").arg(skillLevel), 10, "", 50);
     ui->vLayoutSkill1->addWidget(pLabelSkillLevel);
-    mWidgets << pLabelSkillLevel;
 }
 
 void SkillInfo::initializeSkillLayout2(const QString &skillName, bool bCounter)
@@ -62,7 +52,6 @@ void SkillInfo::addSkillNameLabel(const QString &skillName)
     pLabelSkillName->setFixedWidth(150);
     ui->vLayoutSkill2->addWidget(pLabelSkillName);
     ui->vLayoutSkill2->setAlignment(pLabelSkillName, Qt::AlignHCenter);
-    mWidgets << pLabelSkillName;
 }
 
 void SkillInfo::addCounterLabel(bool bCounter)
@@ -76,7 +65,6 @@ void SkillInfo::addCounterLabel(bool bCounter)
                                  "         padding: 2px }");
     ui->vLayoutSkill2->addWidget(pLabelCounter);
     ui->vLayoutSkill2->setAlignment(pLabelCounter, Qt::AlignHCenter);
-    mWidgets << pLabelCounter;
 }
 
 void SkillInfo::initializeTripodLayout(const QList<Tripod> &tripods)
@@ -116,27 +104,23 @@ void SkillInfo::addTripodTitle(const QString &titleText)
                                      "         border-radius: 5px; "
                                      "         padding: 2px }");
     ui->hLayoutTripodTitle->addWidget(pLabelTripodTitle);
-    mWidgets << pLabelTripodTitle;
 }
 
 void SkillInfo::addTripodInfo(const Tripod &tripod)
 {
     QVBoxLayout *pVLayout = new QVBoxLayout();
     ui->hLayoutTripod->addLayout(pVLayout);
-    mLayouts << pVLayout;
 
     // 트라이포드 아이콘
     QLabel *pIcon = WidgetManager::createIcon(tripod.iconPath(), nullptr, "#000000");
     pVLayout->addWidget(pIcon);
     pVLayout->setAlignment(pIcon, Qt::AlignHCenter);
-    mWidgets << pIcon;
 
     // 트라이포드 명
     QLabel *pLabelTripodName = WidgetManager::createLabel(tripod.tripodName(), 10, "");
     pLabelTripodName->setFixedWidth(100);
     pVLayout->addWidget(pLabelTripodName);
     pVLayout->setAlignment(pLabelTripodName, Qt::AlignHCenter);
-    mWidgets << pLabelTripodName;
 
     // 트라이포드 레벨
     const QString text = tripod.maxLevel() == 1 ? "Lv.1 최대" : QString("Lv.%1").arg(tripod.tripodLevel());
@@ -147,7 +131,6 @@ void SkillInfo::addTripodInfo(const Tripod &tripod)
                                      "         padding: 2px }");
     pVLayout->addWidget(pLabelTripodLevel);
     pVLayout->setAlignment(pLabelTripodLevel, Qt::AlignHCenter);
-    mWidgets << pLabelTripodLevel;
 }
 
 void SkillInfo::initializeRuneLayout(const Rune *pRune)
@@ -156,7 +139,6 @@ void SkillInfo::initializeRuneLayout(const Rune *pRune)
     {
         QLabel *pLabel = WidgetManager::createLabel("룬 미착용", 10, "", 50);
         ui->vLayoutRune->addWidget(pLabel);
-        mWidgets << pLabel;
         return;
     }
 
@@ -171,12 +153,10 @@ void SkillInfo::addRuneIcon(const QString &iconPath, ItemGrade itemGrade)
 
     QLabel *pIcon = WidgetManager::createIcon(iconPath, pNetworkManager, itemGradeToBGColor(itemGrade));
     ui->vLayoutRune->addWidget(pIcon);
-    mWidgets << pIcon;
 }
 
 void SkillInfo::addRuneNameLabel(const QString &runeName, ItemGrade itemGrade)
 {
     QLabel *pLabelRuneName = WidgetManager::createLabel(runeName, 10, itemGradeToTextColor(itemGrade), 50);
     ui->vLayoutRune->addWidget(pLabelRuneName);
-    mWidgets << pLabelRuneName;
 }

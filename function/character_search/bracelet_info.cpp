@@ -16,7 +16,6 @@ BraceletInfo::BraceletInfo(const Bracelet *pBracelet) :
     {
         QLabel *pLabel = WidgetManager::createLabel("팔찌 미착용");
         ui->vLayout2->addWidget(pLabel);
-        mWidgets << pLabel;
         return;
     }
 
@@ -26,14 +25,6 @@ BraceletInfo::BraceletInfo(const Bracelet *pBracelet) :
 
 BraceletInfo::~BraceletInfo()
 {
-    for (QWidget *pWidget : mWidgets)
-        delete pWidget;
-    mWidgets.clear();
-
-    for (auto rIter = mLayouts.rbegin(); rIter != mLayouts.rend(); rIter++)
-        delete *rIter;
-    mLayouts.clear();
-
     delete ui;
 }
 
@@ -49,7 +40,6 @@ void BraceletInfo::addBraceletIcon(const QString &iconPath, ItemGrade itemGrade)
 
     QLabel *pIcon = WidgetManager::createIcon(iconPath, pNetworkManager, itemGradeToBGColor(itemGrade));
     ui->vLayout1->addWidget(pIcon);
-    mWidgets << pIcon;
 }
 
 void BraceletInfo::initializeLayout2(const Bracelet *pBracelet)
@@ -67,7 +57,6 @@ void BraceletInfo::addEffectInfo(const QList<QPair<QString, int> > &effects)
 
         QLabel *pLabelEffect = WidgetManager::createLabel(text);
         pHLayout->addWidget(pLabelEffect);
-        mWidgets << pLabelEffect;
     }
 }
 
@@ -82,7 +71,6 @@ void BraceletInfo::addSpecialEffectInfo(const QList<QPair<QString, int> > &speci
                                     "         border-radius: 5px; "
                                     "         padding: 2px }");
         pHLayout->addWidget(pLabelEffect);
-        mWidgets << pLabelEffect;
     }
 }
 
@@ -93,7 +81,6 @@ QHBoxLayout *BraceletInfo::createHLayout(QVBoxLayout *pLayout)
     pHLayout->setSpacing(5);
     pLayout->addLayout(pHLayout);
     pLayout->setAlignment(pHLayout, Qt::AlignLeft);
-    mLayouts << pHLayout;
 
     return pHLayout;
 }

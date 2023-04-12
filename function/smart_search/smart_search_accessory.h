@@ -78,8 +78,6 @@ private:
     QPushButton *mpSearchButton;
     QList<class QGridLayout*> mResultLayouts;
     QList<class QLabel*> mEngraveLabels;
-    QList<QWidget*> mWidgets;
-    QList<QLayout*> mLayouts;
 };
 
 #endif // SMART_SEARCH_ACCESSORY_H

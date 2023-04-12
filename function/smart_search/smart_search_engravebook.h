@@ -37,7 +37,6 @@ private:
     QList<QWidget*> mPriceWidgets;
 
     QList<class QGridLayout*> mLayouts;
-    QList<QWidget*> mWidgets;
 };
 
 #endif // SMART_SEARCH_ENGRAVEBOOK_H

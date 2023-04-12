@@ -40,25 +40,6 @@ CharacterSearch::CharacterSearch() :
 
 CharacterSearch::~CharacterSearch()
 {
-    mpLineEditCharacterName = nullptr;
-    mpSearchButton = nullptr;
-
-    for (auto iter = mCharacters.begin(); iter != mCharacters.end(); iter++)
-        delete *iter;
-    mCharacters.clear();
-
-    for (auto iter = mCharacterInfos.begin(); iter != mCharacterInfos.end(); iter++)
-        delete *iter;
-    mCharacterInfos.clear();
-
-    for (QWidget *pWidget : mWidgets)
-        delete pWidget;
-    mWidgets.clear();
-
-    for (auto rIter = mLayouts.rbegin(); rIter != mLayouts.rend(); rIter++)
-        delete *rIter;
-    mLayouts.clear();
-
     delete ui;
 }
 
@@ -74,17 +55,14 @@ void CharacterSearch::initializeInputLayout()
     // Layout 구성
     QGroupBox *pGroupInput = WidgetManager::createGroupBox("");
     ui->hLayoutInput->addWidget(pGroupInput);
-    mWidgets << pGroupInput;
 
     QHBoxLayout *pHLayoutInput = new QHBoxLayout();
     pHLayoutInput->setAlignment(Qt::AlignHCenter);
     pGroupInput->setLayout(pHLayoutInput);
-    mLayouts << pHLayoutInput;
 
     // 캐릭터명 입력창 추가
     mpLineEditCharacterName = WidgetManager::createLineEdit(nullptr, "캐릭터명을 입력해주세요.");
     pHLayoutInput->addWidget(mpLineEditCharacterName);
-    mWidgets << mpLineEditCharacterName;
 
     // 캐릭터명 입력창에서 Enter 입력 시 검색 시작
     connect(mpLineEditCharacterName, &QLineEdit::returnPressed, this, [&]()
@@ -96,7 +74,6 @@ void CharacterSearch::initializeInputLayout()
     // 검색 버튼 추가
     mpSearchButton = WidgetManager::createPushButton("검색", 10, 100, 25);
     pHLayoutInput->addWidget(mpSearchButton);
-    mWidgets << mpSearchButton;
 
     connect(mpSearchButton, &QPushButton::released, this, [&]()
     {

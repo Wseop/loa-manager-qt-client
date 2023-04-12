@@ -29,9 +29,6 @@ private:
 
 private:
     Ui::GemInfo *ui;
-
-    QList<QWidget*> mWidgets;
-    QList<QLayout*> mLayouts;
 };
 
 #endif // GEM_INFO_H

@@ -22,18 +22,6 @@ ContentRewardTable::ContentRewardTable(const QString &content, const QStringList
 
 ContentRewardTable::~ContentRewardTable()
 {
-    mItemCountLabels.clear();
-    mGoldLabel.clear();
-    mCountLabel.clear();
-
-    for (QWidget *pWidget : mWidgets)
-        delete pWidget;
-    mWidgets.clear();
-
-    for (auto rIter = mLayouts.rbegin(); rIter != mLayouts.rend(); rIter++)
-        delete *rIter;
-    mLayouts.clear();
-
     delete ui;
 }
 
@@ -120,26 +108,21 @@ void ContentRewardTable::initializeUIContentLevel()
 
     QLabel *pLabel = WidgetManager::createLabel("단계", 12);
     ui->gridTable->addWidget(pLabel, row++, 0, Qt::AlignHCenter);
-    mWidgets.append(pLabel);
 
     QFrame *pHLine = WidgetManager::createLine(QFrame::HLine);
     ui->gridTable->addWidget(pHLine, row++, 0, 1, -1);
-    mWidgets.append(pHLine);
 
     for (int i = 0; i < mContentLevels.size(); i++)
     {
         QLabel *pLabelLevel = WidgetManager::createLabel(mContentLevels[i]);
         ui->gridTable->addWidget(pLabelLevel, row++, 0);
-        mWidgets.append(pLabelLevel);
 
         QFrame *pHLine2 = WidgetManager::createLine(QFrame::HLine);
         ui->gridTable->addWidget(pHLine2, row++, 0, 1, -1);
-        mWidgets.append(pHLine2);
     }
 
     QFrame *pVLine = WidgetManager::createLine(QFrame::VLine);
     ui->gridTable->addWidget(pVLine, 0, 1, -1, 1);
-    mWidgets.append(pVLine);
 }
 
 void ContentRewardTable::initializeUIDropTable()
@@ -148,7 +131,6 @@ void ContentRewardTable::initializeUIDropTable()
     int col = 0;
 
     QLabel *pLabel = WidgetManager::createLabel("컨텐츠 보상 평균 획득량 (2수, 휴식X)", 12, "", 300);
-    mWidgets.append(pLabel);
 
     // 보상 평균 획득량 layout
     for (int i = 0; i < mContentLevels.size(); i++)
@@ -162,7 +144,6 @@ void ContentRewardTable::initializeUIDropTable()
 
             QVBoxLayout *pVLayout = new QVBoxLayout();
             ui->gridTable->addLayout(pVLayout, row, itemCol++);
-            mLayouts.append(pVLayout);
 
             const QString &iconPath = ResourceManager::getInstance()->iconPath(item);
 
@@ -173,14 +154,12 @@ void ContentRewardTable::initializeUIDropTable()
                 pLabelItem = WidgetManager::createLabel(item, 10, "", 50, 50);
             pVLayout->addWidget(pLabelItem);
             pVLayout->setAlignment(pLabelItem, Qt::AlignHCenter);
-            mWidgets.append(pLabelItem);
 
             QLabel *pLabelCount = WidgetManager::createLabel("-", 10, "", 100, 25);
             pLabelCount->setStyleSheet("QLabel { border: 1px solid black }");
             pVLayout->addWidget(pLabelCount);
             pVLayout->setAlignment(pLabelCount, Qt::AlignBottom);
             mItemCountLabels[level].append(pLabelCount);
-            mWidgets.append(pLabelCount);
         }
         row += 2;
         col = col > itemCol ? col : itemCol;
@@ -190,7 +169,6 @@ void ContentRewardTable::initializeUIDropTable()
 
     QFrame *pVLine = WidgetManager::createLine(QFrame::VLine);
     ui->gridTable->addWidget(pVLine, 0, col++, -1, 1);
-    mWidgets.append(pVLine);
 
     initializeUIGold(col);
 }
@@ -202,7 +180,6 @@ void ContentRewardTable::initializeUIGold(int col)
     // 골드 가치 layout
     QLabel *pLabelGoldAttr = WidgetManager::createLabel("골드 가치", 12);
     ui->gridTable->addWidget(pLabelGoldAttr, row++, col);
-    mWidgets.append(pLabelGoldAttr);
 
     row++;
 
@@ -213,21 +190,18 @@ void ContentRewardTable::initializeUIGold(int col)
         QLabel *pLabelGold = WidgetManager::createLabel("-");
         ui->gridTable->addWidget(pLabelGold, row++, col);
         mGoldLabel[level] = pLabelGold;
-        mWidgets.append(pLabelGold);
 
         row++;
     }
 
     QFrame *pVLine = WidgetManager::createLine(QFrame::VLine);
     ui->gridTable->addWidget(pVLine, 0, ++col, -1, 1);
-    mWidgets.append(pVLine);
 
     // 누적 데이터 수 layout
     row = 0;
 
     QLabel *pLabelCountAttr = WidgetManager::createLabel("누적 데이터 수", 12);
     ui->gridTable->addWidget(pLabelCountAttr, row++, ++col);
-    mWidgets.append(pLabelCountAttr);
 
     row++;
 
@@ -238,7 +212,6 @@ void ContentRewardTable::initializeUIGold(int col)
         QLabel *pLabelCount = WidgetManager::createLabel("-");
         ui->gridTable->addWidget(pLabelCount, row++, col);
         mCountLabel[level] = pLabelCount;
-        mWidgets.append(pLabelCount);
 
         row++;
     }

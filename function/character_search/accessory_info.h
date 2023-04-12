@@ -32,9 +32,6 @@ private:
 
 private:
     Ui::AccessoryInfo *ui;
-
-    QList<QWidget*> mWidgets;
-    QList<QLayout*> mLayouts;
 };
 
 #endif // ACCESSORY_INFO_H

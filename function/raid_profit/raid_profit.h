@@ -55,9 +55,6 @@ private:
     QList<class RaidProfitTable*> mProfitTables;
     RaidProfitTable *mpCurrentTable;
 
-    QList<QWidget*> mWidgets;
-    QList<QLayout*> mLayouts;
-
 private:
     static RaidProfit *mpInstance;
 };

@@ -72,11 +72,9 @@ void SettingRanking::initializeClassSelector()
     QGroupBox *pGroupBox = WidgetManager::createGroupBox("직업 선택");
     ui->hLayoutInput->addWidget(pGroupBox);
     ui->hLayoutInput->setAlignment(pGroupBox, Qt::AlignCenter);
-    mWidgets << pGroupBox;
 
     QHBoxLayout *pHLayout = new QHBoxLayout();
     pGroupBox->setLayout(pHLayout);
-    mLayouts << pHLayout;
 
     mpClassSelector = WidgetManager::createComboBox(classNames);
     pHLayout->addWidget(mpClassSelector);
@@ -199,7 +197,6 @@ void SettingRanking::initializeSearchButton()
 
     ui->hLayoutInput->addWidget(mpSearchButton);
     ui->hLayoutInput->setAlignment(mpSearchButton, Qt::AlignCenter);
-    mWidgets << mpSearchButton;
 }
 
 void SettingRanking::initializeHelp()
@@ -208,7 +205,6 @@ void SettingRanking::initializeHelp()
     QLabel *pLabelHelp = WidgetManager::createLabel(help, 10, "", 300, 75);
 
     ui->hLayoutInput->addWidget(pLabelHelp);
-    mWidgets << pLabelHelp;
 }
 
 void SettingRanking::initializeOutputLayout()

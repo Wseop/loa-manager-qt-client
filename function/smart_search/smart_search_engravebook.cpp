@@ -34,9 +34,6 @@ SmartSearchEngraveBook::SmartSearchEngraveBook(QLayout *pLayout) :
 
 SmartSearchEngraveBook::~SmartSearchEngraveBook()
 {
-    for (QWidget* pWidget : mWidgets)
-        delete pWidget;
-    clearUI();
     delete ui;
 }
 
@@ -55,13 +52,11 @@ void SmartSearchEngraveBook::initializeUI()
     {
         QLabel *pLabelCategory = WidgetManager::createLabel(categories[i], 16);
         mLayouts[i]->addWidget(pLabelCategory, 0, 0, 1, -1, Qt::AlignHCenter);
-        mWidgets.append(pLabelCategory);
 
         for (int j = 0; j < attributes.size(); j++)
         {
             QLabel *pLabelAttribute = WidgetManager::createLabel(attributes[j], 12);
             mLayouts[i]->addWidget(pLabelAttribute, 1, j);
-            mWidgets.append(pLabelAttribute);
         }
     }
 }

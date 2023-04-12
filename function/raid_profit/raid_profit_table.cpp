@@ -20,14 +20,6 @@ RaidProfitTable::RaidProfitTable(const QString &content, const QList<int> &costs
 
 RaidProfitTable::~RaidProfitTable()
 {
-    for (QWidget *pWidget : mWidgets)
-        delete pWidget;
-    mWidgets.clear();
-
-    for (auto rIter = mLayouts.rbegin(); rIter != mLayouts.rend(); rIter++)
-        delete *rIter;
-    mLayouts.clear();
-
     delete ui;
 }
 
@@ -79,7 +71,6 @@ void RaidProfitTable::initializeTableColumn(const QList<int> &colSpans)
     {
         QLabel *pLabel = WidgetManager::createLabel(attributes[i], 12, "", 150);
         ui->gridTable->addWidget(pLabel, 0, col, 1, colSpans[i], Qt::AlignHCenter);
-        mWidgets << pLabel;
 
         col += colSpans[i];
 
@@ -87,7 +78,6 @@ void RaidProfitTable::initializeTableColumn(const QList<int> &colSpans)
         {
             QFrame *pVLine = WidgetManager::createLine(QFrame::VLine);
             ui->gridTable->addWidget(pVLine, 0, col++, -1, 1, Qt::AlignHCenter);
-            mWidgets << pVLine;
         }
     }
 }
@@ -104,7 +94,6 @@ void RaidProfitTable::initializeTableRow(const QList<int> &colSpans)
 
         QFrame *pHLine = WidgetManager::createLine(QFrame::HLine);
         ui->gridTable->addWidget(pHLine, row++, 0, 1, -1);
-        mWidgets << pHLine;
 
         // 관문
         QLabel *pLabelGate = nullptr;
@@ -115,14 +104,12 @@ void RaidProfitTable::initializeTableRow(const QList<int> &colSpans)
             pLabelGate = WidgetManager::createLabel(QString("%1관문").arg(i + 1), 10, "", 100);
 
         ui->gridTable->addWidget(pLabelGate, row, col, Qt::AlignHCenter);
-        mWidgets << pLabelGate;
 
         col += colSpans[0] + 1 + colSpans[1] + 1;
 
         // 더보기 비용
         QLabel *pLabelCost = WidgetManager::createLabel(QString("%L1").arg(mCosts[i]), 10, "", 100);
         ui->gridTable->addWidget(pLabelCost, row, col, Qt::AlignHCenter);
-        mWidgets << pLabelCost;
 
         col += colSpans[2] + 1;
 
@@ -130,7 +117,6 @@ void RaidProfitTable::initializeTableRow(const QList<int> &colSpans)
         QLabel *pLabelTotalGold = WidgetManager::createLabel("-", 10, "", 100);
         ui->gridTable->addWidget(pLabelTotalGold, row, col, Qt::AlignHCenter);
         mGoldLabels << pLabelTotalGold;
-        mWidgets << pLabelTotalGold;
 
         col += colSpans[3] + 1;
 
@@ -138,7 +124,6 @@ void RaidProfitTable::initializeTableRow(const QList<int> &colSpans)
         QLabel *pLabelProfit = WidgetManager::createLabel("-", 10, "", 100);
         ui->gridTable->addWidget(pLabelProfit, row++, col, Qt::AlignHCenter);
         mProfitLabels << pLabelProfit;
-        mWidgets << pLabelProfit;
     }
 }
 
@@ -154,15 +139,12 @@ void RaidProfitTable::initializeTableReward()
         {
             QVBoxLayout *pLayoutItem = new QVBoxLayout();
             ui->gridTable->addLayout(pLayoutItem, row, col++, Qt::AlignHCenter);
-            mLayouts << pLayoutItem;
 
             QLabel *pIconItem = WidgetManager::createIcon(ResourceManager::getInstance()->iconPath(rewardItem.first), nullptr);
             pLayoutItem->addWidget(pIconItem);
-            mWidgets << pIconItem;
 
             QLabel *pLabelItemCount = WidgetManager::createLabel(QString("%L1").arg(rewardItem.second), 10, "", 100);
             pLayoutItem->addWidget(pLabelItemCount);
-            mWidgets << pLabelItemCount;
         }
 
         row += 2;

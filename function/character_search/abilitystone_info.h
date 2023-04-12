@@ -29,9 +29,6 @@ private:
 
 private:
     Ui::AbilityStoneInfo *ui;
-
-    QList<QWidget*> mWidgets;
-    QList<QLayout*> mLayouts;
 };
 
 #endif // ABILITYSTONE_INFO_H

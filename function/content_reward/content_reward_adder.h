@@ -37,9 +37,6 @@ private:
 
     class QIntValidator *mpInputValidator;
     QList<class QLineEdit*> mLineEdits;
-
-    QList<QWidget*> mWidgets;
-    QList<QLayout*> mLayouts;
 };
 
 #endif // CONTENT_REWARD_ADDER_H

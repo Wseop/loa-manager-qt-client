@@ -9,6 +9,8 @@
 class QComboBox;
 class QPushButton;
 class QLabel;
+class QFrame;
+class QVBoxLayout;
 
 namespace Ui {
 class SettingRanking;
@@ -30,11 +32,19 @@ private:
     void initializeOutputLayout();
 
     QList<CharacterSetting> filterCharacterSettings(const QList<CharacterSetting> &characterSettings);
-    void sortEngraveSetting(QString &engrave, QString &engraveLevel);
-    QList<QList<CharacterSetting>> classifyByClassEngrave(const QList<CharacterSetting> &characterSettings);
-    void classifyBySetting(const QList<QList<CharacterSetting>> &characterSettings);
+    void sortEngraveCodes(QString &engrave, QString &engraveLevel);
 
-    void showCharacterSettings();
+    QList<QList<CharacterSetting>> classifyByClassEngrave(const QList<CharacterSetting> &characterSettings);
+    QList<QPair<QString, int>> classifyByItemSet(const QList<CharacterSetting> &characterSettings);
+    QList<QPair<QString, int>> classifyByAbility(const QList<CharacterSetting> &characterSettings);
+    QList<QPair<QString, int>> classifyByElixir(const QList<CharacterSetting> &characterSettings);
+    QList<QPair<QString, int>> classifyByEngrave(const QList<CharacterSetting> &characterSettings);
+    QList<QPair<QString, int>> classifyOverall(const QList<CharacterSetting> &characterSettings);
+
+    void showClassEngraveRatio();
+    void showRatio(QString textColor, QString title, int index, const QList<QVBoxLayout*> &layouts, const QList<QPair<QString, int>> &classifiedData);
+    void showEngraveRatio(int index, const QList<QPair<QString, int>> &engraveRatio);
+    void showOverallRatio(int index, const QList<QPair<QString, int>> &overallRatio);
 
 public:
     void start() override;
@@ -46,16 +56,25 @@ public:
 private:
     Ui::SettingRanking *ui;
 
-    QList<int> mClassEngraveCodes;
+    QList<int> mClassEngraveCodes;  // 직각1, 2
+
     int mTotalDataCount;
     QList<int> mDataCounts;
-    QList<QHash<QString, QList<CharacterSetting>>> mCharacterSettings;  // [직업각인][세팅ID] = 세팅 목록
-    QList<QList<QPair<QString, int>>> mSettingCounts;  // 세팅ID에 해당하는 세팅 목록의 size
 
     QComboBox *mpClassSelector;
     QPushButton *mpSearchButton;
 
+    QList<QFrame*> mLines;
+    QList<QVBoxLayout*> mClassEngraveLayouts;
+    QList<QVBoxLayout*> mItemSetLayouts;
+    QList<QVBoxLayout*> mAbilityLayouts;
+    QList<QVBoxLayout*> mElixirLayouts;
+    QList<QVBoxLayout*> mEngraveLayouts;
+    QList<QVBoxLayout*> mOverallLayouts;
+
     QList<QWidget*> mOutputs;
+    QList<QLayout*> mOutputLayouts;
+
     QList<QWidget*> mWidgets;
     QList<QLayout*> mLayouts;
 

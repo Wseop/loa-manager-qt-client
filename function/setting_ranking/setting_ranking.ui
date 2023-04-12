@@ -52,29 +52,115 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="hLayoutOutput">
+    <layout class="QHBoxLayout" name="hLayoutClassEngrave">
      <item>
-      <layout class="QVBoxLayout" name="vLayoutOutput1"/>
+      <layout class="QVBoxLayout" name="vLayoutClassEngrave1"/>
      </item>
      <item>
-      <widget class="Line" name="line_2">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-      </widget>
+      <layout class="QVBoxLayout" name="vLayoutClassEngrave2"/>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="vLayoutOutput2"/>
+      <layout class="QVBoxLayout" name="vLayoutClassEngrave3"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="Line" name="line_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="hLayoutItemSet">
+     <item>
+      <layout class="QVBoxLayout" name="vLayoutItemSet1"/>
      </item>
      <item>
-      <widget class="Line" name="line_3">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-      </widget>
+      <layout class="QVBoxLayout" name="vLayoutItemSet2"/>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="vLayoutOutput3"/>
+      <layout class="QVBoxLayout" name="vLayoutItemSet3"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="Line" name="line_3">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="hLayoutAbility">
+     <item>
+      <layout class="QVBoxLayout" name="vLayoutAbility1"/>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="vLayoutAbility2"/>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="vLayoutAbility3"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="Line" name="line_4">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="hLayoutElixir">
+     <item>
+      <layout class="QVBoxLayout" name="vLayoutElixir1"/>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="vLayoutElixir2"/>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="vLayoutElixir3"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="Line" name="line_5">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="hLayoutEngrave">
+     <item>
+      <layout class="QVBoxLayout" name="vLayoutEngrave1"/>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="vLayoutEngrave2"/>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="vLayoutEngrave3"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="Line" name="line_6">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="hLayoutOverall">
+     <item>
+      <layout class="QVBoxLayout" name="vLayoutOverall1"/>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="vLayoutOverall2"/>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="vLayoutOverall3"/>
      </item>
     </layout>
    </item>

@@ -28,21 +28,14 @@ SettingRanking::SettingRanking() :
     mTotalDataCount(0),
     mDataCounts(3, 0),
     mpClassSelector(nullptr),
-    mpSearchButton(nullptr)
+    mpSearchButton(nullptr),
+    mOutputs(static_cast<int>(SettingCategory::size))
 {
     ui->setupUi(this);
 
-    mLines = {ui->line_2, ui->line_3, ui->line_4, ui->line_5, ui->line_6};
-
-    mClassEngraveLayouts = {ui->vLayoutClassEngrave1, ui->vLayoutClassEngrave2, ui->vLayoutClassEngrave3};
-    mItemSetLayouts = {ui->vLayoutItemSet1, ui->vLayoutItemSet2, ui->vLayoutItemSet3};
-    mAbilityLayouts = {ui->vLayoutAbility1, ui->vLayoutAbility2, ui->vLayoutAbility3};
-    mElixirLayouts = {ui->vLayoutElixir1, ui->vLayoutElixir2, ui->vLayoutElixir3};
-    mEngraveLayouts = {ui->vLayoutEngrave1, ui->vLayoutEngrave2, ui->vLayoutEngrave3};
-    mOverallLayouts = {ui->vLayoutOverall1, ui->vLayoutOverall2, ui->vLayoutOverall3};
-
     initializeInputLayout();
     initializeOutputLayout();
+    initializeCategoryButton();
 }
 
 SettingRanking::~SettingRanking()
@@ -90,9 +83,14 @@ void SettingRanking::initializeSearchButton()
         mClassEngraveCodes.clear();
         mTotalDataCount = 0;
         mDataCounts = QList<int>(3, 0);
-        for (QWidget *pWidget : mOutputs)
-            delete pWidget;
-        mOutputs.clear();
+        for (int i = 0; i < mOutputs.size(); i++)
+        {
+            for (int j = 0; j < mOutputs[i].size(); j++)
+            {
+                delete mOutputs[i][j];
+            }
+        }
+        mOutputs = QList<QList<QWidget*>>(static_cast<int>(SettingCategory::size));
 
         mpSearchButton->setDisabled(true);
         ui->labelInfo->setText("데이터 불러오는 중...");
@@ -139,7 +137,7 @@ void SettingRanking::initializeSearchButton()
             for (int i = 0; i < 3; i++)
             {
                 QList<QPair<QString, int>> classifiedByItemSet = classifyByItemSet(classifiedByClassEngrave[i]);
-                showRatio("#D7AC87", "[세트 효과]", i, mItemSetLayouts, classifiedByItemSet);
+                showRatio("#D7AC87", i, SettingCategory::ItemSet, mItemSetLayouts, classifiedByItemSet);
             }
 
             QCoreApplication::processEvents();
@@ -148,7 +146,7 @@ void SettingRanking::initializeSearchButton()
             for (int i = 0; i < 3; i++)
             {
                 QList<QPair<QString, int>> classifiedByAbility = classifyByAbility(classifiedByClassEngrave[i]);
-                showRatio("white", "[특성]", i, mAbilityLayouts, classifiedByAbility);
+                showRatio("white", i, SettingCategory::Ability, mAbilityLayouts, classifiedByAbility);
             }
 
             QCoreApplication::processEvents();
@@ -157,12 +155,21 @@ void SettingRanking::initializeSearchButton()
             for (int i = 0; i < 3; i++)
             {
                 QList<QPair<QString, int>> classifiedByElixir = classifyByElixir(classifiedByClassEngrave[i]);
-                showRatio("#00B700", "[엘릭서]", i, mElixirLayouts, classifiedByElixir);
+                showRatio("#00B700", i, SettingCategory::Elixir, mElixirLayouts, classifiedByElixir);
             }
 
             QCoreApplication::processEvents();
 
             // 각인으로 분류 및 결과 출력
+            for (int i = 0; i < 3; i++)
+            {
+                QList<QPair<QString, int>> classifiedByEngraveSingle = classifyByEngraveSingle(classifiedByClassEngrave[i]);
+                showRatio("white", i, SettingCategory::EngraveSingle, mEngraveSingleLayouts, classifiedByEngraveSingle);
+            }
+
+            QCoreApplication::processEvents();
+
+            // 각인조합으로 분류 및 결과 출력
             for (int i = 0; i < 3; i++)
             {
                 QList<QPair<QString, int>> classifiedByEngrave = classifyByEngrave(classifiedByClassEngrave[i]);
@@ -209,10 +216,20 @@ void SettingRanking::initializeHelp()
 
 void SettingRanking::initializeOutputLayout()
 {
+    mLines = {ui->line_2, ui->line_3, ui->line_4, ui->line_5, ui->line_6, ui->line_7};
+
     for (int i = 0; i < mLines.size(); i++)
     {
         mLines[i]->hide();
     }
+
+    mClassEngraveLayouts = {ui->vLayoutClassEngrave1, ui->vLayoutClassEngrave2, ui->vLayoutClassEngrave3};
+    mItemSetLayouts = {ui->vLayoutItemSet1, ui->vLayoutItemSet2, ui->vLayoutItemSet3};
+    mAbilityLayouts = {ui->vLayoutAbility1, ui->vLayoutAbility2, ui->vLayoutAbility3};
+    mElixirLayouts = {ui->vLayoutElixir1, ui->vLayoutElixir2, ui->vLayoutElixir3};
+    mEngraveSingleLayouts = {ui->vLayoutEngraveSingle1, ui->vLayoutEngraveSingle2, ui->vLayoutEngraveSingle3};
+    mEngraveLayouts = {ui->vLayoutEngrave1, ui->vLayoutEngrave2, ui->vLayoutEngrave3};
+    mOverallLayouts = {ui->vLayoutOverall1, ui->vLayoutOverall2, ui->vLayoutOverall3};
 
     for (int i = 0; i < 3; i++)
     {
@@ -220,11 +237,41 @@ void SettingRanking::initializeOutputLayout()
         mItemSetLayouts[i]->setAlignment(Qt::AlignTop);
         mAbilityLayouts[i]->setAlignment(Qt::AlignTop);
         mElixirLayouts[i]->setAlignment(Qt::AlignTop);
+        mEngraveSingleLayouts[i]->setAlignment(Qt::AlignTop);
         mEngraveLayouts[i]->setAlignment(Qt::AlignTop);
         mOverallLayouts[i]->setAlignment(Qt::AlignTop);
     }
 
     ui->labelInfo->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, 16));
+}
+
+void SettingRanking::initializeCategoryButton()
+{
+    const QList<QPushButton*> buttons = {nullptr, ui->pbItemSet, ui->pbAbility, ui->pbElixir, ui->pbEngraveSingle, ui->pbEngrave, ui->pbOverall};
+    const QFont font = FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, 18);
+
+    for (int i = 0; i < buttons.size(); i++)
+    {
+        QPushButton *pButton = buttons[i];
+
+        if (pButton == nullptr)
+            continue;
+
+        pButton->setFont(font);
+
+        connect(pButton, &QPushButton::released, this, [&, i]()
+        {
+            QList<QWidget*> &widgets = mOutputs[i];
+
+            for (QWidget *pWidget : widgets)
+            {
+                if (pWidget->isHidden())
+                    pWidget->setVisible(true);
+                else
+                    pWidget->setHidden(true);
+            }
+        });
+    }
 }
 
 QList<CharacterSetting> SettingRanking::filterCharacterSettings(const QList<CharacterSetting> &characterSettings)
@@ -388,6 +435,40 @@ QList<QPair<QString, int> > SettingRanking::classifyByElixir(const QList<Charact
     return elixirCounts;
 }
 
+QList<QPair<QString, int> > SettingRanking::classifyByEngraveSingle(const QList<CharacterSetting> &characterSettings)
+{
+    QHash<QString, int> engraveCount;
+
+    static EngraveManager *pEngraveManager = EngraveManager::getInstance();
+
+    for (const CharacterSetting &characterSetting : characterSettings)
+    {
+        const QString &engrave = characterSetting.engrave;
+        const QString &engraveLevel = characterSetting.engraveLevel;
+
+        for (int i = 0; i < engraveLevel.size(); i++)
+        {
+            QString engraveName = pEngraveManager->getEngraveByCode(engrave.sliced(i * 3, 3).toInt());
+
+            engraveCount[engraveName]++;
+        }
+    }
+
+    QList<QPair<QString, int>> engraveCounts;
+
+    for (auto iter = engraveCount.begin(); iter != engraveCount.end(); iter++)
+    {
+        engraveCounts.append({iter.key(), iter.value()});
+    }
+
+    std::sort(engraveCounts.begin(), engraveCounts.end(), [&](auto &a, auto &b)
+    {
+        return a.second > b.second;
+    });
+
+    return engraveCounts;
+}
+
 QList<QPair<QString, int> > SettingRanking::classifyByEngrave(const QList<CharacterSetting> &characterSettings)
 {
     QHash<QString, int> engraveCount;
@@ -459,24 +540,23 @@ void SettingRanking::showClassEngraveRatio()
                                         EngraveManager::getInstance()->getEngraveByCode(mClassEngraveCodes[i]);
         double usageRate = (mDataCounts[i] / static_cast<double>(mTotalDataCount)) * 100;
 
+        if (usageRate == 0)
+            continue;
+
         QLabel *pLabelUsageRate = WidgetManager::createLabel(QString("%1 (%2%)").arg(classEngrave).arg(usageRate, 0, 'f', 2),
                                                              16, "", 500, 50);
         pLabelUsageRate->setStyleSheet(labelStyle);
         mClassEngraveLayouts[i]->addWidget(pLabelUsageRate);
-        mOutputs << pLabelUsageRate;
+        mOutputs[static_cast<int>(SettingCategory::ClassEngrave)] << pLabelUsageRate;
     }
 }
 
-void SettingRanking::showRatio(QString textColor, QString title, int index, const QList<QVBoxLayout *> &layouts, const QList<QPair<QString, int> > &classifiedData)
+void SettingRanking::showRatio(QString textColor, int index, SettingCategory category, const QList<QVBoxLayout *> &layouts, const QList<QPair<QString, int> > &classifiedData)
 {
     const QString labelStyle = QString("QLabel { border-radius: 5px;"
                                               "         padding: 2px;"
                                               "         background-color: black; "
                                               "         color: %1; }").arg(textColor);
-
-    QLabel *pLabelTitle = WidgetManager::createLabel(title, 16, "", 500);
-    layouts[index]->addWidget(pLabelTitle);
-    mOutputs << pLabelTitle;
 
     for (int i = 0; i < classifiedData.size(); i++)
     {
@@ -488,7 +568,7 @@ void SettingRanking::showRatio(QString textColor, QString title, int index, cons
                                                            14, "", 500);
         pLabelUsageRate->setStyleSheet(labelStyle);
         layouts[index]->addWidget(pLabelUsageRate);
-        mOutputs << pLabelUsageRate;
+        mOutputs[static_cast<int>(category)] << pLabelUsageRate;
     }
 }
 
@@ -498,10 +578,6 @@ void SettingRanking::showEngraveRatio(int index, const QList<QPair<QString, int>
                                       "         padding: 2px;"
                                       "         background-color: black; "
                                       "         color: #FFFFAC; }";
-
-    QLabel *pLabelTitle = WidgetManager::createLabel("[각인]", 16, "", 500);
-    mEngraveLayouts[index]->addWidget(pLabelTitle);
-    mOutputs << pLabelTitle;
 
     static EngraveManager *pEngraveManager = EngraveManager::getInstance();
 
@@ -513,7 +589,7 @@ void SettingRanking::showEngraveRatio(int index, const QList<QPair<QString, int>
         QLabel *pLabelUsageRate = WidgetManager::createLabel("", 14, "", 500);
         pLabelUsageRate->setStyleSheet(labelStyle);
         mEngraveLayouts[index]->addWidget(pLabelUsageRate);
-        mOutputs << pLabelUsageRate;
+        mOutputs[static_cast<int>(SettingCategory::Engrave)] << pLabelUsageRate;
 
         // 각인 및 레벨 출력
         QStringList engraveSetting = engraveRatio[i].first.split(',');
@@ -531,7 +607,7 @@ void SettingRanking::showEngraveRatio(int index, const QList<QPair<QString, int>
 
                 QLabel *pLabelEngrave = WidgetManager::createLabel(QString("%1 Lv.%2").arg(engrave).arg(engraveLevel), 10, "", 500);
                 mEngraveLayouts[index]->addWidget(pLabelEngrave);
-                mOutputs << pLabelEngrave;
+                mOutputs[static_cast<int>(SettingCategory::Engrave)] << pLabelEngrave;
 
                 engraveSummaries[engraveLevel - 1] += engrave.front();
             }
@@ -553,16 +629,11 @@ void SettingRanking::showEngraveRatio(int index, const QList<QPair<QString, int>
 
 void SettingRanking::showOverallRatio(int index, const QList<QPair<QString, int> > &overallRatio)
 {
-    QLabel *pLabelTitle = WidgetManager::createLabel("[종합 비율]", 16, "", 500);
-    mOverallLayouts[index]->addWidget(pLabelTitle);
-    mOverallLayouts[index]->setAlignment(pLabelTitle, Qt::AlignHCenter);
-    mOutputs << pLabelTitle;
-
     for (int i = 0; i < overallRatio.size(); i++)
     {
         QFrame *pHLine = WidgetManager::createLine(QFrame::HLine);
         mOverallLayouts[index]->addWidget(pHLine);
-        mOutputs << pHLine;
+        mOutputs[static_cast<int>(SettingCategory::Overall)] << pHLine;
 
         const QStringList settings = overallRatio[i].first.split(",");
 
@@ -575,7 +646,7 @@ void SettingRanking::showOverallRatio(int index, const QList<QPair<QString, int>
 
         SettingInfo *pSettingInfo = new SettingInfo(characterSetting, i + 1, overallRatio[i].second, mDataCounts[index]);
         mOverallLayouts[index]->addWidget(pSettingInfo);
-        mOutputs << pSettingInfo;
+        mOutputs[static_cast<int>(SettingCategory::Overall)] << pSettingInfo;
     }
 }
 

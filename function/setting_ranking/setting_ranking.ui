@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>447</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -72,6 +72,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QPushButton" name="pbItemSet">
+     <property name="text">
+      <string>세트 효과</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="hLayoutItemSet">
      <item>
       <layout class="QVBoxLayout" name="vLayoutItemSet1"/>
@@ -88,6 +95,13 @@
     <widget class="Line" name="line_3">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="pbAbility">
+     <property name="text">
+      <string>특성</string>
      </property>
     </widget>
    </item>
@@ -112,6 +126,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QPushButton" name="pbElixir">
+     <property name="text">
+      <string>엘릭서</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="hLayoutElixir">
      <item>
       <layout class="QVBoxLayout" name="vLayoutElixir1"/>
@@ -132,6 +153,40 @@
     </widget>
    </item>
    <item>
+    <widget class="QPushButton" name="pbEngraveSingle">
+     <property name="text">
+      <string>각인</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="hLayoutEngraveSingle">
+     <item>
+      <layout class="QVBoxLayout" name="vLayoutEngraveSingle1"/>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="vLayoutEngraveSingle2"/>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="vLayoutEngraveSingle3"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="Line" name="line_7">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="pbEngrave">
+     <property name="text">
+      <string>각인 조합</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="hLayoutEngrave">
      <item>
       <layout class="QVBoxLayout" name="vLayoutEngrave1"/>
@@ -148,6 +203,13 @@
     <widget class="Line" name="line_6">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="pbOverall">
+     <property name="text">
+      <string>종합 비율</string>
      </property>
     </widget>
    </item>

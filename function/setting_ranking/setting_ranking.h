@@ -6,6 +6,11 @@
 
 #include <QWidget>
 
+enum class SettingCategory
+{
+    ClassEngrave, ItemSet, Ability, Elixir, EngraveSingle, Engrave, Overall, size
+};
+
 class QComboBox;
 class QPushButton;
 class QLabel;
@@ -30,6 +35,7 @@ private:
     void initializeHelp();
 
     void initializeOutputLayout();
+    void initializeCategoryButton();
 
     QList<CharacterSetting> filterCharacterSettings(const QList<CharacterSetting> &characterSettings);
     void sortEngraveCodes(QString &engrave, QString &engraveLevel);
@@ -38,11 +44,12 @@ private:
     QList<QPair<QString, int>> classifyByItemSet(const QList<CharacterSetting> &characterSettings);
     QList<QPair<QString, int>> classifyByAbility(const QList<CharacterSetting> &characterSettings);
     QList<QPair<QString, int>> classifyByElixir(const QList<CharacterSetting> &characterSettings);
+    QList<QPair<QString, int>> classifyByEngraveSingle(const QList<CharacterSetting> &characterSettings);
     QList<QPair<QString, int>> classifyByEngrave(const QList<CharacterSetting> &characterSettings);
     QList<QPair<QString, int>> classifyOverall(const QList<CharacterSetting> &characterSettings);
 
     void showClassEngraveRatio();
-    void showRatio(QString textColor, QString title, int index, const QList<QVBoxLayout*> &layouts, const QList<QPair<QString, int>> &classifiedData);
+    void showRatio(QString textColor, int index, SettingCategory category, const QList<QVBoxLayout*> &layouts, const QList<QPair<QString, int>> &classifiedData);
     void showEngraveRatio(int index, const QList<QPair<QString, int>> &engraveRatio);
     void showOverallRatio(int index, const QList<QPair<QString, int>> &overallRatio);
 
@@ -69,10 +76,11 @@ private:
     QList<QVBoxLayout*> mItemSetLayouts;
     QList<QVBoxLayout*> mAbilityLayouts;
     QList<QVBoxLayout*> mElixirLayouts;
+    QList<QVBoxLayout*> mEngraveSingleLayouts;
     QList<QVBoxLayout*> mEngraveLayouts;
     QList<QVBoxLayout*> mOverallLayouts;
 
-    QList<QWidget*> mOutputs;
+    QList<QList<QWidget*>> mOutputs;
 
 private:
     static SettingRanking *mpInstance;

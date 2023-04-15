@@ -198,7 +198,7 @@ void SettingRanking::initializeSearchButton()
         connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
         ApiManager::getInstance()->get(pNetworkManager, ApiType::LoaManager,
-                                       static_cast<int>(LoamanagerApi::GetCharacterSetting),
+                                       static_cast<int>(LoamanagerApi::GetCharacterSettings),
                                        mpClassSelector->currentText(), "");
     });
 

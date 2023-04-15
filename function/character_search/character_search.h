@@ -37,7 +37,9 @@ private:
     void searchCharacterSibling(const QString &characterName, Character *pCharacter);
     void renderCharacter(Character *pCharacter);
     void updateCharacterSetting(Character *pCharacter);
+    void updateSkillSetting(Character *pCharacter);
 
+    // CharacterSetting
     QString extractItemSet(const Weapon *pWeapon, const QList<Armor *> &armors);
     QString extractEngrave(const Engrave *pEngrave);
     QString extractEngraveLevel(const Engrave *pEngrave);

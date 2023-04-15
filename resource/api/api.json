@@ -50,6 +50,14 @@
         {
             "RequestURL": "https://loamanagerapi.azurewebsites.net/charactersetting",
             "Type": "POST"
+        },
+        {
+            "RequestURL": "https://localhost:44306/skillsetting/class/%1",
+            "Type": "GET"
+        },
+        {
+            "RequestURL": "https://localhost:44306/skillsetting",
+            "Type": "POST"
         }
     ],
     "LoaManagerApiKey": "F*sdaMf(AU3)a_$@fa#ewdW4F_(J*fae#4efdU$"

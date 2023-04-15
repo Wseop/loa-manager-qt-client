@@ -410,6 +410,47 @@ QList<CharacterSetting> ResponseParser::parseCharacterSettings(QJsonDocument res
     return characterSettings;
 }
 
+SkillSetting ResponseParser::parseSkillSetting(QJsonDocument response)
+{
+    const QJsonObject &object = response.object();
+
+    SkillSetting skillSetting;
+
+    skillSetting.characterName = object.find("characterName")->toString();
+    skillSetting.className = object.find("className")->toString();
+    skillSetting.classEngraves = object.find("classEngraves")->toVariant().toStringList();
+
+    const QJsonArray &skills = object.find("skills")->toArray();
+
+    for (const QJsonValue &value : skills)
+    {
+        const QJsonObject &skill = value.toObject();
+
+        SkillSetting::SkillData skillData;
+        skillData.skillName = skill.find("skillName")->toString();
+        skillData.tripodsNames = skill.find("tripodNames")->toVariant().toStringList();
+        skillData.runeName = skill.find("runeName")->toString();
+
+        skillSetting.skills << skillData;
+    }
+
+    return skillSetting;
+}
+
+QList<SkillSetting> ResponseParser::parseSkillSettings(QJsonDocument response)
+{
+    const QJsonArray &array = response.array();
+
+    QList<SkillSetting> skillSettings;
+
+    for (const QJsonValue &value : array)
+    {
+        skillSettings << parseSkillSetting(QJsonDocument::fromVariant(value.toVariant()));
+    }
+
+    return skillSettings;
+}
+
 void ResponseParser::parseItemInfo(const QJsonObject &itemInfo, Item *pItem)
 {
     const QStringList armorParts = {"투구", "어깨", "상의", "하의", "장갑"};

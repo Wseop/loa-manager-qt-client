@@ -8,6 +8,7 @@ class RequestBodyBuilder
 public:
     static QByteArray buildRewardBody(const Reward &reward);
     static QByteArray buildCharacterSettingBody(const CharacterSetting &characterSetting);
+    static QByteArray buildSkillSettingBody(const SkillSetting &skillSetting);
 };
 
 #endif // REQUESTBODYBUILDER_H

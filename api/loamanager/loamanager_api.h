@@ -14,6 +14,8 @@ enum class LoamanagerApi
     PostRewardGuardian,
     GetCharacterSettings,
     PostCharacterSetting,
+    GetSkillSettings,
+    PostSkillSetting
 };
 
 struct Reward
@@ -49,6 +51,20 @@ struct CharacterSetting
     QString engraveLevel;
     QString ability;
     QString elixir;
+};
+
+struct SkillSetting
+{
+    struct SkillData {
+        QString skillName;
+        QStringList tripodsNames;
+        QString runeName;
+    };
+
+    QString characterName;
+    QString className;
+    QStringList classEngraves;
+    QList<SkillData> skills;
 };
 
 #endif // LOAMANAGER_API_H

@@ -27,6 +27,8 @@ public:
     static QList<Reward> parseRewards(QJsonDocument response);
     static CharacterSetting parseCharacterSetting(QJsonDocument response);
     static QList<CharacterSetting> parseCharacterSettings(QJsonDocument response);
+    static SkillSetting parseSkillSetting(QJsonDocument response);
+    static QList<SkillSetting> parseSkillSettings(QJsonDocument response);
 
 private:
     static void parseItemInfo(const QJsonObject &itemInfo, Item *pItem);

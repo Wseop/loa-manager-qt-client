@@ -2,6 +2,7 @@
 
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonArray>
 
 QByteArray RequestBodyBuilder::buildRewardBody(const Reward &reward)
 {
@@ -50,6 +51,49 @@ QByteArray RequestBodyBuilder::buildCharacterSettingBody(const CharacterSetting 
 
     if (characterSetting.elixir != "")
         body.insert("elixir", characterSetting.elixir);
+
+    return QJsonDocument(body).toJson();
+}
+
+QByteArray RequestBodyBuilder::buildSkillSettingBody(const SkillSetting &skillSetting)
+{
+    QJsonObject body;
+
+    body.insert("characterName", skillSetting.characterName);
+    body.insert("className", skillSetting.className);
+
+    // 직업각인 데이터 추가
+    QJsonArray classEngraves;
+
+    for (const QString &classEngrave : skillSetting.classEngraves)
+    {
+        classEngraves.append(classEngrave);
+    }
+
+    body.insert("classEngraves", classEngraves);
+
+    // 스킬 데이터 추가
+    QJsonArray skills;
+
+    for (const SkillSetting::SkillData &skillData : skillSetting.skills)
+    {
+        QJsonObject skill;
+        skill.insert("skillName", skillData.skillName);
+
+        QJsonArray tripodNames;
+
+        for (const QString &tripodName : skillData.tripodsNames)
+        {
+            tripodNames.append(tripodName);
+        }
+
+        skill.insert("tripodNames", tripodNames);
+        skill.insert("runeName", skillData.runeName);
+
+        skills.append(skill);
+    }
+
+    body.insert("skills", skills);
 
     return QJsonDocument(body).toJson();
 }

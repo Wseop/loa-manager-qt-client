@@ -8,6 +8,7 @@
 #include "api/requestbody_builder.h"
 #include "game/character/character.h"
 #include "game/engrave/engrave_manager.h"
+#include "game/item/rune.h"
 #include "function/character_search/character_info.h"
 
 #include <QGroupBox>
@@ -238,6 +239,7 @@ void CharacterSearch::updateCharacterSetting(Character *pCharacter)
 
     const Profile *pProfile = pCharacter->getProfile();
 
+    // CharacterSetting 객체 초기화
     characterSetting.characterName = pProfile->getCharacterName();
     characterSetting.className = pProfile->getCharacterClass();
     characterSetting.itemLevel = pProfile->getItemLevel();
@@ -254,12 +256,65 @@ void CharacterSearch::updateCharacterSetting(Character *pCharacter)
         return;
 
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
-
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
     ApiManager::getInstance()->post(pNetworkManager, ApiType::LoaManager,
                                     static_cast<int>(LoamanagerApi::PostCharacterSetting),
                                     RequestBodyBuilder::buildCharacterSettingBody(characterSetting));
+}
+
+void CharacterSearch::updateSkillSetting(Character *pCharacter)
+{
+    SkillSetting skillSetting;
+
+    // SkillSetting 객체 초기화
+    skillSetting.characterName = pCharacter->getProfile()->getCharacterName();
+    skillSetting.className = pCharacter->getProfile()->getCharacterClass();
+
+    // 직업 각인 추가
+    static EngraveManager *pEngraveManager = EngraveManager::getInstance();
+
+    const QStringList &engraves = pCharacter->getEngrave()->getEngraves();
+
+    for (const QString &engrave : engraves)
+    {
+        if (pEngraveManager->isClassEngrave(engrave))
+        {
+            skillSetting.classEngraves << engrave;
+        }
+    }
+
+    // SkillData 추가
+    const QList<Skill*> skills = pCharacter->getSkills();
+
+    for (const Skill* pSkill : skills)
+    {
+        if (pSkill->skillLevel() == 1 && pSkill->rune() == nullptr)
+            continue;
+
+        SkillSetting::SkillData skillData;
+        skillData.skillName = pSkill->skillName();
+        skillData.runeName = pSkill->rune() == nullptr ? "" : pSkill->rune()->itemName();
+
+        const QList<Tripod> tripods = pSkill->tripods();
+
+        for (const Tripod &tripod : tripods)
+        {
+            if (tripod.isSelected())
+            {
+                skillData.tripodsNames << tripod.tripodName();
+            }
+        }
+
+        skillSetting.skills << skillData;
+    }
+
+    QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
+    connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
+
+    ApiManager::getInstance()->post(pNetworkManager, ApiType::LoaManager,
+                                    static_cast<int>(LoamanagerApi::PostSkillSetting),
+                                    RequestBodyBuilder::buildSkillSettingBody(skillSetting));
 }
 
 QString CharacterSearch::extractItemSet(const Weapon *pWeapon, const QList<Armor *> &armors)
@@ -424,6 +479,7 @@ void CharacterSearch::updateParseStatus(uint8_t bit, Character *pCharacter)
     {
         renderCharacter(pCharacter);
         updateCharacterSetting(pCharacter);
+        updateSkillSetting(pCharacter);
 
         mpLineEditCharacterName->clear();
         mpSearchButton->setEnabled(true);

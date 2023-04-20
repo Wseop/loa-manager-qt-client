@@ -73,7 +73,6 @@ private:
     static CharacterSearch *mpInstance;
 
 signals:
-    void parseFinished(Character *pCharacter);
     void searchRequested(const QString &characterName);
 };
 

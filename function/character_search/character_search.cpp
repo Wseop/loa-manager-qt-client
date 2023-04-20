@@ -355,9 +355,9 @@ QString CharacterSearch::extractEngrave(const Engrave *pEngrave)
     if (pEngrave == nullptr)
         return "";
 
-    const QStringList &engraves = pEngrave->getEngraves();
+    static EngraveManager *pEngraveManager = EngraveManager::getInstance();
 
-    EngraveManager *pEngraveManager = EngraveManager::getInstance();
+    const QStringList &engraves = pEngrave->getEngraves();
     QString ret;
 
     for (int level = 3; level > 0; level--)
@@ -380,7 +380,6 @@ QString CharacterSearch::extractEngraveLevel(const Engrave *pEngrave)
         return "";
 
     const QStringList &engraves = pEngrave->getEngraves();
-
     QString ret;
 
     for (int level = 3; level > 0; level--)

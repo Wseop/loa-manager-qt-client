@@ -939,6 +939,18 @@
         <file>skill/BS_Skill_01_15.png</file>
         <file>skill/BS_Skill_01_18.png</file>
         <file>skill/BS_Skill_01_25.png</file>
+        <file>item/rune/0.png</file>
+        <file>item/rune/1.png</file>
+        <file>item/rune/2.png</file>
+        <file>item/rune/3.png</file>
+        <file>item/rune/4.png</file>
+        <file>item/rune/5.png</file>
+        <file>item/rune/6.png</file>
+        <file>item/rune/7.png</file>
+        <file>item/rune/8.png</file>
+        <file>item/rune/9.png</file>
+        <file>item/rune/10.png</file>
+        <file>item/rune/11.png</file>
     </qresource>
     <qresource prefix="/json">
         <file alias="engrave.json">engrave/engrave.json</file>

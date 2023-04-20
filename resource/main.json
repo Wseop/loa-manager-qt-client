@@ -1,9 +1,9 @@
 {
-    "Version": "LoaManager v1.2.4",
+    "Version": "LoaManager v1.3.0",
     "Menu": [
         {
             "Title": "캐릭터",
-            "List": ["캐릭터 검색", "직업별 세팅\n통계"]
+            "List": ["캐릭터 검색", "직업별\n세팅 통계", "직업별\n스킬 통계"]
         },
         {
             "Title": "시세",

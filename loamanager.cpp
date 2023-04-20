@@ -5,6 +5,7 @@
 #include "function/function_widget.h"
 #include "function/character_search/character_search.h"
 #include "function/setting_ranking/setting_ranking.h"
+#include "function/skill_stats/skill_stats.h"
 #include "function/auction_calculator/auction_calculator.h"
 #include "function/smart_search/smart_search.h"
 #include "function/content_reward/content_reward.h"
@@ -55,6 +56,7 @@ void LoaManager::initializeFunction()
     // main.json의 메뉴 list 순서에 맞게 등록
     mFunctions << CharacterSearch::getInstance();
     mFunctions << SettingRanking::getInstance();
+    mFunctions << SkillStats::getInstance();
     mFunctions << SmartSearch::getInstance();
     mFunctions << AuctionCalculator::getInstance();
     mFunctions << ContentReward::getInstance();

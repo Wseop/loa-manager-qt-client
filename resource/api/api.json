@@ -52,11 +52,11 @@
             "Type": "POST"
         },
         {
-            "RequestURL": "https://localhost:44306/skillsetting/class/%1",
+            "RequestURL": "https://loamanagerapi.azurewebsites.net/skillsetting/class/%1",
             "Type": "GET"
         },
         {
-            "RequestURL": "https://localhost:44306/skillsetting",
+            "RequestURL": "https://loamanagerapi.azurewebsites.net/skillsetting",
             "Type": "POST"
         }
     ],

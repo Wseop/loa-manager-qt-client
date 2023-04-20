@@ -45,6 +45,15 @@ void ResourceManager::initializeIconPath()
             mIconPath[name] = reforgeIconPath.arg(id1).arg(id2);
         }
     }
+
+    const QStringList runeNames = {"질풍", "철벽", "속행", "정화", "단죄", "집중",
+                                   "심판", "광분", "압도", "풍요", "수호", "출혈"};
+    const QString runeIconPath = ":/image/item/rune/%1.png";
+
+    for (int i = 0; i < runeNames.size(); i++)
+    {
+        mIconPath[runeNames[i]] = runeIconPath.arg(i);
+    }
 }
 
 void ResourceManager::initializeEquipSetName()

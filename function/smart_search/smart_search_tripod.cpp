@@ -268,10 +268,10 @@ void SmartSearchTripod::addTripodWidget(const Tripod &tripod, int skillCode, int
     // 트라이포드 가격 레이블 추가
     QLabel *pLabelTripodPrice = nullptr;
     if (tripod.maxLevel() == 1)
-        pLabelTripodPrice = WidgetManager::createLabel("1레벨 최대", 10, "", 100, 30);
+        pLabelTripodPrice = WidgetManager::createLabel("1레벨 최대", 10, 100, 30);
     else
     {
-        pLabelTripodPrice = WidgetManager::createLabel("-", 12, "", 100, 30);
+        pLabelTripodPrice = WidgetManager::createLabel("-", 12, 100, 30);
         pLabelTripodPrice->setStyleSheet(LABEL_STYLE_NORMAL);
     }
     pTripodLayout->addWidget(pLabelTripodPrice);

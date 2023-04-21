@@ -80,7 +80,8 @@ void SmartSearchEngraveBook::updateUI()
         mLayouts[layoutIndex]->setAlignment(pIcon, Qt::AlignHCenter);
         mPriceWidgets.append(pIcon);
 
-        QLabel *pLabelName = WidgetManager::createLabel(item.name, 10, itemGradeToTextColor(ItemGrade::전설));
+        QLabel *pLabelName = WidgetManager::createLabel(item.name);
+        pLabelName->setStyleSheet(QString("QLabel { color: %1 }").arg(itemGradeToTextColor(ItemGrade::전설)));
         mLayouts[layoutIndex]->addWidget(pLabelName, rows[layoutIndex], 1);
         mPriceWidgets.append(pLabelName);
 

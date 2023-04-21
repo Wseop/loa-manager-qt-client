@@ -83,7 +83,7 @@ void SettingInfo::initializeLayoutEngrave(const QString &engrave, const QString 
         QLabel *pEngraveIcon = WidgetManager::createIcon(pEngraveManager->iconPath(engraveName), nullptr);
         pVLayout->addWidget(pEngraveIcon);
 
-        QLabel *pLabelLevel = WidgetManager::createLabel(engraveLevel[i], 10, "", 50);
+        QLabel *pLabelLevel = WidgetManager::createLabel(engraveLevel[i], 10, 50);
         pVLayout->addWidget(pLabelLevel);
 
         engraveSummaries[engraveLevel[i].digitValue() - 1] += engraveName.front();

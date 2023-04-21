@@ -209,7 +209,7 @@ void SettingRanking::initializeSearchButton()
 void SettingRanking::initializeHelp()
 {
     QString help = "[검색 조건]\n1620이상, 엘릭서 세트효과 활성화\n배신세트 제외\n특성 제인숙 제외";
-    QLabel *pLabelHelp = WidgetManager::createLabel(help, 10, "", 300, 75);
+    QLabel *pLabelHelp = WidgetManager::createLabel(help, 10, 300, 75);
 
     ui->hLayoutInput->addWidget(pLabelHelp);
 }
@@ -544,7 +544,7 @@ void SettingRanking::showClassEngraveRatio()
             continue;
 
         QLabel *pLabelUsageRate = WidgetManager::createLabel(QString("%1 (%2%)").arg(classEngrave).arg(usageRate, 0, 'f', 2),
-                                                             16, "", 500, 50);
+                                                             16, 500, 50);
         pLabelUsageRate->setStyleSheet(labelStyle);
         mClassEngraveLayouts[i]->addWidget(pLabelUsageRate);
         mOutputs[static_cast<int>(SettingCategory::ClassEngrave)] << pLabelUsageRate;
@@ -565,7 +565,7 @@ void SettingRanking::showRatio(QString textColor, int index, SettingCategory cat
         QLabel *pLabelUsageRate = WidgetManager::createLabel(QString("%1 (%2%)")
                                                            .arg(classifiedData[i].first)
                                                            .arg(usageRate, 0, 'f', 2),
-                                                           14, "", 500);
+                                                           14, 500);
         pLabelUsageRate->setStyleSheet(labelStyle);
         layouts[index]->addWidget(pLabelUsageRate);
         mOutputs[static_cast<int>(category)] << pLabelUsageRate;
@@ -586,7 +586,7 @@ void SettingRanking::showEngraveRatio(int index, const QList<QPair<QString, int>
         if (i == 10)
             break;
 
-        QLabel *pLabelUsageRate = WidgetManager::createLabel("", 14, "", 500);
+        QLabel *pLabelUsageRate = WidgetManager::createLabel("", 14, 500);
         pLabelUsageRate->setStyleSheet(labelStyle);
         mEngraveLayouts[index]->addWidget(pLabelUsageRate);
         mOutputs[static_cast<int>(SettingCategory::Engrave)] << pLabelUsageRate;
@@ -605,7 +605,7 @@ void SettingRanking::showEngraveRatio(int index, const QList<QPair<QString, int>
                 if (engraveLevel != level)
                     continue;
 
-                QLabel *pLabelEngrave = WidgetManager::createLabel(QString("%1 Lv.%2").arg(engrave).arg(engraveLevel), 10, "", 500);
+                QLabel *pLabelEngrave = WidgetManager::createLabel(QString("%1 Lv.%2").arg(engrave).arg(engraveLevel), 10, 500);
                 mEngraveLayouts[index]->addWidget(pLabelEngrave);
                 mOutputs[static_cast<int>(SettingCategory::Engrave)] << pLabelEngrave;
 

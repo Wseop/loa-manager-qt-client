@@ -201,11 +201,11 @@ void SmartSearchAccessory::initializeResultUI()
 
             if (j == 4)
             {
-                pLabelAttribute = WidgetManager::createLabel(attributes[j].arg(j - 1 + i), 12, "", 200, 50);
+                pLabelAttribute = WidgetManager::createLabel(attributes[j].arg(j - 1 + i), 12, 200, 50);
                 mEngraveLabels.append(pLabelAttribute);
             }
             else
-                pLabelAttribute = WidgetManager::createLabel(attributes[j], 12, "", 200, 50);
+                pLabelAttribute = WidgetManager::createLabel(attributes[j], 12, 200, 50);
 
             mResultLayouts[i]->addWidget(pLabelAttribute, 0, j);
         }
@@ -415,7 +415,8 @@ QLabel *SmartSearchAccessory::createIcon(const QString &iconPath, const ItemGrad
 
 QLabel *SmartSearchAccessory::createLabelItemName(const QString &itemName, const ItemGrade &itemGrade)
 {
-    QLabel *pLabelItemName = WidgetManager::createLabel(itemName, 10, itemGradeToTextColor(itemGrade));
+    QLabel *pLabelItemName = WidgetManager::createLabel(itemName);
+    pLabelItemName->setStyleSheet(QString("QLabel { color: %1 }").arg(itemGradeToTextColor(itemGrade)));
     mItemWidgets.append(pLabelItemName);
     return pLabelItemName;
 }
@@ -458,7 +459,8 @@ QVBoxLayout *SmartSearchAccessory::createEngraveLayout(const Accessory *pAccesso
     const QStringList &penalties = pAccessory->getEngrave()->getPenalties();
     for (const QString& penalty : penalties)
     {
-        QLabel *pLabelEngrave = WidgetManager::createLabel(QString("%1 +%2").arg(penalty).arg(pAccessory->getEngrave()->getPenaltyValue(penalty)), 10, "red");
+        QLabel *pLabelEngrave = WidgetManager::createLabel(QString("%1 +%2").arg(penalty).arg(pAccessory->getEngrave()->getPenaltyValue(penalty)));
+        pLabelEngrave->setStyleSheet("QLabel { color: red }");
         pEngraveLayout->addWidget(pLabelEngrave);
         mItemWidgets.append(pLabelEngrave);
     }
@@ -470,9 +472,9 @@ QLabel *SmartSearchAccessory::createLabelPrice(const AuctionInfo &auctionInfo)
 {
     QLabel *pLabelPrice = nullptr;
     if (auctionInfo.buyPrice != 0)
-        pLabelPrice = WidgetManager::createLabel(QString("%L1\n(%L2)").arg(auctionInfo.buyPrice).arg(auctionInfo.bidStartPrice), 10, "", 200, 50);
+        pLabelPrice = WidgetManager::createLabel(QString("%L1\n(%L2)").arg(auctionInfo.buyPrice).arg(auctionInfo.bidStartPrice), 10, 200, 50);
     else
-        pLabelPrice = WidgetManager::createLabel(QString("%L1\n(%L2)").arg("-").arg(auctionInfo.bidStartPrice), 10, "", 200, 50);
+        pLabelPrice = WidgetManager::createLabel(QString("%L1\n(%L2)").arg("-").arg(auctionInfo.bidStartPrice), 10, 200, 50);
     mItemWidgets.append(pLabelPrice);
     return pLabelPrice;
 }

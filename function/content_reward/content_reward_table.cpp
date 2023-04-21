@@ -130,7 +130,7 @@ void ContentRewardTable::initializeUIDropTable()
     int row = 2;
     int col = 0;
 
-    QLabel *pLabel = WidgetManager::createLabel("컨텐츠 보상 평균 획득량 (2수, 휴식X)", 12, "", 300);
+    QLabel *pLabel = WidgetManager::createLabel("컨텐츠 보상 평균 획득량 (2수, 휴식X)", 12, 300);
 
     // 보상 평균 획득량 layout
     for (int i = 0; i < mContentLevels.size(); i++)
@@ -151,11 +151,11 @@ void ContentRewardTable::initializeUIDropTable()
             if (iconPath != "")
                 pLabelItem = WidgetManager::createIcon(iconPath, nullptr);
             else
-                pLabelItem = WidgetManager::createLabel(item, 10, "", 50, 50);
+                pLabelItem = WidgetManager::createLabel(item, 10, 50, 50);
             pVLayout->addWidget(pLabelItem);
             pVLayout->setAlignment(pLabelItem, Qt::AlignHCenter);
 
-            QLabel *pLabelCount = WidgetManager::createLabel("-", 10, "", 100, 25);
+            QLabel *pLabelCount = WidgetManager::createLabel("-", 10, 100, 25);
             pLabelCount->setStyleSheet("QLabel { border: 1px solid black }");
             pVLayout->addWidget(pLabelCount);
             pVLayout->setAlignment(pLabelCount, Qt::AlignBottom);

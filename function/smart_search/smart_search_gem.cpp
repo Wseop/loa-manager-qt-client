@@ -68,7 +68,7 @@ void SmartSearchGem::initializeUI()
         // attribute label 추가
         for (int j = 0; j < attributes[i].size(); j++)
         {
-            QLabel *pLabel = WidgetManager::createLabel(attributes[i][j], 14, "", 200, 50);
+            QLabel *pLabel = WidgetManager::createLabel(attributes[i][j], 14, 200, 50);
             layouts[i]->addWidget(pLabel, 0, j, Qt::AlignHCenter);
         }
     }
@@ -92,15 +92,16 @@ void SmartSearchGem::updateUI(const Gem gem, AuctionInfo auctionInfo)
     pLayout->addWidget(pIcon, row, col++, Qt::AlignHCenter);
     mGemWidgets.append(pIcon);
 
-    QLabel *pLabelName = WidgetManager::createLabel(gem.itemName(), 10, itemGradeToTextColor(gem.itemGrade()), 300);
+    QLabel *pLabelName = WidgetManager::createLabel(gem.itemName(), 10, 300);
+    pLabelName->setStyleSheet(QString("QLabel { color: %1 }").arg(itemGradeToTextColor(gem.itemGrade())));
     pLayout->addWidget(pLabelName, row, col++, Qt::AlignHCenter);
     mGemWidgets.append(pLabelName);
 
-    QLabel *pLabelBidStart = WidgetManager::createLabel(QString("%L1").arg(auctionInfo.bidStartPrice), 10, "", 300, 50);
+    QLabel *pLabelBidStart = WidgetManager::createLabel(QString("%L1").arg(auctionInfo.bidStartPrice), 10, 300, 50);
     pLayout->addWidget(pLabelBidStart, row, col++, Qt::AlignHCenter);
     mGemWidgets.append(pLabelBidStart);
 
-    QLabel *pLabelBuyPrice = WidgetManager::createLabel(QString("%L1").arg(auctionInfo.buyPrice), 10, "", 300, 50);
+    QLabel *pLabelBuyPrice = WidgetManager::createLabel(QString("%L1").arg(auctionInfo.buyPrice), 10, 300, 50);
     pLayout->addWidget(pLabelBuyPrice, row, col, Qt::AlignHCenter);
     mGemWidgets.append(pLabelBuyPrice);
 }

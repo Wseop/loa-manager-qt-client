@@ -36,7 +36,7 @@ void SkillInfo::addSkillIcon(const QString &iconPath)
 
 void SkillInfo::addSkillLevelLabel(int skillLevel)
 {
-    QLabel *pLabelSkillLevel = WidgetManager::createLabel(QString("Lv.%1").arg(skillLevel), 10, "", 50);
+    QLabel *pLabelSkillLevel = WidgetManager::createLabel(QString("Lv.%1").arg(skillLevel), 10, 50);
     ui->vLayoutSkill1->addWidget(pLabelSkillLevel);
 }
 
@@ -59,7 +59,7 @@ void SkillInfo::addCounterLabel(bool bCounter)
     if (bCounter == false)
         return;
 
-    QLabel *pLabelCounter = WidgetManager::createLabel("카운터", 10, "", 50);
+    QLabel *pLabelCounter = WidgetManager::createLabel("카운터", 10, 50);
     pLabelCounter->setStyleSheet("QLabel { border: 1px solid black; "
                                  "         border-radius: 5px; "
                                  "         padding: 2px }");
@@ -117,7 +117,7 @@ void SkillInfo::addTripodInfo(const Tripod &tripod)
     pVLayout->setAlignment(pIcon, Qt::AlignHCenter);
 
     // 트라이포드 명
-    QLabel *pLabelTripodName = WidgetManager::createLabel(tripod.tripodName(), 10, "");
+    QLabel *pLabelTripodName = WidgetManager::createLabel(tripod.tripodName(), 10);
     pLabelTripodName->setFixedWidth(100);
     pVLayout->addWidget(pLabelTripodName);
     pVLayout->setAlignment(pLabelTripodName, Qt::AlignHCenter);
@@ -125,7 +125,7 @@ void SkillInfo::addTripodInfo(const Tripod &tripod)
     // 트라이포드 레벨
     const QString text = tripod.maxLevel() == 1 ? "Lv.1 최대" : QString("Lv.%1").arg(tripod.tripodLevel());
 
-    QLabel *pLabelTripodLevel = WidgetManager::createLabel(text, 10, "", 75);
+    QLabel *pLabelTripodLevel = WidgetManager::createLabel(text, 10, 75);
     pLabelTripodLevel->setStyleSheet("QLabel { border: 1px solid black; "
                                      "         border-radius: 5px; "
                                      "         padding: 2px }");
@@ -137,7 +137,7 @@ void SkillInfo::initializeRuneLayout(const Rune *pRune)
 {
     if (pRune == nullptr)
     {
-        QLabel *pLabel = WidgetManager::createLabel("룬 미착용", 10, "", 50);
+        QLabel *pLabel = WidgetManager::createLabel("룬 미착용", 10, 50);
         ui->vLayoutRune->addWidget(pLabel);
         return;
     }
@@ -157,6 +157,7 @@ void SkillInfo::addRuneIcon(const QString &iconPath, ItemGrade itemGrade)
 
 void SkillInfo::addRuneNameLabel(const QString &runeName, ItemGrade itemGrade)
 {
-    QLabel *pLabelRuneName = WidgetManager::createLabel(runeName, 10, itemGradeToTextColor(itemGrade), 50);
+    QLabel *pLabelRuneName = WidgetManager::createLabel(runeName, 10, 50);
+    pLabelRuneName->setStyleSheet(QString("QLabel { color: %1 }").arg(itemGradeToTextColor(itemGrade)));
     ui->vLayoutRune->addWidget(pLabelRuneName);
 }

@@ -69,7 +69,7 @@ void RaidProfitTable::initializeTableColumn(const QList<int> &colSpans)
     const QStringList attributes = {"관문", "더보기 보상 목록", "더보기 비용", "골드 가치 합계", "더보기 손익"};
     for (int i = 0; i < attributes.size(); i++)
     {
-        QLabel *pLabel = WidgetManager::createLabel(attributes[i], 12, "", 150);
+        QLabel *pLabel = WidgetManager::createLabel(attributes[i], 12, 150);
         ui->gridTable->addWidget(pLabel, 0, col, 1, colSpans[i], Qt::AlignHCenter);
 
         col += colSpans[i];
@@ -99,29 +99,29 @@ void RaidProfitTable::initializeTableRow(const QList<int> &colSpans)
         QLabel *pLabelGate = nullptr;
 
         if (mContent.contains("카양겔"))
-            pLabelGate = WidgetManager::createLabel(gateNameOfKayangel[i], 10, "", 100);
+            pLabelGate = WidgetManager::createLabel(gateNameOfKayangel[i], 10, 100);
         else
-            pLabelGate = WidgetManager::createLabel(QString("%1관문").arg(i + 1), 10, "", 100);
+            pLabelGate = WidgetManager::createLabel(QString("%1관문").arg(i + 1), 10, 100);
 
         ui->gridTable->addWidget(pLabelGate, row, col, Qt::AlignHCenter);
 
         col += colSpans[0] + 1 + colSpans[1] + 1;
 
         // 더보기 비용
-        QLabel *pLabelCost = WidgetManager::createLabel(QString("%L1").arg(mCosts[i]), 10, "", 100);
+        QLabel *pLabelCost = WidgetManager::createLabel(QString("%L1").arg(mCosts[i]), 10, 100);
         ui->gridTable->addWidget(pLabelCost, row, col, Qt::AlignHCenter);
 
         col += colSpans[2] + 1;
 
         // 골드 가치 합계
-        QLabel *pLabelTotalGold = WidgetManager::createLabel("-", 10, "", 100);
+        QLabel *pLabelTotalGold = WidgetManager::createLabel("-", 10, 100);
         ui->gridTable->addWidget(pLabelTotalGold, row, col, Qt::AlignHCenter);
         mGoldLabels << pLabelTotalGold;
 
         col += colSpans[3] + 1;
 
         // 더보기 손익
-        QLabel *pLabelProfit = WidgetManager::createLabel("-", 10, "", 100);
+        QLabel *pLabelProfit = WidgetManager::createLabel("-", 10, 100);
         ui->gridTable->addWidget(pLabelProfit, row++, col, Qt::AlignHCenter);
         mProfitLabels << pLabelProfit;
     }
@@ -143,7 +143,7 @@ void RaidProfitTable::initializeTableReward()
             QLabel *pIconItem = WidgetManager::createIcon(ResourceManager::getInstance()->iconPath(rewardItem.first), nullptr);
             pLayoutItem->addWidget(pIconItem);
 
-            QLabel *pLabelItemCount = WidgetManager::createLabel(QString("%L1").arg(rewardItem.second), 10, "", 100);
+            QLabel *pLabelItemCount = WidgetManager::createLabel(QString("%L1").arg(rewardItem.second), 10, 100);
             pLayoutItem->addWidget(pLabelItemCount);
         }
 

@@ -82,11 +82,11 @@ void SkillStatsWidget::initializeSkillInfo(const QString &iconPath, const QStrin
     ui->vLayoutSkillInfo->setAlignment(pSkillIcon, Qt::AlignHCenter);
 
     // 스킬명 레이블 추가
-    QLabel *pLabelSkillName = WidgetManager::createLabel(skillName, 10, "", 150);
+    QLabel *pLabelSkillName = WidgetManager::createLabel(skillName, 10, 150);
     ui->vLayoutSkillInfo->addWidget(pLabelSkillName);
 
     // 스킬 이용률 레이블 추가
-    mpSkillUsageLabel = WidgetManager::createLabel("-", 10, "", 150);
+    mpSkillUsageLabel = WidgetManager::createLabel("-", 10, 150);
     ui->vLayoutSkillInfo->addWidget(mpSkillUsageLabel);
 }
 
@@ -218,12 +218,12 @@ void SkillStatsWidget::updateRuneUsage(const QList<QPair<QString, int>> &runeUsa
         pRuneLayout->setAlignment(pLabelRuneIcon, Qt::AlignHCenter);
         mRuneLabels << pLabelRuneIcon;
 
-        QLabel *pLabelRuneName = WidgetManager::createLabel(runeUsages[i].first, 10, "", 50);
+        QLabel *pLabelRuneName = WidgetManager::createLabel(runeUsages[i].first, 10, 50);
         pRuneLayout->addWidget(pLabelRuneName);
         pRuneLayout->setAlignment(pLabelRuneName, Qt::AlignHCenter);
         mRuneLabels << pLabelRuneName;
 
-        QLabel *pLabelRuneUsage = WidgetManager::createLabel(QString("[%1%]").arg(runeUsageRatio, 0, 'f', 2), 10, "", 75);
+        QLabel *pLabelRuneUsage = WidgetManager::createLabel(QString("[%1%]").arg(runeUsageRatio, 0, 'f', 2), 10, 75);
         pRuneLayout->addWidget(pLabelRuneUsage);
         pRuneLayout->setAlignment(pLabelRuneUsage, Qt::AlignHCenter);
         mRuneLabels << pLabelRuneUsage;

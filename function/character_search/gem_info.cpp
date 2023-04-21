@@ -39,7 +39,7 @@ void GemInfo::addGemLevelInfo(int gemLevel, ItemGrade itemGrade)
 {
     const QString text = QString("Lv.%1").arg(gemLevel);
 
-    QLabel *pLabelGemLevel = WidgetManager::createLabel(text, 10, "", 50);
+    QLabel *pLabelGemLevel = WidgetManager::createLabel(text, 10, 50);
     pLabelGemLevel->setStyleSheet(QString("QLabel { border: 1px solid black; "
                                           "         border-radius: 5px; "
                                           "         padding: 2px; "
@@ -64,7 +64,8 @@ void GemInfo::addGemTypeInfo(GemType gemType, ItemGrade itemGrade)
     else
         return;
 
-    QLabel *pLabelGemType = WidgetManager::createLabel(text, 10, itemGradeToTextColor(itemGrade));
+    QLabel *pLabelGemType = WidgetManager::createLabel(text);
+    pLabelGemType->setStyleSheet(QString("QLabel { color: %1 }").arg(itemGradeToTextColor(itemGrade)));
     ui->vLayout2->addWidget(pLabelGemType);
     ui->vLayout2->setAlignment(pLabelGemType, Qt::AlignLeft);
 }

@@ -143,7 +143,7 @@ void EquipInfo::addItemSourceInfo(ItemSet itemSet, const QString &itemName, Item
         }
     }
 
-    QLabel *pLabelItemSource = WidgetManager::createLabel(text, 10, "", 100);
+    QLabel *pLabelItemSource = WidgetManager::createLabel(text, 10, 100);
     pLabelItemSource->setStyleSheet(QString("QLabel { border: 1px solid black; "
                                             "         border-radius: 5px;"
                                             "         padding: 2px;"
@@ -156,7 +156,7 @@ void EquipInfo::addReforgeLevelInfo(int reforge, int itemLevel)
 {
     const QString text = QString("+%1 (%2)").arg(reforge).arg(itemLevel);
 
-    QLabel *pLabelReforgeLevel = WidgetManager::createLabel(text, 10, "", 100);
+    QLabel *pLabelReforgeLevel = WidgetManager::createLabel(text, 10, 100);
     ui->vLayout2->addWidget(pLabelReforgeLevel);
     ui->vLayout2->setAlignment(pLabelReforgeLevel, Qt::AlignLeft);
 }
@@ -165,7 +165,7 @@ void EquipInfo::addItemSetInfo(ItemSet itemSet, int setLevel)
 {
     const QString text = QString("%1 Lv.%2").arg(itemSetToQString(itemSet)).arg(setLevel);
 
-    QLabel *pLabelItemSet = WidgetManager::createLabel(text, 10, "", 100);
+    QLabel *pLabelItemSet = WidgetManager::createLabel(text, 10, 100);
     ui->vLayout2->addWidget(pLabelItemSet);
     ui->vLayout2->setAlignment(pLabelItemSet, Qt::AlignLeft);
 }
@@ -183,7 +183,7 @@ void EquipInfo::addElixirInfo(const QList<Elixir> &elixirs, ArmorPart part)
         {
             const QString text = QString("%1 Lv.%2").arg(elixir.effect).arg(elixir.level);
 
-            QLabel *pLabelElixir = WidgetManager::createLabel(text, 10, "", 130);
+            QLabel *pLabelElixir = WidgetManager::createLabel(text, 10, 130);
             pLabelElixir->setStyleSheet("QLabel { border: 1px solid black; "
                                         "         border-radius: 5px; "
                                         "         padding: 2px }");
@@ -196,7 +196,7 @@ void EquipInfo::addEllaInfo(bool bElla)
 {
     if (bElla)
     {
-        QLabel *pLabelElla = WidgetManager::createLabel("엘라 부여", 10, "", 100);
+        QLabel *pLabelElla = WidgetManager::createLabel("엘라 부여", 10, 100);
         pLabelElla->setStyleSheet(QString("QLabel { border: 1px solid black; "
                                           "         border-radius: 5px; "
                                           "         padding: 2px;"

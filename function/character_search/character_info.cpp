@@ -157,7 +157,8 @@ void CharacterInfo::addEngraveInfo(const Engrave *pEngrave)
             QLabel *pEngraveIcon = WidgetManager::createIcon(pEngraveManager->iconPath(engrave), nullptr);
             pHLayout->addWidget(pEngraveIcon);
 
-            QLabel *pLabelEngraveLevel = WidgetManager::createLabel(QString("Lv.%1").arg(level), 10, textColor, 50);
+            QLabel *pLabelEngraveLevel = WidgetManager::createLabel(QString("Lv.%1").arg(level), 10, 50);
+            pLabelEngraveLevel->setStyleSheet(QString("QLabel { color: %1 }").arg(textColor));
             pHLayout->addWidget(pLabelEngraveLevel);
         }
     }
@@ -269,7 +270,8 @@ void CharacterInfo::addElixirInfo(const QList<Armor *> &armors)
         {
             if (elixirLevelSum >= enableLevels[i])
             {
-                QLabel *pLabelSetLevel = WidgetManager::createLabel(QString("%1 %2단계 활성화").arg(elixirEffectHead).arg(i + 1), 12, itemGradeToTextColor(ItemGrade::고급));
+                QLabel *pLabelSetLevel = WidgetManager::createLabel(QString("%1 %2단계 활성화").arg(elixirEffectHead).arg(i + 1), 12);
+                pLabelSetLevel->setStyleSheet(QString("QLabel { color: %1 }").arg(itemGradeToTextColor(ItemGrade::고급)));
                 ui->vLayoutEquip->addWidget(pLabelSetLevel);
                 ui->vLayoutEquip->setAlignment(pLabelSetLevel, Qt::AlignHCenter);
             }
@@ -431,7 +433,7 @@ void CharacterInfo::addTripodLevelInfo(const QList<Skill *> &skills)
     // 4, 5레벨 트라이포드 활성화 정보 추가
     const int MAX_TRIPOD = 18;
 
-    QLabel *pLabelTripodTotal = WidgetManager::createLabel(QString("4, 5레벨 트라이포드 활성화 (%1 / %2)").arg(enableCount[0] + enableCount[1]).arg(MAX_TRIPOD), 12, "", 300);
+    QLabel *pLabelTripodTotal = WidgetManager::createLabel(QString("4, 5레벨 트라이포드 활성화 (%1 / %2)").arg(enableCount[0] + enableCount[1]).arg(MAX_TRIPOD), 12, 300);
     ui->vLayoutSkill->addWidget(pLabelTripodTotal);
     ui->vLayoutSkill->setAlignment(pLabelTripodTotal, Qt::AlignHCenter);
 
@@ -481,7 +483,7 @@ void CharacterInfo::addHLine(QLayout *pLayout)
 
 void CharacterInfo::addLayoutTitle(const QString &title, QLayout *pLayout)
 {
-    QLabel *pLabelTitle = WidgetManager::createLabel(title, 12, "", 1000);
+    QLabel *pLabelTitle = WidgetManager::createLabel(title, 12, 1000);
     pLabelTitle->setStyleSheet("QLabel { border-radius: 5px;"
                                "         padding: 2px;"
                                "         background-color: black; "

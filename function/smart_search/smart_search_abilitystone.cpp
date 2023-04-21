@@ -69,7 +69,8 @@ void SmartSearchAbilityStone::refresh()
         ui->gridResult->addWidget(pIcon, ++row, col++);
         mResultWidgets.append(pIcon);
 
-        QLabel *pLabelName = WidgetManager::createLabel(abilityStone.itemName(), 10, itemGradeToTextColor(abilityStone.itemGrade()));
+        QLabel *pLabelName = WidgetManager::createLabel(abilityStone.itemName());
+        pLabelName->setStyleSheet(QString("QLabel { color: %1 }").arg(itemGradeToTextColor(abilityStone.itemGrade())));
         ui->gridResult->addWidget(pLabelName, row, col++);
         mResultWidgets.append(pLabelName);
 
@@ -81,15 +82,16 @@ void SmartSearchAbilityStone::refresh()
             mResultWidgets.append(pLabelEngrave);
         }
 
-        QLabel *pLabelPenalty = WidgetManager::createLabel(abilityStone.getEngrave()->getPenalties().at(0), 10, "red");
+        QLabel *pLabelPenalty = WidgetManager::createLabel(abilityStone.getEngrave()->getPenalties().at(0));
+        pLabelPenalty->setStyleSheet("QLabel { color: red }");
         ui->gridResult->addWidget(pLabelPenalty, row, col++);
         mResultWidgets.append(pLabelPenalty);
 
-        QLabel *pLabelBidStart = WidgetManager::createLabel(QString("%L1").arg(auctionInfo.bidStartPrice), 10, "", 200, 50);
+        QLabel *pLabelBidStart = WidgetManager::createLabel(QString("%L1").arg(auctionInfo.bidStartPrice), 10, 200, 50);
         ui->gridResult->addWidget(pLabelBidStart, row, col++);
         mResultWidgets.append(pLabelBidStart);
 
-        QLabel *pLabelBuyPrice = WidgetManager::createLabel(QString("%L1").arg(auctionInfo.buyPrice), 10, "", 200, 50);
+        QLabel *pLabelBuyPrice = WidgetManager::createLabel(QString("%L1").arg(auctionInfo.buyPrice), 10, 200, 50);
         ui->gridResult->addWidget(pLabelBuyPrice, row++, col);
         mResultWidgets.append(pLabelBuyPrice);
     }
@@ -145,7 +147,7 @@ void SmartSearchAbilityStone::initializeResultUI()
 
     for (int col = 0; col < attributes.size(); col++)
     {
-        QLabel *pLabelAttribute = WidgetManager::createLabel(attributes[col], 12, "", 200, 50);
+        QLabel *pLabelAttribute = WidgetManager::createLabel(attributes[col], 12, 200, 50);
         ui->gridResult->addWidget(pLabelAttribute, 0, col);
     }
 }

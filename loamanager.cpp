@@ -128,7 +128,7 @@ void LoaManager::initializeVersionInfo()
 {
     const QString &versionInfo = mMainSetting.find("Version")->toString();
 
-    mpLabelVersionInfo = WidgetManager::createLabel("", 10, "", 500, 50);
+    mpLabelVersionInfo = WidgetManager::createLabel("", 10, 500, 50);
     ui->hLayoutAdmin->addWidget(mpLabelVersionInfo);
 
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();

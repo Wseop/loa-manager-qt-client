@@ -150,7 +150,8 @@ void SmartSearchReforge::initializeUI()
             else
                 itemName = item.itemName();
 
-            QLabel *pLabelName = WidgetManager::createLabel(itemName, 10, itemGradeToTextColor(item.itemGrade()));
+            QLabel *pLabelName = WidgetManager::createLabel(itemName);
+            pLabelName->setStyleSheet(QString("QLabel { color: %1 }").arg(itemGradeToTextColor(item.itemGrade())));
             ui->gridReforge->addWidget(pLabelName, row, col++);
 
             // 전일 평균 거래가

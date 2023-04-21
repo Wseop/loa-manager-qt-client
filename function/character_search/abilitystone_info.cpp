@@ -52,7 +52,8 @@ void AbilityStoneInfo::addItemNameInfo(const QString &itemName, ItemGrade itemGr
 {
     QHBoxLayout *pHLayout = createHLayout(ui->vLayout2);
 
-    QLabel *pLabelItemName = WidgetManager::createLabel(itemName, 10, itemGradeToTextColor(itemGrade), 125);
+    QLabel *pLabelItemName = WidgetManager::createLabel(itemName, 10, 125);
+    pLabelItemName->setStyleSheet(QString("QLabel { color: %1 }").arg(itemGradeToTextColor(itemGrade)));
     pHLayout->addWidget(pLabelItemName);
 }
 
@@ -74,7 +75,8 @@ void AbilityStoneInfo::addEngraveInfo(const QStringList &engraves, const QString
             else if (i == 1)
                 text = text.arg(engrave).arg(pAbilityStone->getEngrave()->getPenaltyValue(engrave));
 
-            QLabel *pLabelEngrave = WidgetManager::createLabel(text, 10, textColor[i], 100);
+            QLabel *pLabelEngrave = WidgetManager::createLabel(text, 10, 100);
+            pLabelEngrave->setStyleSheet(QString("QLabel { color: %1 }").arg(textColor[i]));
             pHLayout->addWidget(pLabelEngrave);
         }
     }

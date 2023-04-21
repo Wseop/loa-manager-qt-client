@@ -14,7 +14,6 @@ QByteArray RequestBodyBuilder::buildRewardBody(const Reward &reward)
     for (int i = 0; i < reward.items.size(); i++)
     {
         const QString &item = reward.items[i];
-        int itemCount = reward.itemCounts[i];
 
         QString key;
 
@@ -31,7 +30,7 @@ QByteArray RequestBodyBuilder::buildRewardBody(const Reward &reward)
         else if (item == "보석")
             key = "gem";
 
-        rewardBody.insert(key, itemCount);
+        rewardBody.insert(key, reward.itemCounts[i]);
     }
 
     return QJsonDocument(rewardBody).toJson();
@@ -78,8 +77,6 @@ QByteArray RequestBodyBuilder::buildSkillSettingBody(const SkillSetting &skillSe
     for (const SkillSetting::SkillData &skillData : skillSetting.skills)
     {
         QJsonObject skill;
-        skill.insert("skillName", skillData.skillName);
-
         QJsonArray tripodNames;
 
         for (const QString &tripodName : skillData.tripodsNames)
@@ -88,6 +85,7 @@ QByteArray RequestBodyBuilder::buildSkillSettingBody(const SkillSetting &skillSe
         }
 
         skill.insert("tripodNames", tripodNames);
+        skill.insert("skillName", skillData.skillName);
         skill.insert("runeName", skillData.runeName);
 
         skills.append(skill);

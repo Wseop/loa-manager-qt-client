@@ -36,10 +36,7 @@ void ApiManager::initializeRequestUrl(const QJsonObject &resource)
 
         for (const QJsonValue &value : apis)
         {
-            const QJsonObject &api = value.toObject();
-            const QString &url = api.find("RequestURL")->toString();
-
-            mRequestURLs[static_cast<ApiType>(i)] << url;
+            mRequestURLs[static_cast<ApiType>(i)] << value.toObject().find("RequestURL")->toString();
         }
     }
 }
@@ -120,6 +117,7 @@ void ApiManager::get(QNetworkAccessManager *pNetworkManager, ApiType apiType, in
         return;
 
     request.setUrl(QUrl(url));
+
     pNetworkManager->get(request);
 }
 
@@ -147,5 +145,6 @@ void ApiManager::post(QNetworkAccessManager *pNetworkManager, ApiType apiType, i
 
     request.setRawHeader("Content-Type", "application/json");
     request.setUrl(QUrl(url));
+
     pNetworkManager->post(request, data);
 }

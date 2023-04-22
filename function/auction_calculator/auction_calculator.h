@@ -17,10 +17,8 @@ private:
     AuctionCalculator();
     ~AuctionCalculator();
 
-    void setFonts();
-    void setStyleSheets();
-    void setAlignments();
-    void initConnects();
+    void initializeInputLayout();
+    void initializeOutputLayout();
 
     void calculatePrice();
 
@@ -40,8 +38,6 @@ private:
     const double DISTRIBUTE_BALANCE_8 = 0.83;
     const double DISTRIBUTE_LOWPRICE_4 = 0.65;
     const double DISTRIBUTE_LOWPRICE_8 = 0.76;
-
-    class QIntValidator* mpInputValidator;
 };
 
 #endif // AUCTION_CALCULATOR_H

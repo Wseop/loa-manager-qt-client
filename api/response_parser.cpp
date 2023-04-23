@@ -493,6 +493,7 @@ void ResponseParser::parseItemTitle(const QJsonObject &itemTitle, Item *pItem)
 
     // 아이템 레벨, 티어 parsing
     const QString &leftStr2 = itemTitle.find("leftStr2")->toString();
+
     int itemLevelIndex = leftStr2.indexOf("아이템 레벨");
     int itemTierIndex = leftStr2.indexOf("티어");
     int itemLevel = 0;
@@ -536,113 +537,21 @@ void ResponseParser::parseItemTitle(const QJsonObject &itemTitle, Item *pItem)
 void ResponseParser::parseItemPartBox(const QJsonObject &itemPartBox, Item *pItem)
 {
     ItemType type = pItem->itemType();
+
     const QString &element000 = itemPartBox.find("Element_000")->toString();
     const QString &element001 = itemPartBox.find("Element_001")->toString();
 
     if (element000.contains("세트 효과 레벨"))
     {
-        // 세트 효과 및 세트 레벨 parsing
-        int setLevelIndex = element001.indexOf("Lv.");
-        // element의 첫 2글자는 세트 효과 이름
-        ItemSet itemSet = qStringToItemSet(element001.sliced(0, 2));
-        // 세트 레벨 (Lv.#)에서 정수 부분 parsing
-        int setLevel = element001.sliced(setLevelIndex + QString("Lv.").size(), 1).toInt();
-
-        if (ItemType::Weapon == type)
-        {
-            Weapon *pWeapon = static_cast<Weapon*>(pItem);
-            pWeapon->setItemSet(itemSet);
-            pWeapon->setSetLevel(setLevel);
-        }
-        else if (ItemType::Armor == type)
-        {
-            Armor *pArmor = static_cast<Armor*>(pItem);
-            pArmor->setItemSet(itemSet);
-            pArmor->setSetLevel(setLevel);
-        }
+        parseItemSet(element001, type, pItem);
     }
     else if (element000.contains("추가 효과"))
     {
-        // 특성 parsing (특성 +###, ...)
-        if (ItemType::Accessory == type)
-        {
-            Accessory *pAccessory = static_cast<Accessory*>(pItem);
-            int abilityStartIndex = 0;
-            int valueStartIndex = element001.indexOf("+");
-            int valueEndIndex = element001.indexOf("<BR>");
-
-            while (valueStartIndex != -1)
-            {
-                const QString &ability = element001.sliced(abilityStartIndex, 2);
-
-                valueStartIndex += QString("+").size();
-                if (valueEndIndex == -1)
-                    valueEndIndex = element001.size();
-
-                int abilityValue = element001.sliced(valueStartIndex, valueEndIndex - valueStartIndex).toInt();
-
-                pAccessory->setAbility(qStringToAbility(ability), abilityValue);
-
-                // 다음 특성 위치로 index 설정
-                abilityStartIndex = element001.indexOf(">") + QString(">").size();
-                valueStartIndex = element001.indexOf("+", valueStartIndex);
-                valueEndIndex = element001.indexOf("<BR>", valueEndIndex + 1);
-            }
-        }
+        parseItemAdditional(element001, type, pItem);
     }
     else if (element000.contains("팔찌 효과"))
     {
-        // 팔찌 효과 parsing
-        if (ItemType::Bracelet == type)
-        {
-            Bracelet *pBracelet = static_cast<Bracelet*>(pItem);
-            // 팔찌 효과는 </img> 로 시작
-            int startIndex = element001.indexOf("</img>");
-            // </img>와 이후 처음 등장하는 <BR> 사이에 팔찌 효과가 존재
-            int endIndex = element001.indexOf("<BR>", startIndex);
-
-            while (startIndex != -1)
-            {
-                // <BR>이 더 이상 존재하지 않으면 마지막 효과
-                if (endIndex == -1)
-                    endIndex = element001.size();
-                startIndex += QString("</img>").size();
-
-                QString effectStr = element001.sliced(startIndex, endIndex - startIndex);
-
-                // 공백 제거
-                if (effectStr.front() == ' ')
-                    effectStr = effectStr.sliced(1, effectStr.size() - 1);
-
-                // [ 로 시작하면 특수 효과, 아니면 일반 효과
-                if (effectStr.front() == '[')
-                {
-                    // 특수 효과명은 <FONT> 태그로 묶여있음
-                    int effectStartIndex = effectStr.indexOf(">") + QString(">").size();
-                    int effectEndIndex = effectStr.indexOf("</FONT>");
-
-                    // TODO. 특수 효과 value parsing
-                    pBracelet->addSpecialEffect(effectStr.sliced(effectStartIndex, effectEndIndex - effectStartIndex), 0);
-                }
-                else
-                {
-                    // 효과명과 값 parsing 후 추가
-                    int valueStartIndex = effectStr.indexOf("+") + QString("+").size();
-
-                    if (valueStartIndex != 0)
-                    {
-                        const QString &effect = effectStr.sliced(0, valueStartIndex - 2);
-                        int value = effectStr.sliced(valueStartIndex, effectStr.size() - valueStartIndex).toInt();
-
-                        pBracelet->addEffect(effect, value);
-                    }
-                }
-
-                // 다음 효과 탐색
-                startIndex = element001.indexOf("</img>", startIndex);
-                endIndex = element001.indexOf("<BR>", startIndex);
-            }
-        }
+        parseItemBracelet(element001, type, pItem);
     }
 }
 
@@ -660,50 +569,170 @@ void ResponseParser::parseIndentStringGroup(const QJsonObject &indentStringGroup
 
     if (topStr.contains("엘릭서 효과") && pItem->itemType() == ItemType::Armor)
     {
-        // 엘릭서 parsing
-        for (const QString &key : keys)
-        {
-            const QString &elixirStr = contentStr.find(key)->toObject().find("contentStr")->toString();
-            int partStartIndex = elixirStr.indexOf("[");
-            int effectStartIndex = partStartIndex + QString("[##]</FONT> ").size();
-            int levelStartIndex = elixirStr.indexOf("Lv.");
-            int effectEndIndex = levelStartIndex - QString(" <FONT color='#FFFFFF'>").size();
-
-            const QString& part = elixirStr.sliced(partStartIndex + QString("[").size(), 2);
-            const QString& effect = elixirStr.sliced(effectStartIndex, effectEndIndex - effectStartIndex);
-            int level = elixirStr.sliced(levelStartIndex + QString("Lv.").size(), 1).toInt();
-
-            static_cast<Armor*>(pItem)->addElixir(part, effect, level);
-        }
+        parseItemElixir(contentStr, keys, pItem);
     }
     else if (topStr.contains("무작위 각인 효과"))
     {
-        // 각인 parsing
-        for (const QString &key : keys)
+        parseItemEngrave(contentStr, keys, pItem);
+    }
+}
+
+void ResponseParser::parseItemSet(const QString &element001, const ItemType &type, Item *pItem)
+{
+    // 세트 효과 및 세트 레벨 parsing
+    int setLevelIndex = element001.indexOf("Lv.");
+    // element의 첫 2글자는 세트 효과 이름
+    ItemSet itemSet = qStringToItemSet(element001.sliced(0, 2));
+    // 세트 레벨 (Lv.#)에서 정수 부분 parsing
+    int setLevel = element001.sliced(setLevelIndex + QString("Lv.").size(), 1).toInt();
+
+    if (ItemType::Weapon == type)
+    {
+        Weapon *pWeapon = static_cast<Weapon*>(pItem);
+        pWeapon->setItemSet(itemSet);
+        pWeapon->setSetLevel(setLevel);
+    }
+    else if (ItemType::Armor == type)
+    {
+        Armor *pArmor = static_cast<Armor*>(pItem);
+        pArmor->setItemSet(itemSet);
+        pArmor->setSetLevel(setLevel);
+    }
+}
+
+void ResponseParser::parseItemAdditional(const QString &element001, const ItemType &type, Item *pItem)
+{
+    // 특성 parsing (특성 +###, ...)
+    if (ItemType::Accessory == type)
+    {
+        Accessory *pAccessory = static_cast<Accessory*>(pItem);
+        int abilityStartIndex = 0;
+        int valueStartIndex = element001.indexOf("+");
+        int valueEndIndex = element001.indexOf("<BR>");
+
+        while (valueStartIndex != -1)
         {
-            const QString &engrave = contentStr.find(key)->toObject().find("contentStr")->toString();
-            int engraveNameStartIndex = engrave.indexOf(">") + QString(">").size();
-            int engraveNameEndIndex = engrave.indexOf("</FONT>");
-            int engraveValueStartIndex = engrave.indexOf("+") + QString("+").size();
-            int engraveValueEndIndex = engrave.indexOf("<BR>", engraveValueStartIndex);
+            const QString &ability = element001.sliced(abilityStartIndex, 2);
 
-            const QString &engraveName = engrave.sliced(engraveNameStartIndex, engraveNameEndIndex - engraveNameStartIndex);
-            int engraveValue = engrave.sliced(engraveValueStartIndex, engraveValueEndIndex - engraveValueStartIndex).toInt();
+            valueStartIndex += QString("+").size();
+            if (valueEndIndex == -1)
+                valueEndIndex = element001.size();
 
-            if (ItemType::Accessory == pItem->itemType())
+            int abilityValue = element001.sliced(valueStartIndex, valueEndIndex - valueStartIndex).toInt();
+
+            pAccessory->setAbility(qStringToAbility(ability), abilityValue);
+
+            // 다음 특성 위치로 index 설정
+            abilityStartIndex = element001.indexOf(">") + QString(">").size();
+            valueStartIndex = element001.indexOf("+", valueStartIndex);
+            valueEndIndex = element001.indexOf("<BR>", valueEndIndex + 1);
+        }
+    }
+}
+
+void ResponseParser::parseItemBracelet(const QString &element001, const ItemType &type, Item *pItem)
+{
+    // 팔찌 효과 parsing
+    if (ItemType::Bracelet == type)
+    {
+        Bracelet *pBracelet = static_cast<Bracelet*>(pItem);
+        // 팔찌 효과는 </img> 로 시작
+        int startIndex = element001.indexOf("</img>");
+        // </img>와 이후 처음 등장하는 <BR> 사이에 팔찌 효과가 존재
+        int endIndex = element001.indexOf("<BR>", startIndex);
+
+        while (startIndex != -1)
+        {
+            // <BR>이 더 이상 존재하지 않으면 마지막 효과
+            if (endIndex == -1)
+                endIndex = element001.size();
+            startIndex += QString("</img>").size();
+
+            QString effectStr = element001.sliced(startIndex, endIndex - startIndex);
+
+            // 공백 제거
+            if (effectStr.front() == ' ')
+                effectStr = effectStr.sliced(1, effectStr.size() - 1);
+
+            // [ 로 시작하면 특수 효과, 아니면 일반 효과
+            if (effectStr.front() == '[')
             {
-                if (engraveName.contains("감소"))
-                    static_cast<Accessory*>(pItem)->getEngrave()->addPenalty(engraveName, engraveValue);
-                else
-                    static_cast<Accessory*>(pItem)->getEngrave()->addEngrave(engraveName, engraveValue);
+                // 특수 효과명은 <FONT> 태그로 묶여있음
+                int effectStartIndex = effectStr.indexOf(">") + QString(">").size();
+                int effectEndIndex = effectStr.indexOf("</FONT>");
+
+                // TODO. 특수 효과 value parsing
+                pBracelet->addSpecialEffect(effectStr.sliced(effectStartIndex, effectEndIndex - effectStartIndex), 0);
             }
-            else if (ItemType::AbilityStone == pItem->itemType())
+            else
             {
-                if (engraveName.contains("감소"))
-                    static_cast<AbilityStone*>(pItem)->getEngrave()->addPenalty(engraveName, engraveValue);
-                else
-                    static_cast<AbilityStone*>(pItem)->getEngrave()->addEngrave(engraveName, engraveValue);
+                // 효과명과 값 parsing 후 추가
+                int valueStartIndex = effectStr.indexOf("+") + QString("+").size();
+
+                if (valueStartIndex != 0)
+                {
+                    const QString &effect = effectStr.sliced(0, valueStartIndex - 2);
+                    int value = effectStr.sliced(valueStartIndex, effectStr.size() - valueStartIndex).toInt();
+
+                    pBracelet->addEffect(effect, value);
+                }
             }
+
+            // 다음 효과 탐색
+            startIndex = element001.indexOf("</img>", startIndex);
+            endIndex = element001.indexOf("<BR>", startIndex);
+        }
+    }
+}
+
+void ResponseParser::parseItemElixir(const QJsonObject &contentStr, const QStringList &keys, Item *pItem)
+{
+    Armor *pArmor = static_cast<Armor*>(pItem);
+
+    // 엘릭서 parsing
+    for (const QString &key : keys)
+    {
+        const QString &elixirStr = contentStr.find(key)->toObject().find("contentStr")->toString();
+        int partStartIndex = elixirStr.indexOf("[");
+        int effectStartIndex = partStartIndex + QString("[##]</FONT> ").size();
+        int levelStartIndex = elixirStr.indexOf("Lv.");
+        int effectEndIndex = levelStartIndex - QString(" <FONT color='#FFFFFF'>").size();
+
+        const QString& part = elixirStr.sliced(partStartIndex + QString("[").size(), 2);
+        const QString& effect = elixirStr.sliced(effectStartIndex, effectEndIndex - effectStartIndex);
+        int level = elixirStr.sliced(levelStartIndex + QString("Lv.").size(), 1).toInt();
+
+        pArmor->addElixir(part, effect, level);
+    }
+}
+
+void ResponseParser::parseItemEngrave(const QJsonObject &contentStr, const QStringList &keys, Item *pItem)
+{
+    // 각인 parsing
+    for (const QString &key : keys)
+    {
+        const QString &engrave = contentStr.find(key)->toObject().find("contentStr")->toString();
+        int engraveNameStartIndex = engrave.indexOf(">") + QString(">").size();
+        int engraveNameEndIndex = engrave.indexOf("</FONT>");
+        int engraveValueStartIndex = engrave.indexOf("+") + QString("+").size();
+        int engraveValueEndIndex = engrave.indexOf("<BR>", engraveValueStartIndex);
+
+        const QString &engraveName = engrave.sliced(engraveNameStartIndex, engraveNameEndIndex - engraveNameStartIndex);
+        int engraveValue = engrave.sliced(engraveValueStartIndex, engraveValueEndIndex - engraveValueStartIndex).toInt();
+
+        if (ItemType::Accessory == pItem->itemType())
+        {
+            if (engraveName.contains("감소"))
+                static_cast<Accessory*>(pItem)->getEngrave()->addPenalty(engraveName, engraveValue);
+            else
+                static_cast<Accessory*>(pItem)->getEngrave()->addEngrave(engraveName, engraveValue);
+        }
+        else if (ItemType::AbilityStone == pItem->itemType())
+        {
+            if (engraveName.contains("감소"))
+                static_cast<AbilityStone*>(pItem)->getEngrave()->addPenalty(engraveName, engraveValue);
+            else
+                static_cast<AbilityStone*>(pItem)->getEngrave()->addEngrave(engraveName, engraveValue);
         }
     }
 }

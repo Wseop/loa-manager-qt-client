@@ -37,6 +37,12 @@ private:
     static void parseSingleTextBox(const QString &singleTextBox, Item *pItem);
     static void parseIndentStringGroup(const QJsonObject &indentStringGroup, Item *pItem);
 
+    static void parseItemSet(const QString &element001, const ItemType &type, Item *pItem);
+    static void parseItemAdditional(const QString &element001, const ItemType &type, Item *pItem);
+    static void parseItemBracelet(const QString &element001, const ItemType &type, Item *pItem);
+    static void parseItemElixir(const QJsonObject &contentStr, const QStringList &keys, Item *pItem);
+    static void parseItemEngrave(const QJsonObject &contentStr, const QStringList &keys, Item *pItem);
+
     static Weapon *parseWeapon(const QJsonObject &object);
     static Armor *parseArmor(const QJsonObject &object);
     static Accessory *parseAccessory(const QJsonObject &object);

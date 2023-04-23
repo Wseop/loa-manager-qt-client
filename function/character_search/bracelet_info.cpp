@@ -52,9 +52,9 @@ void BraceletInfo::addEffectInfo(const QList<QPair<QString, int> > &effects)
 {
     for (const QPair<QString, int> &effect : effects)
     {
-        QHBoxLayout *pHLayout = createHLayout(ui->vLayout2);
         const QString text = QString("%1 +%2").arg(effect.first).arg(effect.second);
 
+        QHBoxLayout *pHLayout = createHLayout(ui->vLayout2);
         QLabel *pLabelEffect = WidgetManager::createLabel(text);
         pHLayout->addWidget(pLabelEffect);
     }

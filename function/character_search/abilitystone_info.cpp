@@ -62,7 +62,7 @@ void AbilityStoneInfo::addEngraveInfo(const QStringList &engraves, const QString
     const QList<QStringList> engraveList = {engraves, penalties};
     const QStringList textColor = {"#FFA500", "red"};
 
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < engraveList.size(); i++)
     {
         QHBoxLayout *pHLayout = createHLayout(ui->vLayout2);
 

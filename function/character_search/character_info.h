@@ -18,28 +18,28 @@ public:
     ~CharacterInfo();
 
 private:
-    void initializeProfileLayout();
-    void addSiblingSelector(const QList<Profile*> &siblings);
+    void initializeProfileLayout(const Character *pCharacter);
+    void addSiblingSelector(const QList<Profile*> &siblings, const Profile *pProfile);
     void addProfileInfo(const Profile *pProfile);
     void addAbilityInfo(const QHash<Ability, int> &abilities);
     void addEngraveInfo(const Engrave *pEngrave);
     void addCardInfo(const Card *pCard);
 
-    void initializeEquipLayout();
+    void initializeEquipLayout(const Character *pCharacter);
     void addArmorInfo(const QList<Armor*> &armors);
     void addWeaponInfo(const Weapon *pWeapon);
     void addElixirInfo(const QList<Armor*> &armors);
 
-    void initializeAccessoryLayout();
+    void initializeAccessoryLayout(const Character *pCharacter);
     void addAccessoryInfo(const QList<Accessory*> &accessories);
     void addAbilityStoneInfo(const AbilityStone *pAbilityStone);
     void addBraceletInfo(const Bracelet *pBracelet);
 
-    void initializeGemLayout();
+    void initializeGemLayout(const QList<Gem*> &gems);
     void addGemInfo(const QList<Gem*> &gems);
     void addGemLevelAvgInfo(const QList<Gem*> &gems);
 
-    void initializeSkillLayout();
+    void initializeSkillLayout(const Character *pCharacter);
     void addTripodLevelInfo(const QList<Skill*> &skills);
     void addSkillInfo(const QString &title, const QList<Skill*> &skills);
 
@@ -48,8 +48,6 @@ private:
 
 private:
     Ui::CharacterInfo *ui;
-
-    Character *mpCharacter;
 };
 
 #endif // CHARACTER_INFO_H

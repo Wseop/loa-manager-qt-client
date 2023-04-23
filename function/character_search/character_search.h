@@ -35,7 +35,10 @@ private:
 
     void searchCharacter(const QString &characterName);
     void searchCharacterSibling(const QString &characterName, Character *pCharacter);
-    void renderCharacter(Character *pCharacter);
+
+    void setEstherItemSet(Character *pCharacter);
+    void addCharacter(Character *pCharacter);
+
     void updateCharacterSetting(Character *pCharacter);
     void updateSkillSetting(Character *pCharacter);
 

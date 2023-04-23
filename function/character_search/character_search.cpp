@@ -65,7 +65,7 @@ void CharacterSearch::initializeInputLayout()
     mpLineEditCharacterName = WidgetManager::createLineEdit(nullptr, "캐릭터명을 입력해주세요.");
     pHLayoutInput->addWidget(mpLineEditCharacterName);
 
-    // 캐릭터명 입력창에서 Enter 입력 시 검색 시작
+    // 캐릭터명 입력창 기능 구현
     connect(mpLineEditCharacterName, &QLineEdit::returnPressed, this, [&]()
     {
         if (mpSearchButton->isEnabled())
@@ -76,6 +76,7 @@ void CharacterSearch::initializeInputLayout()
     mpSearchButton = WidgetManager::createPushButton("검색", 10, 100, 25);
     pHLayoutInput->addWidget(mpSearchButton);
 
+    // 검색 버튼 기능 구현
     connect(mpSearchButton, &QPushButton::released, this, [&]()
     {
         searchCharacter(mpLineEditCharacterName->text());
@@ -87,7 +88,6 @@ void CharacterSearch::initializeCharacterTab()
     ui->tabCharacter->setStyleSheet("QWidget { background-color: #F0F0F0 }");
     ui->tabCharacter->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, 10));
 
-    // 캐릭터 탭 close시 해당 캐릭터의 메모리 release
     connect(ui->tabCharacter, &QTabWidget::tabCloseRequested, this, [&](int index)
     {
         const QString &characterName = ui->tabCharacter->tabText(index);
@@ -118,7 +118,7 @@ void CharacterSearch::searchCharacter(const QString &characterName)
 
     if (mCharacters.contains(characterName))
     {
-        // 이미 검색된 캐릭터인 경우 해당 캐릭터로 tab 변경
+        // 이미 검색된 캐릭터인 경우 tab만 변경
         for (int i = 0; i < ui->tabCharacter->count(); i++)
         {
             if (ui->tabCharacter->tabText(i) == characterName)
@@ -132,13 +132,12 @@ void CharacterSearch::searchCharacter(const QString &characterName)
     mpSearchButton->setDisabled(true);
     mParseStatus = 0x00;
 
-    // 캐릭터 객체 생성
     Character *pCharacter = new Character();
     mCharacters[characterName] = pCharacter;
 
     // 캐릭터 검색
     static const QString query = "?filters=profiles%2Bequipment%2Bcombat-skills%2Bengravings%2Bcards%2Bgems";
-    static const QStringList objectKeys = {"ArmoryProfile", "ArmoryEquipment", "ArmorySkills", "ArmoryEngraving", "ArmoryCard", "ArmoryGem"};
+    static const QStringList resultKeys = {"ArmoryProfile", "ArmoryEquipment", "ArmorySkills", "ArmoryEngraving", "ArmoryCard", "ArmoryGem"};
 
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
 
@@ -148,7 +147,7 @@ void CharacterSearch::searchCharacter(const QString &characterName)
 
         if (response.isNull())
         {
-            // 존재하지 않는 캐릭터 -> 메세지 출력 및 캐릭터 객체 제거
+            // 존재하지 않는 캐릭터인 경우 메모리 해제 후 종료
             QMessageBox msgBox;
             msgBox.setText("캐릭터 정보가 없습니다.");
             msgBox.exec();
@@ -162,17 +161,17 @@ void CharacterSearch::searchCharacter(const QString &characterName)
         // 결과 parsing
         const QJsonObject &object = response.object();
 
-        for (int i = 0; i < objectKeys.size(); i++)
+        for (int i = 0; i < resultKeys.size(); i++)
         {
-            auto value = object.find(objectKeys[i]);
+            auto result = object.find(resultKeys[i]);
 
-            if (value->isNull())
+            if (result->isNull())
             {
                 updateParseStatus(static_cast<uint8_t>(1 << i), pCharacter);
             }
             else
             {
-                QThread *pThreadParser = QThread::create(mParsers[i], value->toVariant(), pCharacter);
+                QThread *pThreadParser = QThread::create(mParsers[i], result->toVariant(), pCharacter);
 
                 connect(pThreadParser, &QThread::finished, this, [&, i, pCharacter]()
                 {
@@ -192,6 +191,8 @@ void CharacterSearch::searchCharacter(const QString &characterName)
 
 void CharacterSearch::searchCharacterSibling(const QString &characterName, Character *pCharacter)
 {
+    static const int siblingIndex = mParsers.size() - 1;
+
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
 
     connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, pCharacter](QNetworkReply *pReply)
@@ -200,15 +201,15 @@ void CharacterSearch::searchCharacterSibling(const QString &characterName, Chara
 
         if (response.isNull())
         {
-            updateParseStatus(static_cast<uint8_t>(1 << 6), pCharacter);
+            updateParseStatus(static_cast<uint8_t>(1 << siblingIndex), pCharacter);
         }
         else
         {
-            QThread *pThreadParser = QThread::create(mParsers.back(), response.toVariant(), pCharacter);
+            QThread *pThreadParser = QThread::create(mParsers[siblingIndex], response.toVariant(), pCharacter);
 
             connect(pThreadParser, &QThread::finished, this, [&, pCharacter]()
             {
-                updateParseStatus(static_cast<uint8_t>(1 << 6), pCharacter);
+                updateParseStatus(static_cast<uint8_t>(1 << siblingIndex), pCharacter);
             });
             connect(pThreadParser, &QThread::finished, pThreadParser, &QThread::deleteLater);
 
@@ -220,13 +221,29 @@ void CharacterSearch::searchCharacterSibling(const QString &characterName, Chara
     ApiManager::getInstance()->get(pNetworkManager, ApiType::Lostark, static_cast<int>(LostarkApi::Sibling), characterName, "");
 }
 
-void CharacterSearch::renderCharacter(Character *pCharacter)
+void CharacterSearch::setEstherItemSet(Character *pCharacter)
+{
+    // 에스더 무기인 경우 무기의 세트효과는 장갑의 세트효과를 받음
+    Weapon *pWeapon = pCharacter->getWeapon();
+
+    if (pWeapon != nullptr && pWeapon->itemGrade() == ItemGrade::에스더)
+    {
+        const Armor *pHand = pCharacter->getArmor(ArmorPart::Hand);
+
+        if (pHand == nullptr)
+            return;
+
+        pWeapon->setItemSet(pHand->itemSet());
+        pWeapon->setSetLevel(pHand->setLevel());
+    }
+}
+
+void CharacterSearch::addCharacter(Character *pCharacter)
 {
     const QString &characterName = pCharacter->getProfile()->getCharacterName();
 
     CharacterInfo *pCharacterInfo = new CharacterInfo(pCharacter);
 
-    // 캐릭터 탭 추가
     int index = ui->tabCharacter->addTab(pCharacterInfo, characterName);
 
     ui->tabCharacter->setCurrentIndex(index);
@@ -235,15 +252,12 @@ void CharacterSearch::renderCharacter(Character *pCharacter)
 
 void CharacterSearch::updateCharacterSetting(Character *pCharacter)
 {
-    CharacterSetting characterSetting;
-
     const Profile *pProfile = pCharacter->getProfile();
 
-    // CharacterSetting 객체 초기화
+    CharacterSetting characterSetting;
     characterSetting.characterName = pProfile->getCharacterName();
     characterSetting.className = pProfile->getCharacterClass();
     characterSetting.itemLevel = pProfile->getItemLevel();
-
     characterSetting.itemSet = extractItemSet(pCharacter->getWeapon(), pCharacter->getArmors());
     characterSetting.engrave = extractEngrave(pCharacter->getEngrave());
     characterSetting.engraveLevel = extractEngraveLevel(pCharacter->getEngrave());
@@ -266,17 +280,12 @@ void CharacterSearch::updateCharacterSetting(Character *pCharacter)
 void CharacterSearch::updateSkillSetting(Character *pCharacter)
 {
     SkillSetting skillSetting;
-
-    // SkillSetting 객체 초기화
     skillSetting.characterName = pCharacter->getProfile()->getCharacterName();
     skillSetting.className = pCharacter->getProfile()->getCharacterClass();
 
-    // 직업 각인 추가
     static EngraveManager *pEngraveManager = EngraveManager::getInstance();
 
-    const QStringList &engraves = pCharacter->getEngrave()->getEngraves();
-
-    for (const QString &engrave : engraves)
+    for (const QString &engrave : pCharacter->getEngrave()->getEngraves())
     {
         if (pEngraveManager->isClassEngrave(engrave))
         {
@@ -284,10 +293,7 @@ void CharacterSearch::updateSkillSetting(Character *pCharacter)
         }
     }
 
-    // SkillData 추가
-    const QList<Skill*> skills = pCharacter->getSkills();
-
-    for (const Skill* pSkill : skills)
+    for (const Skill* pSkill : pCharacter->getSkills())
     {
         if (pSkill->skillLevel() == 1 && pSkill->rune() == nullptr)
             continue;
@@ -296,9 +302,7 @@ void CharacterSearch::updateSkillSetting(Character *pCharacter)
         skillData.skillName = pSkill->skillName();
         skillData.runeName = pSkill->rune() == nullptr ? "" : pSkill->rune()->itemName();
 
-        const QList<Tripod> tripods = pSkill->tripods();
-
-        for (const Tripod &tripod : tripods)
+        for (const Tripod &tripod : pSkill->tripods())
         {
             if (tripod.isSelected())
             {
@@ -321,13 +325,11 @@ QString CharacterSearch::extractItemSet(const Weapon *pWeapon, const QList<Armor
 {
     QList<int> setCount(static_cast<int>(ItemSet::size) + 1, 0);
 
-    // 무기 세트효과 카운트
     if (pWeapon == nullptr)
         return "";
 
     setCount[static_cast<int>(pWeapon->itemSet())]++;
 
-    // 방어구 세트효과 카운트
     for (const Armor *pArmor : armors)
     {
         if (pArmor == nullptr)
@@ -336,7 +338,6 @@ QString CharacterSearch::extractItemSet(const Weapon *pWeapon, const QList<Armor
         setCount[static_cast<int>(pArmor->itemSet())]++;
     }
 
-    // 카운팅된 세트효과 문자열로 변환
     QString itemSet;
 
     for (int i = 0; i < setCount.size(); i++)
@@ -357,21 +358,20 @@ QString CharacterSearch::extractEngrave(const Engrave *pEngrave)
 
     static EngraveManager *pEngraveManager = EngraveManager::getInstance();
 
-    const QStringList &engraves = pEngrave->getEngraves();
-    QString ret;
+    QString engraveCodes;
 
     for (int level = 3; level > 0; level--)
     {
-        for (const QString &engrave : engraves)
+        for (const QString &engrave : pEngrave->getEngraves())
         {
             if (level == pEngrave->getEngraveLevel(engrave))
             {
-                ret += QString::number(pEngraveManager->getEngraveCode(engrave));
+                engraveCodes += QString::number(pEngraveManager->getEngraveCode(engrave));
             }
         }
     }
 
-    return ret;
+    return engraveCodes;
 }
 
 QString CharacterSearch::extractEngraveLevel(const Engrave *pEngrave)
@@ -379,21 +379,20 @@ QString CharacterSearch::extractEngraveLevel(const Engrave *pEngrave)
     if (pEngrave == nullptr)
         return "";
 
-    const QStringList &engraves = pEngrave->getEngraves();
-    QString ret;
+    QString engraveLevels;
 
     for (int level = 3; level > 0; level--)
     {
-        for (const QString &engrave : engraves)
+        for (const QString &engrave : pEngrave->getEngraves())
         {
             if (level == pEngrave->getEngraveLevel(engrave))
             {
-                ret += QString::number(level);
+                engraveLevels += QString::number(level);
             }
         }
     }
 
-    return ret;
+    return engraveLevels;
 }
 
 QString CharacterSearch::extractAbility(const QHash<Ability, int> &ability)
@@ -438,9 +437,7 @@ QString CharacterSearch::extractElixir(const QList<Armor *> &armors)
         if (pArmor == nullptr)
             return "";
 
-        const QList<Elixir> &elixirs = pArmor->elixirs();
-
-        for (const Elixir &elixir : elixirs)
+        for (const Elixir &elixir : pArmor->elixirs())
         {
             totalLevel += elixir.level;
 
@@ -476,7 +473,8 @@ void CharacterSearch::updateParseStatus(uint8_t bit, Character *pCharacter)
 
     if (mParseStatus == STATUS_PARSE_FINISHED)
     {
-        renderCharacter(pCharacter);
+        addCharacter(pCharacter);
+
         updateCharacterSetting(pCharacter);
         updateSkillSetting(pCharacter);
 

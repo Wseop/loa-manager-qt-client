@@ -25,13 +25,13 @@ ContentRewardAdder::ContentRewardAdder(const QStringList &contents, const QHash<
 {
     ui->setupUi(this);
 
+    this->setWindowIcon(QIcon(":/Home.ico"));
+    this->setWindowTitle("데이터 추가");
+
     initializeContentSelector();
     initializeLevelSelector();
     initializeInsertButton();
     initializeDataInputTable();
-
-    this->setWindowIcon(QIcon(":/Home.ico"));
-    this->setWindowTitle("데이터 추가");
 }
 
 ContentRewardAdder::~ContentRewardAdder()

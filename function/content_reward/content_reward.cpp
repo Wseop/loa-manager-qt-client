@@ -54,15 +54,15 @@ ContentReward::~ContentReward()
 
 void ContentReward::initializeContentData()
 {
-    QJsonObject json = ResourceManager::getInstance()->loadJson("drop_table");
+    QJsonObject data = ResourceManager::getInstance()->loadJson("drop_table");
 
     // 컨텐츠 목록 초기화
-    mContents = json.find("Contents")->toVariant().toStringList();
+    mContents = data.find("Contents")->toVariant().toStringList();
 
     // 컨텐츠별 data 초기화
     for (const QString &content : mContents)
     {
-        const QJsonArray &dropTable = json.find(content)->toObject().find("DropTable")->toArray();
+        const QJsonArray &dropTable = data.find(content)->toObject().find("DropTable")->toArray();
 
         for (const QJsonValue &value : dropTable)
         {
@@ -78,7 +78,7 @@ void ContentReward::initializeContentData()
     }
 
     // 골드로 환산이 가능한 아이템들의 가격 정보 초기화
-    const QStringList &tradable = json.find("Tradable")->toVariant().toStringList();
+    const QStringList &tradable = data.find("Tradable")->toVariant().toStringList();
 
     for (const QString &item : tradable)
     {
@@ -124,7 +124,9 @@ void ContentReward::initializeContentSelector()
 
     mpContentSelector = WidgetManager::createComboBox(mContents);
     pLayoutContentSelector->addWidget(mpContentSelector);
-    connect(mpContentSelector, &QComboBox::currentIndexChanged, this, [&](int index){
+
+    connect(mpContentSelector, &QComboBox::currentIndexChanged, this, [&](int index)
+    {
         mpSelectedTable->hide();
         mpSelectedTable = mRewardTables[index];
         mpSelectedTable->show();
@@ -155,6 +157,7 @@ void ContentReward::initializeTradableSelector()
         pLayoutCheckBox->addWidget(pCheckBox);
         pLayoutCheckBox->setAlignment(pCheckBox, Qt::AlignHCenter);
         mTradableSelector[item] = pCheckBox;
+
         connect(pCheckBox, &QCheckBox::stateChanged, this, [&]()
         {
             for (ContentRewardTable *pRewardTable : mRewardTables)
@@ -167,7 +170,6 @@ void ContentReward::initializeTradableSelector()
 
 void ContentReward::initializeRewardTable()
 {
-    // 로딩 메세지
     mpLabelInfo = WidgetManager::createLabel("데이터 불러오는 중...", 16);
     ui->vLayoutMain->addWidget(mpLabelInfo);
     ui->vLayoutMain->setAlignment(mpLabelInfo, Qt::AlignCenter);
@@ -221,9 +223,7 @@ void ContentReward::refreshRewardData()
     // reward data 로드
     for (const QString &content : mContents)
     {
-        const QStringList &contentLevels = mContentLevels[content];
-
-        for (const QString &contentLevel : contentLevels)
+        for (const QString &contentLevel : mContentLevels[content])
         {
             QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
 
@@ -267,6 +267,7 @@ void ContentReward::refreshTradablePrice()
     mResponseCount = 0;
 
     const QStringList &items = mTradablePrice.keys();
+
     for (int i = 0; i < items.size(); i++)
     {
         const QString &item = items[i];

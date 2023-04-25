@@ -40,6 +40,7 @@ SOURCES += \
     function/smart_search/smart_search_tripod.cpp \
     game/character/card.cpp \
     game/character/character.cpp \
+    game/character/collectible.cpp \
     game/character/profile.cpp \
     game/engrave/engrave.cpp \
     game/engrave/engrave_manager.cpp \
@@ -100,6 +101,7 @@ HEADERS += \
     game/character/ability.h \
     game/character/card.h \
     game/character/character.h \
+    game/character/collectible.h \
     game/character/profile.h \
     game/engrave/engrave.h \
     game/engrave/engrave_manager.h \

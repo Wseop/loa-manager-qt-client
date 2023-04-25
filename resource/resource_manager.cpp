@@ -28,13 +28,21 @@ void ResourceManager::initializeIconPath()
     mIconPath["선명한 지혜의 기운"] = ":/image/item/vigor/0.png";
     mIconPath["빛나는 지혜의 기운"] = ":/image/item/vigor/1.png";
 
-    QString reforgeIconPath = ":/image/item/reforge/%1_%2.png";
-    QJsonArray reforges = loadJson("reforge").find("Reforge")->toArray();
+    initializeReforgeIconPath();
+    initializeRuneIconPath();
+    initializeCollectibleIconPath();
+}
+
+void ResourceManager::initializeReforgeIconPath()
+{
+    const QString reforgeIconPath = ":/image/item/reforge/%1_%2.png";
+    const QJsonArray reforges = loadJson("reforge").find("Reforge")->toArray();
+
     for (const QJsonValue& value : reforges)
     {
         const QJsonObject& reforge = value.toObject();
-        int id1 = reforge.find("Id")->toInt();
         const QJsonArray& items = reforge.find("Items")->toArray();
+        int id1 = reforge.find("Id")->toInt();
 
         for (const QJsonValue& value : items)
         {
@@ -45,9 +53,14 @@ void ResourceManager::initializeIconPath()
             mIconPath[name] = reforgeIconPath.arg(id1).arg(id2);
         }
     }
+}
 
-    const QStringList runeNames = {"질풍", "철벽", "속행", "정화", "단죄", "집중",
-                                   "심판", "광분", "압도", "풍요", "수호", "출혈"};
+void ResourceManager::initializeRuneIconPath()
+{
+    const QStringList runeNames = {
+        "질풍", "철벽", "속행", "정화", "단죄", "집중",
+        "심판", "광분", "압도", "풍요", "수호", "출혈"
+    };
     const QString runeIconPath = ":/image/item/rune/%1.png";
 
     for (int i = 0; i < runeNames.size(); i++)
@@ -56,9 +69,23 @@ void ResourceManager::initializeIconPath()
     }
 }
 
+void ResourceManager::initializeCollectibleIconPath()
+{
+    const QStringList collectibles = {
+        "모코코 씨앗", "섬의 마음", "위대한 미술품", "거인의 심장", "이그네아의 징표",
+        "항해 모험물", "세계수의 잎", "오르페우스의 별", "기억의 오르골"
+    };
+    const QString iconPath = ":/image/collectible/%1.png";
+
+    for (int i = 0; i < collectibles.size(); i++)
+    {
+        mIconPath[collectibles[i]] = iconPath.arg(i);
+    }
+}
+
 void ResourceManager::initializeEquipSetName()
 {
-    QJsonObject equipSetName = loadJson("equip_set_name");
+    const QJsonObject equipSetName = loadJson("equip_set_name");
     const QStringList &list = equipSetName.find("List")->toVariant().toStringList();
 
     for (const QString &setName : list)
@@ -66,7 +93,9 @@ void ResourceManager::initializeEquipSetName()
         const QStringList &itemNames = equipSetName.find(setName)->toVariant().toStringList();
 
         for (const QString &itemName : itemNames)
+        {
             mEquipSetNames[setName] << itemName;
+        }
     }
 }
 
@@ -92,6 +121,7 @@ QJsonObject ResourceManager::loadJson(QString fileName)
     const QString filePath = ":/json/%1.json";
 
     QFile file(filePath.arg(fileName));
+
     if (!file.open(QIODevice::ReadOnly))
     {
         qDebug() << Q_FUNC_INFO << fileName << " Open fail";

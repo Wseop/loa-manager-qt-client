@@ -13,6 +13,10 @@ private:
     ~ResourceManager();
 
     void initializeIconPath();
+    void initializeReforgeIconPath();
+    void initializeRuneIconPath();
+    void initializeCollectibleIconPath();
+
     void initializeEquipSetName();
 
 public:

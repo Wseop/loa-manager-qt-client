@@ -86,7 +86,6 @@ void RaidProfitTable::initializeTableRow(const QList<int> &colSpans)
 {
     int gateSize = mCosts.size();
     int row = 1;
-    QStringList gateNameOfKayangel = {"천공의 문 넬라시아", "영원한 빛의 요람"};
 
     for (int i = 0; i < gateSize; i++)
     {
@@ -96,13 +95,7 @@ void RaidProfitTable::initializeTableRow(const QList<int> &colSpans)
         ui->gridTable->addWidget(pHLine, row++, 0, 1, -1);
 
         // 관문
-        QLabel *pLabelGate = nullptr;
-
-        if (mContent.contains("카양겔"))
-            pLabelGate = WidgetManager::createLabel(gateNameOfKayangel[i], 10, 100);
-        else
-            pLabelGate = WidgetManager::createLabel(QString("%1관문").arg(i + 1), 10, 100);
-
+        QLabel *pLabelGate = WidgetManager::createLabel(QString("%1관문").arg(i + 1), 10, 100);
         ui->gridTable->addWidget(pLabelGate, row, col, Qt::AlignHCenter);
 
         col += colSpans[0] + 1 + colSpans[1] + 1;

@@ -258,6 +258,22 @@ void ResponseParser::parseGem(QVariant response, Character *pCharacter)
     pCharacter->setGems(newGems);
 }
 
+void ResponseParser::parseCollectible(QVariant response, Character *pCharacter)
+{
+    const QJsonArray &collectibles = response.toJsonArray();
+
+    for (const QJsonValue &value : collectibles)
+    {
+        const QJsonObject &collectible = value.toObject();
+        const QString &type = collectible.find("Type")->toString();
+        const int point = collectible.find("Point")->toInt();
+        const int maxPoint = collectible.find("MaxPoint")->toInt();
+
+        Collectible newCollectible(type, point, maxPoint);
+        pCharacter->addCollectible(newCollectible);
+    }
+}
+
 ResponseAuction ResponseParser::parseAuctionItem(QJsonDocument response)
 {
     const QJsonObject &object = response.object();

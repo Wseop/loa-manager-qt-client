@@ -11,6 +11,7 @@
 #include "game/character/card.h"
 #include "game/item/gem.h"
 #include "game/skill/skill.h"
+#include "game/character/collectible.h"
 
 #include <QList>
 
@@ -57,6 +58,9 @@ public:
     QList<Skill *> getSkills() const;
     void addSkill(Skill *pSkill);
 
+    QList<Collectible> getCollectibles() const;
+    void addCollectible(Collectible newCollectible);
+
 private:
     // 보유 캐릭터
     QList<Profile *> mSiblings;
@@ -75,6 +79,8 @@ private:
     Card *mpCard;
     // 스킬
     QList<Skill *> mSkills;
+    // 수집품
+    QList<Collectible> mCollectibles;
 };
 
 #endif // CHARACTER_H

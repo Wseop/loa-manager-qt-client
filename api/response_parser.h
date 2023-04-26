@@ -19,6 +19,7 @@ public:
     static void parseEngrave(QVariant response, Character *pCharacter);
     static void parseCard(QVariant response, Character *pCharacter);
     static void parseGem(QVariant response, Character *pCharacter);
+    static void parseCollectible(QVariant response, Character *pCharacter);
 
     static ResponseAuction parseAuctionItem(QJsonDocument response);
     static ResponseMarket parseMarketItem(QJsonDocument response);

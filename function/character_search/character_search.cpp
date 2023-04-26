@@ -108,6 +108,7 @@ void CharacterSearch::initializeParser()
     mParsers << &ResponseParser::parseEngrave;
     mParsers << &ResponseParser::parseCard;
     mParsers << &ResponseParser::parseGem;
+    mParsers << &ResponseParser::parseCollectible;
     mParsers << &ResponseParser::parseSibling;
 }
 
@@ -136,8 +137,10 @@ void CharacterSearch::searchCharacter(const QString &characterName)
     mCharacters[characterName] = pCharacter;
 
     // 캐릭터 검색
-    static const QString query = "?filters=profiles%2Bequipment%2Bcombat-skills%2Bengravings%2Bcards%2Bgems";
-    static const QStringList resultKeys = {"ArmoryProfile", "ArmoryEquipment", "ArmorySkills", "ArmoryEngraving", "ArmoryCard", "ArmoryGem"};
+    static const QString query = "?filters=profiles%2Bequipment%2Bcombat-skills%2Bengravings%2Bcards%2Bgems%2Bcollectibles";
+    static const QStringList resultKeys = {
+        "ArmoryProfile", "ArmoryEquipment", "ArmorySkills", "ArmoryEngraving", "ArmoryCard", "ArmoryGem", "Collectibles"
+    };
 
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
 
@@ -284,6 +287,9 @@ void CharacterSearch::updateSkillSetting(Character *pCharacter)
     skillSetting.className = pCharacter->getProfile()->getCharacterClass();
 
     static EngraveManager *pEngraveManager = EngraveManager::getInstance();
+
+    if (pCharacter->getEngrave() == nullptr)
+        return;
 
     for (const QString &engrave : pCharacter->getEngrave()->getEngraves())
     {

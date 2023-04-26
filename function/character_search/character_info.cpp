@@ -42,6 +42,7 @@ void CharacterInfo::initializeProfileLayout(const Character *pCharacter)
     addAbilityInfo(pCharacter->getProfile()->getAbility());
     addEngraveInfo(pCharacter->getEngrave());
     addCardInfo(pCharacter->getCard());
+    addCollectibleInfo(pCharacter->getCollectibles());
 }
 
 void CharacterInfo::addSiblingSelector(const QList<Profile*> &siblings, const Profile *pProfile)
@@ -175,6 +176,25 @@ void CharacterInfo::addCardInfo(const Card *pCard)
     {
         QLabel *pLabelCardSet = WidgetManager::createLabel(text.arg(cardSet.first).arg(cardSet.second), 10);
         ui->vLayoutProfile->addWidget(pLabelCardSet);
+    }
+}
+
+void CharacterInfo::addCollectibleInfo(const QList<Collectible> &collectibles)
+{
+    addLayoutTitle("수집품", ui->vLayoutProfile);
+
+    QString pointText = "%1 / %2";
+
+    for (const Collectible &collectible : collectibles)
+    {
+        QHBoxLayout *pHLayout = new QHBoxLayout();
+        ui->vLayoutProfile->addLayout(pHLayout);
+
+        QLabel *pIcon = WidgetManager::createIcon(collectible.getIconPath(), nullptr, "black", 25, 25);
+        pHLayout->addWidget(pIcon);
+
+        QLabel *pLabelPoint = WidgetManager::createLabel(pointText.arg(collectible.getPoint()).arg(collectible.getMaxPoint()));
+        pHLayout->addWidget(pLabelPoint);
     }
 }
 

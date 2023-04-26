@@ -24,6 +24,7 @@ private:
     void addAbilityInfo(const QHash<Ability, int> &abilities);
     void addEngraveInfo(const Engrave *pEngrave);
     void addCardInfo(const Card *pCard);
+    void addCollectibleInfo(const QList<Collectible> &collectibles);
 
     void initializeEquipLayout(const Character *pCharacter);
     void addArmorInfo(const QList<Armor*> &armors);

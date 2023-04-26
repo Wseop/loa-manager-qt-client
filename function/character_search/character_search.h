@@ -61,7 +61,7 @@ public:
 private:
     Ui::CharacterSearch *ui;
 
-    const uint8_t STATUS_PARSE_FINISHED = 0x7F;
+    const uint8_t STATUS_PARSE_FINISHED = 0xFF;
 
     QList<std::function<void(QVariant, Character *)>> mParsers;
     uint8_t mParseStatus;

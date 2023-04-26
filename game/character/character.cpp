@@ -278,3 +278,13 @@ void Character::addSkill(Skill *pSkill)
         mSkills << pSkill;
     }
 }
+
+QList<Collectible> Character::getCollectibles() const
+{
+    return mCollectibles;
+}
+
+void Character::addCollectible(Collectible newCollectible)
+{
+    mCollectibles << newCollectible;
+}

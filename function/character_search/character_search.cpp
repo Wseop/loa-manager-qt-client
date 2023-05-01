@@ -323,7 +323,7 @@ void CharacterSearch::updateSkillSetting(Character *pCharacter)
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
     ApiManager::getInstance()->post(pNetworkManager, ApiType::LoaManager,
-                                    static_cast<int>(LoamanagerApi::PostSkillSetting),
+                                    static_cast<int>(LoamanagerApi::PostCharacterSkill),
                                     RequestBodyBuilder::buildSkillSettingBody(skillSetting));
 }
 

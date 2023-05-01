@@ -434,9 +434,9 @@ SkillSetting ResponseParser::parseSkillSetting(QJsonDocument response)
 
     skillSetting.characterName = object.find("characterName")->toString();
     skillSetting.className = object.find("className")->toString();
-    skillSetting.classEngraves = object.find("classEngraves")->toVariant().toStringList();
+    skillSetting.classEngraves = object.find("classEngrave")->toVariant().toStringList();
 
-    const QJsonArray &skills = object.find("skills")->toArray();
+    const QJsonArray &skills = object.find("skill")->toArray();
 
     for (const QJsonValue &value : skills)
     {

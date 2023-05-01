@@ -234,7 +234,7 @@ void SkillStats::searchSkillSettings(const QString &className)
 
     ApiManager::getInstance()->get(pNetworkManager,
                                    ApiType::LoaManager,
-                                   static_cast<int>(LoamanagerApi::GetSkillSettings),
+                                   static_cast<int>(LoamanagerApi::GetCharacterSkills),
                                    className, "");
 }
 

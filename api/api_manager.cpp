@@ -55,7 +55,7 @@ void ApiManager::initializeApiKey(const QJsonObject &resource)
 
         for (const QJsonValue &value : keys)
         {
-            mLostarkApiKeys << value.toObject().find("key")->toString();
+            mLostarkApiKeys << value.toObject().find("apiKey")->toString();
         }
     });
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
@@ -111,7 +111,7 @@ void ApiManager::get(QNetworkAccessManager *pNetworkManager, ApiType apiType, in
         conf.setPeerVerifyMode(QSslSocket::VerifyNone);
         request.setSslConfiguration(conf);
 
-        request.setRawHeader("ApiKey", mLoaManagerApiKey.toUtf8());
+        //request.setRawHeader("ApiKey", mLoaManagerApiKey.toUtf8());
     }
     else
         return;
@@ -138,7 +138,7 @@ void ApiManager::post(QNetworkAccessManager *pNetworkManager, ApiType apiType, i
         conf.setPeerVerifyMode(QSslSocket::VerifyNone);
         request.setSslConfiguration(conf);
 
-        request.setRawHeader("ApiKey", mLoaManagerApiKey.toUtf8());
+        //request.setRawHeader("ApiKey", mLoaManagerApiKey.toUtf8());
     }
     else
         return;

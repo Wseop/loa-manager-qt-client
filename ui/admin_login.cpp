@@ -61,9 +61,9 @@ void AdminLogin::loadAdminKey()
         if (response.isNull())
             return;
 
-        mAdminKey = response.object().find("key")->toString();
+        mAdminKey = response.object().find("value")->toString();
     });
     connect(pNetworkManager,&QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    ApiManager::getInstance()->get(pNetworkManager, ApiType::LoaManager, static_cast<int>(LoamanagerApi::Admin), "0", "");
+    ApiManager::getInstance()->get(pNetworkManager, ApiType::LoaManager, static_cast<int>(LoamanagerApi::Admin), "login", "");
 }

@@ -20,43 +20,43 @@
     ],
     "LoaManager": [
         {
-            "RequestURL": "https://loamanagerapi.azurewebsites.net/admin/%1",
+            "RequestURL": "http://localhost:3000/admin/%1",
             "Type": "GET"
         },
         {
-            "RequestURL": "https://loamanagerapi.azurewebsites.net/apikey",
+            "RequestURL": "http://localhost:3000/apikey",
             "Type": "GET"
         },
         {
-            "RequestURL": "https://loamanagerapi.azurewebsites.net/rewardchaos/level/%1",
+            "RequestURL": "http://localhost:3000/reward/chaos/%1",
             "Type": "GET"
         },
         {
-            "RequestURL": "https://loamanagerapi.azurewebsites.net/rewardchaos",
+            "RequestURL": "http://localhost:3000/reward/chaos",
             "Type": "POST"
         },
         {
-            "RequestURL": "https://loamanagerapi.azurewebsites.net/rewardguardian/level/%1",
+            "RequestURL": "http://localhost:3000/reward/guardian/%1",
             "Type": "GET"
         },
         {
-            "RequestURL": "https://loamanagerapi.azurewebsites.net/rewardguardian",
+            "RequestURL": "http://localhost:3000/reward/guardian",
             "Type": "POST"
         },
         {
-            "RequestURL": "https://loamanagerapi.azurewebsites.net/charactersetting/class/%1",
+            "RequestURL": "http://localhost:3000/character/setting/%1",
             "Type": "GET"
         },
         {
-            "RequestURL": "https://loamanagerapi.azurewebsites.net/charactersetting",
+            "RequestURL": "http://localhost:3000/character/setting",
             "Type": "POST"
         },
         {
-            "RequestURL": "https://loamanagerapi.azurewebsites.net/skillsetting/class/%1",
+            "RequestURL": "http://localhost:3000/character/skill/%1",
             "Type": "GET"
         },
         {
-            "RequestURL": "https://loamanagerapi.azurewebsites.net/skillsetting",
+            "RequestURL": "http://localhost:3000/character/skill",
             "Type": "POST"
         }
     ],

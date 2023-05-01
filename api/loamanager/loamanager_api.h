@@ -14,8 +14,8 @@ enum class LoamanagerApi
     PostRewardGuardian,
     GetCharacterSettings,
     PostCharacterSetting,
-    GetSkillSettings,
-    PostSkillSetting
+    GetCharacterSkills,
+    PostCharacterSkill
 };
 
 struct Reward

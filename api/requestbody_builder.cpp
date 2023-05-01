@@ -69,7 +69,7 @@ QByteArray RequestBodyBuilder::buildSkillSettingBody(const SkillSetting &skillSe
         classEngraves.append(classEngrave);
     }
 
-    body.insert("classEngraves", classEngraves);
+    body.insert("classEngrave", classEngraves);
 
     // 스킬 데이터 추가
     QJsonArray skills;
@@ -91,7 +91,7 @@ QByteArray RequestBodyBuilder::buildSkillSettingBody(const SkillSetting &skillSe
         skills.append(skill);
     }
 
-    body.insert("skills", skills);
+    body.insert("skill", skills);
 
     return QJsonDocument(body).toJson();
 }

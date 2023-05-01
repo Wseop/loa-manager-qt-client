@@ -143,7 +143,7 @@ void LoaManager::initializeVersionInfo()
             return;
         }
 
-        if (versionInfo == response.object().find("key")->toString())
+        if (versionInfo == response.object().find("value")->toString())
         {
             mpLabelVersionInfo->setText("최신 버전입니다.");
             mpLabelVersionInfo->setStyleSheet("QLabel { color: blue }");
@@ -156,6 +156,6 @@ void LoaManager::initializeVersionInfo()
     });
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    ApiManager::getInstance()->get(pNetworkManager, ApiType::LoaManager, static_cast<int>(LoamanagerApi::Admin), "1", "");
+    ApiManager::getInstance()->get(pNetworkManager, ApiType::LoaManager, static_cast<int>(LoamanagerApi::Admin), "version", "");
 }
 

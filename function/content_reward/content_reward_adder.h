@@ -23,6 +23,8 @@ private:
 
     void insertData();
 
+    void processReply(class QNetworkReply *pReply);
+
 private:
     Ui::ContentRewardAdder *ui;
 

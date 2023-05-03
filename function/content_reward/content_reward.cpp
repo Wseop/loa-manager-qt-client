@@ -194,9 +194,15 @@ void ContentReward::initializeRewardAdder()
 
     connect(pButtonInsertData, &QPushButton::released, this, [&]()
     {
-        // TODO. do not open RewardAdder when accessToken is not set
+        const QString &accessToken = ApiManager::getInstance()->accessToken();
 
-        mpRewardAdder->show();
+        if (accessToken == "") {
+            QMessageBox msgBox;
+            msgBox.setText("로그인이 필요합니다.");
+            msgBox.exec();
+        } else {
+            mpRewardAdder->show();
+        }
     });
 }
 

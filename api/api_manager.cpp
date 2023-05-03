@@ -118,7 +118,7 @@ void ApiManager::get(QNetworkAccessManager *pNetworkManager, ApiType apiType, in
 //        conf.setPeerVerifyMode(QSslSocket::VerifyNone);
 //        request.setSslConfiguration(conf);
 
-        //request.setRawHeader("ApiKey", mLoaManagerApiKey.toUtf8());
+        request.setRawHeader("authorization", QString("bearer %1").arg(mAccessToken).toUtf8());
     }
     else
         return;
@@ -145,7 +145,7 @@ void ApiManager::post(QNetworkAccessManager *pNetworkManager, ApiType apiType, i
 //        conf.setPeerVerifyMode(QSslSocket::VerifyNone);
 //        request.setSslConfiguration(conf);
 
-        //request.setRawHeader("ApiKey", mLoaManagerApiKey.toUtf8());
+        request.setRawHeader("authorization", QString("bearer %1").arg(mAccessToken).toUtf8());
     }
     else
         return;

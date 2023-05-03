@@ -13,6 +13,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QJsonDocument>
+#include <QMessageBox>
 
 ContentRewardAdder::ContentRewardAdder(const QStringList &contents, const QHash<QString, QStringList> &contentLevels, const QHash<QString, QStringList> &dropTable) :
     ui(new Ui::ContentRewardAdder),
@@ -136,6 +137,7 @@ void ContentRewardAdder::insertData()
 
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
 
+    connect(pNetworkManager, &QNetworkAccessManager::finished, this, &ContentRewardAdder::processReply);
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
     int urlIndex = content == "카오스 던전" ? static_cast<int>(LoamanagerApi::PostRewardChaos) :
@@ -147,4 +149,15 @@ void ContentRewardAdder::insertData()
         pLineEdit->clear();
 
     this->close();
+}
+
+void ContentRewardAdder::processReply(QNetworkReply *pReply)
+{
+    int statusCode = pReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+
+    if (statusCode == 401) {
+        QMessageBox msgBox;
+        msgBox.setText("로그인 유효시간이 만료되었습니다. 재로그인 해주세요.");
+        msgBox.exec();
+    }
 }

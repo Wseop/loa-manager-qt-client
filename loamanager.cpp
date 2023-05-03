@@ -1,7 +1,6 @@
 #include "loamanager.h"
 #include "ui_loamanager.h"
 #include "ui/widget_manager.h"
-#include "ui/admin_login.h"
 #include "function/function_widget.h"
 #include "function/character_search/character_search.h"
 #include "function/setting_ranking/setting_ranking.h"
@@ -12,6 +11,7 @@
 #include "function/raid_profit/raid_profit.h"
 #include "resource/resource_manager.h"
 #include "api/api_manager.h"
+#include "user/login.h"
 
 #include <QFile>
 #include <QJsonArray>
@@ -23,13 +23,10 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
-bool gbAdmin = false;
-
 LoaManager::LoaManager() :
     ui(new Ui::LoaManager),
     mMainSetting(ResourceManager::getInstance()->loadJson("main")),
-    mpAdminLogin(new AdminLogin()),
-    mpAdminButton(nullptr),
+    mpLoginButton(nullptr),
     mpLabelVersionInfo(nullptr)
 {
     ui->setupUi(this);
@@ -39,7 +36,7 @@ LoaManager::LoaManager() :
     initializeFunction();
     initializeMenuButton();
     initializeVersionInfo();
-    initializeAdminButton();
+    initializeLoginButton();
 
     this->setWindowIcon(QIcon(":/Home.ico"));
     this->setWindowTitle(mMainSetting.find("Version")->toString());
@@ -114,13 +111,22 @@ void LoaManager::initializeMenuButton()
     }
 }
 
-void LoaManager::initializeAdminButton()
+void LoaManager::initializeLoginButton()
 {
-    mpAdminButton = WidgetManager::createPushButton("관리자 로그인");
-    ui->hLayoutAdmin->addWidget(mpAdminButton);
+    mpLoginButton = WidgetManager::createPushButton("로그인");
+
+    ui->hLayoutAdmin->addWidget(mpLoginButton);
     ui->hLayoutAdmin->setAlignment(Qt::AlignRight);
-    connect(mpAdminButton, &QPushButton::released, this, [&](){
-        mpAdminLogin->show();
+
+    connect(mpLoginButton, &QPushButton::released, this, [&]()
+    {
+        if (mpLoginButton->text() == "로그인") {
+            Login *login = new Login(mpLoginButton);
+            login->show();
+        } else {
+            ApiManager::getInstance()->setAccessToken(QString());
+            mpLoginButton->setText("로그인");
+        }
     });
 }
 

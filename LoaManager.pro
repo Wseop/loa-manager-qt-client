@@ -58,9 +58,9 @@ SOURCES += \
     main.cpp \
     loamanager.cpp \
     resource/resource_manager.cpp \
-    ui/admin_login.cpp \
     ui/font_manager.cpp \
-    ui/widget_manager.cpp
+    ui/widget_manager.cpp \
+    user/login.cpp
 
 HEADERS += \
     api/api_manager.h \
@@ -121,9 +121,9 @@ HEADERS += \
     game/skill/tripod.h \
     loamanager.h \
     resource/resource_manager.h \
-    ui/admin_login.h \
     ui/font_manager.h \
     ui/widget_manager.h \
+    user/login.h \
     util/util.h
 
 FORMS += \
@@ -153,7 +153,7 @@ FORMS += \
     function/smart_search/smart_search_reforge.ui \
     function/smart_search/smart_search_tripod.ui \
     loamanager.ui \
-    ui/admin_login.ui
+    user/login.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

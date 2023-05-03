@@ -58,7 +58,10 @@
         {
             "RequestURL": "http://localhost:3000/character/skill",
             "Type": "POST"
+        },
+        {
+            "RequestURL": "http://localhost:3000/user/signin",
+            "Type": "POST"
         }
-    ],
-    "LoaManagerApiKey": "F*sdaMf(AU3)a_$@fa#ewdW4F_(J*fae#4efdU$"
+    ]
 }

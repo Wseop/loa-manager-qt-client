@@ -20,7 +20,7 @@ public:
 private:
     void initializeFunction();
     void initializeMenuButton();
-    void initializeAdminButton();
+    void initializeLoginButton();
     void initializeVersionInfo();
 
 private:
@@ -32,8 +32,7 @@ private:
     QList<QWidget*> mFunctions;
 
     // admin button
-    class AdminLogin* mpAdminLogin;
-    QPushButton *mpAdminButton;
+    QPushButton *mpLoginButton;
 
     // version
     class QLabel *mpLabelVersionInfo;

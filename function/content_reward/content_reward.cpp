@@ -23,8 +23,6 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
-extern bool gbAdmin;
-
 ContentReward *ContentReward::m_pInstance = nullptr;
 
 ContentReward::ContentReward() :
@@ -196,13 +194,7 @@ void ContentReward::initializeRewardAdder()
 
     connect(pButtonInsertData, &QPushButton::released, this, [&]()
     {
-        if (!gbAdmin)
-        {
-            QMessageBox msgBox;
-            msgBox.setText("관리자 권한 필요");
-            msgBox.exec();
-            return;
-        }
+        // TODO. do not open RewardAdder when accessToken is not set
 
         mpRewardAdder->show();
     });

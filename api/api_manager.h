@@ -20,13 +20,16 @@ private:
     ~ApiManager();
 
     void initializeRequestUrl(const QJsonObject &resource);
-    void initializeApiKey(const QJsonObject &resource);
+    void initializeApiKey();
 
     const QString &getLostarkApiKey();
 
 public:
     static ApiManager *getInstance();
     static void destroyInstance();
+
+    void setAccessToken(const QString &token);
+    QString accessToken() const;
 
     void get(QNetworkAccessManager *pNetworkManager, ApiType apiType, int urlIndex, const QString &param, const QString &query);
     void post(QNetworkAccessManager *pNetworkManager, ApiType apiType, int urlIndex, QByteArray data);
@@ -36,8 +39,7 @@ private:
 
     QStringList mLostarkApiKeys;
     int mLostarkKeyIndex;
-
-    QString mLoaManagerApiKey;
+    QString mAccessToken;
 
     QHash<ApiType, QStringList> mRequestURLs;
 };

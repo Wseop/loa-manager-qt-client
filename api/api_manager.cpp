@@ -18,7 +18,7 @@ ApiManager::ApiManager() :
     const QJsonObject resource = ResourceManager::getInstance()->loadJson("api");
 
     initializeRequestUrl(resource);
-    initializeApiKey(resource);
+    initializeApiKey();
 }
 
 ApiManager::~ApiManager()
@@ -41,11 +41,8 @@ void ApiManager::initializeRequestUrl(const QJsonObject &resource)
     }
 }
 
-void ApiManager::initializeApiKey(const QJsonObject &resource)
+void ApiManager::initializeApiKey()
 {
-    // LoaManager Api Key 초기화
-    mLoaManagerApiKey = resource.find("LoaManagerApiKey")->toString();
-
     // Lostark Api Key 초기화
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
 
@@ -88,6 +85,16 @@ void ApiManager::destroyInstance()
     mpInstance = nullptr;
 }
 
+void ApiManager::setAccessToken(const QString &token)
+{
+    mAccessToken = token;
+}
+
+QString ApiManager::accessToken() const
+{
+    return mAccessToken;
+}
+
 void ApiManager::get(QNetworkAccessManager *pNetworkManager, ApiType apiType, int urlIndex, const QString &param, const QString &query)
 {
     QString url = mRequestURLs[apiType][urlIndex];
@@ -107,9 +114,9 @@ void ApiManager::get(QNetworkAccessManager *pNetworkManager, ApiType apiType, in
     }
     else if (apiType == ApiType::LoaManager)
     {
-        QSslConfiguration conf = request.sslConfiguration();
-        conf.setPeerVerifyMode(QSslSocket::VerifyNone);
-        request.setSslConfiguration(conf);
+//        QSslConfiguration conf = request.sslConfiguration();
+//        conf.setPeerVerifyMode(QSslSocket::VerifyNone);
+//        request.setSslConfiguration(conf);
 
         //request.setRawHeader("ApiKey", mLoaManagerApiKey.toUtf8());
     }
@@ -134,9 +141,9 @@ void ApiManager::post(QNetworkAccessManager *pNetworkManager, ApiType apiType, i
     }
     else if (apiType == ApiType::LoaManager)
     {
-        QSslConfiguration conf = request.sslConfiguration();
-        conf.setPeerVerifyMode(QSslSocket::VerifyNone);
-        request.setSslConfiguration(conf);
+//        QSslConfiguration conf = request.sslConfiguration();
+//        conf.setPeerVerifyMode(QSslSocket::VerifyNone);
+//        request.setSslConfiguration(conf);
 
         //request.setRawHeader("ApiKey", mLoaManagerApiKey.toUtf8());
     }
@@ -148,3 +155,4 @@ void ApiManager::post(QNetworkAccessManager *pNetworkManager, ApiType apiType, i
 
     pNetworkManager->post(request, data);
 }
+

@@ -95,3 +95,13 @@ QByteArray RequestBodyBuilder::buildSkillSettingBody(const SkillSetting &skillSe
 
     return QJsonDocument(body).toJson();
 }
+
+QByteArray RequestBodyBuilder::buildLoginBody(const QString &userId, const QString &password)
+{
+    QJsonObject loginBody;
+
+    loginBody.insert("userId", userId);
+    loginBody.insert("password", password);
+
+    return QJsonDocument(loginBody).toJson();
+}

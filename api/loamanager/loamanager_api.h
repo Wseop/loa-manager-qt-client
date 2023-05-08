@@ -8,15 +8,10 @@ enum class LoamanagerApi
 {
     Admin,
     ApiKey,
-    GetRewardChaos,
-    PostRewardChaos,
-    GetRewardGuardian,
-    PostRewardGuardian,
-    GetCharacterSettings,
-    PostCharacterSetting,
-    GetCharacterSkills,
-    PostCharacterSkill,
-    Signin
+    Signin,
+    GetResource,
+    GetStats,
+    PostStats
 };
 
 struct Reward

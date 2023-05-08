@@ -28,39 +28,19 @@
             "Type": "GET"
         },
         {
-            "RequestURL": "http://localhost:3000/reward/chaos/%1",
-            "Type": "GET"
-        },
-        {
-            "RequestURL": "http://localhost:3000/reward/chaos",
-            "Type": "POST"
-        },
-        {
-            "RequestURL": "http://localhost:3000/reward/guardian/%1",
-            "Type": "GET"
-        },
-        {
-            "RequestURL": "http://localhost:3000/reward/guardian",
-            "Type": "POST"
-        },
-        {
-            "RequestURL": "http://localhost:3000/character/setting/%1",
-            "Type": "GET"
-        },
-        {
-            "RequestURL": "http://localhost:3000/character/setting",
-            "Type": "POST"
-        },
-        {
-            "RequestURL": "http://localhost:3000/character/skill/%1",
-            "Type": "GET"
-        },
-        {
-            "RequestURL": "http://localhost:3000/character/skill",
-            "Type": "POST"
-        },
-        {
             "RequestURL": "http://localhost:3000/user/signin",
+            "Type": "POST"
+        },
+        {
+            "RequestURL": "http://localhost:3000/resources/%1/%2",
+            "Type": "GET"
+        },
+        {
+            "RequestURL": "http://localhost:3000/stats/%1/%2",
+            "Type": "GET"
+        },
+        {
+            "RequestURL": "http://localhost:3000/stats/%1",
             "Type": "POST"
         }
     ]

@@ -31,7 +31,6 @@ RaidProfit::RaidProfit() :
     initializeSearchOption();
     initializeContentSelect();
     initializeItemSelect();
-    initializeProfitTable();
 }
 
 RaidProfit::~RaidProfit()
@@ -41,13 +40,21 @@ RaidProfit::~RaidProfit()
 
 void RaidProfit::initializeRaidReward()
 {
-    QJsonObject json = ResourceManager::getInstance()->loadJson("raid_reward");
-
     // 전체 콘텐츠 목록 초기화
-    mContents = json.find("Contents")->toVariant().toStringList();
+    mContents = {"발탄(노말)", "발탄(하드)",
+                 "비아키스(노말)", "비아키스(하드)",
+                 "쿠크세이튼",
+                 "아브렐슈드(노말)", "아브렐슈드(하드)",
+                 "카양겔(노말)", "카양겔(하드)",
+                 "일리아칸(노말)", "일리아칸(하드)",
+                 "혼돈의 상아탑(노말)", "혼돈의 상아탑(하드)"};
 
     // 아이템 가격 테이블 초기화
-    const QStringList &rewards = json.find("Rewards")->toVariant().toStringList();
+    const QStringList &rewards = {
+        "명예의 파편 주머니(소)", "파괴석 결정", "파괴강석", "정제된 파괴강석", "수호석 결정", "수호강석", "정제된 수호강석",
+        "위대한 명예의 돌파석", "경이로운 명예의 돌파석", "찬란한 명예의 돌파석", "선명한 지혜의 정수", "빛나는 지혜의 정수"
+    };
+
     for (const QString &reward : rewards)
     {
         if (reward.contains("명예의 파편"))
@@ -61,34 +68,55 @@ void RaidProfit::initializeRaidReward()
     }
 
     // 레이드 관문별 더보기 보상 정보 초기화
-    for (const QString &content : mContents)
+    mCosts = QList<QList<int>>(mContents.size());
+    mRewardItems = QList<QList<RewardItems>>(mContents.size());
+
+    for (int i = 0; i < mContents.size(); i++)
     {
-        const QJsonArray &more = json.find(content)->toObject().find("More")->toArray();
-        QList<int> costsPerRaid;
-        QList<RewardItems> rewardItemsPerRaid;
+        QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
+        connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, i](QNetworkReply *pReply){
+            QJsonArray rewards = QJsonDocument::fromJson(pReply->readAll()).object()
+                                                                           .find("rewards")->toArray();
 
-        for (const QJsonValue &value : more)
-        {
-            const QJsonObject &object = value.toObject();
-            const QJsonArray &items = object.find("Items")->toArray();
-            RewardItems rewardItemsPerGate;
+            QList<int> costsPerRaid;
+            QList<RewardItems> rewardItemsPerRaid;
 
-            costsPerRaid << object.find("Cost")->toInt();
-
-            for (const QJsonValue &value : items)
+            for (const QJsonValue &value : rewards)
             {
-                const QJsonObject &item = value.toObject();
-                const QString &name = item.find("Name")->toString();
-                int count = item.find("Count")->toInt();
+                const QJsonObject &reward = value.toObject();
+                const QJsonArray &items = reward.find("items")->toArray();
+                RewardItems rewardItemsPerGate;
 
-                rewardItemsPerGate.append({name, count});
+                costsPerRaid << reward.find("cost")->toInt();
+
+                for (const QJsonValue &value : items)
+                {
+                    const QJsonObject &item = value.toObject();
+                    const QString &name = item.find("item")->toString();
+                    int count = item.find("count")->toInt();
+
+                    rewardItemsPerGate.append({name, count});
+                }
+
+                rewardItemsPerRaid << rewardItemsPerGate;
             }
 
-            rewardItemsPerRaid << rewardItemsPerGate;
-        }
+            mCosts[i] = costsPerRaid;
+            mRewardItems[i] = rewardItemsPerRaid;
 
-        mCosts << costsPerRaid;
-        mRewardItems << rewardItemsPerRaid;
+            mInitStatus |= (1 << i);
+
+            if (mInitStatus == (1 << mContents.size()) - 1) {
+                initializeProfitTable();
+            }
+        });
+        connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
+
+        ApiManager::getInstance()->get(pNetworkManager,
+                                       ApiType::LoaManager,
+                                       static_cast<int>(LoamanagerApi::GetResource),
+                                       {"reward", mContents[i]},
+                                       "");
     }
 }
 
@@ -218,7 +246,11 @@ void RaidProfit::refreshItemPrice()
         });
         connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-        ApiManager::getInstance()->post(pNetworkManager, ApiType::Lostark, static_cast<int>(LostarkApi::Market), QJsonDocument(mSearchOptions[i]->toJsonObject()).toJson());
+        ApiManager::getInstance()->post(pNetworkManager,
+                                        ApiType::Lostark,
+                                        static_cast<int>(LostarkApi::Market),
+                                        {},
+                                        QJsonDocument(mSearchOptions[i]->toJsonObject()).toJson());
     }
 }
 

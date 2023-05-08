@@ -25,7 +25,6 @@ SmartSearch::SmartSearch() :
     ui->hLayoutMenu->setAlignment(Qt::AlignHCenter);
 
     loadResource();
-    initializeMenu();
 }
 
 SmartSearch::~SmartSearch()
@@ -96,5 +95,5 @@ void SmartSearch::destroyInstance()
 
 void SmartSearch::start()
 {
-    // Nothing to do
+    initializeMenu();
 }

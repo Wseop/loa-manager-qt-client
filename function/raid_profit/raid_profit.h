@@ -55,6 +55,8 @@ private:
     QList<class RaidProfitTable*> mProfitTables;
     RaidProfitTable *mpCurrentTable;
 
+    int mInitStatus = 0x00;
+
 private:
     static RaidProfit *mpInstance;
 };

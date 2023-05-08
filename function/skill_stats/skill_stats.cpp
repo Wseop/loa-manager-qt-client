@@ -2,7 +2,6 @@
 #include "ui_skill_stats.h"
 #include "ui/widget_manager.h"
 #include "ui/font_manager.h"
-#include "resource/resource_manager.h"
 #include "game/engrave/engrave_manager.h"
 #include "game/skill/skill_manager.h"
 #include "function/skill_stats/skill_stats_widget.h"
@@ -56,16 +55,25 @@ void SkillStats::initializeClassSelector()
     pGroupClassSelect->setLayout(pGroupLayout);
     ui->hLayoutMenu->addWidget(pGroupClassSelect);
 
-    const QJsonArray classes = ResourceManager::getInstance()->loadJson("class").find("Class")->toArray();
-    QStringList classNames;
+    QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
+    connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, pGroupLayout](QNetworkReply *pReply){
+        QJsonArray classes = QJsonDocument::fromJson(pReply->readAll()).array();
+        QStringList classNames;
 
-    for (const QJsonValue &value : classes)
-    {
-        classNames << value.toObject().find("Child")->toVariant().toStringList();
-    }
+        for (const QJsonValue &value : classes) {
+            classNames << value.toObject().find("child")->toVariant().toStringList();
+        }
 
-    mpClassSelector = WidgetManager::createComboBox(classNames);
-    pGroupLayout->addWidget(mpClassSelector);
+        mpClassSelector = WidgetManager::createComboBox(classNames);
+        pGroupLayout->addWidget(mpClassSelector);
+    });
+    connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
+
+    ApiManager::getInstance()->get(pNetworkManager,
+                                   ApiType::LoaManager,
+                                   static_cast<int>(LoamanagerApi::GetResource),
+                                   {"class", ""},
+                                   "");
 }
 
 void SkillStats::initializeSearchButton()
@@ -234,8 +242,9 @@ void SkillStats::searchSkillSettings(const QString &className)
 
     ApiManager::getInstance()->get(pNetworkManager,
                                    ApiType::LoaManager,
-                                   static_cast<int>(LoamanagerApi::GetCharacterSkills),
-                                   className, "");
+                                   static_cast<int>(LoamanagerApi::GetStats),
+                                   {"skill", className},
+                                   "");
 }
 
 void SkillStats::updateSkillSettings(QNetworkReply *pReply)

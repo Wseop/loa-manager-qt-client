@@ -187,7 +187,11 @@ void CharacterSearch::searchCharacter(const QString &characterName)
         }
     });
 
-    ApiManager::getInstance()->get(pNetworkManager, ApiType::Lostark, static_cast<int>(LostarkApi::Character), characterName, query);
+    ApiManager::getInstance()->get(pNetworkManager,
+                                   ApiType::Lostark,
+                                   static_cast<int>(LostarkApi::Character),
+                                   {characterName},
+                                   query);
 
     searchCharacterSibling(characterName, pCharacter);
 }
@@ -221,7 +225,11 @@ void CharacterSearch::searchCharacterSibling(const QString &characterName, Chara
     });
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    ApiManager::getInstance()->get(pNetworkManager, ApiType::Lostark, static_cast<int>(LostarkApi::Sibling), characterName, "");
+    ApiManager::getInstance()->get(pNetworkManager,
+                                   ApiType::Lostark,
+                                   static_cast<int>(LostarkApi::Sibling),
+                                   {characterName},
+                                   "");
 }
 
 void CharacterSearch::setEstherItemSet(Character *pCharacter)
@@ -275,8 +283,10 @@ void CharacterSearch::updateCharacterSetting(Character *pCharacter)
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    ApiManager::getInstance()->post(pNetworkManager, ApiType::LoaManager,
-                                    static_cast<int>(LoamanagerApi::PostCharacterSetting),
+    ApiManager::getInstance()->post(pNetworkManager,
+                                    ApiType::LoaManager,
+                                    static_cast<int>(LoamanagerApi::PostStats),
+                                    {"setting"},
                                     RequestBodyBuilder::buildCharacterSettingBody(characterSetting));
 }
 
@@ -322,8 +332,10 @@ void CharacterSearch::updateSkillSetting(Character *pCharacter)
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    ApiManager::getInstance()->post(pNetworkManager, ApiType::LoaManager,
-                                    static_cast<int>(LoamanagerApi::PostCharacterSkill),
+    ApiManager::getInstance()->post(pNetworkManager,
+                                    ApiType::LoaManager,
+                                    static_cast<int>(LoamanagerApi::PostStats),
+                                    {"skill"},
                                     RequestBodyBuilder::buildSkillSettingBody(skillSetting));
 }
 

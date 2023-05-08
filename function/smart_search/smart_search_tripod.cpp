@@ -50,18 +50,6 @@ void SmartSearchTripod::refresh()
 
 void SmartSearchTripod::initializeClassSelector()
 {
-    // 직업 목록 초기화
-    QStringList classes;
-    QJsonArray jsonClasses = ResourceManager::getInstance()->loadJson("class").find("Class")->toArray();
-
-    for (const QJsonValue& value : jsonClasses)
-    {
-        const QJsonObject &cls = value.toObject();
-
-        classes << cls.find("Child")->toVariant().toStringList();
-    }
-
-    // 직업 선택 UI 추가
     QGroupBox *pGroupClassSelector = WidgetManager::createGroupBox("직업 선택");
     pGroupClassSelector->setMaximumWidth(9 + 200 + 9);
     ui->hLayoutMenu->addWidget(pGroupClassSelector);
@@ -69,8 +57,25 @@ void SmartSearchTripod::initializeClassSelector()
     QHBoxLayout *pLayout = new QHBoxLayout();
     pGroupClassSelector->setLayout(pLayout);
 
-    mpClassSelector = WidgetManager::createComboBox(classes);
-    pLayout->addWidget(mpClassSelector);
+    QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
+    connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, pLayout](QNetworkReply *pReply){
+        QJsonArray classes = QJsonDocument::fromJson(pReply->readAll()).array();
+        QStringList classNames;
+
+        for (const QJsonValue &value : classes) {
+            classNames << value.toObject().find("child")->toVariant().toStringList();
+        }
+
+        mpClassSelector = WidgetManager::createComboBox(classNames);
+        pLayout->addWidget(mpClassSelector);
+    });
+    connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
+
+    ApiManager::getInstance()->get(pNetworkManager,
+                                   ApiType::LoaManager,
+                                   static_cast<int>(LoamanagerApi::GetResource),
+                                   {"class", ""},
+                                   "");
 }
 
 void SmartSearchTripod::initializePriceFilter()
@@ -222,7 +227,11 @@ void SmartSearchTripod::searchTripod(int skillCode, int tripodCode)
     searchOption.setSortCondition("ASC");
     searchOption.setSkillOption(skillCode, tripodCode, 5, 5);
 
-    ApiManager::getInstance()->post(pNetworkManager, ApiType::Lostark, static_cast<int>(LostarkApi::Auction), QJsonDocument(searchOption.toJsonObject()).toJson());
+    ApiManager::getInstance()->post(pNetworkManager,
+                                    ApiType::Lostark,
+                                    static_cast<int>(LostarkApi::Auction),
+                                    {},
+                                    QJsonDocument(searchOption.toJsonObject()).toJson());
 }
 
 void SmartSearchTripod::addSkillWidget(const Skill &skill, int row)

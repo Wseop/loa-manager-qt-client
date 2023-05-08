@@ -76,7 +76,11 @@ void SmartSearchReforge::refresh()
             searchOption.setPageNo(1);
             searchOption.setSortCondition("ASC");
 
-            ApiManager::getInstance()->post(pNetworkManager, ApiType::Lostark, static_cast<int>(LostarkApi::Market), QJsonDocument(searchOption.toJsonObject()).toJson());
+            ApiManager::getInstance()->post(pNetworkManager,
+                                            ApiType::Lostark,
+                                            static_cast<int>(LostarkApi::Market),
+                                            {},
+                                            QJsonDocument(searchOption.toJsonObject()).toJson());
 
             labelIndex++;
         }

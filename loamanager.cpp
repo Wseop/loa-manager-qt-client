@@ -12,6 +12,8 @@
 #include "resource/resource_manager.h"
 #include "api/api_manager.h"
 #include "user/login.h"
+#include "game/engrave/engrave_manager.h"
+#include "game/skill/skill_manager.h"
 
 #include <QFile>
 #include <QJsonArray>
@@ -29,6 +31,9 @@ LoaManager::LoaManager() :
     mpLoginButton(nullptr),
     mpLabelVersionInfo(nullptr)
 {
+    this->setWindowIcon(QIcon(":/Home.ico"));
+    this->setWindowTitle(mMainSetting.find("Version")->toString());
+
     ui->setupUi(this);
     ui->hLayoutMenu->setAlignment(Qt::AlignLeft);
     ui->vLayoutContents->setAlignment(Qt::AlignTop);
@@ -38,9 +43,8 @@ LoaManager::LoaManager() :
     initializeVersionInfo();
     initializeLoginButton();
 
-    this->setWindowIcon(QIcon(":/Home.ico"));
-    this->setWindowTitle(mMainSetting.find("Version")->toString());
-    this->showMaximized();
+    EngraveManager::getInstance();
+    SkillManager::getInstance();
 }
 
 LoaManager::~LoaManager()
@@ -162,6 +166,10 @@ void LoaManager::initializeVersionInfo()
     });
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    ApiManager::getInstance()->get(pNetworkManager, ApiType::LoaManager, static_cast<int>(LoamanagerApi::Admin), "version", "");
+    ApiManager::getInstance()->get(pNetworkManager,
+                                   ApiType::LoaManager,
+                                   static_cast<int>(LoamanagerApi::Admin),
+                                   {"version"},
+                                   "");
 }
 

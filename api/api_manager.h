@@ -31,8 +31,8 @@ public:
     void setAccessToken(const QString &token);
     QString accessToken() const;
 
-    void get(QNetworkAccessManager *pNetworkManager, ApiType apiType, int urlIndex, const QString &param, const QString &query);
-    void post(QNetworkAccessManager *pNetworkManager, ApiType apiType, int urlIndex, QByteArray data);
+    void get(QNetworkAccessManager *pNetworkManager, ApiType apiType, int urlIndex, const QStringList &params, const QString &query);
+    void post(QNetworkAccessManager *pNetworkManager, ApiType apiType, int urlIndex, const QStringList &params, QByteArray data);
 
 private:
     static ApiManager *mpInstance;

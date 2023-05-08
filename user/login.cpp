@@ -64,6 +64,7 @@ void Login::requestLogin()
     ApiManager::getInstance()->post(pNetworkManager,
                                     ApiType::LoaManager,
                                     static_cast<int>(LoamanagerApi::Signin),
+                                    {},
                                     RequestBodyBuilder::buildLoginBody(ui->leId->text(), ui->lePassword->text()));
 }
 

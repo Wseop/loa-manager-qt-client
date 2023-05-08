@@ -57,7 +57,7 @@ void ApiManager::initializeApiKey()
     });
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    get(pNetworkManager, ApiType::LoaManager, static_cast<int>(LoamanagerApi::ApiKey), "", "");
+    get(pNetworkManager, ApiType::LoaManager, static_cast<int>(LoamanagerApi::ApiKey), {}, "");
 }
 
 const QString &ApiManager::getLostarkApiKey()
@@ -95,12 +95,13 @@ QString ApiManager::accessToken() const
     return mAccessToken;
 }
 
-void ApiManager::get(QNetworkAccessManager *pNetworkManager, ApiType apiType, int urlIndex, const QString &param, const QString &query)
+void ApiManager::get(QNetworkAccessManager *pNetworkManager, ApiType apiType, int urlIndex, const QStringList &params, const QString &query)
 {
     QString url = mRequestURLs[apiType][urlIndex];
 
-    if (param != "")
+    for (const QString &param : params) {
         url = url.arg(param);
+    }
 
     if (query != "")
         url += query;
@@ -124,13 +125,16 @@ void ApiManager::get(QNetworkAccessManager *pNetworkManager, ApiType apiType, in
         return;
 
     request.setUrl(QUrl(url));
-
     pNetworkManager->get(request);
 }
 
-void ApiManager::post(QNetworkAccessManager *pNetworkManager, ApiType apiType, int urlIndex, QByteArray data)
+void ApiManager::post(QNetworkAccessManager *pNetworkManager, ApiType apiType, int urlIndex, const QStringList &params, QByteArray data)
 {
     QString url = mRequestURLs[apiType][urlIndex];
+
+    for (const QString &param : params) {
+        url= url.arg(param);
+    }
 
     QNetworkRequest request;
 
@@ -152,7 +156,6 @@ void ApiManager::post(QNetworkAccessManager *pNetworkManager, ApiType apiType, i
 
     request.setRawHeader("Content-Type", "application/json");
     request.setUrl(QUrl(url));
-
     pNetworkManager->post(request, data);
 }
 

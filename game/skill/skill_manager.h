@@ -3,10 +3,14 @@
 
 #include "game/skill/skill.h"
 
+#include <QObject>
 #include <QHash>
+#include <QEventLoop>
 
-class SkillManager
+class SkillManager : public QObject
 {
+    Q_OBJECT
+
 private:
     SkillManager();
     ~SkillManager();
@@ -27,6 +31,8 @@ private:
 private:
     QHash<QString, QStringList> mSkillNames;
     QHash<QString, QHash<QString, Skill>> mSkills;
+
+    QEventLoop mEventLoop;
 };
 
 #endif // SKILLMANAGER_H

@@ -2,7 +2,6 @@
 #include "ui_setting_ranking.h"
 #include "ui/widget_manager.h"
 #include "ui/font_manager.h"
-#include "resource/resource_manager.h"
 #include "api/api_manager.h"
 #include "api/response_parser.h"
 #include "game/engrave/engrave_manager.h"
@@ -54,14 +53,6 @@ void SettingRanking::initializeInputLayout()
 
 void SettingRanking::initializeClassSelector()
 {
-    QJsonArray classArray = ResourceManager::getInstance()->loadJson("class").find("Class")->toArray();
-    QStringList classNames;
-
-    for (const QJsonValue &value : classArray)
-    {
-        classNames << value.toObject().find("Child")->toVariant().toStringList();
-    }
-
     QGroupBox *pGroupBox = WidgetManager::createGroupBox("직업 선택");
     ui->hLayoutInput->addWidget(pGroupBox);
     ui->hLayoutInput->setAlignment(pGroupBox, Qt::AlignCenter);
@@ -69,8 +60,25 @@ void SettingRanking::initializeClassSelector()
     QHBoxLayout *pHLayout = new QHBoxLayout();
     pGroupBox->setLayout(pHLayout);
 
-    mpClassSelector = WidgetManager::createComboBox(classNames);
-    pHLayout->addWidget(mpClassSelector);
+    QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
+    connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, pHLayout](QNetworkReply *pReply){
+        QJsonArray classes = QJsonDocument::fromJson(pReply->readAll()).array();
+        QStringList classNames;
+
+        for (const QJsonValue &value : classes) {
+            classNames << value.toObject().find("child")->toVariant().toStringList();
+        }
+
+        mpClassSelector = WidgetManager::createComboBox(classNames);
+        pHLayout->addWidget(mpClassSelector);
+    });
+    connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
+
+    ApiManager::getInstance()->get(pNetworkManager,
+                                   ApiType::LoaManager,
+                                   static_cast<int>(LoamanagerApi::GetResource),
+                                   {"class", ""},
+                                   "");
 }
 
 void SettingRanking::initializeSearchButton()
@@ -197,9 +205,11 @@ void SettingRanking::initializeSearchButton()
         });
         connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-        ApiManager::getInstance()->get(pNetworkManager, ApiType::LoaManager,
-                                       static_cast<int>(LoamanagerApi::GetCharacterSettings),
-                                       mpClassSelector->currentText(), "");
+        ApiManager::getInstance()->get(pNetworkManager,
+                                       ApiType::LoaManager,
+                                       static_cast<int>(LoamanagerApi::GetStats),
+                                       {"setting", mpClassSelector->currentText()},
+                                       "");
     });
 
     ui->hLayoutInput->addWidget(mpSearchButton);

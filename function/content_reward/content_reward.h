@@ -65,6 +65,7 @@ private:
     class ContentRewardAdder *mpRewardAdder;
 
     class QLabel *mpLabelInfo;
+    uint8_t mInitStatus = 0x00;
 };
 
 #endif // CONTENT_REWARD_H

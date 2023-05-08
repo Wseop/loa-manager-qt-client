@@ -1,7 +1,6 @@
 #include "content_reward.h"
 #include "ui_content_reward.h"
 #include "ui/widget_manager.h"
-#include "resource/resource_manager.h"
 #include "api/api_manager.h"
 #include "api/response_parser.h"
 #include "api/lostark/search_option.h"
@@ -41,8 +40,6 @@ ContentReward::ContentReward() :
     initializeSearchOption();
     initializeContentSelector();
     initializeTradableSelector();
-    initializeRewardTable();
-    initializeRewardAdder();
 }
 
 ContentReward::~ContentReward()
@@ -52,36 +49,63 @@ ContentReward::~ContentReward()
 
 void ContentReward::initializeContentData()
 {
-    QJsonObject data = ResourceManager::getInstance()->loadJson("drop_table");
-
     // 컨텐츠 목록 초기화
-    mContents = data.find("Contents")->toVariant().toStringList();
-
-    // 컨텐츠별 data 초기화
-    for (const QString &content : mContents)
-    {
-        const QJsonArray &dropTable = data.find(content)->toObject().find("DropTable")->toArray();
-
-        for (const QJsonValue &value : dropTable)
-        {
-            const QJsonObject &object = value.toObject();
-            const QString &level = object.find("Level")->toString();
-
-            mContentLevels[content] << level;
-            mDropTable[level] = object.find("ItemList")->toVariant().toStringList();
-            mRewardData[level] = {level, 0, {}, QList<int>(mDropTable[level].size(), 0)};
-
-            mTotalLevels++;
-        }
-    }
+    mContents = {"카오스던전", "가디언토벌"};
 
     // 골드로 환산이 가능한 아이템들의 가격 정보 초기화
-    const QStringList &tradable = data.find("Tradable")->toVariant().toStringList();
+    const QStringList &tradable = {
+        "명예의 파편 주머니(소)",
+        "파괴강석", "정제된 파괴강석",
+        "수호강석", "정제된 수호강석",
+        "경이로운 명예의 돌파석", "찬란한 명예의 돌파석",
+        "1레벨 멸화"
+    };
 
     for (const QString &item : tradable)
     {
         mTradablePrice[item] = 0;
     }
+
+    // 컨텐츠별 data 초기화
+    for (int i = 0; i < mContents.size(); i++) {
+        QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
+        connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, i](QNetworkReply *pReply){
+            QJsonArray rewards = QJsonDocument::fromJson(pReply->readAll())
+                                    .object()
+                                    .find("rewards")->toArray();
+
+            for (const QJsonValue &value : rewards) {
+                const QJsonObject &reward = value.toObject();
+                const QString &level = reward.find("level")->toString();
+                const QJsonArray items = reward.find("items")->toArray();
+
+                mContentLevels[mContents[i]] << level;
+
+                for (const QJsonValue &value : items) {
+                    mDropTable[level] << value.toObject().find("item")->toString();
+                }
+
+                mRewardData[level] = {level, 0, {}, QList<int>(mDropTable[level].size(), 0)};
+
+                mTotalLevels++;
+            }
+
+            mInitStatus |= (1 << i);
+
+            if (mInitStatus == 0x03) {
+                initializeRewardTable();
+                initializeRewardAdder();
+            }
+        });
+        connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
+
+        ApiManager::getInstance()->get(pNetworkManager,
+                                       ApiType::LoaManager,
+                                       static_cast<int>(LoamanagerApi::GetResource),
+                                       {"reward", mContents[i]},
+                                       "");
+    }
+
 }
 
 void ContentReward::initializeSearchOption()
@@ -253,9 +277,13 @@ void ContentReward::refreshRewardData()
             });
             connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-            LoamanagerApi api = content == "카오스 던전" ? LoamanagerApi::GetRewardChaos : LoamanagerApi::GetRewardGuardian;
+            QString category = content == "카오스던전" ? "chaos": "guardian";
 
-            ApiManager::getInstance()->get(pNetworkManager, ApiType::LoaManager, static_cast<int>(api), contentLevel, "");
+            ApiManager::getInstance()->get(pNetworkManager,
+                                           ApiType::LoaManager,
+                                           static_cast<int>(LoamanagerApi::GetStats),
+                                           {category, contentLevel},
+                                           "");
         }
     }
 }
@@ -315,9 +343,17 @@ void ContentReward::refreshTradablePrice()
         SearchOption *pSearchOption = mSearchOptions[i];
 
         if (item == "1레벨 멸화")
-            ApiManager::getInstance()->post(pNetworkManager, ApiType::Lostark, static_cast<int>(LostarkApi::Auction), QJsonDocument(pSearchOption->toJsonObject()).toJson());
+            ApiManager::getInstance()->post(pNetworkManager,
+                                            ApiType::Lostark,
+                                            static_cast<int>(LostarkApi::Auction),
+                                            {},
+                                            QJsonDocument(pSearchOption->toJsonObject()).toJson());
         else
-            ApiManager::getInstance()->post(pNetworkManager, ApiType::Lostark, static_cast<int>(LostarkApi::Market), QJsonDocument(pSearchOption->toJsonObject()).toJson());
+            ApiManager::getInstance()->post(pNetworkManager,
+                                            ApiType::Lostark,
+                                            static_cast<int>(LostarkApi::Market),
+                                            {},
+                                            QJsonDocument(pSearchOption->toJsonObject()).toJson());
     }
 }
 

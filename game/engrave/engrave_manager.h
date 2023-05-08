@@ -1,11 +1,15 @@
 #ifndef ENGRAVE_MANAGER_H
 #define ENGRAVE_MANAGER_H
 
+#include <QObject>
 #include <QStringList>
 #include <QHash>
+#include <QEventLoop>
 
-class EngraveManager
+class EngraveManager : public QObject
 {
+    Q_OBJECT
+
 private:
     EngraveManager();
     ~EngraveManager();
@@ -41,6 +45,8 @@ private:
     QStringList mBattleEngraves;
     QHash<QString, QStringList> mClassEngraves;
     QStringList mPenalties;
+
+    QEventLoop mEventLoop;
 };
 
 #endif // ENGRAVE_MANAGER_H

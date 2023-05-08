@@ -200,7 +200,11 @@ void SmartSearchAbilityStone::searchAbilityStone()
             if (mpPenaltySelector->currentIndex() != 0)
                 searchOption.setEtcOption(EtcOptionCode::Engrave, EngraveManager::getInstance()->getEngraveCode(mpPenaltySelector->currentText()));
 
-            ApiManager::getInstance()->post(pNetworkManager, ApiType::Lostark, static_cast<int>(LostarkApi::Auction), QJsonDocument(searchOption.toJsonObject()).toJson());
+            ApiManager::getInstance()->post(pNetworkManager,
+                                            ApiType::Lostark,
+                                            static_cast<int>(LostarkApi::Auction),
+                                            {},
+                                            QJsonDocument(searchOption.toJsonObject()).toJson());
         }
     }
 }

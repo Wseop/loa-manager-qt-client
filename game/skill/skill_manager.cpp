@@ -1,9 +1,12 @@
 #include "skill_manager.h"
-#include "resource/resource_manager.h"
+#include "api/api_manager.h"
+#include "api/loamanager/loamanager_api.h"
 
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonDocument>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
 
 SkillManager *SkillManager::mpInstance = nullptr;
 
@@ -22,50 +25,62 @@ void SkillManager::initializeSkillList()
     const QString skillIconPath = ":/image/skill/%1";
     const QString tripodIconPath = ":/image/tripod/Tripod_Tier_%1_%2.png";
 
-    QJsonArray json = ResourceManager::getInstance()->loadJson("skill").find("Skill")->toArray();
+    QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
+    connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, skillIconPath, tripodIconPath](QNetworkReply *pReply){
+        QJsonArray data = QJsonDocument::fromJson(pReply->readAll()).array();
 
-    for (const QJsonValue& value : json)
-    {
-        const QJsonObject &object = value.toObject();
-
-        // 직업별 스킬 목록 추가
-        const QString &_class = object.find("Class")->toString();
-        const QJsonArray skills = object.find("Skills")->toArray();
-
-        for (const QJsonValue& value : skills)
+        for (const QJsonValue& value : data)
         {
-            const QJsonObject &skill = value.toObject();
+            const QJsonObject &object = value.toObject();
 
-            Skill newSkill;
-            newSkill.setSkillName(skill.find("Text")->toString());
-            newSkill.setSkillCode(skill.find("Value")->toInt());
-            newSkill.setIconPath(skillIconPath.arg(skill.find("IconPath")->toString()));
-            newSkill.setCounter(skill.find("IsCounter")->toBool());
+            // 직업별 스킬 목록 추가
+            const QString &_class = object.find("className")->toString();
+            const QJsonArray skills = object.find("skills")->toArray();
 
-            // 스킬별 트라이포드 목록 추가
-            const QJsonArray &tripods = skill.find("Tripods")->toArray();
-
-            for (int i = 0; i < tripods.size(); i++)
+            for (const QJsonValue& value : skills)
             {
-                const QJsonObject &tripod = tripods[i].toObject();
-                int tier = (i / 3) + 1;
+                const QJsonObject &skill = value.toObject();
 
-                Tripod newTripod;
-                newTripod.setTripodName(tripod.find("Text")->toString());
-                newTripod.setTripodCode(tripod.find("Value")->toInt());
-                if (newTripod.tripodCode() == -1)
-                    newTripod.setMaxLevel(1);
-                else
-                    newTripod.setMaxLevel(5);
-                newTripod.setTier(tier);
-                newTripod.setIconPath(tripodIconPath.arg(tier).arg(tripod.find("IconIndex")->toInt()));
+                Skill newSkill;
+                newSkill.setSkillName(skill.find("skillName")->toString());
+                newSkill.setSkillCode(skill.find("skillCode")->toInt());
+                newSkill.setIconPath(skillIconPath.arg(skill.find("iconPath")->toString()));
+                newSkill.setCounter(skill.find("isCounter")->toBool());
 
-                newSkill.addTripod(newTripod);
+                // 스킬별 트라이포드 목록 추가
+                const QJsonArray &tripods = skill.find("tripods")->toArray();
+
+                for (int i = 0; i < tripods.size(); i++)
+                {
+                    const QJsonObject &tripod = tripods[i].toObject();
+                    int tier = (i / 3) + 1;
+
+                    Tripod newTripod;
+                    newTripod.setTripodName(tripod.find("tripodName")->toString());
+                    newTripod.setTripodCode(tripod.find("tripodCode")->toInt());
+                    if (newTripod.tripodCode() == -1)
+                        newTripod.setMaxLevel(1);
+                    else
+                        newTripod.setMaxLevel(5);
+                    newTripod.setTier(tier);
+                    newTripod.setIconPath(tripodIconPath.arg(tier).arg(tripod.find("iconIndex")->toInt()));
+
+                    newSkill.addTripod(newTripod);
+                }
+                mSkillNames[_class] << newSkill.skillName();
+                mSkills[_class][newSkill.skillName()] = newSkill;
             }
-            mSkillNames[_class] << newSkill.skillName();
-            mSkills[_class][newSkill.skillName()] = newSkill;
         }
-    }
+    });
+    connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
+    connect(pNetworkManager, &QNetworkAccessManager::finished, &mEventLoop, &QEventLoop::quit);
+
+    ApiManager::getInstance()->get(pNetworkManager,
+                                   ApiType::LoaManager,
+                                   static_cast<int>(LoamanagerApi::GetResource),
+                                   {"skill", ""},
+                                   "");
+    mEventLoop.exec();
 }
 
 SkillManager *SkillManager::getInstance()

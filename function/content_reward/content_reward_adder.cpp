@@ -140,10 +140,13 @@ void ContentRewardAdder::insertData()
     connect(pNetworkManager, &QNetworkAccessManager::finished, this, &ContentRewardAdder::processReply);
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    int urlIndex = content == "카오스 던전" ? static_cast<int>(LoamanagerApi::PostRewardChaos) :
-                                            static_cast<int>(LoamanagerApi::PostRewardGuardian);
+    QString param = content == "카오스 던전" ? "chaos" : "guardian";
 
-    ApiManager::getInstance()->post(pNetworkManager, ApiType::LoaManager, urlIndex, RequestBodyBuilder::buildRewardBody(reward));
+    ApiManager::getInstance()->post(pNetworkManager,
+                                    ApiType::LoaManager,
+                                    static_cast<int>(LoamanagerApi::PostStats),
+                                    {param},
+                                    RequestBodyBuilder::buildRewardBody(reward));
 
     for (QLineEdit *pLineEdit : mLineEdits)
         pLineEdit->clear();

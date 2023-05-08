@@ -274,7 +274,11 @@ void SmartSearchAccessory::searchAccessory()
         connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
         mSearchOptions[i]->setPageNo(mSearchPage);
-        ApiManager::getInstance()->post(pNetworkManager, ApiType::Lostark, static_cast<int>(LostarkApi::Auction), QJsonDocument(mSearchOptions[i]->toJsonObject()).toJson());
+        ApiManager::getInstance()->post(pNetworkManager,
+                                        ApiType::Lostark,
+                                        static_cast<int>(LostarkApi::Auction),
+                                        {},
+                                        QJsonDocument(mSearchOptions[i]->toJsonObject()).toJson());
     }
 }
 

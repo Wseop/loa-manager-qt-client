@@ -121,7 +121,11 @@ void SmartSearchEngraveBook::searchEngraveBook(bool bResetPageNo)
     searchOption.setPageNo(mSearchPageNo);
     searchOption.setSortCondition("DESC");
 
-    ApiManager::getInstance()->post(pNetworkManager, ApiType::Lostark, static_cast<int>(LostarkApi::Market), QJsonDocument(searchOption.toJsonObject()).toJson());
+    ApiManager::getInstance()->post(pNetworkManager,
+                                    ApiType::Lostark,
+                                    static_cast<int>(LostarkApi::Market),
+                                    {},
+                                    QJsonDocument(searchOption.toJsonObject()).toJson());
 }
 
 void SmartSearchEngraveBook::parseSearchResult(QNetworkReply *pReply)

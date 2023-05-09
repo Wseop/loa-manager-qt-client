@@ -34,6 +34,9 @@ LoaManager::LoaManager() :
     this->setWindowIcon(QIcon(":/Home.ico"));
     this->setWindowTitle(mMainSetting.find("Version")->toString());
 
+    EngraveManager::getInstance();
+    SkillManager::getInstance();
+
     ui->setupUi(this);
     ui->hLayoutMenu->setAlignment(Qt::AlignLeft);
     ui->vLayoutContents->setAlignment(Qt::AlignTop);
@@ -42,9 +45,6 @@ LoaManager::LoaManager() :
     initializeMenuButton();
     initializeVersionInfo();
     initializeLoginButton();
-
-    EngraveManager::getInstance();
-    SkillManager::getInstance();
 }
 
 LoaManager::~LoaManager()

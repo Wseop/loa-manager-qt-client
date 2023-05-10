@@ -47,9 +47,7 @@ QByteArray RequestBodyBuilder::buildCharacterSettingBody(const CharacterSetting 
     body.insert("engrave", characterSetting.engrave);
     body.insert("engraveLevel", characterSetting.engraveLevel);
     body.insert("ability", characterSetting.ability);
-
-    if (characterSetting.elixir != "")
-        body.insert("elixir", characterSetting.elixir);
+    body.insert("elixir", characterSetting.elixir);
 
     return QJsonDocument(body).toJson();
 }
@@ -69,7 +67,7 @@ QByteArray RequestBodyBuilder::buildSkillSettingBody(const SkillSetting &skillSe
         classEngraves.append(classEngrave);
     }
 
-    body.insert("classEngrave", classEngraves);
+    body.insert("classEngraves", classEngraves);
 
     // 스킬 데이터 추가
     QJsonArray skills;
@@ -91,7 +89,7 @@ QByteArray RequestBodyBuilder::buildSkillSettingBody(const SkillSetting &skillSe
         skills.append(skill);
     }
 
-    body.insert("skill", skills);
+    body.insert("skills", skills);
 
     return QJsonDocument(body).toJson();
 }

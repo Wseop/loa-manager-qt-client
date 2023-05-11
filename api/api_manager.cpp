@@ -115,10 +115,6 @@ void ApiManager::get(QNetworkAccessManager *pNetworkManager, ApiType apiType, in
     }
     else if (apiType == ApiType::LoaManager)
     {
-//        QSslConfiguration conf = request.sslConfiguration();
-//        conf.setPeerVerifyMode(QSslSocket::VerifyNone);
-//        request.setSslConfiguration(conf);
-
         request.setRawHeader("authorization", QString("bearer %1").arg(mAccessToken).toUtf8());
     }
     else
@@ -145,10 +141,6 @@ void ApiManager::post(QNetworkAccessManager *pNetworkManager, ApiType apiType, i
     }
     else if (apiType == ApiType::LoaManager)
     {
-//        QSslConfiguration conf = request.sslConfiguration();
-//        conf.setPeerVerifyMode(QSslSocket::VerifyNone);
-//        request.setSslConfiguration(conf);
-
         request.setRawHeader("authorization", QString("bearer %1").arg(mAccessToken).toUtf8());
     }
     else

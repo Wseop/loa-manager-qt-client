@@ -282,6 +282,10 @@ void CharacterSearch::updateCharacterSetting(Character *pCharacter)
 
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
+    connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&](QNetworkReply *pReply){
+        qDebug() << "[UPDATE][SETTING]"
+                 << pReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    });
 
     ApiManager::getInstance()->post(pNetworkManager,
                                     ApiType::LoaManager,
@@ -331,6 +335,10 @@ void CharacterSearch::updateSkillSetting(Character *pCharacter)
 
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
+    connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&](QNetworkReply *pReply){
+        qDebug() << "[UPDATE][SKILL]"
+                 << pReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    });
 
     ApiManager::getInstance()->post(pNetworkManager,
                                     ApiType::LoaManager,

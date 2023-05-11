@@ -71,6 +71,8 @@ void SkillManager::initializeSkillList()
                 mSkills[_class][newSkill.skillName()] = newSkill;
             }
         }
+
+        qDebug() << "SkillManager initialized";
     });
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
     connect(pNetworkManager, &QNetworkAccessManager::finished, &mEventLoop, &QEventLoop::quit);

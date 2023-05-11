@@ -140,7 +140,7 @@ void ContentRewardAdder::insertData()
     connect(pNetworkManager, &QNetworkAccessManager::finished, this, &ContentRewardAdder::processReply);
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    QString param = content == "카오스 던전" ? "chaos" : "guardian";
+    QString param = content == "카오스던전" ? "chaos" : "guardian";
 
     ApiManager::getInstance()->post(pNetworkManager,
                                     ApiType::LoaManager,
@@ -162,5 +162,7 @@ void ContentRewardAdder::processReply(QNetworkReply *pReply)
         QMessageBox msgBox;
         msgBox.setText("로그인 유효시간이 만료되었습니다. 재로그인 해주세요.");
         msgBox.exec();
+    } else {
+        qDebug() << "[UPDATE][REWARD]" << statusCode;
     }
 }

@@ -20,27 +20,27 @@
     ],
     "LoaManager": [
         {
-            "RequestURL": "http://localhost:3000/admin/%1",
+            "RequestURL": "https://loamgr.xyz/admin/%1",
             "Type": "GET"
         },
         {
-            "RequestURL": "http://localhost:3000/apikey",
+            "RequestURL": "https://loamgr.xyz/apikey",
             "Type": "GET"
         },
         {
-            "RequestURL": "http://localhost:3000/user/signin",
+            "RequestURL": "https://loamgr.xyz/user/signin",
             "Type": "POST"
         },
         {
-            "RequestURL": "http://localhost:3000/resources/%1/%2",
+            "RequestURL": "https://loamgr.xyz/resources/%1/%2",
             "Type": "GET"
         },
         {
-            "RequestURL": "http://localhost:3000/stats/%1/%2",
+            "RequestURL": "https://loamgr.xyz/stats/%1/%2",
             "Type": "GET"
         },
         {
-            "RequestURL": "http://localhost:3000/stats/%1",
+            "RequestURL": "https://loamgr.xyz/stats/%1",
             "Type": "POST"
         }
     ]

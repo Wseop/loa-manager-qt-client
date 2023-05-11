@@ -47,6 +47,8 @@ void EngraveManager::initalizeEngraveList()
             else
                 mClassEngraves[cls] << text;
         }
+
+        qDebug() << "EngraveManager initialized";
     });
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
     connect(pNetworkManager, &QNetworkAccessManager::finished, &mEventLoop, &QEventLoop::quit);

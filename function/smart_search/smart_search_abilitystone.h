@@ -22,24 +22,36 @@ public:
     void refresh() override;
 
 private:
-    void initializeEngraveSelector();
+    void initializeValidEngraveList();
+    void initializeFilter();
     void initializeResultUI();
 
     void searchAbilityStone();
     void parseSearchResult(class QNetworkReply *pReply);
+    void showSearchResult();
+
     void clearResult();
+
+    void applyFilter();
 
 private:
     Ui::SmartSearchAbilityStone *ui;
 
+    const int MAX_FILTER = 5;
+
+    bool mIsWorking;
+
+    QStringList mValidEngraves;
     QList<class QComboBox*> mEngraveSelectors;
-    QComboBox *mpPenaltySelector;
 
     QList<QPair<AbilityStone, AuctionInfo>> mSearchResults;
     int mTotalSearchCount;
     int mCurrentSearchCount;
 
-    QList<QWidget*> mResultWidgets;
+    QList<QList<QWidget*>> mResultWidgets;
+    QHash<QString, QList<int>> mResultIndexMap;
+
+    QStringList mEngraveFilters;
 };
 
 #endif // SMART_SEARCH_ABILITYSTONE_H

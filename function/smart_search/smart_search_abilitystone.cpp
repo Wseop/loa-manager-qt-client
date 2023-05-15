@@ -266,8 +266,14 @@ void SmartSearchAbilityStone::applyFilter()
         }
     }
 
+    // 1개라도 선택된 경우 필터 적용
     if (bApplyFilter) {
-        // 1개라도 선택된 경우 필터 적용
+        for (int i = 0; i < mResultWidgets.size(); i++) {
+            for (int j = 0; j < mResultWidgets[i].size(); j++) {
+                mResultWidgets[i][j]->hide();
+            }
+        }
+
         for (QString &filter : mEngraveFilters) {
             if (filter == "")
                 continue;
@@ -280,9 +286,6 @@ void SmartSearchAbilityStone::applyFilter()
                 if (resultIndices.contains(i)) {
                     for (QWidget *pWidget : widgets)
                         pWidget->show();
-                } else {
-                    for (QWidget *pWidget : widgets)
-                        pWidget->hide();
                 }
             }
         }

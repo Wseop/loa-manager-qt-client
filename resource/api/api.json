@@ -20,7 +20,7 @@
     ],
     "LoaManager": [
         {
-            "RequestURL": "https://loamgr.xyz/admin/%1",
+            "RequestURL": "https://loamgr.xyz/admin",
             "Type": "GET"
         },
         {

@@ -31,9 +31,6 @@ LoaManager::LoaManager() :
     mpLoginButton(nullptr),
     mpLabelVersionInfo(nullptr)
 {
-    this->setWindowIcon(QIcon(":/Home.ico"));
-    this->setWindowTitle(mMainSetting.find("Version")->toString());
-
     EngraveManager::getInstance();
     SkillManager::getInstance();
 
@@ -45,6 +42,9 @@ LoaManager::LoaManager() :
     initializeMenuButton();
     initializeVersionInfo();
     initializeLoginButton();
+
+    this->setWindowIcon(QIcon(":/Home.ico"));
+    this->setWindowTitle(mMainSetting.find("Version")->toString());
 }
 
 LoaManager::~LoaManager()
@@ -136,14 +136,14 @@ void LoaManager::initializeLoginButton()
 
 void LoaManager::initializeVersionInfo()
 {
-    const QString &versionInfo = mMainSetting.find("Version")->toString();
+    const QString &currentVersion = mMainSetting.find("Version")->toString();
 
     mpLabelVersionInfo = WidgetManager::createLabel("", 10, 500, 50);
     ui->hLayoutAdmin->addWidget(mpLabelVersionInfo);
 
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
 
-    connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, versionInfo](QNetworkReply *pReply)
+    connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, currentVersion](QNetworkReply *pReply)
     {
         QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
 
@@ -153,15 +153,30 @@ void LoaManager::initializeVersionInfo()
             return;
         }
 
-        if (versionInfo == response.object().find("value")->toString())
+        const QJsonArray &datas = response.array();
+        QString latestVersion;
+        QString releaseUrl;
+
+        for (const QJsonValue &data : datas) {
+            const QString &key = data.toObject().find("key")->toString();
+            const QString &value = data.toObject().find("value")->toString();
+
+            if (key == "version") {
+                latestVersion = value;
+            } else if (key == "release") {
+                releaseUrl = value;
+            }
+        }
+
+        if (currentVersion == latestVersion)
         {
-            mpLabelVersionInfo->setText("최신 버전입니다.");
+            mpLabelVersionInfo->setText(latestVersion);
             mpLabelVersionInfo->setStyleSheet("QLabel { color: blue }");
         }
         else
         {
-            mpLabelVersionInfo->setText("업데이트가 필요합니다.\n(https://github.com/Wseop/QT_LoaManager/releases)");
-            mpLabelVersionInfo->setStyleSheet("QLabel { color: red }");
+            mpLabelVersionInfo->setText(QString("<a href=\"%1\">%2 released\n</a>").arg(releaseUrl, latestVersion));
+            mpLabelVersionInfo->setOpenExternalLinks(true);
         }
     });
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
@@ -169,7 +184,7 @@ void LoaManager::initializeVersionInfo()
     ApiManager::getInstance()->get(pNetworkManager,
                                    ApiType::LoaManager,
                                    static_cast<int>(LoamanagerApi::Admin),
-                                   {"version"},
+                                   {},
                                    "");
 }
 

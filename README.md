@@ -1,8 +1,12 @@
 # QT_LoaManager
 Lostark OpenAPI를 활용한 편의기능 제공 앱
-## 개발 환경
-- **Compiler** : MinGW 11.2.0 64-bit for c++
-- **Framework** : Qt Creator 9.0.1 (Qt Version. 6.4.0 MinGW 64-bit)
+## 기술 스택
+### Environment
+<img src="https://img.shields.io/badge/qt-41CD52?style=for-the-badge&logo=qt&logoColor=white"> 
+
+### Development
+<img src="https://img.shields.io/badge/c++-00599C?style=for-the-badge&logo=cplusplus&logoColor=white"> 
+
 ## 프로젝트 구조
 - 현재 페이지는 Front End 영역에 해당
 - BackEnd 페이지는 [여기](https://github.com/Wseop/LoaManagerServer)로

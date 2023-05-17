@@ -145,7 +145,9 @@ void SkillStats::initializeClassEngraveSelector()
             // 선택한 직업 각인으로 스킬 usage 업데이트
             for (auto &skillStatsWidget : mSkillStatsWidgets)
             {
-                skillStatsWidget.second->updateUsage(mSettingCounts[i], mSkillUsageInfos[i][skillStatsWidget.first]);
+                if (mSkillUsageInfos[i].contains(skillStatsWidget.first)) {
+                    skillStatsWidget.second->updateUsage(mSettingCounts[i], mSkillUsageInfos[i][skillStatsWidget.first]);
+                }
             }
 
             // 사용률이 높은 순으로 정렬

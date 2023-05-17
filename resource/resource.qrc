@@ -16,7 +16,6 @@
         <file>engrave/123.png</file>
         <file>engrave/125.png</file>
         <file>engrave/127.png</file>
-        <file>engrave/129.png</file>
         <file>engrave/130.png</file>
         <file>engrave/134.png</file>
         <file>engrave/140.png</file>
@@ -28,7 +27,6 @@
         <file>engrave/189.png</file>
         <file>engrave/190.png</file>
         <file>engrave/191.png</file>
-        <file>engrave/192.png</file>
         <file>engrave/193.png</file>
         <file>engrave/194.png</file>
         <file>engrave/195.png</file>
@@ -951,6 +949,14 @@
         <file>item/rune/9.png</file>
         <file>item/rune/10.png</file>
         <file>item/rune/11.png</file>
+        <file>engrave/129.png</file>
+        <file>engrave/192.png</file>
+        <file>skill/DH_Skill_01_47.png</file>
+        <file>skill/DH_Skill_01_48.png</file>
+        <file>skill/DH_Skill_01_49.png</file>
+        <file>skill/SO_Skill_01_26.png</file>
+        <file>tripod/Tripod_Tier_1_158.png</file>
+        <file>tripod/Tripod_Tier_2_128.png</file>
     </qresource>
     <qresource prefix="/json">
         <file alias="api.json">api/api.json</file>

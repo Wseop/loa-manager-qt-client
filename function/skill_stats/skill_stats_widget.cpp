@@ -174,15 +174,17 @@ void SkillStatsWidget::updateTripodUsage(const QList<QPair<QString, int>> &tripo
     {
         double tripodUsageRatio = tripodUsage.second / static_cast<double>(settingCount) * 100;
 
-        mTripodUsageLabels[tripodUsage.first]->setText(QString("[%1%]").arg(tripodUsageRatio, 0, 'f', 2));
+        if (mTripodUsageLabels.contains(tripodUsage.first)) {
+            mTripodUsageLabels[tripodUsage.first]->setText(QString("[%1%]").arg(tripodUsageRatio, 0, 'f', 2));
 
-        if (tripodUsageRatio >= EMPHASIS_RATIO)
-        {
-            mTripodUsageLabels[tripodUsage.first]->setStyleSheet(QString("QLabel { color: blue }"));
-        }
-        else
-        {
-            mTripodUsageLabels[tripodUsage.first]->setStyleSheet(QString("QLabel { color: black }"));
+            if (tripodUsageRatio >= EMPHASIS_RATIO)
+            {
+                mTripodUsageLabels[tripodUsage.first]->setStyleSheet(QString("QLabel { color: blue }"));
+            }
+            else
+            {
+                mTripodUsageLabels[tripodUsage.first]->setStyleSheet(QString("QLabel { color: black }"));
+            }
         }
     }
 }

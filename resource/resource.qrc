@@ -959,7 +959,6 @@
         <file>tripod/Tripod_Tier_2_128.png</file>
     </qresource>
     <qresource prefix="/json">
-        <file alias="api.json">api/api.json</file>
         <file alias="reforge.json">item/reforge/reforge.json</file>
         <file alias="smart_search.json">smart_search/smart_search.json</file>
         <file>main.json</file>

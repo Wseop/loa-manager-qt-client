@@ -1,13 +1,11 @@
 #ifndef APIMANAGER_H
 #define APIMANAGER_H
 
-#include <QObject>
-#include <QHash>
+#include "api/resources/resources.h"
+#include "api/statistics/statistics.h"
+#include "api/lostark/search_option.h"
 
-enum class ApiType
-{
-    Lostark, LoaManager
-};
+#include <QObject>
 
 class QNetworkAccessManager;
 
@@ -19,29 +17,42 @@ private:
     ApiManager();
     ~ApiManager();
 
-    void initializeRequestUrl(const QJsonObject &resource);
-    void initializeApiKey();
-
-    const QString &getLostarkApiKey();
+    void get(QNetworkAccessManager *pNetworkManager, const QString &url);
+    void post(QNetworkAccessManager *pNetworkManager, const QString &url, const QByteArray &data);
 
 public:
     static ApiManager *getInstance();
     static void destroyInstance();
 
+public:
     void setAccessToken(const QString &token);
     QString accessToken() const;
 
-    void get(QNetworkAccessManager *pNetworkManager, ApiType apiType, int urlIndex, const QStringList &params, const QString &query);
-    void post(QNetworkAccessManager *pNetworkManager, ApiType apiType, int urlIndex, const QStringList &params, QByteArray data);
+    // info
+    void getInfos(QNetworkAccessManager *pNetworkManager);
+
+    // user
+    void trySignin(QNetworkAccessManager *pNetworkManager, const QString &userId, const QString &password);
+
+    // resources
+    void getResources(QNetworkAccessManager *pNetworkManager, Resources resource, const QString &param);
+
+    // statistics
+    void getStatistics(QNetworkAccessManager *pNetworkManager, Statistics statistic, const QString &param);
+    void postStatistics(QNetworkAccessManager *pNetworkManager, Statistics statistic, const QByteArray &data);
+
+    // lostark
+    void getCharacter(QNetworkAccessManager *pNetworkManager, const QString &characterName);
+    void getSiblings(QNetworkAccessManager *pNetworkManager, const QString &characterName);
+    void getAuctionItems(QNetworkAccessManager *pNetworkManager, AuctionSearchOption searchOption);
+    void getMarketItems(QNetworkAccessManager *pNetworkManager, MarketSearchOption searchOption);
 
 private:
     static ApiManager *mpInstance;
 
-    QStringList mLostarkApiKeys;
-    int mLostarkKeyIndex;
+private:
+    QString mUrlBase;
     QString mAccessToken;
-
-    QHash<ApiType, QStringList> mRequestURLs;
 };
 
 #endif // APIMANAGER_H

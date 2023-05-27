@@ -22,15 +22,14 @@ public:
     static void destroyInstance();
 
 public:
-    QStringList skillNames(const QString &_class) const;
-    QHash<QString, Skill> skills(const QString &_class) const;
+    QStringList skillNames(const QString &className) const;
+    QHash<QString, Skill> skills(const QString &className) const;
 
 private:
     static SkillManager *mpInstance;
 
 private:
-    QHash<QString, QStringList> mSkillNames;
-    QHash<QString, QHash<QString, Skill>> mSkills;
+    QHash<QString, QHash<QString, Skill>> mSkillMap;
 
     QEventLoop mEventLoop;
 };

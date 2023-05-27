@@ -181,10 +181,6 @@ void LoaManager::initializeVersionInfo()
     });
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    ApiManager::getInstance()->get(pNetworkManager,
-                                   ApiType::LoaManager,
-                                   static_cast<int>(LoamanagerApi::Admin),
-                                   {},
-                                   "");
+    ApiManager::getInstance()->getInfos(pNetworkManager);
 }
 

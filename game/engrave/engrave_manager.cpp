@@ -24,28 +24,30 @@ EngraveManager::~EngraveManager()
 void EngraveManager::initalizeEngraveList()
 {
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
-    connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&](QNetworkReply *pReply){
+
+    connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&](QNetworkReply *pReply)
+    {
         QJsonArray engraves = QJsonDocument::fromJson(pReply->readAll()).array();
 
-        for (const QJsonValue &value : engraves) {
+        for (const QJsonValue &value : engraves)
+        {
             const QJsonObject &engrave = value.toObject();
 
             const int &code = engrave.find("code")->toInt();
-            const QString &text = engrave.find("engraveName")->toString();
-            const QString &cls = engrave.find("className")->toString();
+            const QString &engraveName = engrave.find("engraveName")->toString();
+            const QString &className = engrave.find("className")->toString();
             const bool &isPenalty = engrave.find("isPenalty")->toBool();
 
-            // 각인명 <-> 각인코드 맵 초기화
-            mEngraveToCode[text] = code;
-            mCodeToEngrave[code] = text;
+            // engrave, code mapping
+            mEngraveMap[code] = engraveName;
 
             // 각인 종류별로 리스트에 추가
             if (isPenalty)
-                mPenalties << text;
-            else if (cls.isEmpty())
-                mBattleEngraves << text;
+                mPenalties << engraveName;
+            else if (className.isEmpty())
+                mBattleEngraves << engraveName;
             else
-                mClassEngraves[cls] << text;
+                mClassEngraves[className] << engraveName;
         }
 
         qDebug() << "EngraveManager initialized";
@@ -53,11 +55,8 @@ void EngraveManager::initalizeEngraveList()
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
     connect(pNetworkManager, &QNetworkAccessManager::finished, &mEventLoop, &QEventLoop::quit);
 
-    ApiManager::getInstance()->get(pNetworkManager,
-                                   ApiType::LoaManager,
-                                   static_cast<int>(LoamanagerApi::GetResource),
-                                   {"engrave", ""},
-                                   "");
+    ApiManager::getInstance()->getResources(pNetworkManager, Resources::Engrave, "");
+
     mEventLoop.exec();
 }
 
@@ -80,7 +79,7 @@ void EngraveManager::destroyInstance()
 
 QStringList EngraveManager::getEngraves() const
 {
-    return mEngraveToCode.keys();
+    return mEngraveMap.values();
 }
 
 QStringList EngraveManager::getBattleEngraves() const
@@ -88,15 +87,15 @@ QStringList EngraveManager::getBattleEngraves() const
     return mBattleEngraves;
 }
 
-QStringList EngraveManager::getClassEngraves(const QString &characterClass) const
+QStringList EngraveManager::getClassEngraves(const QString &className) const
 {
-    if (!mClassEngraves.contains(characterClass))
-        return QStringList(0);
+    if (!mClassEngraves.contains(className))
+        return {};
 
-    return mClassEngraves[characterClass];
+    return mClassEngraves.value(className);
 }
 
-QStringList EngraveManager::getAllClassEngraves() const
+QStringList EngraveManager::getClassEngraves() const
 {
     QStringList classEngraves;
 
@@ -115,19 +114,17 @@ QStringList EngraveManager::getPenalties() const
 
 const QString EngraveManager::iconPath(const QString &engrave) const
 {
-    QString iconPath = ":/image/engrave/%1.png";
-    return iconPath.arg(mEngraveToCode[engrave]);
+    return QString(":/image/engrave/%1.png").arg(mEngraveMap.key(engrave));
 }
 
 bool EngraveManager::isClassEngrave(const QString &engrave)
 {
-    for (auto iter = mClassEngraves.begin(); iter != mClassEngraves.end(); iter++)
-    {
-        if (iter.value().contains(engrave))
-            return true;
+    if (mBattleEngraves.contains(engrave) ||
+        mPenalties.contains(engrave)) {
+        return false;
+    } else {
+        return true;
     }
-
-    return false;
 }
 
 bool EngraveManager::isPenalty(const QString &engrave)
@@ -137,10 +134,10 @@ bool EngraveManager::isPenalty(const QString &engrave)
 
 int EngraveManager::getEngraveCode(const QString &engrave)
 {
-    return mEngraveToCode[engrave];
+    return mEngraveMap.key(engrave);
 }
 
-const QString EngraveManager::getEngraveByCode(const int &code) const
+const QString EngraveManager::getEngraveName(const int &code) const
 {
-    return mCodeToEngrave[code];
+    return mEngraveMap.value(code);
 }

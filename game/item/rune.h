@@ -1,12 +1,14 @@
 #ifndef RUNE_H
 #define RUNE_H
 
-#include "game/item/item.h"
+#include "game/item/item_grade.h"
 
-class Rune : public Item
-{
-public:
-    Rune();
+#include <QString>
+
+struct Rune {
+    QString runeName;
+    ItemGrade itemGrade;
+    QString iconPath;
 };
 
 #endif // RUNE_H

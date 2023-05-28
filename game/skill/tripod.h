@@ -3,41 +3,15 @@
 
 #include <QString>
 
-class Tripod
-{
-public:
-    Tripod();
+struct Tripod {
+    QString tripodName;
+    int tripodCode = -1;
+    int iconIndex = -1;
+    int maxLevel = -1;
+    int tier = -1;
+    QString iconPath;
 
-    QString tripodName() const;
-    void setTripodName(const QString &newTripodName);
-
-    int tier() const;
-    void setTier(int newTier);
-
-    int tripodCode() const;
-    void setTripodCode(int newTripodCode);
-
-    int maxLevel() const;
-    void setMaxLevel(int newMaxLevel);
-
-    QString iconPath() const;
-    void setIconPath(const QString &newIconPath);
-
-    bool isSelected() const;
-    void setSelected(bool bSelected);
-
-    int tripodLevel() const;
-    void setTripodLevel(int newTripodLevel);
-
-private:
-    QString mTripodName;
-    int mTier;
-    int mTripodCode;
-    int mMaxLevel;
-    QString mIconPath;
-
-    bool mbSelected;
-    int mTripodLevel;
+    int tripodLevel = -1;
 };
 
 #endif // TRIPOD_H

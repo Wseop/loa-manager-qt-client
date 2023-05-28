@@ -38,23 +38,9 @@ SOURCES += \
     function/smart_search/smart_search_gem.cpp \
     function/smart_search/smart_search_reforge.cpp \
     function/smart_search/smart_search_tripod.cpp \
-    game/character/card.cpp \
     game/character/character.cpp \
-    game/character/collectible.cpp \
-    game/character/profile.cpp \
-    game/engrave/engrave.cpp \
     game/engrave/engrave_manager.cpp \
-    game/item/abilitystone.cpp \
-    game/item/accessory.cpp \
-    game/item/armor.cpp \
-    game/item/bracelet.cpp \
-    game/item/gem.cpp \
-    game/item/item.cpp \
-    game/item/rune.cpp \
-    game/item/weapon.cpp \
-    game/skill/skill.cpp \
     game/skill/skill_manager.cpp \
-    game/skill/tripod.cpp \
     main.cpp \
     loamanager.cpp \
     resource/resource_manager.cpp \
@@ -97,24 +83,14 @@ HEADERS += \
     function/smart_search/smart_search_menu.h \
     function/smart_search/smart_search_reforge.h \
     function/smart_search/smart_search_tripod.h \
-    game/character/ability.h \
-    game/character/card.h \
     game/character/character.h \
     game/character/collectible.h \
     game/character/profile.h \
-    game/engrave/engrave.h \
     game/engrave/engrave_manager.h \
-    game/item/abilitystone.h \
-    game/item/accessory.h \
-    game/item/armor.h \
-    game/item/bracelet.h \
+    game/item/equipment.h \
     game/item/gem.h \
-    game/item/item.h \
     game/item/item_grade.h \
-    game/item/item_set.h \
-    game/item/item_type.h \
     game/item/rune.h \
-    game/item/weapon.h \
     game/skill/skill.h \
     game/skill/skill_manager.h \
     game/skill/tripod.h \

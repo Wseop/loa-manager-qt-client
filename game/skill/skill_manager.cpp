@@ -43,10 +43,10 @@ void SkillManager::initializeSkillList()
                 const QJsonObject &skill = value.toObject();
 
                 Skill newSkill;
-                newSkill.setSkillName(skill.find("skillName")->toString());
-                newSkill.setSkillCode(skill.find("skillCode")->toInt());
-                newSkill.setIconPath(skillIconPath.arg(skill.find("iconPath")->toString()));
-                newSkill.setCounter(skill.find("isCounter")->toBool());
+                newSkill.skillName = skill.find("skillName")->toString();
+                newSkill.skillCode = skill.find("skillCode")->toInt();
+                newSkill.iconPath = skillIconPath.arg(skill.find("iconPath")->toString());
+                newSkill.isCounter = skill.find("isCounter")->toBool();
 
                 // 스킬별 트라이포드 목록 추가
                 const QJsonArray &tripods = skill.find("tripods")->toArray();
@@ -57,21 +57,21 @@ void SkillManager::initializeSkillList()
                     int tier = (i / 3) + 1;
 
                     Tripod newTripod;
-                    newTripod.setTripodName(tripod.find("tripodName")->toString());
-                    newTripod.setTripodCode(tripod.find("tripodCode")->toInt());
+                    newTripod.tripodName = tripod.find("tripodName")->toString();
+                    newTripod.tripodCode = tripod.find("tripodCode")->toInt();
 
-                    if (newTripod.tripodCode() == -1)
-                        newTripod.setMaxLevel(1);
+                    if (newTripod.tripodCode == -1)
+                        newTripod.maxLevel = 1;
                     else
-                        newTripod.setMaxLevel(5);
+                        newTripod.maxLevel = 5;
 
-                    newTripod.setTier(tier);
-                    newTripod.setIconPath(tripodIconPath.arg(tier).arg(tripod.find("iconIndex")->toInt()));
+                    newTripod.tier = tier;
+                    newTripod.iconPath = tripodIconPath.arg(tier).arg(tripod.find("iconIndex")->toInt());
 
-                    newSkill.addTripod(newTripod);
+                    newSkill.tripods << newTripod;
                 }
 
-                mSkillMap[className][newSkill.skillName()] = newSkill;
+                mSkillMap[className][newSkill.skillName] = newSkill;
             }
         }
 

@@ -18,7 +18,25 @@ public:
     Character();
 
     Profile profile() const;
-    void setProfile(const Profile &newProfile);
+    void setProfile(const Profile &profile);
+
+    QHash<QString, Equipment> equipments() const;
+    void addEquipment(const Equipment &equipment);
+
+    QList<Skill> skills() const;
+    void addSkill(const Skill &skill);
+
+    QList<Gem> gems() const;
+    void addGem(const Gem &gem);
+
+    QList<QPair<QString, int> > engraves() const;
+    void addEngrave(const QString &engraveName, int engraveLevel);
+
+    QList<QPair<QString, int> > cards() const;
+    void addCard(const QString &cardSet, int awaken);
+
+    QList<Collectible> collectibles() const;
+    void addCollectible(const Collectible &collectible);
 
 private:
     Profile mProfile;

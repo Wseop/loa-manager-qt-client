@@ -145,5 +145,7 @@ QList<Profile> Character::siblings() const
 
 void Character::addSiblings(const Profile &sibling)
 {
-    mSiblings << sibling;
+    if (mProfile.characterName != sibling.characterName) {
+        mSiblings << sibling;
+    }
 }

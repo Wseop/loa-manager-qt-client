@@ -182,7 +182,8 @@ void CharacterSearch::searchCharacterSibling(const QString &characterName, Chara
 {
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
 
-    connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, pCharacter](QNetworkReply *pReply)
+    connect(pNetworkManager, &QNetworkAccessManager::finished,
+            this, [&, pCharacter](QNetworkReply *pReply)
     {
         QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
 

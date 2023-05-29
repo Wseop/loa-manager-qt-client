@@ -93,6 +93,10 @@ void EquipInfo::addItemSourceInfo(const QString &setName, const QString &itemNam
                 break;
             }
         }
+
+        if (sourceInfo == "") {
+            sourceInfo = itemGradeToStr(itemGrade);
+        }
     }
 
     QLabel *pLabelItemSource = WidgetManager::createLabel(sourceInfo, 10, 100);

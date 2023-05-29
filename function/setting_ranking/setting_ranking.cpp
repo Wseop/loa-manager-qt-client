@@ -3,7 +3,6 @@
 #include "ui/widget_manager.h"
 #include "ui/font_manager.h"
 #include "api/api_manager.h"
-#include "api/response_parser.h"
 #include "game/engrave/engrave_manager.h"
 #include "function/setting_ranking/setting_info.h"
 
@@ -13,6 +12,7 @@
 #include <QPushButton>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QJsonDocument>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QRegularExpression>
@@ -74,11 +74,11 @@ void SettingRanking::initializeClassSelector()
     });
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    ApiManager::getInstance()->get(pNetworkManager,
-                                   ApiType::LoaManager,
-                                   static_cast<int>(LoamanagerApi::GetResource),
-                                   {"class", ""},
-                                   "");
+//    ApiManager::getInstance()->get(pNetworkManager,
+//                                   ApiType::LoaManager,
+//                                   static_cast<int>(LoamanagerApi::GetResource),
+//                                   {"class", ""},
+//                                   "");
 }
 
 void SettingRanking::initializeSearchButton()
@@ -116,100 +116,14 @@ void SettingRanking::initializeSearchButton()
 
         connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&](QNetworkReply *pReply)
         {
-            // 데이터 parsing
-            QList<CharacterSetting> characterSettings =
-                    ResponseParser::parseCharacterSettings(QJsonDocument::fromJson(pReply->readAll()));
-
-            // 데이터 필터링
-            characterSettings = filterCharacterSettings(characterSettings);
-            mTotalDataCount = characterSettings.size();
-
-            ui->labelInfo->setText(QString("검색된 캐릭터 수 : %1").arg(mTotalDataCount));
-
-            for (int i = 0; i < mLines.size(); i++)
-            {
-                mLines[i]->show();
-            }
-
-            // 각인 코드 오름차순 정렬
-            for (CharacterSetting &characterSetting : characterSettings)
-            {
-                sortEngraveCodes(characterSetting.engrave, characterSetting.engraveLevel);
-            }
-
-            // 직업 각인별로 데이터 분류 및 직업 각인별 사용률 출력
-            QList<QList<CharacterSetting>> classifiedByClassEngrave = classifyByClassEngrave(characterSettings);
-            showClassEngraveRatio();
-
-            // 세트효과로 분류 및 결과 출력
-            for (int i = 0; i < 3; i++)
-            {
-                QList<QPair<QString, int>> classifiedByItemSet = classifyByItemSet(classifiedByClassEngrave[i]);
-                showRatio("#D7AC87", i, SettingCategory::ItemSet, mItemSetLayouts, classifiedByItemSet);
-            }
-
-            QCoreApplication::processEvents();
-
-            // 특성으로 분류 및 결과 출력
-            for (int i = 0; i < 3; i++)
-            {
-                QList<QPair<QString, int>> classifiedByAbility = classifyByAbility(classifiedByClassEngrave[i]);
-                showRatio("white", i, SettingCategory::Ability, mAbilityLayouts, classifiedByAbility);
-            }
-
-            QCoreApplication::processEvents();
-
-            // 엘릭서로 분류 및 결과 출력
-            for (int i = 0; i < 3; i++)
-            {
-                QList<QPair<QString, int>> classifiedByElixir = classifyByElixir(classifiedByClassEngrave[i]);
-                showRatio("#00B700", i, SettingCategory::Elixir, mElixirLayouts, classifiedByElixir);
-            }
-
-            QCoreApplication::processEvents();
-
-            // 각인으로 분류 및 결과 출력
-            for (int i = 0; i < 3; i++)
-            {
-                QList<QPair<QString, int>> classifiedByEngraveSingle = classifyByEngraveSingle(classifiedByClassEngrave[i]);
-                showRatio("white", i, SettingCategory::EngraveSingle, mEngraveSingleLayouts, classifiedByEngraveSingle);
-            }
-
-            QCoreApplication::processEvents();
-
-            // 각인조합으로 분류 및 결과 출력
-            for (int i = 0; i < 3; i++)
-            {
-                QList<QPair<QString, int>> classifiedByEngrave = classifyByEngrave(classifiedByClassEngrave[i]);
-                showEngraveRatio(i, classifiedByEngrave);
-            }
-
-            QCoreApplication::processEvents();
-
-            // 모든 항목을 종합한 정보로 분류 및 결과 출력
-            QProgressDialog progress("종합 비율 처리중", QString(), 0, 3, nullptr);
-            progress.setWindowModality(Qt::WindowModal);
-
-            for (int i = 0; i < 3; i++)
-            {
-                QList<QPair<QString, int>> classifiedOverall = classifyOverall(classifiedByClassEngrave[i]);
-                showOverallRatio(i, classifiedOverall);
-
-                progress.setValue(i);
-                QCoreApplication::processEvents();
-            }
-
-            progress.setValue(3);
-
-            mpSearchButton->setEnabled(true);
         });
         connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-        ApiManager::getInstance()->get(pNetworkManager,
-                                       ApiType::LoaManager,
-                                       static_cast<int>(LoamanagerApi::GetStats),
-                                       {"setting", mpClassSelector->currentText()},
-                                       "");
+//        ApiManager::getInstance()->get(pNetworkManager,
+//                                       ApiType::LoaManager,
+//                                       static_cast<int>(LoamanagerApi::GetStats),
+//                                       {"setting", mpClassSelector->currentText()},
+//                                       "");
     });
 
     ui->hLayoutInput->addWidget(mpSearchButton);
@@ -284,28 +198,6 @@ void SettingRanking::initializeCategoryButton()
     }
 }
 
-QList<CharacterSetting> SettingRanking::filterCharacterSettings(const QList<CharacterSetting> &characterSettings)
-{
-    QList<CharacterSetting> filteredCharacterSettings;
-
-    static QRegularExpression regExpAbilityFilter("제|인|숙");
-
-    for (int i = 0; i < characterSettings.size(); i++)
-    {
-        const CharacterSetting &characterSetting = characterSettings[i];
-
-        if (characterSetting.itemSet.contains("배신") ||
-            characterSetting.engraveLevel.size() < 5 ||
-            characterSetting.ability.contains(regExpAbilityFilter) ||
-            characterSetting.elixir == "")
-            continue;
-
-        filteredCharacterSettings << characterSetting;
-    }
-
-    return filteredCharacterSettings;
-}
-
 void SettingRanking::sortEngraveCodes(QString &engrave, QString &engraveLevel)
 {
     QList<int> engraveCodes;
@@ -334,209 +226,6 @@ void SettingRanking::sortEngraveCodes(QString &engrave, QString &engraveLevel)
     engraveLevel = sortedEngraveLevel;
 }
 
-QList<QList<CharacterSetting>> SettingRanking::classifyByClassEngrave(const QList<CharacterSetting> &characterSettings)
-{
-    QList<QList<CharacterSetting>> classifiedByClassEngrave(3);
-
-    for (int i = 0; i < characterSettings.size(); i++)
-    {
-        const CharacterSetting &characterSetting = characterSettings[i];
-        const QString &engrave = characterSetting.engrave;
-
-        int classifyIndex = -1;
-        int matchCount = 0;
-
-        for (int i = 0; i < characterSetting.engraveLevel.size(); i++)
-        {
-            int engraveCode = engrave.sliced(i * 3, 3).toInt();
-            int index = mClassEngraveCodes.indexOf(engraveCode);
-
-            if (index != -1)
-            {
-                matchCount++;
-                classifyIndex = index;
-            }
-        }
-
-        if (matchCount == 1)
-        {
-            classifiedByClassEngrave[classifyIndex] << characterSetting;
-            mDataCounts[classifyIndex]++;
-        }
-        else if (matchCount == 2)
-        {
-            classifiedByClassEngrave[2] << characterSetting;
-            mDataCounts[2]++;
-        }
-    }
-
-    return classifiedByClassEngrave;
-}
-
-QList<QPair<QString, int> > SettingRanking::classifyByItemSet(const QList<CharacterSetting> &characterSettings)
-{
-    QHash<QString, int> itemSetCount;
-
-    for (const CharacterSetting &characterSetting : characterSettings)
-    {
-        itemSetCount[characterSetting.itemSet]++;
-    }
-
-    QList<QPair<QString, int>> itemSetCounts;
-
-    for (auto iter = itemSetCount.begin(); iter != itemSetCount.end(); iter++)
-    {
-        itemSetCounts.append({iter.key(), iter.value()});
-    }
-
-    std::sort(itemSetCounts.begin(), itemSetCounts.end(), [&](auto &a, auto &b)
-    {
-        return a.second > b.second;
-    });
-
-    return itemSetCounts;
-}
-
-QList<QPair<QString, int> > SettingRanking::classifyByAbility(const QList<CharacterSetting> &characterSettings)
-{
-    QHash<QString, int> abilityCount;
-
-    for (const CharacterSetting &characterSetting : characterSettings)
-    {
-        abilityCount[characterSetting.ability]++;
-    }
-
-    QList<QPair<QString, int>> abilityCounts;
-
-    for (auto iter = abilityCount.begin(); iter != abilityCount.end(); iter++)
-    {
-        abilityCounts.append({iter.key(), iter.value()});
-    }
-
-    std::sort(abilityCounts.begin(), abilityCounts.end(), [&](auto &a, auto &b)
-    {
-        return a.second > b.second;
-    });
-
-    return abilityCounts;
-}
-
-QList<QPair<QString, int> > SettingRanking::classifyByElixir(const QList<CharacterSetting> &characterSettings)
-{
-    QHash<QString, int> elixirCount;
-
-    for (const CharacterSetting &characterSetting : characterSettings)
-    {
-        elixirCount[characterSetting.elixir]++;
-    }
-
-    QList<QPair<QString, int>> elixirCounts;
-
-    for (auto iter = elixirCount.begin(); iter != elixirCount.end(); iter++)
-    {
-        elixirCounts.append({iter.key(), iter.value()});
-    }
-
-    std::sort(elixirCounts.begin(), elixirCounts.end(), [&](auto &a, auto &b)
-    {
-        return a.second > b.second;
-    });
-
-    return elixirCounts;
-}
-
-QList<QPair<QString, int> > SettingRanking::classifyByEngraveSingle(const QList<CharacterSetting> &characterSettings)
-{
-    QHash<QString, int> engraveCount;
-
-    static EngraveManager *pEngraveManager = EngraveManager::getInstance();
-
-    for (const CharacterSetting &characterSetting : characterSettings)
-    {
-        const QString &engrave = characterSetting.engrave;
-        const QString &engraveLevel = characterSetting.engraveLevel;
-
-        for (int i = 0; i < engraveLevel.size(); i++)
-        {
-            QString engraveName = pEngraveManager->getEngraveByCode(engrave.sliced(i * 3, 3).toInt());
-
-            engraveCount[engraveName]++;
-        }
-    }
-
-    QList<QPair<QString, int>> engraveCounts;
-
-    for (auto iter = engraveCount.begin(); iter != engraveCount.end(); iter++)
-    {
-        engraveCounts.append({iter.key(), iter.value()});
-    }
-
-    std::sort(engraveCounts.begin(), engraveCounts.end(), [&](auto &a, auto &b)
-    {
-        return a.second > b.second;
-    });
-
-    return engraveCounts;
-}
-
-QList<QPair<QString, int> > SettingRanking::classifyByEngrave(const QList<CharacterSetting> &characterSettings)
-{
-    QHash<QString, int> engraveCount;
-
-    for (const CharacterSetting &characterSetting : characterSettings)
-    {
-        QString key = characterSetting.engrave + "," + characterSetting.engraveLevel;
-
-        engraveCount[key]++;
-    }
-
-    QList<QPair<QString, int>> engraveCounts;
-
-    for (auto iter = engraveCount.begin(); iter != engraveCount.end(); iter++)
-    {
-        engraveCounts.append({iter.key(), iter.value()});
-    }
-
-    std::sort(engraveCounts.begin(), engraveCounts.end(), [&](auto &a, auto &b)
-    {
-        return a.second > b.second;
-    });
-
-    return engraveCounts;
-}
-
-QList<QPair<QString, int> > SettingRanking::classifyOverall(const QList<CharacterSetting> &characterSettings)
-{
-    QHash<QString, int> settingCount;
-
-    for (const CharacterSetting &characterSetting : characterSettings)
-    {
-        QString setting = "";
-
-        setting += characterSetting.itemSet + ",";
-        setting += characterSetting.ability + ",";
-        setting += characterSetting.elixir + ",";
-        setting += characterSetting.engrave + ",";
-        setting += characterSetting.engraveLevel;
-
-        settingCount[setting]++;
-    }
-
-    QList<QPair<QString, int>> settingCounts;
-
-    for (auto iter = settingCount.begin(); iter != settingCount.end(); iter++)
-    {
-        settingCounts.append({iter.key(), iter.value()});
-    }
-
-    std::sort(settingCounts.begin(), settingCounts.end(), [&](auto &a, auto &b)
-    {
-        return a.second > b.second;
-    });
-
-    return settingCounts;
-}
-
 void SettingRanking::showClassEngraveRatio()
 {
     static const QString labelStyle = "QLabel { border-radius: 5px;"
@@ -547,7 +236,7 @@ void SettingRanking::showClassEngraveRatio()
     for (int i = 0; i < 3; i++)
     {
         QString classEngrave = i == 2 ? "쌍직각" :
-                                        EngraveManager::getInstance()->getEngraveByCode(mClassEngraveCodes[i]);
+                                        EngraveManager::getInstance()->getEngraveName(mClassEngraveCodes[i]);
         double usageRate = (mDataCounts[i] / static_cast<double>(mTotalDataCount)) * 100;
 
         if (usageRate == 0)
@@ -609,7 +298,7 @@ void SettingRanking::showEngraveRatio(int index, const QList<QPair<QString, int>
         {
             for (int j = 0; j < engraveSetting[1].size(); j++)
             {
-                const QString &engrave = pEngraveManager->getEngraveByCode(engraveSetting[0].sliced(j * 3, 3).toInt());
+                const QString &engrave = pEngraveManager->getEngraveName(engraveSetting[0].sliced(j * 3, 3).toInt());
                 int engraveLevel = engraveSetting[1][j].digitValue();
 
                 if (engraveLevel != level)
@@ -647,16 +336,16 @@ void SettingRanking::showOverallRatio(int index, const QList<QPair<QString, int>
 
         const QStringList settings = overallRatio[i].first.split(",");
 
-        CharacterSetting characterSetting;
-        characterSetting.itemSet = settings[0];
-        characterSetting.ability = settings[1];
-        characterSetting.elixir = settings[2];
-        characterSetting.engrave = settings[3];
-        characterSetting.engraveLevel = settings[4];
+//        CharacterSetting characterSetting;
+//        characterSetting.itemSet = settings[0];
+//        characterSetting.ability = settings[1];
+//        characterSetting.elixir = settings[2];
+//        characterSetting.engrave = settings[3];
+//        characterSetting.engraveLevel = settings[4];
 
-        SettingInfo *pSettingInfo = new SettingInfo(characterSetting, i + 1, overallRatio[i].second, mDataCounts[index]);
-        mOverallLayouts[index]->addWidget(pSettingInfo);
-        mOutputs[static_cast<int>(SettingCategory::Overall)] << pSettingInfo;
+        //SettingInfo *pSettingInfo = new SettingInfo(characterSetting, i + 1, overallRatio[i].second, mDataCounts[index]);
+        //mOverallLayouts[index]->addWidget(pSettingInfo);
+        //mOutputs[static_cast<int>(SettingCategory::Overall)] << pSettingInfo;
     }
 }
 

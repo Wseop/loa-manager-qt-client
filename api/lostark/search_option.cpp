@@ -10,6 +10,11 @@ SearchOption::SearchOption() :
 
 }
 
+SearchOption::~SearchOption()
+{
+
+}
+
 QString SearchOption::getQuery()
 {
     QString query = "?";
@@ -21,7 +26,7 @@ QString SearchOption::getQuery()
     }
 
     if (mItemGrade != ItemGrade::size) {
-        query += QString("&itemGrade=%1").arg(itemGradeToQString(mItemGrade));
+        query += QString("&itemGrade=%1").arg(itemGradeToStr(mItemGrade));
     }
     if (mItemName != "") {
         query += QString("&itemName=%1").arg(mItemName);
@@ -51,6 +56,11 @@ void SearchOption::setPageAll(bool newPageAll)
 AuctionSearchOption::AuctionSearchOption(AuctionCategory auctionCategory) :
     mAuctionCategory(auctionCategory),
     mQuality(-1)
+{
+
+}
+
+AuctionSearchOption::~AuctionSearchOption()
 {
 
 }
@@ -115,6 +125,11 @@ void AuctionSearchOption::addEngraveCode(int engraveCode)
 
 MarketSearchOption::MarketSearchOption(MarketCategory marketCategory) :
     mMarketCategory(marketCategory)
+{
+
+}
+
+MarketSearchOption::~MarketSearchOption()
 {
 
 }

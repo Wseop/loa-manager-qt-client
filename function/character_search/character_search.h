@@ -40,7 +40,7 @@ private:
 
     Profile parseProfile(const QJsonObject &object, bool isSibling);
     Equipment parseEquipment(const QJsonObject &object);
-    Skill parseSkill(const QJsonObject &object);
+    Skill parseSkill(const QString &className, const QJsonObject &object);
     Gem parseGem(const QJsonObject &object);
     QPair<QString, int> parseEngrave(const QJsonObject &object);
     QPair<QString, int> parseCard(const QJsonObject &object);

@@ -42,7 +42,7 @@ QList<Equipment> Character::armors() const
 {
     QList<Equipment> armors;
 
-    const QStringList types = {"투구", "상의", "하의", "장갑", "어깨"};
+    const QStringList types = {"투구", "어깨", "상의", "하의", "장갑"};
 
     for (const QString &type : types) {
         armors << equipment(type);
@@ -81,7 +81,11 @@ Equipment Character::bracelet() const
 
 void Character::addEquipment(const Equipment &equipment)
 {
-    mEquipments[equipment.type] = equipment;
+    if (mEquipments.contains(equipment.type)) {
+        mEquipments[equipment.type + "2"] = equipment;
+    } else {
+        mEquipments[equipment.type] = equipment;
+    }
 }
 
 QList<Skill> Character::skills() const

@@ -12,6 +12,7 @@ struct Tripod {
     QString iconPath;
 
     int tripodLevel = -1;
+    bool isSelected = false;
 };
 
 #endif // TRIPOD_H

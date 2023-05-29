@@ -25,6 +25,8 @@ public:
     QStringList skillNames(const QString &className) const;
     QHash<QString, Skill> skills(const QString &className) const;
 
+    Skill skill(const QString &className, const QString &skillName) const;
+
 private:
     static SkillManager *mpInstance;
 

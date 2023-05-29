@@ -6,9 +6,6 @@
 #include "function/setting_ranking/setting_ranking.h"
 #include "function/skill_stats/skill_stats.h"
 #include "function/auction_calculator/auction_calculator.h"
-#include "function/smart_search/smart_search.h"
-#include "function/content_reward/content_reward.h"
-#include "function/raid_profit/raid_profit.h"
 #include "resource/resource_manager.h"
 #include "api/api_manager.h"
 #include "user/login.h"
@@ -58,10 +55,7 @@ void LoaManager::initializeFunction()
     mFunctions << CharacterSearch::getInstance();
     mFunctions << SettingRanking::getInstance();
     mFunctions << SkillStats::getInstance();
-    mFunctions << SmartSearch::getInstance();
     mFunctions << AuctionCalculator::getInstance();
-    mFunctions << ContentReward::getInstance();
-    mFunctions << RaidProfit::getInstance();
 
     for (QWidget* pWidget : mFunctions)
     {

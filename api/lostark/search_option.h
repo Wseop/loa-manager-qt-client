@@ -1,7 +1,7 @@
 #ifndef SEARCHOPTION_H
 #define SEARCHOPTION_H
 
-#include "/api/lostark/search_category.h"
+#include "api/lostark/search_category.h"
 #include "game/item/item_grade.h"
 
 #include <QObject>
@@ -29,6 +29,7 @@ class AuctionSearchOption : public SearchOption
 {
 public:
     AuctionSearchOption(AuctionCategory auctionCategory);
+    ~AuctionSearchOption();
 
     QString getQuery() override;
 
@@ -51,6 +52,7 @@ class MarketSearchOption : public SearchOption
 {
 public:
     MarketSearchOption(MarketCategory marketCategory);
+    ~MarketSearchOption();
 
     QString getQuery() override;
 

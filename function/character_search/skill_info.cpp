@@ -73,10 +73,13 @@ void SkillInfo::initializeTripodLayout(const QList<Tripod> &tripods)
 {
     QString tripodTitle = "트라이포드 (";
 
-    for (const Tripod &tripod : tripods) {
+    for (int i = 0; i < tripods.size(); i++) {
         // TODO. tripod title
 
-        addTripodInfo(tripod);
+        if (tripods[i].isSelected) {
+            tripodTitle += QString::number((i % 3) + 1);
+            addTripodInfo(tripods[i]);
+        }
     }
 
     if (tripods.size() == 0)

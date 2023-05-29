@@ -4,7 +4,7 @@
 #include "ui/font_manager.h"
 #include "api/api_manager.h"
 #include "game/character/character.h"
-#include "game/engrave/engrave_manager.h"
+#include "game/skill/skill_manager.h"
 #include "function/character_search/character_info.h"
 
 #include <QGroupBox>
@@ -153,7 +153,7 @@ void CharacterSearch::searchCharacter(const QString &characterName)
         }
 
         for (const QJsonValue &value : skills) {
-            pCharacter->addSkill(parseSkill(value.toObject()));
+            pCharacter->addSkill(parseSkill(pCharacter->profile().className, value.toObject()));
         }
 
         for (const QJsonValue &value : gems) {
@@ -280,7 +280,8 @@ Equipment CharacterSearch::parseEquipment(const QJsonObject &object)
     }
 
     if (object.value("braceletEffects") != QJsonValue::Undefined) {
-        equipment.braceletEffects = object.find("braceletEffects")->toVariant().toStringList();
+        equipment.braceletEffects = object.find("braceletEffects")->toVariant()
+                                          .toStringList();
     }
 
     if (object.value("isElla") != QJsonValue::Undefined) {
@@ -290,22 +291,26 @@ Equipment CharacterSearch::parseEquipment(const QJsonObject &object)
     return equipment;
 }
 
-Skill CharacterSearch::parseSkill(const QJsonObject &object)
+Skill CharacterSearch::parseSkill(const QString &className, const QJsonObject &object)
 {
-    Skill skill;
+    Skill skill = SkillManager::getInstance()->skill(
+                    className,
+                    object.find("skillName")->toString());
 
-    skill.skillName = object.find("skillName")->toString();
     skill.skillLevel = object.find("skillLevel")->toInt();
 
     const QJsonArray &tripods = object.find("tripods")->toArray();
 
     for (const QJsonValue &value : tripods) {
-        Tripod tripod;
-
-        tripod.tripodName = value.toObject().find("tripodName")->toString();
-        tripod.tripodLevel = value.toObject().find("tripodLevel")->toInt();
-
-        skill.tripods << tripod;
+        for (Tripod &tripod : skill.tripods) {
+            if (tripod.tripodName ==
+                value.toObject().find("tripodName")->toString())
+            {
+                tripod.tripodLevel = value.toObject().find("tripodLevel")->toInt();
+                tripod.isSelected = true;
+                break;
+            }
+        }
     }
 
     if (!object.value("rune").isNull()) {

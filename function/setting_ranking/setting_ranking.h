@@ -1,7 +1,6 @@
 #ifndef SETTING_RANKING_H
 #define SETTING_RANKING_H
 
-#include "api/loamanager/loamanager_api.h"
 #include "function/function_widget.h"
 
 #include <QWidget>
@@ -37,16 +36,7 @@ private:
     void initializeOutputLayout();
     void initializeCategoryButton();
 
-    QList<CharacterSetting> filterCharacterSettings(const QList<CharacterSetting> &characterSettings);
     void sortEngraveCodes(QString &engrave, QString &engraveLevel);
-
-    QList<QList<CharacterSetting>> classifyByClassEngrave(const QList<CharacterSetting> &characterSettings);
-    QList<QPair<QString, int>> classifyByItemSet(const QList<CharacterSetting> &characterSettings);
-    QList<QPair<QString, int>> classifyByAbility(const QList<CharacterSetting> &characterSettings);
-    QList<QPair<QString, int>> classifyByElixir(const QList<CharacterSetting> &characterSettings);
-    QList<QPair<QString, int>> classifyByEngraveSingle(const QList<CharacterSetting> &characterSettings);
-    QList<QPair<QString, int>> classifyByEngrave(const QList<CharacterSetting> &characterSettings);
-    QList<QPair<QString, int>> classifyOverall(const QList<CharacterSetting> &characterSettings);
 
     void showClassEngraveRatio();
     void showRatio(QString textColor, int index, SettingCategory category, const QList<QVBoxLayout*> &layouts, const QList<QPair<QString, int>> &classifiedData);

@@ -84,7 +84,7 @@ void ApiManager::trySignin(QNetworkAccessManager *pNetworkManager, const QString
 
 void ApiManager::getResources(QNetworkAccessManager *pNetworkManager, Resources resource, const QString &param)
 {
-    QString url = mUrlBase;
+    QString url = mUrlBase + "/resources";
 
     switch (resource) {
     case Resources::Class:

@@ -77,7 +77,9 @@ void BraceletInfo::addSpecialEffectInfo(const QStringList &specialEffects)
 
     for (const QString &specialEffect : specialEffects)
     {
-        QLabel *pLabelEffect = WidgetManager::createLabel(specialEffect);
+        QString effectText = specialEffect.sliced(1, specialEffect.size() - 2);
+
+        QLabel *pLabelEffect = WidgetManager::createLabel(effectText);
         pLabelEffect->setStyleSheet("QLabel { border: 1px solid black; "
                                     "         border-radius: 5px; "
                                     "         padding: 2px }");

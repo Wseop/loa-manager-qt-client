@@ -96,19 +96,26 @@ void AccessoryInfo::addEngraveInfo(const QHash<QString, int> &engraves)
     const QString infoText = "%1 +%2";
     const QString infoStyle = "QLabel { color: %1 }";
 
+    QString penalty;
+
     for (const QString &engraveName : engraveNames) {
-        QHBoxLayout *pHLayout = createHLayout(ui->vLayout2);
-        QLabel *pLabelEngraveInfo = WidgetManager::createLabel(
-            infoText.arg(engraveName).arg(engraves[engraveName]), 10, 100);
-
         if (engraveName.contains("감소")) {
-            pLabelEngraveInfo->setStyleSheet(infoStyle.arg("red"));
+            penalty = engraveName;
         } else {
-            pLabelEngraveInfo->setStyleSheet(infoStyle.arg("#FFA500"));
-        }
+            QHBoxLayout *pHLayout = createHLayout(ui->vLayout2);
+            QLabel *pLabelEngraveInfo = WidgetManager::createLabel(
+                infoText.arg(engraveName).arg(engraves[engraveName]), 10, 100);
 
-        pHLayout->addWidget(pLabelEngraveInfo);
+            pLabelEngraveInfo->setStyleSheet(infoStyle.arg("#FFA500"));
+            pHLayout->addWidget(pLabelEngraveInfo);
+        }
     }
+
+    QHBoxLayout *pHLayout = createHLayout(ui->vLayout2);
+    QLabel *pLabelPenalty = WidgetManager::createLabel(
+        infoText.arg(penalty).arg(engraves[penalty]), 10, 100);
+    pLabelPenalty->setStyleSheet(infoStyle.arg("red"));
+    pHLayout->addWidget(pLabelPenalty);
 }
 
 QHBoxLayout *AccessoryInfo::createHLayout(QVBoxLayout *pLayout)

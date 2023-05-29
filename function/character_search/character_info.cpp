@@ -57,9 +57,10 @@ void CharacterInfo::addSiblingSelector(const QList<Profile> &siblings, const QSt
     {
         if (sibling.characterName != characterName)
         {
-            characterList << siblingText.arg(sibling.className)
-                                     .arg(sibling.itemLevel)
-                                     .arg(sibling.characterName);
+            characterList << siblingText
+                                 .arg(sibling.className)
+                                 .arg(sibling.itemLevel)
+                                 .arg(sibling.characterName);
         }
     }
 
@@ -118,7 +119,6 @@ void CharacterInfo::addProfileInfo(const Profile &profile)
 void CharacterInfo::addAbilityInfo(const QHash<QString, int> &abilities)
 {
     const QStringList keys = {"치명", "특화", "신속", "제압", "인내", "숙련"};
-    const QString text = "%1 : %2";
 
     addLayoutTitle("특성", ui->vLayoutProfile);
 
@@ -139,8 +139,6 @@ void CharacterInfo::addEngraveInfo(const QList<QPair<QString, int>> &engraves)
 
     for (int i = 0; i < engraves.size(); i++)
     {
-        QString textColor = (i == 0) ? "" : "red";
-
         // 각인 레벨별 레이아웃 생성 (레벨 3 -> 2 -> 1 순으로 추가되도록)
         QList<QVBoxLayout*> vLayouts(3, nullptr);
 
@@ -161,8 +159,11 @@ void CharacterInfo::addEngraveInfo(const QList<QPair<QString, int>> &engraves)
 
         QLabel *pLabelEngraveLevel = WidgetManager::createLabel(
             QString("Lv.%1").arg(engraves[i].second), 10, 50);
-        pLabelEngraveLevel->setStyleSheet(
-            QString("QLabel { color: %1 }").arg(textColor));
+
+        if (engraves[i].first.contains("감소")) {
+            pLabelEngraveLevel->setStyleSheet("QLabel { color: red }");
+        }
+
         pHLayout->addWidget(pLabelEngraveLevel);
     }
 }

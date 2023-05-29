@@ -15,9 +15,9 @@ SkillStatsWidget::SkillStatsWidget(const Skill &skill) :
 {
     ui->setupUi(this);
 
-    initializeCounterLabel(skill.isCounter());
-    initializeSkillInfo(skill.iconPath(), skill.skillName());
-    initializeTripodInfo(skill.tripods());
+    initializeCounterLabel(skill.isCounter);
+    initializeSkillInfo(skill.iconPath, skill.skillName);
+    initializeTripodInfo(skill.tripods);
     initializeRuneInfo();
 }
 
@@ -108,16 +108,16 @@ void SkillStatsWidget::initializeTripodInfo(const QList<Tripod> &tripods)
         QVBoxLayout *pTripodVLayout = new QVBoxLayout();
         pTripodHLayout->addLayout(pTripodVLayout);
 
-        QLabel *pTripodIcon = WidgetManager::createIcon(tripods[i].iconPath(), nullptr, "#000000");
+        QLabel *pTripodIcon = WidgetManager::createIcon(tripods[i].iconPath, nullptr, "#000000");
         pTripodVLayout->addWidget(pTripodIcon);
         pTripodVLayout->setAlignment(pTripodIcon, Qt::AlignHCenter);
 
-        QLabel *pLabelTripodName = WidgetManager::createLabel(tripods[i].tripodName());
+        QLabel *pLabelTripodName = WidgetManager::createLabel(tripods[i].tripodName);
         pTripodVLayout->addWidget(pLabelTripodName);
 
         QLabel *pLabelTripodUsage = WidgetManager::createLabel("-");
         pTripodVLayout->addWidget(pLabelTripodUsage);
-        mTripodUsageLabels[tripods[i].tripodName()] = pLabelTripodUsage;
+        mTripodUsageLabels[tripods[i].tripodName] = pLabelTripodUsage;
     }
 
     if (tripods.size() == 0)

@@ -22,21 +22,10 @@ SOURCES += \
     function/character_search/equip_info.cpp \
     function/character_search/gem_info.cpp \
     function/character_search/skill_info.cpp \
-    function/content_reward/content_reward.cpp \
-    function/content_reward/content_reward_adder.cpp \
-    function/content_reward/content_reward_table.cpp \
-    function/raid_profit/raid_profit.cpp \
-    function/raid_profit/raid_profit_table.cpp \
     function/setting_ranking/setting_info.cpp \
     function/setting_ranking/setting_ranking.cpp \
     function/skill_stats/skill_stats.cpp \
     function/skill_stats/skill_stats_widget.cpp \
-    function/smart_search/smart_search.cpp \
-    function/smart_search/smart_search_abilitystone.cpp \
-    function/smart_search/smart_search_engravebook.cpp \
-    function/smart_search/smart_search_gem.cpp \
-    function/smart_search/smart_search_reforge.cpp \
-    function/smart_search/smart_search_tripod.cpp \
     game/character/character.cpp \
     game/engrave/engrave_manager.cpp \
     game/skill/skill_manager.cpp \
@@ -64,23 +53,12 @@ HEADERS += \
     function/character_search/equip_info.h \
     function/character_search/gem_info.h \
     function/character_search/skill_info.h \
-    function/content_reward/content_reward.h \
-    function/content_reward/content_reward_adder.h \
-    function/content_reward/content_reward_table.h \
     function/function_widget.h \
-    function/raid_profit/raid_profit.h \
-    function/raid_profit/raid_profit_table.h \
     function/setting_ranking/setting_info.h \
     function/setting_ranking/setting_ranking.h \
     function/skill_stats/skill_stats.h \
     function/skill_stats/skill_stats_widget.h \
-    function/smart_search/smart_search.h \
-    function/smart_search/smart_search_abilitystone.h \
-    function/smart_search/smart_search_engravebook.h \
-    function/smart_search/smart_search_gem.h \
     function/smart_search/smart_search_menu.h \
-    function/smart_search/smart_search_reforge.h \
-    function/smart_search/smart_search_tripod.h \
     game/character/character.h \
     game/character/collectible.h \
     game/character/profile.h \
@@ -109,21 +87,10 @@ FORMS += \
     function/character_search/equip_info.ui \
     function/character_search/gem_info.ui \
     function/character_search/skill_info.ui \
-    function/content_reward/content_reward.ui \
-    function/content_reward/content_reward_adder.ui \
-    function/content_reward/content_reward_table.ui \
-    function/raid_profit/raid_profit.ui \
-    function/raid_profit/raid_profit_table.ui \
     function/setting_ranking/setting_info.ui \
     function/setting_ranking/setting_ranking.ui \
     function/skill_stats/skill_stats.ui \
     function/skill_stats/skill_stats_widget.ui \
-    function/smart_search/smart_search.ui \
-    function/smart_search/smart_search_abilitystone.ui \
-    function/smart_search/smart_search_engravebook.ui \
-    function/smart_search/smart_search_gem.ui \
-    function/smart_search/smart_search_reforge.ui \
-    function/smart_search/smart_search_tripod.ui \
     loamanager.ui \
     user/login.ui
 

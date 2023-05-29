@@ -6,8 +6,6 @@
 #include "game/skill/skill_manager.h"
 #include "function/skill_stats/skill_stats_widget.h"
 #include "api/api_manager.h"
-#include "api/loamanager/loamanager_api.h"
-#include "api/response_parser.h"
 
 #include <QLabel>
 #include <QGroupBox>
@@ -69,11 +67,11 @@ void SkillStats::initializeClassSelector()
     });
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    ApiManager::getInstance()->get(pNetworkManager,
-                                   ApiType::LoaManager,
-                                   static_cast<int>(LoamanagerApi::GetResource),
-                                   {"class", ""},
-                                   "");
+//    ApiManager::getInstance()->get(pNetworkManager,
+//                                   ApiType::LoaManager,
+//                                   static_cast<int>(LoamanagerApi::GetResource),
+//                                   {"class", ""},
+//                                   "");
 }
 
 void SkillStats::initializeSearchButton()
@@ -233,110 +231,12 @@ void SkillStats::initializeSkillLayout(const QString &className)
 
 void SkillStats::searchSkillSettings(const QString &className)
 {
-    // 데이터 초기화
-    mSettingCounts = QList<int>(3, 0);
-    mSkillUsageInfos = QList<QHash<QString, SkillUsageInfo>>(3);
 
-    // 스킬 세팅 정보 로드
-    QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
-    connect(pNetworkManager, &QNetworkAccessManager::finished, this, &SkillStats::updateSkillSettings);
-    connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
-
-    ApiManager::getInstance()->get(pNetworkManager,
-                                   ApiType::LoaManager,
-                                   static_cast<int>(LoamanagerApi::GetStats),
-                                   {"skill", className},
-                                   "");
 }
 
 void SkillStats::updateSkillSettings(QNetworkReply *pReply)
 {
-    QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
 
-    if (response.isNull())
-        return;
-
-    QList<SkillSetting> skillSettings = ResponseParser::parseSkillSettings(response);
-
-    QList<QHash<QString, QHash<QString, int>>> tripodUsage(3);
-    QList<QHash<QString, QHash<QString, int>>> runeUsage(3);
-
-    for (int i = 0; i < skillSettings.size(); i++)
-    {
-        if (skillSettings[i].classEngraves.size() == 0)
-            continue;
-
-        int index = skillSettings[i].classEngraves.size() == 2
-                    ? 2
-                    : mClassEngraveIndex[skillSettings[i].classEngraves[0]];
-
-        const QList<SkillSetting::SkillData> &skillDatas = skillSettings[i].skills;
-
-        // 스킬 usage 정보 업데이트
-        for (const auto &skillData : skillDatas)
-        {
-            // 스킬 usage
-            mSkillUsageInfos[index][skillData.skillName].skillUsage++;
-
-            // 트라이포드 usage
-            for (const QString &tripodName : skillData.tripodsNames)
-            {
-                tripodUsage[index][skillData.skillName][tripodName]++;
-            }
-
-            // 룬 usage
-            if (skillData.runeName != "")
-            {
-                runeUsage[index][skillData.skillName][skillData.runeName]++;
-            }
-        }
-
-        mSettingCounts[index]++;
-    }
-
-    for (int i = 0; i < mSettingCounts.size(); i++)
-    {
-        for (auto iter = tripodUsage[i].begin(); iter != tripodUsage[i].end(); iter++)
-        {
-            const QString &skillName = iter.key();
-            const QHash<QString, int> &tripods = iter.value();
-
-            for (auto iterTripod = tripods.begin(); iterTripod != tripods.end(); iterTripod++)
-            {
-                mSkillUsageInfos[i][skillName].tripodUsage.append({iterTripod.key(), iterTripod.value()});
-            }
-        }
-
-        for (auto iter = runeUsage[i].begin(); iter != runeUsage[i].end(); iter++)
-        {
-            const QString &skillName = iter.key();
-            const QHash<QString, int> &runes = iter.value();
-
-            for (auto iterRune = runes.begin(); iterRune != runes.end(); iterRune++)
-            {
-                mSkillUsageInfos[i][skillName].runeUsage.append({iterRune.key(), iterRune.value()});
-
-                std::sort(mSkillUsageInfos[i][skillName].runeUsage.begin(),
-                          mSkillUsageInfos[i][skillName].runeUsage.end(),
-                          [&](auto &a, auto &b)
-                {
-                    return a.second > b.second;
-                });
-            }
-        }
-    }
-
-    for (int i = 0; i < mSettingCounts.size(); i++)
-    {
-        if (mSettingCounts[i] > 0)
-        {
-            mClassEngraveSelectors[i]->show();
-        }
-    }
-
-    ui->labelInfo->hide();
-
-    mpSearchButton->setEnabled(true);
 }
 
 void SkillStats::start()

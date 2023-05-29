@@ -122,6 +122,20 @@ void CharacterSearch::searchCharacter(const QString &characterName)
 
     connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, characterName, pCharacter](QNetworkReply *pReply)
     {
+        int statusCode = pReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+
+        if (statusCode == 429) {
+            QMessageBox msgBox;
+            msgBox.setText("API 요청 횟수 제한 - 1분뒤 재시도해주세요.");
+            msgBox.exec();
+            return;
+        } else if (statusCode == 503) {
+            QMessageBox msgBox;
+            msgBox.setText("로스트아크 서버 점검중");
+            msgBox.exec();
+            return;
+        }
+
         QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
 
         if (response.isNull())

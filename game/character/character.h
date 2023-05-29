@@ -16,11 +16,18 @@ class Character : public QObject
 
 public:
     Character();
+    ~Character();
 
     Profile profile() const;
     void setProfile(const Profile &profile);
 
     QHash<QString, Equipment> equipments() const;
+    Equipment equipment(const QString &type) const;
+    QList<Equipment> armors() const;
+    Equipment weapon() const;
+    QList<Equipment> accessories() const;
+    Equipment abilityStone() const;
+    Equipment bracelet() const;
     void addEquipment(const Equipment &equipment);
 
     QList<Skill> skills() const;
@@ -30,13 +37,16 @@ public:
     void addGem(const Gem &gem);
 
     QList<QPair<QString, int> > engraves() const;
-    void addEngrave(const QString &engraveName, int engraveLevel);
+    void addEngrave(const QPair<QString, int> &engrave);
 
     QList<QPair<QString, int> > cards() const;
-    void addCard(const QString &cardSet, int awaken);
+    void addCard(const QPair<QString, int> &card);
 
     QList<Collectible> collectibles() const;
     void addCollectible(const Collectible &collectible);
+
+    QList<Profile> siblings() const;
+    void addSiblings(const Profile &sibling);
 
 private:
     Profile mProfile;
@@ -46,6 +56,8 @@ private:
     QList<QPair<QString, int>> mEngraves;   // {engraveName, engraveLevel}
     QList<QPair<QString, int>> mCards;      // {cardSet, awaken}
     QList<Collectible> mCollectibles;
+
+    QList<Profile> mSiblings;
 };
 
 #endif // CHARACTER_H

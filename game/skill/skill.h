@@ -2,6 +2,7 @@
 #define SKILL_H
 
 #include "game/skill/tripod.h"
+#include "game/item/rune.h"
 
 #include <QString>
 #include <QHash>
@@ -14,6 +15,7 @@ struct Skill {
     QList<Tripod> tripods;
 
     int skillLevel = -1;
+    Rune *pRune = nullptr;
 };
 
 #endif // SKILL_H

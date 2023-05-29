@@ -3,12 +3,8 @@
 #include "ui/widget_manager.h"
 #include "ui/font_manager.h"
 #include "api/api_manager.h"
-#include "api/lostark/lostark_api.h"
-#include "api/response_parser.h"
-#include "api/requestbody_builder.h"
 #include "game/character/character.h"
 #include "game/engrave/engrave_manager.h"
-#include "game/item/rune.h"
 #include "function/character_search/character_info.h"
 
 #include <QGroupBox>
@@ -28,7 +24,6 @@ CharacterSearch *CharacterSearch::mpInstance = nullptr;
 
 CharacterSearch::CharacterSearch() :
     ui(new Ui::CharacterSearch),
-    mParseStatus(0x00),
     mpSearchButton(nullptr)
 {
     ui->setupUi(this);
@@ -36,7 +31,6 @@ CharacterSearch::CharacterSearch() :
     initializeSignal();
     initializeInputLayout();
     initializeCharacterTab();
-    initializeParser();
 }
 
 CharacterSearch::~CharacterSearch()
@@ -100,18 +94,6 @@ void CharacterSearch::initializeCharacterTab()
     });
 }
 
-void CharacterSearch::initializeParser()
-{
-    mParsers << &ResponseParser::parseProfile;
-    mParsers << &ResponseParser::parseEquipment;
-    mParsers << &ResponseParser::parseSkill;
-    mParsers << &ResponseParser::parseEngrave;
-    mParsers << &ResponseParser::parseCard;
-    mParsers << &ResponseParser::parseGem;
-    mParsers << &ResponseParser::parseCollectible;
-    mParsers << &ResponseParser::parseSibling;
-}
-
 void CharacterSearch::searchCharacter(const QString &characterName)
 {
     if (characterName == "")
@@ -131,17 +113,11 @@ void CharacterSearch::searchCharacter(const QString &characterName)
     }
 
     mpSearchButton->setDisabled(true);
-    mParseStatus = 0x00;
 
     Character *pCharacter = new Character();
     mCharacters[characterName] = pCharacter;
 
     // 캐릭터 검색
-    static const QString query = "?filters=profiles%2Bequipment%2Bcombat-skills%2Bengravings%2Bcards%2Bgems%2Bcollectibles";
-    static const QStringList resultKeys = {
-        "ArmoryProfile", "ArmoryEquipment", "ArmorySkills", "ArmoryEngraving", "ArmoryCard", "ArmoryGem", "Collectibles"
-    };
-
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
 
     connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, characterName, pCharacter](QNetworkReply *pReply)
@@ -163,350 +139,244 @@ void CharacterSearch::searchCharacter(const QString &characterName)
 
         // 결과 parsing
         const QJsonObject &object = response.object();
+        const QJsonObject &equipments = object.find("equipments")->toObject();
+        const QJsonArray &skills = object.find("skills")->toArray();
+        const QJsonArray &gems = object.find("gems")->toArray();
+        const QJsonArray &engraves = object.find("engraves")->toArray();
+        const QJsonArray &cards = object.find("cards")->toArray();
+        const QJsonArray &collectibles = object.find("collectibles")->toArray();
 
-        for (int i = 0; i < resultKeys.size(); i++)
-        {
-            auto result = object.find(resultKeys[i]);
+        pCharacter->setProfile(parseProfile(object.find("profile")->toObject(), false));
 
-            if (result->isNull())
-            {
-                updateParseStatus(static_cast<uint8_t>(1 << i), pCharacter);
-            }
-            else
-            {
-                QThread *pThreadParser = QThread::create(mParsers[i], result->toVariant(), pCharacter);
-
-                connect(pThreadParser, &QThread::finished, this, [&, i, pCharacter]()
-                {
-                    updateParseStatus(static_cast<uint8_t>(1 << i), pCharacter);
-                });
-                connect(pThreadParser, &QThread::finished, pThreadParser, &QThread::deleteLater);
-
-                pThreadParser->start();
-            }
+        for (const QJsonValue &value : equipments) {
+            pCharacter->addEquipment(parseEquipment(value.toObject()));
         }
+
+        for (const QJsonValue &value : skills) {
+            pCharacter->addSkill(parseSkill(value.toObject()));
+        }
+
+        for (const QJsonValue &value : gems) {
+            pCharacter->addGem(parseGem(value.toObject()));
+        }
+
+        for (const QJsonValue &value : engraves) {
+            pCharacter->addEngrave(parseEngrave(value.toObject()));
+        }
+
+        for (const QJsonValue &value : cards) {
+            pCharacter->addCard(parseCard(value.toObject()));
+        }
+
+        for (const QJsonValue &value : collectibles) {
+            pCharacter->addCollectible(parseCollectible(value.toObject()));
+        }
+
+        searchCharacterSibling(characterName, pCharacter);
     });
 
-    ApiManager::getInstance()->get(pNetworkManager,
-                                   ApiType::Lostark,
-                                   static_cast<int>(LostarkApi::Character),
-                                   {characterName},
-                                   query);
-
-    searchCharacterSibling(characterName, pCharacter);
+    ApiManager::getInstance()->getCharacter(pNetworkManager, characterName);
 }
 
 void CharacterSearch::searchCharacterSibling(const QString &characterName, Character *pCharacter)
 {
-    static const int siblingIndex = mParsers.size() - 1;
-
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
 
     connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, pCharacter](QNetworkReply *pReply)
     {
         QJsonDocument response = QJsonDocument::fromJson(pReply->readAll());
 
-        if (response.isNull())
-        {
-            updateParseStatus(static_cast<uint8_t>(1 << siblingIndex), pCharacter);
-        }
-        else
-        {
-            QThread *pThreadParser = QThread::create(mParsers[siblingIndex], response.toVariant(), pCharacter);
+        if (!response.isNull()) {
+            const QJsonArray &siblings = response.array();
 
-            connect(pThreadParser, &QThread::finished, this, [&, pCharacter]()
-            {
-                updateParseStatus(static_cast<uint8_t>(1 << siblingIndex), pCharacter);
-            });
-            connect(pThreadParser, &QThread::finished, pThreadParser, &QThread::deleteLater);
+            for (const QJsonValue &value : siblings) {
+                pCharacter->addSiblings(parseProfile(value.toObject(), true));
+            }
 
-            pThreadParser->start();
+            addCharacter(pCharacter);
+
+            mpLineEditCharacterName->clear();
+            mpSearchButton->setEnabled(true);
         }
     });
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    ApiManager::getInstance()->get(pNetworkManager,
-                                   ApiType::Lostark,
-                                   static_cast<int>(LostarkApi::Sibling),
-                                   {characterName},
-                                   "");
+    ApiManager::getInstance()->getSiblings(pNetworkManager, characterName);
 }
 
-void CharacterSearch::setEstherItemSet(Character *pCharacter)
+Profile CharacterSearch::parseProfile(const QJsonObject &object, bool isSibling)
 {
-    // 에스더 무기인 경우 무기의 세트효과는 장갑의 세트효과를 받음
-    Weapon *pWeapon = pCharacter->getWeapon();
+    Profile profile;
 
-    if (pWeapon != nullptr && pWeapon->itemGrade() == ItemGrade::에스더)
-    {
-        const Armor *pHand = pCharacter->getArmor(ArmorPart::Hand);
+    if (!isSibling) {
+        profile.expeditionLevel = object.find("expeditionLevel")->toInt();
+        profile.title = object.find("title")->toString();
+        profile.guildName = object.find("guildName")->toString();
+        profile.usingSkillPoint = object.find("usingSkillPoint")->toInt();
+        profile.totalSkillPoint = object.find("totalSkillPoint")->toInt();
 
-        if (pHand == nullptr)
-            return;
+        const QJsonObject &stats = object.find("stats")->toObject();
 
-        pWeapon->setItemSet(pHand->itemSet());
-        pWeapon->setSetLevel(pHand->setLevel());
+        for (auto iter = stats.constBegin(); iter != stats.constEnd(); iter++) {
+            profile.stats[iter.key()] = iter.value().toInt();
+        }
     }
+
+    profile.serverName = object.find("serverName")->toString();
+    profile.characterName = object.find("characterName")->toString();
+    profile.characterLevel = object.find("characterLevel")->toInt();
+    profile.className = object.find("className")->toString();
+    profile.itemLevel = object.find("itemLevel")->toDouble();
+
+    return profile;
+}
+
+Equipment CharacterSearch::parseEquipment(const QJsonObject &object)
+{
+    Equipment equipment;
+
+    equipment.type = object.find("type")->toString();
+    equipment.name = object.find("name")->toString();
+    equipment.iconPath = object.find("iconPath")->toString();
+    equipment.itemGrade = strToItemGrade(object.find("itemGrade")->toString());
+
+    if (object.value("quality") != QJsonValue::Undefined) {
+        equipment.quality = object.find("quality")->toInt();
+    }
+
+    if (object.value("itemLevel") != QJsonValue::Undefined) {
+        equipment.itemLevel = object.find("itemLevel")->toInt();
+    }
+
+    if (object.value("itemSet") != QJsonValue::Undefined) {
+        const QJsonObject &itemSet = object.find("itemSet")->toObject();
+
+        equipment.itemSet = {itemSet.find("setName")->toString(),
+                             itemSet.find("setLevel")->toInt()};
+    }
+
+    if (object.value("elixirs") != QJsonValue::Undefined) {
+        const QJsonObject &elixirs = object.find("elixirs")->toObject();
+
+        for (auto iter = elixirs.constBegin(); iter != elixirs.constEnd(); iter++) {
+            equipment.elixirs[iter.key()] = iter.value().toInt();
+        }
+    }
+
+    if (object.value("abilities") != QJsonValue::Undefined) {
+        const QJsonObject &abilities = object.find("abilities")->toObject();
+
+        for (auto iter = abilities.constBegin(); iter != abilities.constEnd(); iter++) {
+            equipment.abilities[iter.key()] = iter.value().toInt();
+        }
+    }
+
+    if (object.value("engraves") != QJsonValue::Undefined) {
+        const QJsonObject &engraves = object.find("engraves")->toObject();
+
+        for (auto iter = engraves.constBegin(); iter != engraves.constEnd(); iter++) {
+            equipment.engraves[iter.key()] = iter.value().toInt();
+        }
+    }
+
+    if (object.value("braceletEffects") != QJsonValue::Undefined) {
+        equipment.braceletEffects = object.find("braceletEffects")->toVariant().toStringList();
+    }
+
+    if (object.value("isElla") != QJsonValue::Undefined) {
+        equipment.isElla = object.find("isElla")->toBool();
+    }
+
+    return equipment;
+}
+
+Skill CharacterSearch::parseSkill(const QJsonObject &object)
+{
+    Skill skill;
+
+    skill.skillName = object.find("skillName")->toString();
+    skill.skillLevel = object.find("skillLevel")->toInt();
+
+    const QJsonArray &tripods = object.find("tripods")->toArray();
+
+    for (const QJsonValue &value : tripods) {
+        Tripod tripod;
+
+        tripod.tripodName = value.toObject().find("tripodName")->toString();
+        tripod.tripodLevel = value.toObject().find("tripodLevel")->toInt();
+
+        skill.tripods << tripod;
+    }
+
+    if (!object.value("rune").isNull()) {
+        const QJsonObject &rune = object.find("rune")->toObject();
+        Rune *pRune = new Rune();
+
+        pRune->runeName = rune.find("runeName")->toString();
+        pRune->itemGrade = strToItemGrade(rune.find("itemGrade")->toString());
+        pRune->iconPath = rune.find("iconPath")->toString();
+
+        skill.pRune = pRune;
+    }
+
+    return skill;
+}
+
+Gem CharacterSearch::parseGem(const QJsonObject &object)
+{
+    Gem gem;
+
+    gem.type = object.find("type")->toString();
+    gem.gemLevel = object.find("gemLevel")->toInt();
+    gem.iconPath = object.find("iconPath")->toString();
+    gem.itemGrade = strToItemGrade(object.find("itemGrade")->toString());
+    gem.skillName = object.find("skillName")->toString();
+
+    return gem;
+}
+
+QPair<QString, int> CharacterSearch::parseEngrave(const QJsonObject &object)
+{
+    return {
+        object.find("engraveName")->toString(),
+        object.find("engraveLevel")->toInt()
+    };
+}
+
+QPair<QString, int> CharacterSearch::parseCard(const QJsonObject &object)
+{
+    return {
+        object.find("cardSet")->toString(),
+        object.find("awaken")->toInt()
+    };
+}
+
+Collectible CharacterSearch::parseCollectible(const QJsonObject &object)
+{
+    Collectible collectible;
+
+    collectible.type = object.find("type")->toString();
+    collectible.point = object.find("point")->toInt();
+    collectible.maxPoint = object.find("maxPoint")->toInt();
+
+    return collectible;
 }
 
 void CharacterSearch::addCharacter(Character *pCharacter)
 {
-    const QString &characterName = pCharacter->getProfile()->getCharacterName();
-
     CharacterInfo *pCharacterInfo = new CharacterInfo(pCharacter);
 
-    int index = ui->tabCharacter->addTab(pCharacterInfo, characterName);
+    int index = ui->tabCharacter->addTab(
+        pCharacterInfo,
+        pCharacter->profile().characterName);
 
     ui->tabCharacter->setCurrentIndex(index);
-    mCharacterInfos[characterName] = pCharacterInfo;
-}
-
-void CharacterSearch::updateCharacterSetting(Character *pCharacter)
-{
-    const Profile *pProfile = pCharacter->getProfile();
-
-    CharacterSetting characterSetting;
-    characterSetting.characterName = pProfile->getCharacterName();
-    characterSetting.className = pProfile->getCharacterClass();
-    characterSetting.itemLevel = pProfile->getItemLevel();
-    characterSetting.itemSet = extractItemSet(pCharacter->getWeapon(), pCharacter->getArmors());
-    characterSetting.engrave = extractEngrave(pCharacter->getEngrave());
-    characterSetting.engraveLevel = extractEngraveLevel(pCharacter->getEngrave());
-    characterSetting.ability = extractAbility(pProfile->getAbility());
-    characterSetting.elixir = extractElixir(pCharacter->getArmors());
-
-    // 세팅이 비어있으면 업데이트 X
-    if (characterSetting.itemSet == "" || characterSetting.ability == "" ||
-        characterSetting.engrave == "" || characterSetting.engraveLevel == "")
-        return;
-
-    QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
-    connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
-    connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&](QNetworkReply *pReply){
-        qDebug() << "[UPDATE][SETTING]"
-                 << pReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-    });
-
-    ApiManager::getInstance()->post(pNetworkManager,
-                                    ApiType::LoaManager,
-                                    static_cast<int>(LoamanagerApi::PostStats),
-                                    {"setting"},
-                                    RequestBodyBuilder::buildCharacterSettingBody(characterSetting));
-}
-
-void CharacterSearch::updateSkillSetting(Character *pCharacter)
-{
-    SkillSetting skillSetting;
-    skillSetting.characterName = pCharacter->getProfile()->getCharacterName();
-    skillSetting.className = pCharacter->getProfile()->getCharacterClass();
-
-    static EngraveManager *pEngraveManager = EngraveManager::getInstance();
-
-    if (pCharacter->getEngrave() == nullptr)
-        return;
-
-    for (const QString &engrave : pCharacter->getEngrave()->getEngraves())
-    {
-        if (pEngraveManager->isClassEngrave(engrave))
-        {
-            skillSetting.classEngraves << engrave;
-        }
-    }
-
-    for (const Skill* pSkill : pCharacter->getSkills())
-    {
-        if (pSkill->skillLevel() == 1 && pSkill->rune() == nullptr)
-            continue;
-
-        SkillSetting::SkillData skillData;
-        skillData.skillName = pSkill->skillName();
-        skillData.runeName = pSkill->rune() == nullptr ? "" : pSkill->rune()->itemName();
-
-        for (const Tripod &tripod : pSkill->tripods())
-        {
-            if (tripod.isSelected())
-            {
-                skillData.tripodsNames << tripod.tripodName();
-            }
-        }
-
-        skillSetting.skills << skillData;
-    }
-
-    QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
-    connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
-    connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&](QNetworkReply *pReply){
-        qDebug() << "[UPDATE][SKILL]"
-                 << pReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-    });
-
-    ApiManager::getInstance()->post(pNetworkManager,
-                                    ApiType::LoaManager,
-                                    static_cast<int>(LoamanagerApi::PostStats),
-                                    {"skill"},
-                                    RequestBodyBuilder::buildSkillSettingBody(skillSetting));
-}
-
-QString CharacterSearch::extractItemSet(const Weapon *pWeapon, const QList<Armor *> &armors)
-{
-    QList<int> setCount(static_cast<int>(ItemSet::size) + 1, 0);
-
-    if (pWeapon == nullptr)
-        return "";
-
-    setCount[static_cast<int>(pWeapon->itemSet())]++;
-
-    for (const Armor *pArmor : armors)
-    {
-        if (pArmor == nullptr)
-            return "";
-
-        setCount[static_cast<int>(pArmor->itemSet())]++;
-    }
-
-    QString itemSet;
-
-    for (int i = 0; i < setCount.size(); i++)
-    {
-        if (setCount[i] == 0)
-            continue;
-
-        itemSet += QString("%1%2").arg(setCount[i]).arg(itemSetToQString(static_cast<ItemSet>(i)));
-    }
-
-    return itemSet;
-}
-
-QString CharacterSearch::extractEngrave(const Engrave *pEngrave)
-{
-    if (pEngrave == nullptr)
-        return "";
-
-    static EngraveManager *pEngraveManager = EngraveManager::getInstance();
-
-    QString engraveCodes;
-
-    for (int level = 3; level > 0; level--)
-    {
-        for (const QString &engrave : pEngrave->getEngraves())
-        {
-            if (level == pEngrave->getEngraveLevel(engrave))
-            {
-                engraveCodes += QString::number(pEngraveManager->getEngraveCode(engrave));
-            }
-        }
-    }
-
-    return engraveCodes;
-}
-
-QString CharacterSearch::extractEngraveLevel(const Engrave *pEngrave)
-{
-    if (pEngrave == nullptr)
-        return "";
-
-    QString engraveLevels;
-
-    for (int level = 3; level > 0; level--)
-    {
-        for (const QString &engrave : pEngrave->getEngraves())
-        {
-            if (level == pEngrave->getEngraveLevel(engrave))
-            {
-                engraveLevels += QString::number(level);
-            }
-        }
-    }
-
-    return engraveLevels;
-}
-
-QString CharacterSearch::extractAbility(const QHash<Ability, int> &ability)
-{
-    QList<QPair<Ability, int>> abilities;
-
-    // 수치가 200이상인 특성만 추가
-    for (auto iter = ability.begin(); iter != ability.end(); iter++)
-    {
-        if (iter.value() >= 200)
-        {
-            abilities.append({iter.key(), iter.value()});
-        }
-    }
-
-    // 내림차순 정렬
-    std::sort(abilities.begin(), abilities.end(), [&](const QPair<Ability, int> &a, const QPair<Ability, int> &b)
-    {
-        return a.second > b.second;
-    });
-
-    QString ret;
-
-    for (int i = 0; i < abilities.size(); i++)
-    {
-        ret += abilityToQString(abilities[i].first).front();
-    }
-
-    return ret;
-}
-
-QString CharacterSearch::extractElixir(const QList<Armor *> &armors)
-{
-    static const QString elixirEffectHead = "질서";
-    static const QString elixirEffectHand = "혼돈";
-
-    int totalLevel = 0;
-    QString head, hand;
-
-    for (const Armor *pArmor : armors)
-    {
-        if (pArmor == nullptr)
-            return "";
-
-        for (const Elixir &elixir : pArmor->elixirs())
-        {
-            totalLevel += elixir.level;
-
-            if (pArmor->armorPart() == ArmorPart::Head && elixir.effect.contains(elixirEffectHead))
-            {
-                head = elixir.effect.sliced(0, elixir.effect.indexOf("(") - 1);
-            }
-            else if (pArmor->armorPart() == ArmorPart::Hand && elixir.effect.contains(elixirEffectHand))
-            {
-                hand = elixir.effect.sliced(0, elixir.effect.indexOf("(") - 1);
-            }
-        }
-    }
-
-    if (totalLevel >= 35 && head == hand)
-    {
-        return head;
-    }
-    else
-    {
-        return "";
-    }
+    mCharacterInfos[pCharacter->profile().characterName] = pCharacterInfo;
 }
 
 void CharacterSearch::start()
 {
 
-}
-
-void CharacterSearch::updateParseStatus(uint8_t bit, Character *pCharacter)
-{
-    mParseStatus |= bit;
-
-    if (mParseStatus == STATUS_PARSE_FINISHED)
-    {
-        addCharacter(pCharacter);
-
-        updateCharacterSetting(pCharacter);
-        updateSkillSetting(pCharacter);
-
-        mpLineEditCharacterName->clear();
-        mpSearchButton->setEnabled(true);
-    }
 }
 
 CharacterSearch *CharacterSearch::getInstance()

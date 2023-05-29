@@ -2,6 +2,7 @@
 #define ABILITYSTONE_INFO_H
 
 #include "game/item/item_grade.h"
+#include "game/item/equipment.h"
 
 #include <QWidget>
 
@@ -14,16 +15,16 @@ class AbilityStoneInfo : public QWidget
     Q_OBJECT
 
 public:
-    AbilityStoneInfo(const class AbilityStone *pAbilityStone);
+    AbilityStoneInfo(const Equipment &abilityStone);
     ~AbilityStoneInfo();
 
 private:
-    void initializeLayout1(const AbilityStone *pAbilityStone);
+    void initializeLayout1(const QString &iconPath, const ItemGrade &itemGrade);
     void addAbilityStoneIcon(const QString &iconPath, ItemGrade itemGrade);
 
-    void initializeLayout2(const AbilityStone *pAbilityStone);
+    void initializeLayout2(const QString &itemName, const ItemGrade &itemGrade, const QHash<QString, int> &engraves);
     void addItemNameInfo(const QString &itemName, ItemGrade itemGrade);
-    void addEngraveInfo(const QStringList &engraves, const QStringList &penalties, const AbilityStone *pAbilityStone);
+    void addEngraveInfo(const QHash<QString, int> &engraves);
 
     class QHBoxLayout *createHLayout(class QVBoxLayout *pLayout);
 

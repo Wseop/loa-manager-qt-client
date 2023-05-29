@@ -15,7 +15,7 @@ class SkillInfo : public QWidget
     Q_OBJECT
 
 public:
-    SkillInfo(const class Skill *pSkill);
+    SkillInfo(const Skill &skill);
     ~SkillInfo();
 
 private:

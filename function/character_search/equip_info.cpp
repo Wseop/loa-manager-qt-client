@@ -1,7 +1,6 @@
 #include "equip_info.h"
 #include "ui_equip_info.h"
 #include "ui/widget_manager.h"
-#include "game/item/weapon.h"
 #include "resource/resource_manager.h"
 
 #include <QLabel>
@@ -9,20 +8,20 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
-EquipInfo::EquipInfo(const Item *pEquip) :
+EquipInfo::EquipInfo(const Equipment &equipment) :
     ui(new Ui::EquipInfo)
 {
     ui->setupUi(this);
 
-    if (pEquip == nullptr)
+    if (equipment.type == "")
     {
         QLabel *pLabel = WidgetManager::createLabel("장비 미착용");
         ui->vLayout2->addWidget(pLabel);
         return;
     }
 
-    initializeLayout1(pEquip, pEquip->itemType());
-    initializeLayout2(pEquip, pEquip->itemType());
+    initializeLayout1(equipment.iconPath, equipment.itemGrade, equipment.quality);
+    initializeLayout2(equipment);
 }
 
 EquipInfo::~EquipInfo()
@@ -30,29 +29,8 @@ EquipInfo::~EquipInfo()
     delete ui;
 }
 
-void EquipInfo::initializeLayout1(const Item *pEquip, ItemType itemType)
+void EquipInfo::initializeLayout1(const QString &iconPath, const ItemGrade &itemGrade, int quality)
 {
-    QString iconPath;
-    ItemGrade itemGrade = ItemGrade::size;
-    int quality = 0;
-
-    if (itemType == ItemType::Weapon)
-    {
-        const Weapon *pWeapon = static_cast<const Weapon*>(pEquip);
-
-        iconPath = pWeapon->iconPath();
-        itemGrade = pWeapon->itemGrade();
-        quality = pWeapon->quality();
-    }
-    else if (itemType == ItemType::Armor)
-    {
-        const Armor *pArmor = static_cast<const Armor*>(pEquip);
-
-        iconPath = pArmor->iconPath();
-        itemGrade = pArmor->itemGrade();
-        quality = pArmor->quality();
-    }
-
     addEquipIcon(iconPath, itemGrade);
     addQualityBar(quality);
 }
@@ -60,9 +38,11 @@ void EquipInfo::initializeLayout1(const Item *pEquip, ItemType itemType)
 void EquipInfo::addEquipIcon(const QString &iconPath, ItemGrade itemGrade)
 {
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
-    connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
+    connect(pNetworkManager, &QNetworkAccessManager::finished,
+            pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    QLabel *pIcon = WidgetManager::createIcon(iconPath, pNetworkManager, itemGradeToBGColor(itemGrade));
+    QLabel *pIcon = WidgetManager::createIcon(
+        iconPath, pNetworkManager, itemGradeToBGColor(itemGrade));
     ui->vLayout1->addWidget(pIcon);
 }
 
@@ -72,88 +52,67 @@ void EquipInfo::addQualityBar(int quality)
     ui->vLayout1->addWidget(pQualityBar);
 }
 
-void EquipInfo::initializeLayout2(const Item *pEquip, ItemType itemType)
+void EquipInfo::initializeLayout2(const Equipment &equipment)
 {
-    int reforge = 0;
-    int itemLevel = 0;
-    ItemSet itemSet = ItemSet::size;
-    int setLevel = 0;
-    QList<Elixir> elixirs;
-    ArmorPart part = ArmorPart::size;
-    bool bElla = false;
+    addItemSourceInfo(equipment.itemSet.first, equipment.name, equipment.itemGrade);
+    addReforgeLevelInfo(equipment.name, equipment.itemLevel);
+    addItemSetInfo(equipment.itemSet);
 
-    if (itemType == ItemType::Weapon)
-    {
-        const Weapon *pWeapon = static_cast<const Weapon*>(pEquip);
-
-        reforge = pWeapon->reforge();
-        itemLevel = pWeapon->itemLevel();
-        itemSet = pWeapon->itemSet();
-        setLevel = pWeapon->setLevel();
-        bElla = pWeapon->ella();
+    if (equipment.type == "무기") {
+        addEllaInfo(equipment.isElla);
+    } else {
+        addElixirInfo(equipment.elixirs);
     }
-    else if (itemType == ItemType::Armor)
-    {
-        const Armor *pArmor = static_cast<const Armor*>(pEquip);
-
-        reforge = pArmor->reforge();
-        itemLevel = pArmor->itemLevel();
-        itemSet = pArmor->itemSet();
-        setLevel = pArmor->setLevel();
-        elixirs = pArmor->elixirs();
-        part = pArmor->armorPart();
-    }
-
-    addItemSourceInfo(itemSet, pEquip->itemName(), pEquip->itemGrade());
-    addReforgeLevelInfo(reforge, itemLevel);
-    addItemSetInfo(itemSet, setLevel);
-
-    if (itemType == ItemType::Weapon)
-        addEllaInfo(bElla);
-    else if (itemType == ItemType::Armor)
-        addElixirInfo(elixirs, part);
 }
 
-void EquipInfo::addItemSourceInfo(ItemSet itemSet, const QString &itemName, ItemGrade itemGrade)
+void EquipInfo::addItemSourceInfo(const QString &setName, const QString &itemName, ItemGrade itemGrade)
 {
-    QString text;
+    QString sourceInfo;
 
     // 군단장 제작 장비가 아니면 아이템 등급으로 표시
-    if (itemSet == ItemSet::size || itemGrade == ItemGrade::에스더)
-        text = itemGradeToQString(itemGrade);
+    if (setName == "" || itemGrade == ItemGrade::에스더)
+        sourceInfo = itemGradeToStr(itemGrade);
     else
     {
         // 군단장 제작 장비의 경우 해당하는 군단장명으로 표시
-        const QStringList &setNames = ResourceManager::getInstance()->equipSetNames(itemSetToQString(itemSet));
+        const QStringList &setNames = ResourceManager::getInstance()->equipSetNames(
+            setName);
 
         for (int i = 0; i < setNames.size(); i++)
         {
             if (itemName.contains(setNames[i]))
             {
                 if (i < 2)
-                    text = "일리아칸";
+                    sourceInfo = "일리아칸";
                 else if (i < 4)
-                    text = "하브";
+                    sourceInfo = "하브";
                 else if (i == 4)
-                    text = "노브";
+                    sourceInfo = "노브";
                 else if (i == 5)
-                    text = "발비";
+                    sourceInfo = "발비";
                 break;
             }
         }
     }
 
-    QLabel *pLabelItemSource = WidgetManager::createLabel(text, 10, 100);
+    QLabel *pLabelItemSource = WidgetManager::createLabel(sourceInfo, 10, 100);
     pLabelItemSource->setStyleSheet(QString("QLabel { border: 1px solid black; "
                                             "         border-radius: 5px;"
                                             "         padding: 2px;"
-                                            "         color: %1 }").arg(itemGradeToTextColor(itemGrade)));
+                                            "         color: %1 }").arg(
+                                            itemGradeToTextColor(itemGrade)));
     ui->vLayout2->addWidget(pLabelItemSource);
     ui->vLayout2->setAlignment(pLabelItemSource, Qt::AlignLeft);
 }
 
-void EquipInfo::addReforgeLevelInfo(int reforge, int itemLevel)
+void EquipInfo::addReforgeLevelInfo(const QString &itemName, int itemLevel)
 {
+    int reforge = 0;
+
+    if (itemName.startsWith("+")) {
+        reforge = itemName.sliced(1, itemName.indexOf(' ') - 1).toInt();
+    }
+
     const QString text = QString("+%1 (%2)").arg(reforge).arg(itemLevel);
 
     QLabel *pLabelReforgeLevel = WidgetManager::createLabel(text, 10, 100);
@@ -161,34 +120,29 @@ void EquipInfo::addReforgeLevelInfo(int reforge, int itemLevel)
     ui->vLayout2->setAlignment(pLabelReforgeLevel, Qt::AlignLeft);
 }
 
-void EquipInfo::addItemSetInfo(ItemSet itemSet, int setLevel)
+void EquipInfo::addItemSetInfo(const QPair<QString, int> &itemSet)
 {
-    const QString text = QString("%1 Lv.%2").arg(itemSetToQString(itemSet)).arg(setLevel);
+    QLabel *pLabelItemSet = WidgetManager::createLabel(
+        QString("%1 Lv.%2").arg(itemSet.first).arg(itemSet.second), 10, 100);
 
-    QLabel *pLabelItemSet = WidgetManager::createLabel(text, 10, 100);
     ui->vLayout2->addWidget(pLabelItemSet);
     ui->vLayout2->setAlignment(pLabelItemSet, Qt::AlignLeft);
 }
 
-void EquipInfo::addElixirInfo(const QList<Elixir> &elixirs, ArmorPart part)
+void EquipInfo::addElixirInfo(const QHash<QString, int> &elixirs)
 {
     QHBoxLayout *pHLayout = new QHBoxLayout();
     pHLayout->setSpacing(5);
     ui->vLayout2->addLayout(pHLayout);
 
-    for (const Elixir &elixir : elixirs)
-    {
-        // 활성화된 엘릭서 정보만 추가
-        if (elixir.part == ArmorPart::size || part == elixir.part)
-        {
-            const QString text = QString("%1 Lv.%2").arg(elixir.effect).arg(elixir.level);
+    for (auto iter = elixirs.constBegin(); iter != elixirs.constEnd(); iter++) {
+        QLabel *pLabelElixir = WidgetManager::createLabel(
+            QString("%1 Lv.%2").arg(iter.key()).arg(iter.value()), 10, 130);
 
-            QLabel *pLabelElixir = WidgetManager::createLabel(text, 10, 130);
-            pLabelElixir->setStyleSheet("QLabel { border: 1px solid black; "
-                                        "         border-radius: 5px; "
-                                        "         padding: 2px }");
-            pHLayout->addWidget(pLabelElixir);
-        }
+        pLabelElixir->setStyleSheet("QLabel { border: 1px solid black; "
+                                    "         border-radius: 5px; "
+                                    "         padding: 2px }");
+        pHLayout->addWidget(pLabelElixir);
     }
 }
 

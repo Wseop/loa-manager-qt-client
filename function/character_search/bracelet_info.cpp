@@ -1,26 +1,25 @@
 #include "bracelet_info.h"
 #include "ui_bracelet_info.h"
 #include "ui/widget_manager.h"
-#include "game/item/bracelet.h"
 
 #include <QLabel>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
-BraceletInfo::BraceletInfo(const Bracelet *pBracelet) :
+BraceletInfo::BraceletInfo(const Equipment &bracelet) :
     ui(new Ui::BraceletInfo)
 {
     ui->setupUi(this);
 
-    if (pBracelet == nullptr)
+    if (bracelet.type == "")
     {
         QLabel *pLabel = WidgetManager::createLabel("팔찌 미착용");
         ui->vLayout2->addWidget(pLabel);
         return;
     }
 
-    initializeLayout1(pBracelet);
-    initializeLayout2(pBracelet);
+    initializeLayout1(bracelet.iconPath, bracelet.itemGrade);
+    initializeLayout2(bracelet.braceletEffects);
 }
 
 BraceletInfo::~BraceletInfo()
@@ -28,45 +27,57 @@ BraceletInfo::~BraceletInfo()
     delete ui;
 }
 
-void BraceletInfo::initializeLayout1(const Bracelet *pBracelet)
+void BraceletInfo::initializeLayout1(const QString &iconPath, const ItemGrade &itemGrade)
 {
-    addBraceletIcon(pBracelet->iconPath(), pBracelet->itemGrade());
+    addBraceletIcon(iconPath, itemGrade);
 }
 
 void BraceletInfo::addBraceletIcon(const QString &iconPath, ItemGrade itemGrade)
 {
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
-    connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
+    connect(pNetworkManager, &QNetworkAccessManager::finished,
+            pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    QLabel *pIcon = WidgetManager::createIcon(iconPath, pNetworkManager, itemGradeToBGColor(itemGrade));
+    QLabel *pIcon = WidgetManager::createIcon(
+        iconPath, pNetworkManager, itemGradeToBGColor(itemGrade));
+
     ui->vLayout1->addWidget(pIcon);
 }
 
-void BraceletInfo::initializeLayout2(const Bracelet *pBracelet)
+void BraceletInfo::initializeLayout2(const QStringList &effects)
 {
-    addEffectInfo(pBracelet->effects());
-    addSpecialEffectInfo(pBracelet->specialEffects());
+    QStringList normalEffects;
+    QStringList specialEffects;
+
+    for (const QString &effect : effects) {
+        if (effect.startsWith("[")) {
+            specialEffects << effect;
+        } else {
+            normalEffects << effect;
+        }
+    }
+
+    addEffectInfo(normalEffects);
+    addSpecialEffectInfo(specialEffects);
 }
 
-void BraceletInfo::addEffectInfo(const QList<QPair<QString, int> > &effects)
+void BraceletInfo::addEffectInfo(const QStringList &effects)
 {
-    for (const QPair<QString, int> &effect : effects)
+    for (const QString &effect : effects)
     {
-        const QString text = QString("%1 +%2").arg(effect.first).arg(effect.second);
-
         QHBoxLayout *pHLayout = createHLayout(ui->vLayout2);
-        QLabel *pLabelEffect = WidgetManager::createLabel(text);
+        QLabel *pLabelEffect = WidgetManager::createLabel(effect);
         pHLayout->addWidget(pLabelEffect);
     }
 }
 
-void BraceletInfo::addSpecialEffectInfo(const QList<QPair<QString, int> > &specialEffects)
+void BraceletInfo::addSpecialEffectInfo(const QStringList &specialEffects)
 {
     QHBoxLayout *pHLayout = createHLayout(ui->vLayout2);
 
-    for (const QPair<QString, int> &specialEffect : specialEffects)
+    for (const QString &specialEffect : specialEffects)
     {
-        QLabel *pLabelEffect = WidgetManager::createLabel(specialEffect.first);
+        QLabel *pLabelEffect = WidgetManager::createLabel(specialEffect);
         pLabelEffect->setStyleSheet("QLabel { border: 1px solid black; "
                                     "         border-radius: 5px; "
                                     "         padding: 2px }");

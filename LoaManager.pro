@@ -33,7 +33,6 @@ SOURCES += \
     function/skill_stats/skill_stats_widget.cpp \
     function/smart_search/smart_search.cpp \
     function/smart_search/smart_search_abilitystone.cpp \
-    function/smart_search/smart_search_accessory.cpp \
     function/smart_search/smart_search_engravebook.cpp \
     function/smart_search/smart_search_gem.cpp \
     function/smart_search/smart_search_reforge.cpp \
@@ -77,7 +76,6 @@ HEADERS += \
     function/skill_stats/skill_stats_widget.h \
     function/smart_search/smart_search.h \
     function/smart_search/smart_search_abilitystone.h \
-    function/smart_search/smart_search_accessory.h \
     function/smart_search/smart_search_engravebook.h \
     function/smart_search/smart_search_gem.h \
     function/smart_search/smart_search_menu.h \
@@ -122,7 +120,6 @@ FORMS += \
     function/skill_stats/skill_stats_widget.ui \
     function/smart_search/smart_search.ui \
     function/smart_search/smart_search_abilitystone.ui \
-    function/smart_search/smart_search_accessory.ui \
     function/smart_search/smart_search_engravebook.ui \
     function/smart_search/smart_search_gem.ui \
     function/smart_search/smart_search_reforge.ui \

@@ -2,6 +2,7 @@
 #define BRACELET_INFO_H
 
 #include "game/item/item_grade.h"
+#include "game/item/equipment.h"
 
 #include <QWidget>
 
@@ -14,16 +15,16 @@ class BraceletInfo : public QWidget
     Q_OBJECT
 
 public:
-    BraceletInfo(const class Bracelet *pBracelet);
+    BraceletInfo(const Equipment &bracelet);
     ~BraceletInfo();
 
 private:
-    void initializeLayout1(const Bracelet *pBracelet);
+    void initializeLayout1(const QString &iconPath, const ItemGrade &itemGrade);
     void addBraceletIcon(const QString &iconPath, ItemGrade itemGrade);
 
-    void initializeLayout2(const Bracelet *pBracelet);
-    void addEffectInfo(const QList<QPair<QString, int>> &effects);
-    void addSpecialEffectInfo(const QList<QPair<QString, int>> &specialEffects);
+    void initializeLayout2(const QStringList &effects);
+    void addEffectInfo(const QStringList &effects);
+    void addSpecialEffectInfo(const QStringList &specialEffects);
 
     class QHBoxLayout *createHLayout(class QVBoxLayout *pLayout);
 

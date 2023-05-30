@@ -334,6 +334,10 @@ void StatisticArmory::setAbilityCount(const QStringList &classEngraves)
                 text.arg(ability.first).arg(ratio, 0, 'f', 2), 14);
             pLabel->setMaximumWidth(QWIDGETSIZE_MAX);
 
+            if (ratio >= 20) {
+                pLabel->setStyleSheet("QLabel { color: blue }");
+            }
+
             mCategoryLayouts["특성"][i]->addWidget(pLabel);
             mResultLabels << pLabel;
         }
@@ -358,27 +362,33 @@ void StatisticArmory::setEngraveCount(const QStringList &classEngraves)
             const auto &engraves = mStatisticData.settings[classEngraves[i]]
                                        .engraves[j];
 
-        for (const auto &engrave : engraves) {
-            double ratio = engrave.second /
-                           static_cast<double>(
-                               mStatisticData.settings[classEngraves[i]].count) * 100;
+            for (const auto &engrave : engraves) {
+                double ratio = engrave.second /
+                               static_cast<double>(
+                                   mStatisticData.settings[classEngraves[i]].count) * 100;
 
-            QLabel *pLabel = WidgetManager::createLabel(
-                text.arg(engrave.first).arg(ratio, 0, 'f', 2), 14);
-            pLabel->setMaximumWidth(QWIDGETSIZE_MAX);
+                QLabel *pLabel = WidgetManager::createLabel(
+                    text.arg(engrave.first).arg(ratio, 0, 'f', 2), 14);
+                pLabel->setMaximumWidth(QWIDGETSIZE_MAX);
 
-            mCategoryLayouts[QString("각인(Lv.%1)").arg(j + 1)][i]->addWidget(pLabel);
-            mResultLabels << pLabel;
-        }
+                if (ratio >= 20) {
+                    pLabel->setStyleSheet("QLabel { color: blue }");
+                }
 
-        // 데이터가 없을 경우 layout 맞춰주기 위해 dummy label 추가
-        if (engraves.size() == 0) {
-            QLabel *pLabel = WidgetManager::createLabel("-");
-            pLabel->setMaximumWidth(QWIDGETSIZE_MAX);
+                mCategoryLayouts[QString("각인(Lv.%1)").arg(j + 1)][i]
+                    ->addWidget(pLabel);
+                mResultLabels << pLabel;
+            }
 
-            mCategoryLayouts[QString("각인(Lv.%1)").arg(j + 1)][i]->addWidget(pLabel);
-            mResultLabels << pLabel;
-        }
+            // 데이터가 없을 경우 layout 맞춰주기 위해 dummy label 추가
+            if (engraves.size() == 0) {
+                QLabel *pLabel = WidgetManager::createLabel("-");
+                pLabel->setMaximumWidth(QWIDGETSIZE_MAX);
+
+                mCategoryLayouts[QString("각인(Lv.%1)").arg(j + 1)][i]
+                    ->addWidget(pLabel);
+                mResultLabels << pLabel;
+            }
         }
     }
 }
@@ -398,6 +408,10 @@ void StatisticArmory::setItemSetCount(const QStringList &classEngraves)
             QLabel *pLabel = WidgetManager::createLabel(
                 text.arg(itemSet.first).arg(ratio, 0, 'f', 2), 14);
             pLabel->setMaximumWidth(QWIDGETSIZE_MAX);
+
+            if (ratio >= 20) {
+                pLabel->setStyleSheet("QLabel { color: blue }");
+            }
 
             mCategoryLayouts["세트효과"][i]->addWidget(pLabel);
             mResultLabels << pLabel;
@@ -429,6 +443,10 @@ void StatisticArmory::setElixirCount(const QStringList &classEngraves)
             QLabel *pLabel = WidgetManager::createLabel(
                 text.arg(elixir.first).arg(ratio, 0, 'f', 2), 14);
             pLabel->setMaximumWidth(QWIDGETSIZE_MAX);
+
+            if (ratio >= 20) {
+                pLabel->setStyleSheet("QLabel { color: blue }");
+            }
 
             mCategoryLayouts["엘릭서"][i]->addWidget(pLabel);
             mResultLabels << pLabel;

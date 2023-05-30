@@ -22,10 +22,8 @@ SOURCES += \
     function/character_search/equip_info.cpp \
     function/character_search/gem_info.cpp \
     function/character_search/skill_info.cpp \
-    function/setting_ranking/setting_info.cpp \
-    function/setting_ranking/setting_ranking.cpp \
-    function/skill_stats/skill_stats.cpp \
-    function/skill_stats/skill_stats_widget.cpp \
+    function/statistic_armory/statistic_armory.cpp \
+    function/statistic_skill/statistic_skill.cpp \
     game/character/character.cpp \
     game/engrave/engrave_manager.cpp \
     game/skill/skill_manager.cpp \
@@ -43,6 +41,8 @@ HEADERS += \
     api/resources/resources.h \
     api/statistics/reward_chaos.h \
     api/statistics/reward_guardian.h \
+    api/statistics/settings_armory.h \
+    api/statistics/settings_skill.h \
     api/statistics/statistics.h \
     function/auction_calculator/auction_calculator.h \
     function/character_search/abilitystone_info.h \
@@ -54,11 +54,9 @@ HEADERS += \
     function/character_search/gem_info.h \
     function/character_search/skill_info.h \
     function/function_widget.h \
-    function/setting_ranking/setting_info.h \
-    function/setting_ranking/setting_ranking.h \
-    function/skill_stats/skill_stats.h \
-    function/skill_stats/skill_stats_widget.h \
     function/smart_search/smart_search_menu.h \
+    function/statistic_armory/statistic_armory.h \
+    function/statistic_skill/statistic_skill.h \
     game/character/character.h \
     game/character/collectible.h \
     game/character/profile.h \
@@ -87,10 +85,8 @@ FORMS += \
     function/character_search/equip_info.ui \
     function/character_search/gem_info.ui \
     function/character_search/skill_info.ui \
-    function/setting_ranking/setting_info.ui \
-    function/setting_ranking/setting_ranking.ui \
-    function/skill_stats/skill_stats.ui \
-    function/skill_stats/skill_stats_widget.ui \
+    function/statistic_armory/statistic_armory.ui \
+    function/statistic_skill/statistic_skill.ui \
     loamanager.ui \
     user/login.ui
 

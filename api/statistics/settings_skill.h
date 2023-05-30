@@ -1,0 +1,4 @@
+#ifndef SETTINGS_SKILL_H
+#define SETTINGS_SKILL_H
+
+#endif // SETTINGS_SKILL_H

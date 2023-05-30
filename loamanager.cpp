@@ -3,8 +3,8 @@
 #include "ui/widget_manager.h"
 #include "function/function_widget.h"
 #include "function/character_search/character_search.h"
-#include "function/setting_ranking/setting_ranking.h"
-#include "function/skill_stats/skill_stats.h"
+#include "function/statistic_armory/statistic_armory.h"
+#include "function/statistic_skill/statistic_skill.h"
 #include "function/auction_calculator/auction_calculator.h"
 #include "resource/resource_manager.h"
 #include "api/api_manager.h"
@@ -53,8 +53,8 @@ void LoaManager::initializeFunction()
 {
     // main.json의 메뉴 list 순서에 맞게 등록
     mFunctions << CharacterSearch::getInstance();
-    mFunctions << SettingRanking::getInstance();
-    mFunctions << SkillStats::getInstance();
+    mFunctions << StatisticArmory::getInstance();
+    mFunctions << StatisticSkill::getInstance();
     mFunctions << AuctionCalculator::getInstance();
 
     for (QWidget* pWidget : mFunctions)

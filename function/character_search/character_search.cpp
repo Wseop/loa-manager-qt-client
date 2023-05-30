@@ -122,17 +122,9 @@ void CharacterSearch::searchCharacter(const QString &characterName)
 
     connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, characterName, pCharacter](QNetworkReply *pReply)
     {
-        int statusCode = pReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-
-        if (statusCode == 429) {
-            QMessageBox msgBox;
-            msgBox.setText("API 요청 횟수 제한 - 1분뒤 재시도해주세요.");
-            msgBox.exec();
-            return;
-        } else if (statusCode == 503) {
-            QMessageBox msgBox;
-            msgBox.setText("로스트아크 서버 점검중");
-            msgBox.exec();
+        if (!handleStatusCode(pReply))
+        {
+            mpSearchButton->setEnabled(true);
             return;
         }
 
@@ -209,10 +201,10 @@ void CharacterSearch::searchCharacterSibling(const QString &characterName, Chara
             }
 
             addCharacter(pCharacter);
-
             mpLineEditCharacterName->clear();
-            mpSearchButton->setEnabled(true);
         }
+
+        mpSearchButton->setEnabled(true);
     });
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 

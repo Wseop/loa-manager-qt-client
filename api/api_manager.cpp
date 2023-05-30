@@ -108,7 +108,7 @@ void ApiManager::getResources(QNetworkAccessManager *pNetworkManager, Resources 
 
 void ApiManager::getStatistics(QNetworkAccessManager *pNetworkManager, Statistics statistic, const QString &param)
 {
-    QString url = mUrlBase;
+    QString url = mUrlBase + "/statistics";
 
     switch (statistic) {
     case Statistics::RewardsChaos:

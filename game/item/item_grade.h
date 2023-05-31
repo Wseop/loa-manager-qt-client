@@ -8,7 +8,7 @@ enum class ItemGrade
     일반, 고급, 희귀, 영웅, 전설, 유물, 고대, 에스더, size
 };
 
-static inline QString itemGradeToQString(ItemGrade itemGrade)
+static inline QString itemGradeToStr(ItemGrade itemGrade)
 {
     switch (itemGrade)
     {
@@ -33,7 +33,7 @@ static inline QString itemGradeToQString(ItemGrade itemGrade)
     }
 }
 
-static inline ItemGrade qStringToItemGrade(const QString &itemGrade)
+static inline ItemGrade strToItemGrade(const QString &itemGrade)
 {
     if (itemGrade == "일반")
         return ItemGrade::일반;

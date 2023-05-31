@@ -2,8 +2,6 @@
 #include "ui_login.h"
 #include "ui/font_manager.h"
 #include "api/api_manager.h"
-#include "api/loamanager/loamanager_api.h"
-#include "api/requestbody_builder.h"
 
 #include <QCloseEvent>
 #include <QNetworkAccessManager>
@@ -61,11 +59,7 @@ void Login::requestLogin()
     connect(pNetworkManager, &QNetworkAccessManager::finished, this, &Login::processLogin);
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    ApiManager::getInstance()->post(pNetworkManager,
-                                    ApiType::LoaManager,
-                                    static_cast<int>(LoamanagerApi::Signin),
-                                    {},
-                                    RequestBodyBuilder::buildLoginBody(ui->leId->text(), ui->lePassword->text()));
+    ApiManager::getInstance()->trySignin(pNetworkManager, ui->leId->text(), ui->lePassword->text());
 }
 
 void Login::processLogin(QNetworkReply *pReply)

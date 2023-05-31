@@ -1,26 +1,25 @@
 #include "abilitystone_info.h"
 #include "ui_abilitystone_info.h"
 #include "ui/widget_manager.h"
-#include "game/item/abilitystone.h"
 
 #include <QLabel>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
-AbilityStoneInfo::AbilityStoneInfo(const AbilityStone *pAbilityStone) :
+AbilityStoneInfo::AbilityStoneInfo(const Equipment &abilityStone) :
     ui(new Ui::AbilityStoneInfo)
 {
     ui->setupUi(this);
 
-    if (pAbilityStone == nullptr)
+    if (abilityStone.type == "")
     {
         QLabel *pLabel = WidgetManager::createLabel("어빌리티 스톤 미착용");
         ui->vLayout2->addWidget(pLabel);
         return;
     }
 
-    initializeLayout1(pAbilityStone);
-    initializeLayout2(pAbilityStone);
+    initializeLayout1(abilityStone.iconPath, abilityStone.itemGrade);
+    initializeLayout2(abilityStone.name, abilityStone.itemGrade, abilityStone.engraves);
 }
 
 AbilityStoneInfo::~AbilityStoneInfo()
@@ -28,24 +27,26 @@ AbilityStoneInfo::~AbilityStoneInfo()
     delete ui;
 }
 
-void AbilityStoneInfo::initializeLayout1(const AbilityStone *pAbilityStone)
+void AbilityStoneInfo::initializeLayout1(const QString &iconPath, const ItemGrade &itemGrade)
 {
-    addAbilityStoneIcon(pAbilityStone->iconPath(), pAbilityStone->itemGrade());
+    addAbilityStoneIcon(iconPath, itemGrade);
 }
 
 void AbilityStoneInfo::addAbilityStoneIcon(const QString &iconPath, ItemGrade itemGrade)
 {
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
-    connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
+    connect(pNetworkManager, &QNetworkAccessManager::finished,
+            pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    QLabel *pIcon = WidgetManager::createIcon(iconPath, pNetworkManager, itemGradeToBGColor(itemGrade));
+    QLabel *pIcon = WidgetManager::createIcon(
+        iconPath, pNetworkManager, itemGradeToBGColor(itemGrade));
     ui->vLayout1->addWidget(pIcon);
 }
 
-void AbilityStoneInfo::initializeLayout2(const AbilityStone *pAbilityStone)
+void AbilityStoneInfo::initializeLayout2(const QString &itemName, const ItemGrade &itemGrade, const QHash<QString, int> &engraves)
 {
-    addItemNameInfo(pAbilityStone->itemName(), pAbilityStone->itemGrade());
-    addEngraveInfo(pAbilityStone->getEngrave()->getEngraves(), pAbilityStone->getEngrave()->getPenalties(), pAbilityStone);
+    addItemNameInfo(itemName, itemGrade);
+    addEngraveInfo(engraves);
 }
 
 void AbilityStoneInfo::addItemNameInfo(const QString &itemName, ItemGrade itemGrade)
@@ -53,33 +54,37 @@ void AbilityStoneInfo::addItemNameInfo(const QString &itemName, ItemGrade itemGr
     QHBoxLayout *pHLayout = createHLayout(ui->vLayout2);
 
     QLabel *pLabelItemName = WidgetManager::createLabel(itemName, 10, 125);
-    pLabelItemName->setStyleSheet(QString("QLabel { color: %1 }").arg(itemGradeToTextColor(itemGrade)));
+    pLabelItemName->setStyleSheet(
+        QString("QLabel { color: %1 }").arg(itemGradeToTextColor(itemGrade)));
     pHLayout->addWidget(pLabelItemName);
 }
 
-void AbilityStoneInfo::addEngraveInfo(const QStringList &engraves, const QStringList &penalties, const AbilityStone *pAbilityStone)
+void AbilityStoneInfo::addEngraveInfo(const QHash<QString, int> &engraves)
 {
-    const QList<QStringList> engraveList = {engraves, penalties};
-    const QStringList textColor = {"#FFA500", "red"};
+    const QStringList &engraveNames = engraves.keys();
+    const QString infoText = "%1 +%2";
+    const QString infoStyle = "QLabel { color: %1 }";
 
-    for (int i = 0; i < engraveList.size(); i++)
-    {
-        QHBoxLayout *pHLayout = createHLayout(ui->vLayout2);
+    QString penalty;
 
-        for (const QString &engrave : engraveList[i])
-        {
-            QString text = "%1 +%2";
+    for (const QString &engraveName : engraveNames) {
+        if (engraveName.contains("감소")) {
+            penalty = engraveName;
+        } else {
+            QHBoxLayout *pHLayout = createHLayout(ui->vLayout2);
+            QLabel *pLabelEngraveInfo = WidgetManager::createLabel(
+                infoText.arg(engraveName).arg(engraves[engraveName]), 10, 100);
 
-            if (i == 0)
-                text = text.arg(engrave).arg(pAbilityStone->getEngrave()->getEngraveValue(engrave));
-            else if (i == 1)
-                text = text.arg(engrave).arg(pAbilityStone->getEngrave()->getPenaltyValue(engrave));
-
-            QLabel *pLabelEngrave = WidgetManager::createLabel(text, 10, 100);
-            pLabelEngrave->setStyleSheet(QString("QLabel { color: %1 }").arg(textColor[i]));
-            pHLayout->addWidget(pLabelEngrave);
+            pLabelEngraveInfo->setStyleSheet(infoStyle.arg("#FFA500"));
+            pHLayout->addWidget(pLabelEngraveInfo);
         }
     }
+
+    QHBoxLayout *pHLayout = createHLayout(ui->vLayout2);
+    QLabel *pLabelPenalty = WidgetManager::createLabel(
+        infoText.arg(penalty).arg(engraves[penalty]), 10, 100);
+    pLabelPenalty->setStyleSheet(infoStyle.arg("red"));
+    pHLayout->addWidget(pLabelPenalty);
 }
 
 QHBoxLayout *AbilityStoneInfo::createHLayout(QVBoxLayout *pLayout)

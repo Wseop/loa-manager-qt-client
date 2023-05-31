@@ -86,9 +86,9 @@ void ResourceManager::initializeCollectibleIconPath()
 void ResourceManager::initializeEquipSetName()
 {
     const QJsonObject equipSetName = loadJson("equip_set_name");
-    const QStringList &list = equipSetName.find("List")->toVariant().toStringList();
+    const QStringList &setNames = equipSetName.keys();
 
-    for (const QString &setName : list)
+    for (const QString &setName : setNames)
     {
         const QStringList &itemNames = equipSetName.find(setName)->toVariant().toStringList();
 

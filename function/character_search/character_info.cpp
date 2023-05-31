@@ -3,12 +3,13 @@
 #include "ui/widget_manager.h"
 #include "game/engrave/engrave_manager.h"
 #include "function/character_search/character_search.h"
-#include "function/character_search/equip_info.h"
 #include "function/character_search/accessory_info.h"
 #include "function/character_search/abilitystone_info.h"
 #include "function/character_search/bracelet_info.h"
+#include "function/character_search/equip_info.h"
 #include "function/character_search/gem_info.h"
 #include "function/character_search/skill_info.h"
+#include "resource/resource_manager.h"
 
 #include <QComboBox>
 #include <QLabel>
@@ -24,8 +25,10 @@ CharacterInfo::CharacterInfo(Character *pCharacter) :
     initializeProfileLayout(pCharacter);
     initializeEquipLayout(pCharacter);
     initializeAccessoryLayout(pCharacter);
-    initializeGemLayout(pCharacter->getGems());
-    initializeSkillLayout(pCharacter);
+    initializeGemLayout(pCharacter->gems());
+    initializeSkillLayout(pCharacter->skills(),
+                          pCharacter->profile().usingSkillPoint,
+                          pCharacter->profile().totalSkillPoint);
 }
 
 CharacterInfo::~CharacterInfo()
@@ -37,30 +40,33 @@ void CharacterInfo::initializeProfileLayout(const Character *pCharacter)
 {
     ui->vLayoutProfile->setAlignment(Qt::AlignTop);
 
-    addSiblingSelector(pCharacter->getSiblings(), pCharacter->getProfile());
-    addProfileInfo(pCharacter->getProfile());
-    addAbilityInfo(pCharacter->getProfile()->getAbility());
-    addEngraveInfo(pCharacter->getEngrave());
-    addCardInfo(pCharacter->getCard());
-    addCollectibleInfo(pCharacter->getCollectibles());
+    addSiblingSelector(pCharacter->siblings(), pCharacter->profile().characterName);
+    addProfileInfo(pCharacter->profile());
+    addAbilityInfo(pCharacter->profile().stats);
+    addEngraveInfo(pCharacter->engraves());
+    addCardInfo(pCharacter->cards());
+    addCollectibleInfo(pCharacter->collectibles());
 }
 
-void CharacterInfo::addSiblingSelector(const QList<Profile*> &siblings, const Profile *pProfile)
+void CharacterInfo::addSiblingSelector(const QList<Profile> &siblings, const QString &characterName)
 {
-    QStringList characterList = { QString("보유 캐릭터\n(%1)").arg(siblings.size() + 1) };
-    QString itemText = "[%1 Lv.%2]\n%3";
+    QStringList characterList = {QString("보유 캐릭터\n(%1)").arg(siblings.size() + 1)};
+    QString siblingText = "[%1 Lv.%2]\n%3";
 
-    for (const Profile *pSibling : siblings)
+    for (const Profile &sibling : siblings)
     {
-        if (pSibling->getCharacterName() != pProfile->getCharacterName())
+        if (sibling.characterName != characterName)
         {
-            characterList << itemText.arg(pSibling->getCharacterClass())
-                                     .arg(pSibling->getItemLevel())
-                                     .arg(pSibling->getCharacterName());
+            characterList << siblingText
+                                 .arg(sibling.className)
+                                 .arg(sibling.itemLevel)
+                                 .arg(sibling.characterName);
         }
     }
 
-    QComboBox *pSiblingSelector = WidgetManager::createComboBox(characterList, 10, 200, 50);
+    QComboBox *pSiblingSelector = WidgetManager::createComboBox(
+        characterList, 10, 200, 50);
+
     pSiblingSelector->setFixedHeight(50);
     ui->vLayoutProfile->addWidget(pSiblingSelector);
 
@@ -69,25 +75,30 @@ void CharacterInfo::addSiblingSelector(const QList<Profile*> &siblings, const Pr
         pSiblingSelector->setItemData(i, Qt::AlignCenter, Qt::TextAlignmentRole);
     }
 
-    connect(pSiblingSelector, &QComboBox::currentIndexChanged, this, [&, siblings](int index)
+    connect(pSiblingSelector, &QComboBox::currentIndexChanged,
+            this, [&, siblings](int index)
     {
         if (index != 0)
         {
-            emit CharacterSearch::getInstance()->searchRequested(siblings.at(index - 1)->getCharacterName());
+            emit CharacterSearch::getInstance()->searchRequested(
+                siblings.at(index - 1).characterName);
         }
     });
 }
 
-void CharacterInfo::addProfileInfo(const Profile *pProfile)
+void CharacterInfo::addProfileInfo(const Profile &profile)
 {
-    const QStringList profileTexts = { QString("@%1").arg(pProfile->getServerName()),
-                                     pProfile->getCharacterClass(),
-                                     pProfile->getCharacterName(),
-                                     QString("원정대 Lv.%1").arg(pProfile->getExpeditionLevel()),
-                                     QString("전투 Lv.%1").arg(pProfile->getCharacterLevel()),
-                                     QString("아이템 Lv.%1").arg(pProfile->getItemLevel()),
-                                     QString("공격력 : %L1").arg(pProfile->getAttack()),
-                                     QString("최대 생명력 : %L1").arg(pProfile->getMaxHp()) };
+    const QStringList profileTexts =
+        {
+            QString("@%1").arg(profile.serverName),
+            profile.className,
+            profile.characterName,
+            QString("원정대 Lv.%1").arg(profile.expeditionLevel),
+            QString("전투 Lv.%1").arg(profile.characterLevel),
+            QString("아이템 Lv.%1").arg(profile.itemLevel),
+            QString("공격력 : %L1").arg(profile.stats["공격력"]),
+            QString("최대 생명력 : %L1").arg(profile.stats["최대 생명력"])
+        };
     const QString labelStyle = "QLabel { color: %1 }";
 
     for (int i = 0; i < profileTexts.size(); i++)
@@ -105,36 +116,29 @@ void CharacterInfo::addProfileInfo(const Profile *pProfile)
     }
 }
 
-void CharacterInfo::addAbilityInfo(const QHash<Ability, int> &abilities)
+void CharacterInfo::addAbilityInfo(const QHash<QString, int> &abilities)
 {
-    const QString text = "%1 : %2";
+    const QStringList keys = {"치명", "특화", "신속", "제압", "인내", "숙련"};
 
     addLayoutTitle("특성", ui->vLayoutProfile);
 
-    for (int i = 0; i < static_cast<int>(Ability::size); i++)
+    for (const QString &key : keys)
     {
-        Ability ability = static_cast<Ability>(i);
+        QLabel *pLabelAbility = WidgetManager::createLabel(
+            QString("%1 : %2").arg(key).arg(abilities[key]), 12);
 
-        QLabel *pLabelAbility = WidgetManager::createLabel(text.arg(abilityToQString(ability)).arg(abilities[ability]), 12);
         ui->vLayoutProfile->addWidget(pLabelAbility);
     }
 }
 
-void CharacterInfo::addEngraveInfo(const Engrave *pEngrave)
+void CharacterInfo::addEngraveInfo(const QList<QPair<QString, int>> &engraves)
 {
     EngraveManager *pEngraveManager = EngraveManager::getInstance();
 
     addLayoutTitle("각인", ui->vLayoutProfile);
 
-    if (pEngrave == nullptr)
-        return;
-
-    const QList<QStringList> engraves = {pEngrave->getEngraves(), pEngrave->getPenalties()};
-
     for (int i = 0; i < engraves.size(); i++)
     {
-        QString textColor = (i == 0) ? "" : "red";
-
         // 각인 레벨별 레이아웃 생성 (레벨 3 -> 2 -> 1 순으로 추가되도록)
         QList<QVBoxLayout*> vLayouts(3, nullptr);
 
@@ -146,41 +150,41 @@ void CharacterInfo::addEngraveInfo(const Engrave *pEngrave)
         }
 
         // 각인 정보 추가
-        for (const QString &engrave : engraves[i])
-        {
-            int level = (i == 0) ? pEngrave->getEngraveLevel(engrave) : pEngrave->getPenaltyLevel(engrave);
+        QHBoxLayout *pHLayout = new QHBoxLayout();
+        vLayouts[engraves[i].second - 1]->addLayout(pHLayout);
 
-            QHBoxLayout *pHLayout = new QHBoxLayout();
-            vLayouts[level - 1]->addLayout(pHLayout);
+        QLabel *pEngraveIcon = WidgetManager::createIcon(
+            pEngraveManager->iconPath(engraves[i].first), nullptr);
+        pHLayout->addWidget(pEngraveIcon);
 
-            QLabel *pEngraveIcon = WidgetManager::createIcon(pEngraveManager->iconPath(engrave), nullptr);
-            pHLayout->addWidget(pEngraveIcon);
+        QLabel *pLabelEngraveLevel = WidgetManager::createLabel(
+            QString("Lv.%1").arg(engraves[i].second), 10, 50);
 
-            QLabel *pLabelEngraveLevel = WidgetManager::createLabel(QString("Lv.%1").arg(level), 10, 50);
-            pLabelEngraveLevel->setStyleSheet(QString("QLabel { color: %1 }").arg(textColor));
-            pHLayout->addWidget(pLabelEngraveLevel);
+        if (engraves[i].first.contains("감소")) {
+            pLabelEngraveLevel->setStyleSheet("QLabel { color: red }");
         }
+
+        pHLayout->addWidget(pLabelEngraveLevel);
     }
 }
 
-void CharacterInfo::addCardInfo(const Card *pCard)
+void CharacterInfo::addCardInfo(const QList<QPair<QString, int>> &cards)
 {
-    QString text = "%1 (%2각)";
-
     addLayoutTitle("카드", ui->vLayoutProfile);
 
-    if (pCard == nullptr)
-        return;
-
-    for (const QPair<QString, int> &cardSet : pCard->cardSets())
+    for (int i = 0; i < cards.size(); i++)
     {
-        QLabel *pLabelCardSet = WidgetManager::createLabel(text.arg(cardSet.first).arg(cardSet.second), 10);
+        QLabel *pLabelCardSet = WidgetManager::createLabel(
+            QString("%1 (%2각)").arg(cards[i].first).arg(cards[i].second), 10);
+
         ui->vLayoutProfile->addWidget(pLabelCardSet);
     }
 }
 
 void CharacterInfo::addCollectibleInfo(const QList<Collectible> &collectibles)
 {
+    ResourceManager *pResourceManager = ResourceManager::getInstance();
+
     addLayoutTitle("수집품", ui->vLayoutProfile);
 
     QString pointText = "%1 / %2";
@@ -190,10 +194,12 @@ void CharacterInfo::addCollectibleInfo(const QList<Collectible> &collectibles)
         QHBoxLayout *pHLayout = new QHBoxLayout();
         ui->vLayoutProfile->addLayout(pHLayout);
 
-        QLabel *pIcon = WidgetManager::createIcon(collectible.getIconPath(), nullptr, "black", 25, 25);
+        QLabel *pIcon = WidgetManager::createIcon(
+            pResourceManager->iconPath(collectible.type), nullptr, "black", 25, 25);
         pHLayout->addWidget(pIcon);
 
-        QLabel *pLabelPoint = WidgetManager::createLabel(pointText.arg(collectible.getPoint()).arg(collectible.getMaxPoint()));
+        QLabel *pLabelPoint = WidgetManager::createLabel(
+            pointText.arg(collectible.point).arg(collectible.maxPoint));
         pHLayout->addWidget(pLabelPoint);
     }
 }
@@ -204,12 +210,12 @@ void CharacterInfo::initializeEquipLayout(const Character *pCharacter)
 
     addLayoutTitle("장비", ui->vLayoutEquip);
 
-    addArmorInfo(pCharacter->getArmors());
-    addWeaponInfo(pCharacter->getWeapon());
-    addElixirInfo(pCharacter->getArmors());
+    addArmorInfo(pCharacter->armors());
+    addWeaponInfo(pCharacter->weapon());
+    addElixirInfo(pCharacter->armors());
 }
 
-void CharacterInfo::addArmorInfo(const QList<Armor *> &armors)
+void CharacterInfo::addArmorInfo(const QList<Equipment> &armors)
 {
     for (int i = 0; i < armors.size(); i++)
     {
@@ -220,43 +226,43 @@ void CharacterInfo::addArmorInfo(const QList<Armor *> &armors)
     }
 }
 
-void CharacterInfo::addWeaponInfo(const Weapon *pWeapon)
+void CharacterInfo::addWeaponInfo(const Equipment &weapon)
 {
-    EquipInfo *pWeaponInfo = new EquipInfo(pWeapon);
+    EquipInfo *pWeaponInfo = new EquipInfo(weapon);
 
     ui->vLayoutEquip->addWidget(pWeaponInfo);
     ui->vLayoutEquip->setAlignment(pWeaponInfo, Qt::AlignLeft);
 }
 
-void CharacterInfo::addElixirInfo(const QList<Armor *> &armors)
+void CharacterInfo::addElixirInfo(const QList<Equipment> &armors)
 {
     int elixirLevelSum = 0;
     QString elixirEffectHead = "질서";
     QString elixirEffectHand = "혼돈";
 
-    for (const Armor *pArmor : armors)
+    for (const Equipment &armor : armors)
     {
-        if (pArmor == nullptr)
+        if (armor.type == "")
             continue;
 
-        for (const Elixir &elixir : pArmor->elixirs())
+        for (auto iter = armor.elixirs.constBegin(); iter != armor.elixirs.constEnd(); iter++)
         {
-            // 활성화된 엘릭서 레벨 합계 계산
-            if (pArmor->armorPart() == elixir.part || elixir.part == ArmorPart::size)
-                elixirLevelSum += elixir.level;
+            // 엘릭서 레벨 합계 계산
+            elixirLevelSum += iter.value();
 
             // 투구, 장갑인 경우 부위 전용 효과 추출
-            if (pArmor->armorPart() == ArmorPart::Head && elixir.effect.contains("("))
-                elixirEffectHead = elixir.effect.sliced(0, elixir.effect.indexOf("(") - 1);
-            else if (pArmor->armorPart() == ArmorPart::Hand && elixir.effect.contains("("))
-                elixirEffectHand = elixir.effect.sliced(0, elixir.effect.indexOf("(") - 1);
+            if (armor.type == "투구" && iter.key().contains("("))
+                elixirEffectHead = iter.key().sliced(0, iter.key().indexOf("(") - 1);
+            else if (armor.type == "장갑" && iter.key().contains("("))
+                elixirEffectHand = iter.key().sliced(0, iter.key().indexOf("(") - 1);
         }
     }
 
     addLayoutTitle("엘릭서 정보", ui->vLayoutEquip);
 
     // 엘릭서 연성 레벨 합 정보 추가
-    QLabel *pLabelTotalLevel = WidgetManager::createLabel(QString("연성 레벨 합 : %1").arg(elixirLevelSum), 12);
+    QLabel *pLabelTotalLevel = WidgetManager::createLabel(
+        QString("연성 레벨 합 : %1").arg(elixirLevelSum), 12);
     ui->vLayoutEquip->addWidget(pLabelTotalLevel);
     ui->vLayoutEquip->setAlignment(pLabelTotalLevel, Qt::AlignHCenter);
 
@@ -269,8 +275,11 @@ void CharacterInfo::addElixirInfo(const QList<Armor *> &armors)
         {
             if (elixirLevelSum >= enableLevels[i])
             {
-                QLabel *pLabelSetLevel = WidgetManager::createLabel(QString("%1 %2단계 활성화").arg(elixirEffectHead).arg(i + 1), 12);
-                pLabelSetLevel->setStyleSheet(QString("QLabel { color: %1 }").arg(itemGradeToTextColor(ItemGrade::고급)));
+                QLabel *pLabelSetLevel = WidgetManager::createLabel(
+                    QString("%1 %2단계 활성화").arg(elixirEffectHead).arg(i + 1), 12);
+                pLabelSetLevel->setStyleSheet(
+                    QString("QLabel { color: %1 }").arg(
+                        itemGradeToTextColor(ItemGrade::고급)));
                 ui->vLayoutEquip->addWidget(pLabelSetLevel);
                 ui->vLayoutEquip->setAlignment(pLabelSetLevel, Qt::AlignHCenter);
             }
@@ -283,43 +292,43 @@ void CharacterInfo::initializeAccessoryLayout(const Character *pCharacter)
     ui->vLayoutAccessory->setAlignment(Qt::AlignTop);
 
     addLayoutTitle("악세", ui->vLayoutAccessory);
-    addAccessoryInfo(pCharacter->getAccessories());
+    addAccessoryInfo(pCharacter->accessories());
 
     addLayoutTitle("어빌리티 스톤", ui->vLayoutAccessory);
-    addAbilityStoneInfo(pCharacter->getAbilityStone());
+    addAbilityStoneInfo(pCharacter->abilityStone());
 
     addLayoutTitle("팔찌", ui->vLayoutAccessory);
-    addBraceletInfo(pCharacter->getBracelet());
+    addBraceletInfo(pCharacter->bracelet());
 }
 
-void CharacterInfo::addAccessoryInfo(const QList<Accessory *> &accessories)
+void CharacterInfo::addAccessoryInfo(const QList<Equipment> &accessories)
 {
-    for (const Accessory *pAccessory : accessories)
+    for (const Equipment &accessory : accessories)
     {
-        AccessoryInfo *pAccInfo = new AccessoryInfo(pAccessory);
+        AccessoryInfo *pAccInfo = new AccessoryInfo(accessory);
 
         ui->vLayoutAccessory->addWidget(pAccInfo);
         ui->vLayoutAccessory->setAlignment(pAccInfo, Qt::AlignLeft);
     }
 }
 
-void CharacterInfo::addAbilityStoneInfo(const AbilityStone *pAbilityStone)
+void CharacterInfo::addAbilityStoneInfo(const Equipment &abilityStone)
 {
-    AbilityStoneInfo *pAbilityStoneInfo = new AbilityStoneInfo(pAbilityStone);
+    AbilityStoneInfo *pAbilityStoneInfo = new AbilityStoneInfo(abilityStone);
 
     ui->vLayoutAccessory->addWidget(pAbilityStoneInfo);
     ui->vLayoutAccessory->setAlignment(pAbilityStoneInfo, Qt::AlignLeft);
 }
 
-void CharacterInfo::addBraceletInfo(const Bracelet *pBracelet)
+void CharacterInfo::addBraceletInfo(const Equipment &bracelet)
 {
-    BraceletInfo *pBraceletInfo = new BraceletInfo(pBracelet);
+    BraceletInfo *pBraceletInfo = new BraceletInfo(bracelet);
 
     ui->vLayoutAccessory->addWidget(pBraceletInfo);
     ui->vLayoutAccessory->setAlignment(pBraceletInfo, Qt::AlignLeft);
 }
 
-void CharacterInfo::initializeGemLayout(const QList<Gem*> &gems)
+void CharacterInfo::initializeGemLayout(const QList<Gem> &gems)
 {
     ui->vLayoutGem1->setAlignment(Qt::AlignTop);
     ui->vLayoutGem2->setAlignment(Qt::AlignTop);
@@ -331,45 +340,46 @@ void CharacterInfo::initializeGemLayout(const QList<Gem*> &gems)
     addGemLevelAvgInfo(gems);
 }
 
-void CharacterInfo::addGemInfo(const QList<Gem *> &gems)
+void CharacterInfo::addGemInfo(const QList<Gem> &gems)
 {
-    for (const Gem *pGem : gems)
+    for (const Gem &gem : gems)
     {
-        GemInfo *pGemInfo = new GemInfo(pGem);
         QVBoxLayout *pVLayout = nullptr;
 
-        if (pGem->gemType() == GemType::멸화)
+        if (gem.type == "멸화")
             pVLayout = ui->vLayoutGem1;
-        else if (pGem->gemType() == GemType::홍염)
+        else if (gem.type == "홍염")
             pVLayout = ui->vLayoutGem2;
-
-        // 비정상적인 보석 타입인 경우 제외
-        if (pVLayout == nullptr)
-        {
-            delete pGemInfo;
+        else
             continue;
-        }
+
+        GemInfo *pGemInfo = new GemInfo(gem);
 
         pVLayout->addWidget(pGemInfo);
         pVLayout->setAlignment(pGemInfo, Qt::AlignLeft);
     }
 }
 
-void CharacterInfo::addGemLevelAvgInfo(const QList<Gem *> &gems)
+void CharacterInfo::addGemLevelAvgInfo(const QList<Gem> &gems)
 {
+    // 0: 멸화, 1: 홍염
     int levelSum[] = {0, 0};
     int count[] = {0, 0};
 
     // 보석 타입별 레벨 및 갯수 계산
-    for (const Gem *pGem : gems)
+    for (const Gem &gem : gems)
     {
-        int index = static_cast<int>(pGem->gemType());
+        int index = 0;
 
-        if (index < 0 || index > 2)
+        if (gem.type == "멸화")
+            index = 0;
+        else if (gem.type == "홍염")
+            index = 1;
+        else
             continue;
 
         count[index]++;
-        levelSum[index] += pGem->gemLevel();
+        levelSum[index] += gem.gemLevel;
     }
 
     // 보석 타입별 평균 레벨 정보 추가
@@ -383,52 +393,51 @@ void CharacterInfo::addGemLevelAvgInfo(const QList<Gem *> &gems)
 
         if (count[i] > 0)
         {
-            QLabel *pLabelGemLevelAvg = WidgetManager::createLabel(QString::number(levelSum[i] / (double)count[i], 'f', 2), 12);
+            QLabel *pLabelGemLevelAvg = WidgetManager::createLabel(
+                QString::number(levelSum[i] / (double)count[i], 'f', 2), 12);
             layouts[i]->addWidget(pLabelGemLevelAvg);
         }
     }
 }
 
-void CharacterInfo::initializeSkillLayout(const Character *pCharacter)
+void CharacterInfo::initializeSkillLayout(const QList<Skill> &skills, int usingSkillPoint, int totalSkillPoint)
 {
     ui->vLayoutSkill->setAlignment(Qt::AlignTop);
 
-    addTripodLevelInfo(pCharacter->getSkills());
+    addTripodLevelInfo(skills);
 
-    const Profile *pProfile = pCharacter->getProfile();
-    const QString titleText = QString("스킬 (%1/%2)").arg(pProfile->getUsingSkillPoint())
-                                                    .arg(pProfile->getTotalSkillPoint());
+    const QString titleText = QString("스킬 (%1/%2)")
+                                  .arg(usingSkillPoint)
+                                  .arg(totalSkillPoint);
 
-    addSkillInfo(titleText, pCharacter->getSkills());
+    addSkillInfo(titleText, skills);
 }
 
-void CharacterInfo::addTripodLevelInfo(const QList<Skill *> &skills)
+void CharacterInfo::addTripodLevelInfo(const QList<Skill> &skills)
 {
     addLayoutTitle("트라이포드 활성화 정보", ui->vLayoutSkill);
 
     // 4, 5레벨 트라이포드 활성화 갯수 counting
     QList<int> enableCount = {0, 0};
 
-    for (const Skill *pSkill : skills)
+    for (const Skill &skill : skills)
     {
-        for (const Tripod &tripod : pSkill->tripods())
+        for (const Tripod &tripod : skill.tripods)
         {
-            if (tripod.isSelected())
-            {
-                if (tripod.tripodLevel() == 4)
-                    enableCount[0]++;
-                else if (tripod.tripodLevel() == 5)
-                    enableCount[1]++;
-            }
+            if (tripod.tripodLevel == 4)
+                enableCount[0]++;
+            else if (tripod.tripodLevel == 5)
+                enableCount[1]++;
         }
     }
 
     // 4, 5레벨 트라이포드 활성화 정보 추가
     const int MAX_TRIPOD = 18;
 
-    QLabel *pLabelTripodTotal = WidgetManager::createLabel(QString("4, 5레벨 트라이포드 활성화 (%1 / %2)")
-                                                           .arg(enableCount[0] + enableCount[1])
-                                                           .arg(MAX_TRIPOD), 12, 300);
+    QLabel *pLabelTripodTotal = WidgetManager::createLabel(
+                                        QString("4, 5레벨 트라이포드 활성화 (%1 / %2)")
+                                        .arg(enableCount[0] + enableCount[1])
+                                        .arg(MAX_TRIPOD), 12, 300);
     ui->vLayoutSkill->addWidget(pLabelTripodTotal);
     ui->vLayoutSkill->setAlignment(pLabelTripodTotal, Qt::AlignHCenter);
 
@@ -438,7 +447,8 @@ void CharacterInfo::addTripodLevelInfo(const QList<Skill *> &skills)
 
     for (int i = 0; i < enableCount.size(); i++)
     {
-        QLabel *pLabelTripod = WidgetManager::createLabel(QString("%1레벨 : %2").arg(i + 4).arg(enableCount[i]));
+        QLabel *pLabelTripod = WidgetManager::createLabel(
+            QString("%1레벨 : %2").arg(i + 4).arg(enableCount[i]));
         pLabelTripod->setStyleSheet("QLabel { border: 1px solid black;"
                                     "         border-radius: 5px;"
                                     "         padding: 2px }");
@@ -446,7 +456,7 @@ void CharacterInfo::addTripodLevelInfo(const QList<Skill *> &skills)
     }
 }
 
-void CharacterInfo::addSkillInfo(const QString &title, const QList<Skill *> &skills)
+void CharacterInfo::addSkillInfo(const QString &title, const QList<Skill> &skills)
 {
     // title 추가
     addLayoutTitle(title, ui->vLayoutSkill);
@@ -454,15 +464,15 @@ void CharacterInfo::addSkillInfo(const QString &title, const QList<Skill *> &ski
     // 스킬 정보 추가
     int count = 0;
 
-    for (const Skill *pSkill : skills)
+    for (const Skill &skill : skills)
     {
         // 스킬레벨을 올렸거나 룬을 착용한 스킬만 표시
-        if (pSkill->skillLevel() > 1 || pSkill->rune() != nullptr)
+        if (skill.skillLevel > 1 || skill.pRune != nullptr)
         {
             if (count != 0)
                 addHLine(ui->vLayoutSkill);
 
-            SkillInfo *pSkillInfo = new SkillInfo(pSkill);
+            SkillInfo *pSkillInfo = new SkillInfo(skill);
             ui->vLayoutSkill->addWidget(pSkillInfo);
 
             count++;

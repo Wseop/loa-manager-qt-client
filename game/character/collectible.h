@@ -3,21 +3,10 @@
 
 #include <QString>
 
-class Collectible
-{
-public:
-    Collectible(QString type, int point, int maxPoint);
-
-    QString getType() const;
-    QString getIconPath() const;
-    int getPoint() const;
-    int getMaxPoint() const;
-
-private:
-    QString mType;
-    QString mIconPath;
-    int mPoint;
-    int mMaxPoint;
+struct Collectible {
+    QString type;
+    int point = -1;
+    int maxPoint = -1;
 };
 
 #endif // COLLECTIBLE_H

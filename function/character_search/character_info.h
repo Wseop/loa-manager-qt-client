@@ -19,30 +19,30 @@ public:
 
 private:
     void initializeProfileLayout(const Character *pCharacter);
-    void addSiblingSelector(const QList<Profile*> &siblings, const Profile *pProfile);
-    void addProfileInfo(const Profile *pProfile);
-    void addAbilityInfo(const QHash<Ability, int> &abilities);
-    void addEngraveInfo(const Engrave *pEngrave);
-    void addCardInfo(const Card *pCard);
+    void addSiblingSelector(const QList<Profile> &siblings, const QString &characterName);
+    void addProfileInfo(const Profile &profile);
+    void addAbilityInfo(const QHash<QString, int> &abilities);
+    void addEngraveInfo(const QList<QPair<QString, int>> &engraves);
+    void addCardInfo(const QList<QPair<QString, int>> &cards);
     void addCollectibleInfo(const QList<Collectible> &collectibles);
 
     void initializeEquipLayout(const Character *pCharacter);
-    void addArmorInfo(const QList<Armor*> &armors);
-    void addWeaponInfo(const Weapon *pWeapon);
-    void addElixirInfo(const QList<Armor*> &armors);
+    void addArmorInfo(const QList<Equipment> &armors);
+    void addWeaponInfo(const Equipment &weapon);
+    void addElixirInfo(const QList<Equipment> &armors);
 
     void initializeAccessoryLayout(const Character *pCharacter);
-    void addAccessoryInfo(const QList<Accessory*> &accessories);
-    void addAbilityStoneInfo(const AbilityStone *pAbilityStone);
-    void addBraceletInfo(const Bracelet *pBracelet);
+    void addAccessoryInfo(const QList<Equipment> &accessories);
+    void addAbilityStoneInfo(const Equipment &abilityStone);
+    void addBraceletInfo(const Equipment &bracelet);
 
-    void initializeGemLayout(const QList<Gem*> &gems);
-    void addGemInfo(const QList<Gem*> &gems);
-    void addGemLevelAvgInfo(const QList<Gem*> &gems);
+    void initializeGemLayout(const QList<Gem> &gems);
+    void addGemInfo(const QList<Gem> &gems);
+    void addGemLevelAvgInfo(const QList<Gem> &gems);
 
-    void initializeSkillLayout(const Character *pCharacter);
-    void addTripodLevelInfo(const QList<Skill*> &skills);
-    void addSkillInfo(const QString &title, const QList<Skill*> &skills);
+    void initializeSkillLayout(const QList<Skill> &skills, int usingSkillPoint, int totalSkillPoint);
+    void addTripodLevelInfo(const QList<Skill> &skills);
+    void addSkillInfo(const QString &title, const QList<Skill> &skills);
 
     void addHLine(QLayout *pLayout);
     void addLayoutTitle(const QString &title, QLayout *pLayout);

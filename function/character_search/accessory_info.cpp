@@ -1,27 +1,26 @@
 #include "accessory_info.h"
 #include "ui_accessory_info.h"
 #include "ui/widget_manager.h"
-#include "game/item/accessory.h"
 
 #include <QLabel>
 #include <QProgressBar>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
-AccessoryInfo::AccessoryInfo(const Accessory *pAccessory) :
+AccessoryInfo::AccessoryInfo(const Equipment &accessory) :
     ui(new Ui::AccessoryInfo)
 {
     ui->setupUi(this);
 
-    if (pAccessory == nullptr)
+    if (accessory.type == "")
     {
         QLabel *pLabel = WidgetManager::createLabel("악세 미착용");
         ui->vLayout2->addWidget(pLabel);
         return;
     }
 
-    initializeLayout1(pAccessory);
-    initializeLayout2(pAccessory);
+    initializeLayout1(accessory.iconPath, accessory.itemGrade, accessory.quality);
+    initializeLayout2(accessory.itemGrade, accessory.abilities, accessory.engraves);
 }
 
 AccessoryInfo::~AccessoryInfo()
@@ -29,18 +28,20 @@ AccessoryInfo::~AccessoryInfo()
     delete ui;
 }
 
-void AccessoryInfo::initializeLayout1(const Accessory *pAccessory)
+void AccessoryInfo::initializeLayout1(const QString &iconPath, const ItemGrade &itemGrade, int quality)
 {
-    addAccessoryIcon(pAccessory->iconPath(), pAccessory->itemGrade());
-    addQualityBar(pAccessory->quality());
+    addAccessoryIcon(iconPath, itemGrade);
+    addQualityBar(quality);
 }
 
 void AccessoryInfo::addAccessoryIcon(const QString &iconPath, ItemGrade itemGrade)
 {
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
-    connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
+    connect(pNetworkManager, &QNetworkAccessManager::finished,
+            pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    QLabel *pIcon = WidgetManager::createIcon(iconPath, pNetworkManager, itemGradeToBGColor(itemGrade));
+    QLabel *pIcon = WidgetManager::createIcon(
+        iconPath, pNetworkManager, itemGradeToBGColor(itemGrade));
     ui->vLayout1->addWidget(pIcon);
 }
 
@@ -50,61 +51,71 @@ void AccessoryInfo::addQualityBar(int quality)
     ui->vLayout1->addWidget(pQualityBar);
 }
 
-void AccessoryInfo::initializeLayout2(const Accessory *pAccessory)
+void AccessoryInfo::initializeLayout2(const ItemGrade &itemGrade, const QHash<QString, int> &abilities, const QHash<QString, int> &engraves)
 {
-    addItemGradeInfo(pAccessory->itemGrade());
-    addAbilityInfo(pAccessory->abilities());
-    addEngraveInfo(pAccessory->getEngrave()->getEngraves(), pAccessory->getEngrave()->getPenalties(), pAccessory);
+    addItemGradeInfo(itemGrade);
+    addAbilityInfo(abilities);
+    addEngraveInfo(engraves);
 }
 
-void AccessoryInfo::addItemGradeInfo(ItemGrade itemGrade)
+void AccessoryInfo::addItemGradeInfo(const ItemGrade &itemGrade)
 {
     QHBoxLayout *pHLayout = createHLayout(ui->vLayout2);
 
-    QLabel *pLabelItemGrade = WidgetManager::createLabel(itemGradeToQString(itemGrade), 10, 50);
-    pLabelItemGrade->setStyleSheet(QString("QLabel { border: 1px solid black; "
-                                           "         border-radius: 5px; "
-                                           "         padding: 2px;"
-                                           "         color: %1 }").arg(itemGradeToTextColor(itemGrade)));
+    QLabel *pLabelItemGrade = WidgetManager::createLabel(
+        itemGradeToStr(itemGrade), 10, 50);
+
+    pLabelItemGrade->setStyleSheet(
+        QString("QLabel { border: 1px solid black; "
+                "         border-radius: 5px; "
+                "         padding: 2px;"
+                "         color: %1 }").arg(itemGradeToTextColor(itemGrade)));
+
     pHLayout->addWidget(pLabelItemGrade);
 }
 
-void AccessoryInfo::addAbilityInfo(const QHash<Ability, int> &abilities)
+void AccessoryInfo::addAbilityInfo(const QHash<QString, int> &abilities)
 {
+    const QStringList &abilityNames = abilities.keys();
+    const QString infoText = "%1 +%2";
+
     QHBoxLayout *pHLayout = createHLayout(ui->vLayout2);
 
-    for (auto iter = abilities.begin(); iter != abilities.end(); iter++)
-    {
-        const QString text = QString("%1 +%2").arg(abilityToQString(iter.key())).arg(iter.value());
+    for (const QString &abilityName : abilityNames) {
+        QLabel *pLabelAbilityInfo = WidgetManager::createLabel(
+            infoText.arg(abilityName).arg(abilities[abilityName]),
+            10, 75);
 
-        QLabel *pLabelAbility = WidgetManager::createLabel(text, 10, 75);
-        pHLayout->addWidget(pLabelAbility);
+        pHLayout->addWidget(pLabelAbilityInfo);
     }
 }
 
-void AccessoryInfo::addEngraveInfo(const QStringList &engraves, const QStringList &penalties, const Accessory *pAccessory)
+void AccessoryInfo::addEngraveInfo(const QHash<QString, int> &engraves)
 {
-    const QList<QStringList> engraveList = {engraves, penalties};
-    const QStringList textColor = {"#FFA500", "red"};
+    const QStringList &engraveNames = engraves.keys();
+    const QString infoText = "%1 +%2";
+    const QString infoStyle = "QLabel { color: %1 }";
 
-    for (int i = 0; i < engraveList.size(); i++)
-    {
-        QHBoxLayout *pHLayout = createHLayout(ui->vLayout2);
+    QString penalty;
 
-        for (const QString &engrave : engraveList[i])
-        {
-            QString text = "%1 +%2";
+    for (const QString &engraveName : engraveNames) {
+        if (engraveName.contains("감소")) {
+            penalty = engraveName;
+        } else {
+            QHBoxLayout *pHLayout = createHLayout(ui->vLayout2);
+            QLabel *pLabelEngraveInfo = WidgetManager::createLabel(
+                infoText.arg(engraveName).arg(engraves[engraveName]), 10, 100);
 
-            if (i == 0)
-                text = text.arg(engrave).arg(pAccessory->getEngrave()->getEngraveValue(engrave));
-            else if (i == 1)
-                text = text.arg(engrave).arg(pAccessory->getEngrave()->getPenaltyValue(engrave));
-
-            QLabel *pLabelEngrave = WidgetManager::createLabel(text, 10, 100);
-            pLabelEngrave->setStyleSheet(QString("QLabel { color: %1 }").arg(textColor[i]));
-            pHLayout->addWidget(pLabelEngrave);
+            pLabelEngraveInfo->setStyleSheet(infoStyle.arg("#FFA500"));
+            pHLayout->addWidget(pLabelEngraveInfo);
         }
     }
+
+    QHBoxLayout *pHLayout = createHLayout(ui->vLayout2);
+    QLabel *pLabelPenalty = WidgetManager::createLabel(
+        infoText.arg(penalty).arg(engraves[penalty]), 10, 100);
+    pLabelPenalty->setStyleSheet(infoStyle.arg("red"));
+    pHLayout->addWidget(pLabelPenalty);
 }
 
 QHBoxLayout *AccessoryInfo::createHLayout(QVBoxLayout *pLayout)

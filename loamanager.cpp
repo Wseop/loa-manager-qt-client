@@ -3,12 +3,9 @@
 #include "ui/widget_manager.h"
 #include "function/function_widget.h"
 #include "function/character_search/character_search.h"
-#include "function/setting_ranking/setting_ranking.h"
-#include "function/skill_stats/skill_stats.h"
+#include "function/statistic_armory/statistic_armory.h"
+#include "function/statistic_skill/statistic_skill.h"
 #include "function/auction_calculator/auction_calculator.h"
-#include "function/smart_search/smart_search.h"
-#include "function/content_reward/content_reward.h"
-#include "function/raid_profit/raid_profit.h"
 #include "resource/resource_manager.h"
 #include "api/api_manager.h"
 #include "user/login.h"
@@ -56,12 +53,9 @@ void LoaManager::initializeFunction()
 {
     // main.json의 메뉴 list 순서에 맞게 등록
     mFunctions << CharacterSearch::getInstance();
-    mFunctions << SettingRanking::getInstance();
-    mFunctions << SkillStats::getInstance();
-    mFunctions << SmartSearch::getInstance();
+    mFunctions << StatisticArmory::getInstance();
+    mFunctions << StatisticSkill::getInstance();
     mFunctions << AuctionCalculator::getInstance();
-    mFunctions << ContentReward::getInstance();
-    mFunctions << RaidProfit::getInstance();
 
     for (QWidget* pWidget : mFunctions)
     {
@@ -181,10 +175,6 @@ void LoaManager::initializeVersionInfo()
     });
     connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    ApiManager::getInstance()->get(pNetworkManager,
-                                   ApiType::LoaManager,
-                                   static_cast<int>(LoamanagerApi::Admin),
-                                   {},
-                                   "");
+    ApiManager::getInstance()->getInfos(pNetworkManager);
 }
 

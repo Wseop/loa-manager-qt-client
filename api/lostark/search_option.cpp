@@ -1,105 +1,158 @@
 #include "search_option.h"
 
-SearchOption::SearchOption(SearchType type)
-{
-    setSearchType(type);
-}
-
-SearchOption::SearchOption(const SearchOption &searchOption) :
-    mSearchOption(searchOption.mSearchOption),
-    mSearchType(searchOption.mSearchType),
-    mSkillOptions(searchOption.mSkillOptions),
-    mEtcOptions(searchOption.mEtcOptions)
+/*
+ * SearchOption
+ */
+SearchOption::SearchOption() :
+    mItemGrade(ItemGrade::size),
+    mPageAll(false)
 {
 
 }
 
-void SearchOption::setSearchType(SearchType type)
+SearchOption::~SearchOption()
 {
-    mSearchType = type;
 
-    if (mSearchType == SearchType::Auction)
-        mSearchOption.insert("Sort", "BUY_PRICE");
-    else
-        mSearchOption.insert("Sort", "CURRENT_MIN_PRICE");
 }
 
-void SearchOption::setCategoryCode(CategoryCode category)
+QString SearchOption::getQuery()
 {
-    mSearchOption.insert("CategoryCode", static_cast<int>(category));
-}
+    QString query = "?";
 
-void SearchOption::setItemTier(int tier)
-{
-    mSearchOption.insert("ItemTier", tier);
-}
-
-void SearchOption::setItemGrade(ItemGrade itemGrade)
-{
-    mSearchOption.insert("ItemGrade", itemGradeToQString(itemGrade));
-}
-
-void SearchOption::setItemName(QString itemName)
-{
-    mSearchOption.insert("ItemName", itemName);
-}
-
-void SearchOption::setPageNo(int pageNo)
-{
-    mSearchOption.insert("PageNo", pageNo);
-}
-
-void SearchOption::setSortCondition(QString sortCondition)
-{
-    if (sortCondition == "ASC" || sortCondition == "DESC")
-        mSearchOption.insert("SortCondition", sortCondition);
-}
-
-void SearchOption::setQuality(int quality)
-{
-    if (mSearchType == SearchType::Auction)
-        mSearchOption.insert("ItemGradeQuality", quality);
-}
-
-void SearchOption::setSkillOption(int firstOption, int secondOption, int minValue, int maxValue)
-{
-    if (mSearchType == SearchType::Market)
-        return;
-
-    QJsonObject skillOption;
-    skillOption.insert("FirstOption", firstOption);
-    skillOption.insert("SecondOption", secondOption);
-    if (minValue != -1)
-        skillOption.insert("MinValue", minValue);
-    if (maxValue != -1)
-        skillOption.insert("MaxValue", maxValue);
-    mSkillOptions.append(skillOption);
-}
-
-void SearchOption::setEtcOption(EtcOptionCode firstOption, int secondOption, int minValue, int maxValue)
-{
-    if (mSearchType == SearchType::Market)
-        return;
-
-    QJsonObject etcOption;
-    etcOption.insert("FirstOption", static_cast<int>(firstOption));
-    etcOption.insert("SecondOption", secondOption);
-    if (minValue != -1)
-        etcOption.insert("MinValue", minValue);
-    if (maxValue != -1)
-        etcOption.insert("MaxValue", maxValue);
-    mEtcOptions.append(etcOption);
-}
-
-QJsonObject SearchOption::toJsonObject()
-{
-    if (mSearchType == SearchType::Auction)
-    {
-        if (mSkillOptions.size() > 0)
-            mSearchOption.insert("SkillOptions", mSkillOptions);
-        if (mEtcOptions.size() > 0)
-            mSearchOption.insert("EtcOptions", mEtcOptions);
+    if (mPageAll) {
+        query += QString("pageAll=true");
+    } else {
+        query += QString("pageAll=false");
     }
 
-    return mSearchOption;
+    if (mItemGrade != ItemGrade::size) {
+        query += QString("&itemGrade=%1").arg(itemGradeToStr(mItemGrade));
+    }
+    if (mItemName != "") {
+        query += QString("&itemName=%1").arg(mItemName);
+    }
+
+    return query;
+}
+
+void SearchOption::setItemGrade(ItemGrade newItemGrade)
+{
+    mItemGrade = newItemGrade;
+}
+
+void SearchOption::setItemName(const QString &newItemName)
+{
+    mItemName = newItemName;
+}
+
+void SearchOption::setPageAll(bool newPageAll)
+{
+    mPageAll = newPageAll;
+}
+
+/*
+ * AuctionSearchOption
+ */
+AuctionSearchOption::AuctionSearchOption(AuctionCategory auctionCategory) :
+    mAuctionCategory(auctionCategory),
+    mQuality(-1)
+{
+
+}
+
+AuctionSearchOption::~AuctionSearchOption()
+{
+
+}
+
+QString AuctionSearchOption::getQuery()
+{
+    QString query = SearchOption::getQuery();
+
+    query += QString("&categoryCode=%1").arg(static_cast<int>(mAuctionCategory));
+
+    if (mQuality >= 0) {
+        query += QString("&quality=%1").arg(mQuality);
+    }
+
+    for (int skillCode : mSkillCodes) {
+        query += QString("&skillCodes=%1").arg(skillCode);
+    }
+
+    for (int tripodCode : mTripodCodes) {
+        query += QString("&tripodCodes=%1").arg(tripodCode);
+    }
+
+    for (int abilityCode : mAbilityCodes) {
+        query += QString("&abilityCodes=%1").arg(abilityCode);
+    }
+
+    for (int engraveCode : mEngraveCodes) {
+        query += QString("&engraveCodes=%1").arg(engraveCode);
+    }
+
+    return query;
+}
+
+void AuctionSearchOption::setQuality(int quality)
+{
+    mQuality = quality;
+}
+
+void AuctionSearchOption::addSkillCode(int skillCode)
+{
+    mSkillCodes << skillCode;
+}
+
+void AuctionSearchOption::addTripodCode(int tripodCode)
+{
+    mTripodCodes << tripodCode;
+}
+
+void AuctionSearchOption::addAbilityCode(int abilityCode)
+{
+    mAbilityCodes << abilityCode;
+}
+
+void AuctionSearchOption::addEngraveCode(int engraveCode)
+{
+    mEngraveCodes << engraveCode;
+}
+
+/*
+ * MarketSearchOption
+ */
+
+MarketSearchOption::MarketSearchOption(MarketCategory marketCategory) :
+    mMarketCategory(marketCategory)
+{
+
+}
+
+MarketSearchOption::~MarketSearchOption()
+{
+
+}
+
+QString MarketSearchOption::getQuery()
+{
+    QString query = SearchOption::getQuery();
+
+    query += QString("&categoryCode=%1").arg(static_cast<int>(mMarketCategory));
+
+    if (mClassName != "") {
+        query += QString("&className=%1").arg(mClassName);
+    }
+
+    return query;
+}
+
+void MarketSearchOption::setMarketCategory(MarketCategory newMarketCategory)
+{
+    mMarketCategory = newMarketCategory;
+}
+
+void MarketSearchOption::setClassName(const QString &newClassName)
+{
+    mClassName = newClassName;
 }

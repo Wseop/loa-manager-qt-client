@@ -7,7 +7,7 @@
 ApiManager *ApiManager::mpInstance = nullptr;
 
 ApiManager::ApiManager() :
-    mUrlBase("http://localhost:3000")
+    mUrlBase("https://loamgr.xyz")
 {
 
 }

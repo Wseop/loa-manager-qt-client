@@ -11,8 +11,8 @@ CONFIG += c++17
 SOURCES += \
     api/api_manager.cpp \
     api/lostark/search_option.cpp \
-    api/requestbody_builder.cpp \
-    api/response_parser.cpp \
+    api/statistics/reward_chaos.cpp \
+    api/statistics/reward_guardian.cpp \
     function/auction_calculator/auction_calculator.cpp \
     function/character_search/abilitystone_info.cpp \
     function/character_search/accessory_info.cpp \
@@ -22,39 +22,12 @@ SOURCES += \
     function/character_search/equip_info.cpp \
     function/character_search/gem_info.cpp \
     function/character_search/skill_info.cpp \
-    function/content_reward/content_reward.cpp \
-    function/content_reward/content_reward_adder.cpp \
-    function/content_reward/content_reward_table.cpp \
-    function/raid_profit/raid_profit.cpp \
-    function/raid_profit/raid_profit_table.cpp \
-    function/setting_ranking/setting_info.cpp \
-    function/setting_ranking/setting_ranking.cpp \
-    function/skill_stats/skill_stats.cpp \
-    function/skill_stats/skill_stats_widget.cpp \
-    function/smart_search/smart_search.cpp \
-    function/smart_search/smart_search_abilitystone.cpp \
-    function/smart_search/smart_search_accessory.cpp \
-    function/smart_search/smart_search_engravebook.cpp \
-    function/smart_search/smart_search_gem.cpp \
-    function/smart_search/smart_search_reforge.cpp \
-    function/smart_search/smart_search_tripod.cpp \
-    game/character/card.cpp \
+    function/statistic_armory/statistic_armory.cpp \
+    function/statistic_skill/skill_usage_widget.cpp \
+    function/statistic_skill/statistic_skill.cpp \
     game/character/character.cpp \
-    game/character/collectible.cpp \
-    game/character/profile.cpp \
-    game/engrave/engrave.cpp \
     game/engrave/engrave_manager.cpp \
-    game/item/abilitystone.cpp \
-    game/item/accessory.cpp \
-    game/item/armor.cpp \
-    game/item/bracelet.cpp \
-    game/item/gem.cpp \
-    game/item/item.cpp \
-    game/item/rune.cpp \
-    game/item/weapon.cpp \
-    game/skill/skill.cpp \
     game/skill/skill_manager.cpp \
-    game/skill/tripod.cpp \
     main.cpp \
     loamanager.cpp \
     resource/resource_manager.cpp \
@@ -64,13 +37,14 @@ SOURCES += \
 
 HEADERS += \
     api/api_manager.h \
-    api/loamanager/loamanager_api.h \
-    api/lostark/lostark_api.h \
-    api/lostark/response_auction.h \
-    api/lostark/response_market.h \
+    api/lostark/search_category.h \
     api/lostark/search_option.h \
-    api/requestbody_builder.h \
-    api/response_parser.h \
+    api/resources/resources.h \
+    api/statistics/reward_chaos.h \
+    api/statistics/reward_guardian.h \
+    api/statistics/settings_armory.h \
+    api/statistics/settings_skill.h \
+    api/statistics/statistics.h \
     function/auction_calculator/auction_calculator.h \
     function/character_search/abilitystone_info.h \
     function/character_search/accessory_info.h \
@@ -80,42 +54,19 @@ HEADERS += \
     function/character_search/equip_info.h \
     function/character_search/gem_info.h \
     function/character_search/skill_info.h \
-    function/content_reward/content_reward.h \
-    function/content_reward/content_reward_adder.h \
-    function/content_reward/content_reward_table.h \
     function/function_widget.h \
-    function/raid_profit/raid_profit.h \
-    function/raid_profit/raid_profit_table.h \
-    function/setting_ranking/setting_info.h \
-    function/setting_ranking/setting_ranking.h \
-    function/skill_stats/skill_stats.h \
-    function/skill_stats/skill_stats_widget.h \
-    function/smart_search/smart_search.h \
-    function/smart_search/smart_search_abilitystone.h \
-    function/smart_search/smart_search_accessory.h \
-    function/smart_search/smart_search_engravebook.h \
-    function/smart_search/smart_search_gem.h \
     function/smart_search/smart_search_menu.h \
-    function/smart_search/smart_search_reforge.h \
-    function/smart_search/smart_search_tripod.h \
-    game/character/ability.h \
-    game/character/card.h \
+    function/statistic_armory/statistic_armory.h \
+    function/statistic_skill/skill_usage_widget.h \
+    function/statistic_skill/statistic_skill.h \
     game/character/character.h \
     game/character/collectible.h \
     game/character/profile.h \
-    game/engrave/engrave.h \
     game/engrave/engrave_manager.h \
-    game/item/abilitystone.h \
-    game/item/accessory.h \
-    game/item/armor.h \
-    game/item/bracelet.h \
+    game/item/equipment.h \
     game/item/gem.h \
-    game/item/item.h \
     game/item/item_grade.h \
-    game/item/item_set.h \
-    game/item/item_type.h \
     game/item/rune.h \
-    game/item/weapon.h \
     game/skill/skill.h \
     game/skill/skill_manager.h \
     game/skill/tripod.h \
@@ -136,22 +87,9 @@ FORMS += \
     function/character_search/equip_info.ui \
     function/character_search/gem_info.ui \
     function/character_search/skill_info.ui \
-    function/content_reward/content_reward.ui \
-    function/content_reward/content_reward_adder.ui \
-    function/content_reward/content_reward_table.ui \
-    function/raid_profit/raid_profit.ui \
-    function/raid_profit/raid_profit_table.ui \
-    function/setting_ranking/setting_info.ui \
-    function/setting_ranking/setting_ranking.ui \
-    function/skill_stats/skill_stats.ui \
-    function/skill_stats/skill_stats_widget.ui \
-    function/smart_search/smart_search.ui \
-    function/smart_search/smart_search_abilitystone.ui \
-    function/smart_search/smart_search_accessory.ui \
-    function/smart_search/smart_search_engravebook.ui \
-    function/smart_search/smart_search_gem.ui \
-    function/smart_search/smart_search_reforge.ui \
-    function/smart_search/smart_search_tripod.ui \
+    function/statistic_armory/statistic_armory.ui \
+    function/statistic_skill/skill_usage_widget.ui \
+    function/statistic_skill/statistic_skill.ui \
     loamanager.ui \
     user/login.ui
 

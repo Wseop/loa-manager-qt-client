@@ -1,30 +1,16 @@
 #ifndef GEM_H
 #define GEM_H
 
-#include "game/item/item.h"
+#include "game/item/item_grade.h"
 
-enum class GemType
-{
-    멸화, 홍염
-};
+#include <QString>
 
-class Gem : public Item
-{
-public:
-    Gem(GemType gemType);
-
-    GemType gemType() const;
-
-    int gemLevel() const;
-    void setGemLevel(int newGemLevel);
-
-    QString skillName() const;
-    void setSkillName(const QString &newSkillName);
-
-private:
-    GemType mGemType;
-    int mGemLevel;
-    QString mSkillName;
+struct Gem {
+    QString type;
+    int gemLevel = -1;
+    QString iconPath;
+    ItemGrade itemGrade;
+    QString skillName;
 };
 
 #endif // GEM_H

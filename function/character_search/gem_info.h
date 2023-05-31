@@ -15,16 +15,16 @@ class GemInfo : public QWidget
     Q_OBJECT
 
 public:
-    GemInfo(const class Gem *pGem);
+    GemInfo(const Gem &gem);
     ~GemInfo();
 
 private:
-    void initializeLayout1(const Gem *pGem);
+    void initializeLayout1(const QString &iconPath, const ItemGrade &itemGrade, int gemLevel);
     void addGemIcon(const QString &iconPath, ItemGrade itemGrade);
     void addGemLevelInfo(int gemLevel, ItemGrade itemGrade);
 
-    void initializeLayout2(const Gem *pGem);
-    void addGemTypeInfo(GemType gemType, ItemGrade itemGrade);
+    void initializeLayout2(const QString &type, const ItemGrade &itemGrade, const QString &skillName);
+    void addGemTypeInfo(const QString &type, const ItemGrade &itemGrade);
     void addSkillNameInfo(const QString &skillName);
 
 private:

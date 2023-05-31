@@ -1,40 +1,67 @@
 #ifndef SEARCHOPTION_H
 #define SEARCHOPTION_H
 
-#include "api/lostark/lostark_api.h"
+#include "api/lostark/search_category.h"
 #include "game/item/item_grade.h"
 
-#include <QJsonObject>
-#include <QJsonArray>
+#include <QObject>
 
-class SearchOption
+class SearchOption : public QObject {
+    Q_OBJECT
+
+public:
+    SearchOption();
+    virtual ~SearchOption();
+
+    virtual QString getQuery();
+
+    void setItemGrade(ItemGrade newItemGrade);
+    void setItemName(const QString &newItemName);
+    void setPageAll(bool newPageAll);
+
+protected:
+    ItemGrade mItemGrade;
+    QString mItemName;
+    bool mPageAll;
+};
+
+class AuctionSearchOption : public SearchOption
 {
 public:
-    SearchOption(SearchType type);
-    SearchOption(const SearchOption &searchOption);
+    AuctionSearchOption(AuctionCategory auctionCategory);
+    ~AuctionSearchOption();
 
-    void setSearchType(SearchType type);
+    QString getQuery() override;
 
-    // auction, market 공용
-    void setCategoryCode(CategoryCode category);
-    void setItemTier(int tier);
-    void setItemGrade(ItemGrade itemGrade);
-    void setItemName(QString itemName);
-    void setPageNo(int pageNo);
-    void setSortCondition(QString sortCondition);
-
-    // auction 전용
     void setQuality(int quality);
-    void setSkillOption(int firstOption, int secondOption, int minValue = -1, int maxValue = -1);
-    void setEtcOption(EtcOptionCode firstOption, int secondOption, int minValue = -1, int maxValue = -1);
-
-    QJsonObject toJsonObject();
+    void addSkillCode(int skillCode);
+    void addTripodCode(int tripodCode);
+    void addAbilityCode(int abilityCode);
+    void addEngraveCode(int engraveCode);
 
 private:
-    QJsonObject mSearchOption;
-    SearchType mSearchType;
-    QJsonArray mSkillOptions;
-    QJsonArray mEtcOptions;
+    AuctionCategory mAuctionCategory;
+    int mQuality;
+    QList<int> mSkillCodes;
+    QList<int> mTripodCodes;
+    QList<int> mAbilityCodes;
+    QList<int> mEngraveCodes;
+};
+
+class MarketSearchOption : public SearchOption
+{
+public:
+    MarketSearchOption(MarketCategory marketCategory);
+    ~MarketSearchOption();
+
+    QString getQuery() override;
+
+    void setMarketCategory(MarketCategory newMarketCategory);
+    void setClassName(const QString &newClassName);
+
+private:
+    MarketCategory mMarketCategory;
+    QString mClassName;
 };
 
 #endif // SEARCHOPTION_H

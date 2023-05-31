@@ -23,8 +23,8 @@ public:
 public:
     QStringList getEngraves() const;
     QStringList getBattleEngraves() const;
-    QStringList getClassEngraves(const QString &characterClass) const;
-    QStringList getAllClassEngraves() const;
+    QStringList getClassEngraves(const QString &className) const;
+    QStringList getClassEngraves() const;
     QStringList getPenalties() const;
 
     const QString iconPath(const QString &engrave) const;
@@ -33,14 +33,13 @@ public:
     bool isPenalty(const QString &engrave);
 
     int getEngraveCode(const QString &engrave);
-    const QString getEngraveByCode(const int &code) const;
+    const QString getEngraveName(const int &code) const;
 
 private:
     static EngraveManager *mpEngrave;
 
 private:
-    QHash<QString, int> mEngraveToCode;
-    QHash<int, QString> mCodeToEngrave;
+    QHash<int, QString> mEngraveMap;
 
     QStringList mBattleEngraves;
     QHash<QString, QStringList> mClassEngraves;

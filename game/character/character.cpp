@@ -1,290 +1,151 @@
 #include "character.h"
 
-Character::Character() :
-    mpProfile(nullptr),
-    mpWeapon(nullptr),
-    mArmors(static_cast<int>(ArmorPart::size), nullptr),
-    mAccessories(5, nullptr),
-    mpAbilityStone(nullptr),
-    mpBracelet(nullptr),
-    mpEngrave(nullptr),
-    mpCard(nullptr)
+Character::Character()
 {
 
 }
 
 Character::~Character()
 {
-    for (Profile *pProfile : mSiblings)
-        delete pProfile;
-    mSiblings.clear();
-
-    if (mpProfile != nullptr)
-    {
-        delete mpProfile;
-        mpProfile = nullptr;
-    }
-
-    if (mpWeapon != nullptr)
-    {
-        delete mpWeapon;
-        mpWeapon = nullptr;
-    }
-
-    for (Armor *pArmor : mArmors)
-    {
-        if (pArmor != nullptr)
-        {
-            delete pArmor;
-            pArmor = nullptr;
+    for (const Skill &skill: mSkills) {
+        if (skill.pRune != nullptr) {
+            delete skill.pRune;
         }
     }
+}
 
-    for (Accessory *pAccessory : mAccessories)
-    {
-        if (pAccessory != nullptr)
-        {
-            delete pAccessory;
-            pAccessory = nullptr;
-        }
+Profile Character::profile() const
+{
+    return mProfile;
+}
+
+void Character::setProfile(const Profile &profile)
+{
+    mProfile = profile;
+}
+
+QHash<QString, Equipment> Character::equipments() const
+{
+    return mEquipments;
+}
+
+Equipment Character::equipment(const QString &type) const
+{
+    if (mEquipments.contains(type)) {
+        return mEquipments[type];
+    } else {
+        return Equipment{};
+    }
+}
+
+QList<Equipment> Character::armors() const
+{
+    QList<Equipment> armors;
+
+    const QStringList types = {"투구", "어깨", "상의", "하의", "장갑"};
+
+    for (const QString &type : types) {
+        armors << equipment(type);
     }
 
-    if (mpAbilityStone != nullptr)
-    {
-        delete mpAbilityStone;
-        mpAbilityStone = nullptr;
+    return armors;
+}
+
+Equipment Character::weapon() const
+{
+    return equipment("무기");
+}
+
+QList<Equipment> Character::accessories() const
+{
+    QList<Equipment> accessories;
+
+    const QStringList types = {"목걸이", "귀걸이", "귀걸이2", "반지", "반지2"};
+
+    for (const QString &type : types) {
+        accessories << equipment(type);
     }
 
-    if (mpBracelet != nullptr)
-    {
-        delete mpBracelet;
-        mpBracelet = nullptr;
+    return accessories;
+}
+
+Equipment Character::abilityStone() const
+{
+    return equipment("어빌리티 스톤");
+}
+
+Equipment Character::bracelet() const
+{
+    return equipment("팔찌");
+}
+
+void Character::addEquipment(const Equipment &equipment)
+{
+    if (mEquipments.contains(equipment.type)) {
+        mEquipments[equipment.type + "2"] = equipment;
+    } else {
+        mEquipments[equipment.type] = equipment;
     }
-
-    if (mpEngrave != nullptr)
-    {
-        delete mpEngrave;
-        mpEngrave = nullptr;
-    }
-
-    if (mpCard != nullptr)
-    {
-        delete mpCard;
-        mpCard = nullptr;
-    }
-
-    for (Gem *pGem : mGems)
-        delete pGem;
-    mGems.clear();
-
-    for (Skill *pSkill : mSkills)
-        delete pSkill;
-    mSkills.clear();
 }
 
-QList<Profile *> Character::getSiblings() const
-{
-    return mSiblings;
-}
-
-void Character::setSiblings(QList<Profile *> &siblings)
-{
-    mSiblings = siblings;
-}
-
-void Character::addSibling(Profile *pSibling)
-{
-    mSiblings << pSibling;
-}
-
-Profile *Character::getProfile() const
-{
-    return mpProfile;
-}
-
-void Character::setProfile(Profile *pProfile)
-{
-    if (mpProfile != nullptr)
-        delete mpProfile;
-
-    mpProfile = pProfile;
-}
-
-Weapon *Character::getWeapon() const
-{
-    return mpWeapon;
-}
-
-void Character::setWeapon(Weapon *pWeapon)
-{
-    if (mpWeapon != nullptr)
-        delete mpWeapon;
-
-    mpWeapon = pWeapon;
-}
-
-QList<Armor *> Character::getArmors() const
-{
-    return mArmors;
-}
-
-Armor *Character::getArmor(ArmorPart part) const
-{
-    if (part == ArmorPart::size)
-        return nullptr;
-
-    return mArmors[static_cast<int>(part)];
-}
-
-void Character::setArmor(Armor *pArmor)
-{
-    int index = static_cast<int>(pArmor->armorPart());
-
-    if (mArmors[index] != nullptr)
-        delete mArmors[index];
-
-    mArmors[index] = pArmor;
-}
-
-QList<Accessory *> Character::getAccessories() const
-{
-    return mAccessories;
-}
-
-Accessory *Character::getAccessory(AccessoryPart part, int index) const
-{
-    if (index < 0 || index > 2)
-        return nullptr;
-
-    if (part == AccessoryPart::Necklace)
-        return mAccessories[static_cast<int>(part)];
-    else
-        return mAccessories[static_cast<int>(part) + index];
-}
-
-void Character::setAccessory(Accessory *pAccessory, int index)
-{
-    if (index < 0 || index > 2)
-    {
-        delete pAccessory;
-        return;
-    }
-
-    AccessoryPart part = pAccessory->accessoryPart();
-    Accessory **dpAccessory = nullptr;
-
-    if (part == AccessoryPart::Necklace)
-        dpAccessory = &mAccessories[static_cast<int>(part)];
-    else
-        dpAccessory = &mAccessories[static_cast<int>(part) + index];
-
-    if (pAccessory != nullptr)
-        delete *dpAccessory;
-
-    *dpAccessory = pAccessory;
-}
-
-AbilityStone *Character::getAbilityStone() const
-{
-    return mpAbilityStone;
-}
-
-void Character::setAbilityStone(AbilityStone *pAbilityStone)
-{
-    if (mpAbilityStone != nullptr)
-        delete mpAbilityStone;
-
-    mpAbilityStone = pAbilityStone;
-}
-
-Bracelet *Character::getBracelet() const
-{
-    return mpBracelet;
-}
-
-void Character::setBracelet(Bracelet *pBracelet)
-{
-    if (mpBracelet != nullptr)
-        delete mpBracelet;
-
-    mpBracelet = pBracelet;
-}
-
-Engrave *Character::getEngrave() const
-{
-    return mpEngrave;
-}
-
-void Character::setEngrave(Engrave *pEngrave)
-{
-    if (mpEngrave != nullptr)
-        delete mpEngrave;
-
-    mpEngrave = pEngrave;
-}
-
-Card *Character::getCard() const
-{
-    return mpCard;
-}
-
-void Character::setCard(Card *pCard)
-{
-    if (mpCard != nullptr)
-        delete mpCard;
-
-    mpCard = pCard;
-}
-
-QList<Gem *> Character::getGems() const
-{
-    return mGems;
-}
-
-void Character::setGems(const QList<Gem *> &gems)
-{
-    mGems = gems;
-}
-
-void Character::addGem(Gem *pGem)
-{
-    if (pGem != nullptr)
-        mGems << pGem;
-}
-
-QList<Skill *> Character::getSkills() const
+QList<Skill> Character::skills() const
 {
     return mSkills;
 }
 
-void Character::addSkill(Skill *pSkill)
+void Character::addSkill(const Skill &skill)
 {
-    if (pSkill != nullptr)
-    {
-        for (auto iter = mSkills.constBegin(); iter != mSkills.constEnd(); iter++)
-        {
-            Skill *p = *iter;
-
-            if (p->skillName() == pSkill->skillName())
-            {
-                iter = mSkills.erase(iter);
-                mSkills.insert(iter, pSkill);
-
-                delete p;
-                return;
-            }
-        }
-
-        mSkills << pSkill;
-    }
+    mSkills << skill;
 }
 
-QList<Collectible> Character::getCollectibles() const
+QList<Gem> Character::gems() const
+{
+    return mGems;
+}
+
+void Character::addGem(const Gem &gem)
+{
+    mGems << gem;
+}
+
+QList<QPair<QString, int> > Character::engraves() const
+{
+    return mEngraves;
+}
+
+void Character::addEngrave(const QPair<QString, int> &engrave)
+{
+    mEngraves << engrave;
+}
+
+QList<QPair<QString, int> > Character::cards() const
+{
+    return mCards;
+}
+
+void Character::addCard(const QPair<QString, int> &card)
+{
+    mCards << card;
+}
+
+QList<Collectible> Character::collectibles() const
 {
     return mCollectibles;
 }
 
-void Character::addCollectible(Collectible newCollectible)
+void Character::addCollectible(const Collectible &collectible)
 {
-    mCollectibles << newCollectible;
+    mCollectibles << collectible;
+}
+
+QList<Profile> Character::siblings() const
+{
+    return mSiblings;
+}
+
+void Character::addSiblings(const Profile &sibling)
+{
+    if (mProfile.characterName != sibling.characterName) {
+        mSiblings << sibling;
+    }
 }

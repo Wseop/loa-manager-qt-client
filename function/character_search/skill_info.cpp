@@ -6,15 +6,15 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
-SkillInfo::SkillInfo(const Skill *pSkill) :
+SkillInfo::SkillInfo(const Skill &skill) :
     ui(new Ui::SkillInfo)
 {
     ui->setupUi(this);
 
-    initializeSkillLayout1(pSkill->iconPath(), pSkill->skillLevel());
-    initializeSkillLayout2(pSkill->skillName(), pSkill->isCounter());
-    initializeTripodLayout(pSkill->tripods());
-    initializeRuneLayout(pSkill->rune());
+    initializeSkillLayout1(skill.iconPath, skill.skillLevel);
+    initializeSkillLayout2(skill.skillName, skill.isCounter);
+    initializeTripodLayout(skill.tripods);
+    initializeRuneLayout(skill.pRune);
 }
 
 SkillInfo::~SkillInfo()
@@ -36,7 +36,9 @@ void SkillInfo::addSkillIcon(const QString &iconPath)
 
 void SkillInfo::addSkillLevelLabel(int skillLevel)
 {
-    QLabel *pLabelSkillLevel = WidgetManager::createLabel(QString("Lv.%1").arg(skillLevel), 10, 50);
+    QLabel *pLabelSkillLevel = WidgetManager::createLabel(
+        QString("Lv.%1").arg(skillLevel), 10, 50);
+
     ui->vLayoutSkill1->addWidget(pLabelSkillLevel);
 }
 
@@ -71,25 +73,17 @@ void SkillInfo::initializeTripodLayout(const QList<Tripod> &tripods)
 {
     QString tripodTitle = "트라이포드 (";
 
-    for (int i = 0; i < tripods.size(); i++)
-    {
-        const Tripod &tripod = tripods[i];
+    for (int i = 0; i < tripods.size(); i++) {
+        // TODO. tripod title
 
-        if (tripod.isSelected())
-        {
-            if (tripod.tier() == 1)
-                tripodTitle += QString::number(i + 1);
-            else if (tripod.tier() == 2)
-                tripodTitle += QString::number(i - 2);
-            else if (tripod.tier() == 3)
-                tripodTitle += QString::number(i - 5);
-
-            addTripodInfo(tripod);
+        if (tripods[i].isSelected) {
+            tripodTitle += QString::number((i % 3) + 1);
+            addTripodInfo(tripods[i]);
         }
     }
 
     if (tripods.size() == 0)
-        tripodTitle = "트라이포드 (없음)";
+        tripodTitle = "트라이포드 (-)";
     else
         tripodTitle += ")";
 
@@ -112,18 +106,20 @@ void SkillInfo::addTripodInfo(const Tripod &tripod)
     ui->hLayoutTripod->addLayout(pVLayout);
 
     // 트라이포드 아이콘
-    QLabel *pIcon = WidgetManager::createIcon(tripod.iconPath(), nullptr, "#000000");
+    QLabel *pIcon = WidgetManager::createIcon(tripod.iconPath, nullptr, "#000000");
     pVLayout->addWidget(pIcon);
     pVLayout->setAlignment(pIcon, Qt::AlignHCenter);
 
     // 트라이포드 명
-    QLabel *pLabelTripodName = WidgetManager::createLabel(tripod.tripodName(), 10);
+    QLabel *pLabelTripodName = WidgetManager::createLabel(tripod.tripodName, 10);
     pLabelTripodName->setFixedWidth(100);
     pVLayout->addWidget(pLabelTripodName);
     pVLayout->setAlignment(pLabelTripodName, Qt::AlignHCenter);
 
     // 트라이포드 레벨
-    const QString text = tripod.maxLevel() == 1 ? "Lv.1 최대" : QString("Lv.%1").arg(tripod.tripodLevel());
+    const QString text = tripod.maxLevel == 1 ?
+                             "Lv.1 최대" :
+                             QString("Lv.%1").arg(tripod.tripodLevel);
 
     QLabel *pLabelTripodLevel = WidgetManager::createLabel(text, 10, 75);
     pLabelTripodLevel->setStyleSheet("QLabel { border: 1px solid black; "
@@ -142,22 +138,27 @@ void SkillInfo::initializeRuneLayout(const Rune *pRune)
         return;
     }
 
-    addRuneIcon(pRune->iconPath(), pRune->itemGrade());
-    addRuneNameLabel(pRune->itemName(), pRune->itemGrade());
+    addRuneIcon(pRune->iconPath, pRune->itemGrade);
+    addRuneNameLabel(pRune->runeName, pRune->itemGrade);
 }
 
 void SkillInfo::addRuneIcon(const QString &iconPath, ItemGrade itemGrade)
 {
     QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
-    connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
+    connect(pNetworkManager, &QNetworkAccessManager::finished,
+            pNetworkManager, &QNetworkAccessManager::deleteLater);
 
-    QLabel *pIcon = WidgetManager::createIcon(iconPath, pNetworkManager, itemGradeToBGColor(itemGrade));
+    QLabel *pIcon = WidgetManager::createIcon(
+        iconPath, pNetworkManager, itemGradeToBGColor(itemGrade));
+
     ui->vLayoutRune->addWidget(pIcon);
 }
 
 void SkillInfo::addRuneNameLabel(const QString &runeName, ItemGrade itemGrade)
 {
     QLabel *pLabelRuneName = WidgetManager::createLabel(runeName, 10, 50);
-    pLabelRuneName->setStyleSheet(QString("QLabel { color: %1 }").arg(itemGradeToTextColor(itemGrade)));
+    pLabelRuneName->setStyleSheet(
+        QString("QLabel { color: %1 }").arg(itemGradeToTextColor(itemGrade)));
+
     ui->vLayoutRune->addWidget(pLabelRuneName);
 }

@@ -1,24 +1,15 @@
 #include "api_manager.h"
-#include "api/loamanager/loamanager_api.h"
-#include "resource/resource_manager.h"
 
+#include <QNetworkAccessManager>
 #include <QJsonObject>
 #include <QJsonDocument>
-#include <QJsonArray>
-#include <QUrl>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
 
 ApiManager *ApiManager::mpInstance = nullptr;
 
 ApiManager::ApiManager() :
-    mLostarkKeyIndex(0)
+    mUrlBase("https://loamgr.xyz")
 {
-    const QJsonObject resource = ResourceManager::getInstance()->loadJson("api");
 
-    initializeRequestUrl(resource);
-    initializeApiKey();
 }
 
 ApiManager::~ApiManager()
@@ -26,46 +17,24 @@ ApiManager::~ApiManager()
 
 }
 
-void ApiManager::initializeRequestUrl(const QJsonObject &resource)
+void ApiManager::get(QNetworkAccessManager *pNetworkManager, const QString &url)
 {
-    const QStringList &keys = resource.find("List")->toVariant().toStringList();
+    QNetworkRequest request;
+    request.setRawHeader("accept", "applicaton/json");
+    request.setUrl(QUrl(url));
 
-    for (int i = 0; i < keys.size(); i++)
-    {
-        const QJsonArray &apis = resource.find(keys[i])->toArray();
-
-        for (const QJsonValue &value : apis)
-        {
-            mRequestURLs[static_cast<ApiType>(i)] << value.toObject().find("RequestURL")->toString();
-        }
-    }
+    pNetworkManager->get(request);
 }
 
-void ApiManager::initializeApiKey()
+void ApiManager::post(QNetworkAccessManager *pNetworkManager, const QString &url, const QByteArray &data)
 {
-    // Lostark Api Key 초기화
-    QNetworkAccessManager *pNetworkManager = new QNetworkAccessManager();
+    QNetworkRequest request;
+    request.setRawHeader("accept", "application/json");
+    request.setRawHeader("authorization", QString("bearer %1").arg(mAccessToken).toUtf8());
+    request.setRawHeader("Content-Type", "application/json");
+    request.setUrl(QUrl(url));
 
-    connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&](QNetworkReply *pReply)
-    {
-        const QJsonArray &keys = QJsonDocument::fromJson(pReply->readAll()).array();
-
-        for (const QJsonValue &value : keys)
-        {
-            mLostarkApiKeys << value.toObject().find("apiKey")->toString();
-        }
-    });
-    connect(pNetworkManager, &QNetworkAccessManager::finished, pNetworkManager, &QNetworkAccessManager::deleteLater);
-
-    get(pNetworkManager, ApiType::LoaManager, static_cast<int>(LoamanagerApi::ApiKey), {}, "");
-}
-
-const QString &ApiManager::getLostarkApiKey()
-{
-    if (mLostarkKeyIndex >= mLostarkApiKeys.size())
-        mLostarkKeyIndex = 0;
-
-    return mLostarkApiKeys[mLostarkKeyIndex++];
+    pNetworkManager->post(request, data);
 }
 
 ApiManager *ApiManager::getInstance()
@@ -95,59 +64,97 @@ QString ApiManager::accessToken() const
     return mAccessToken;
 }
 
-void ApiManager::get(QNetworkAccessManager *pNetworkManager, ApiType apiType, int urlIndex, const QStringList &params, const QString &query)
+void ApiManager::getInfos(QNetworkAccessManager *pNetworkManager)
 {
-    QString url = mRequestURLs[apiType][urlIndex];
+    QString url = mUrlBase + "/info";
 
-    for (const QString &param : params) {
-        url = url.arg(param);
-    }
-
-    if (query != "")
-        url += query;
-
-    QNetworkRequest request;
-
-    if (apiType == ApiType::Lostark)
-    {
-        request.setRawHeader("accept", "application/json");
-        request.setRawHeader("authorization", QString("bearer %1").arg(getLostarkApiKey()).toUtf8());
-    }
-    else if (apiType == ApiType::LoaManager)
-    {
-        request.setRawHeader("authorization", QString("bearer %1").arg(mAccessToken).toUtf8());
-    }
-    else
-        return;
-
-    request.setUrl(QUrl(url));
-    pNetworkManager->get(request);
+    get(pNetworkManager, url);
 }
 
-void ApiManager::post(QNetworkAccessManager *pNetworkManager, ApiType apiType, int urlIndex, const QStringList &params, QByteArray data)
+void ApiManager::trySignin(QNetworkAccessManager *pNetworkManager, const QString &userId, const QString &password)
 {
-    QString url = mRequestURLs[apiType][urlIndex];
+    QString url = mUrlBase + "/user/signin";
 
-    for (const QString &param : params) {
-        url= url.arg(param);
+    QJsonObject signinUser;
+    signinUser.insert("userId", userId);
+    signinUser.insert("password", password);
+
+    post(pNetworkManager, url, QJsonDocument(signinUser).toJson());
+}
+
+void ApiManager::getResources(QNetworkAccessManager *pNetworkManager, Resources resource, const QString &param)
+{
+    QString url = mUrlBase + "/resources";
+
+    switch (resource) {
+    case Resources::Class:
+        url += "/class";
+        break;
+    case Resources::Engrave:
+        url += "/engrave";
+        break;
+    case Resources::Reward:
+        url += "/reward";
+        break;
+    case Resources::Skill:
+        url += "/skill";
+        break;
     }
 
-    QNetworkRequest request;
+    url += QString("/%1").arg(param);
 
-    if (apiType == ApiType::Lostark)
-    {
-        request.setRawHeader("accept", "application/json");
-        request.setRawHeader("authorization", QString("bearer %1").arg(getLostarkApiKey()).toUtf8());
-    }
-    else if (apiType == ApiType::LoaManager)
-    {
-        request.setRawHeader("authorization", QString("bearer %1").arg(mAccessToken).toUtf8());
-    }
-    else
-        return;
+    get(pNetworkManager, url);
+}
 
-    request.setRawHeader("Content-Type", "application/json");
-    request.setUrl(QUrl(url));
-    pNetworkManager->post(request, data);
+void ApiManager::getStatistics(QNetworkAccessManager *pNetworkManager, Statistics statistic, const QString &param)
+{
+    QString url = mUrlBase + "/statistics";
+
+    switch (statistic) {
+    case Statistics::RewardsChaos:
+        url += "/rewards/chaos";
+        break;
+    case Statistics::RewardsGuardian:
+        url += "/rewards/guardian";
+        break;
+    case Statistics::SettingsArmory:
+        url += "/settings/armory";
+        break;
+    case Statistics::SettingsSkill:
+        url += "/settings/skill";
+        break;
+    }
+
+    url += QString("/%1").arg(param);
+
+    get(pNetworkManager, url);
+}
+
+void ApiManager::getCharacter(QNetworkAccessManager *pNetworkManager, const QString &characterName)
+{
+    QString url = mUrlBase + QString("/lostark/characters/%1").arg(characterName);
+
+    get(pNetworkManager, url);
+}
+
+void ApiManager::getSiblings(QNetworkAccessManager *pNetworkManager, const QString &characterName)
+{
+    QString url = mUrlBase + QString("/lostark/characters/%1/siblings").arg(characterName);
+
+    get(pNetworkManager, url);
+}
+
+void ApiManager::getAuctionItems(QNetworkAccessManager *pNetworkManager, AuctionSearchOption searchOption)
+{
+    QString url = mUrlBase + "/auctions/items" + searchOption.getQuery();
+
+    get(pNetworkManager, url);
+}
+
+void ApiManager::getMarketItems(QNetworkAccessManager *pNetworkManager, MarketSearchOption searchOption)
+{
+    QString url = mUrlBase + "/markets/items" + searchOption.getQuery();
+
+    get(pNetworkManager, url);
 }
 

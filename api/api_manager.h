@@ -44,8 +44,8 @@ public:
     // lostark
     void getCharacter(QNetworkAccessManager *pNetworkManager, const QString &characterName);
     void getSiblings(QNetworkAccessManager *pNetworkManager, const QString &characterName);
-    void getAuctionItems(QNetworkAccessManager *pNetworkManager, AuctionSearchOption searchOption);
-    void getMarketItems(QNetworkAccessManager *pNetworkManager, MarketSearchOption searchOption);
+    void getAuctionItems(QNetworkAccessManager *pNetworkManager, const QString &searchOptionQuery);
+    void getMarketItems(QNetworkAccessManager *pNetworkManager, const QString &searchOptionQuery);
 
 private:
     static ApiManager *mpInstance;

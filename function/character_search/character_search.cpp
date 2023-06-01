@@ -386,7 +386,7 @@ void CharacterSearch::addCharacter(Character *pCharacter)
     mCharacterInfos[pCharacter->profile().characterName] = pCharacterInfo;
 }
 
-void CharacterSearch::start()
+void CharacterSearch::refresh()
 {
 
 }

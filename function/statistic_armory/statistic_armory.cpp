@@ -469,7 +469,7 @@ void StatisticArmory::enableInput(bool enable)
     pSearchButton->setEnabled(enable);
 }
 
-void StatisticArmory::start()
+void StatisticArmory::refresh()
 {
 
 }

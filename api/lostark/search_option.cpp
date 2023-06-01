@@ -147,11 +147,6 @@ QString MarketSearchOption::getQuery()
     return query;
 }
 
-void MarketSearchOption::setMarketCategory(MarketCategory newMarketCategory)
-{
-    mMarketCategory = newMarketCategory;
-}
-
 void MarketSearchOption::setClassName(const QString &newClassName)
 {
     mClassName = newClassName;

@@ -10,7 +10,7 @@ public:
     FunctionWidget() {}
     virtual ~FunctionWidget() {}
 
-    virtual void start() = 0;
+    virtual void refresh() = 0;
 
 protected:
     inline bool handleStatusCode(QNetworkReply *pReply)

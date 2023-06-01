@@ -7,7 +7,7 @@
 ApiManager *ApiManager::mpInstance = nullptr;
 
 ApiManager::ApiManager() :
-    mUrlBase("https://loamgr.xyz")
+    mUrlBase("http://localhost:3000")
 {
 
 }
@@ -144,16 +144,16 @@ void ApiManager::getSiblings(QNetworkAccessManager *pNetworkManager, const QStri
     get(pNetworkManager, url);
 }
 
-void ApiManager::getAuctionItems(QNetworkAccessManager *pNetworkManager, AuctionSearchOption searchOption)
+void ApiManager::getAuctionItems(QNetworkAccessManager *pNetworkManager, const QString &searchOptionQuery)
 {
-    QString url = mUrlBase + "/auctions/items" + searchOption.getQuery();
+    QString url = mUrlBase + "/lostark/auctions/items" + searchOptionQuery;
 
     get(pNetworkManager, url);
 }
 
-void ApiManager::getMarketItems(QNetworkAccessManager *pNetworkManager, MarketSearchOption searchOption)
+void ApiManager::getMarketItems(QNetworkAccessManager *pNetworkManager, const QString &searchOptionQuery)
 {
-    QString url = mUrlBase + "/markets/items" + searchOption.getQuery();
+    QString url = mUrlBase + "/lostark/markets/items" + searchOptionQuery;
 
     get(pNetworkManager, url);
 }

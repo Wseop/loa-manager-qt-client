@@ -56,7 +56,6 @@ public:
 
     QString getQuery() override;
 
-    void setMarketCategory(MarketCategory newMarketCategory);
     void setClassName(const QString &newClassName);
 
 private:

@@ -37,11 +37,6 @@ StatisticSkill::~StatisticSkill()
     delete ui;
 }
 
-void StatisticSkill::start()
-{
-
-}
-
 void StatisticSkill::initializeClassLayout()
 {
     ui->hLayoutClass->setAlignment(Qt::AlignHCenter);
@@ -297,6 +292,12 @@ void StatisticSkill::enableInput(bool enable)
     for (QPushButton *pButton : mClassEngraveButtons) {
         pButton->setEnabled(enable);
     }
+}
+
+
+void StatisticSkill::refresh()
+{
+
 }
 
 StatisticSkill *StatisticSkill::getInstance()

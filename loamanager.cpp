@@ -5,6 +5,7 @@
 #include "function/character_search/character_search.h"
 #include "function/statistic_armory/statistic_armory.h"
 #include "function/statistic_skill/statistic_skill.h"
+#include "function/statistic_daily/statistic_daily.h"
 #include "function/auction_calculator/auction_calculator.h"
 #include "resource/resource_manager.h"
 #include "api/api_manager.h"
@@ -55,6 +56,7 @@ void LoaManager::initializeFunction()
     mFunctions << CharacterSearch::getInstance();
     mFunctions << StatisticArmory::getInstance();
     mFunctions << StatisticSkill::getInstance();
+    mFunctions << StatisticDaily::getInstance();
     mFunctions << AuctionCalculator::getInstance();
 
     for (QWidget* pWidget : mFunctions)
@@ -93,7 +95,7 @@ void LoaManager::initializeMenuButton()
                     if (i == menuIndex)
                     {
                         mMenuButtons[i]->setDisabled(true);
-                        dynamic_cast<FunctionWidget*>(mFunctions[i])->start();
+                        dynamic_cast<FunctionWidget*>(mFunctions[i])->refresh();
                         mFunctions[i]->show();
                     }
                     else

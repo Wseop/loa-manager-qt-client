@@ -20,13 +20,10 @@ class StatisticSkill : public QWidget, public FunctionWidget
 {
     Q_OBJECT
 
-public:
+private:
     StatisticSkill();
     ~StatisticSkill();
 
-    void start() override;
-
-private:
     // class layout
     void initializeClassLayout();
     QGroupBox *createClassSelector();
@@ -46,6 +43,9 @@ private:
     void showSkillUsageWidget();
 
     void enableInput(bool enable);
+
+public:
+    void refresh() override;
 
 public:
     static StatisticSkill *getInstance();

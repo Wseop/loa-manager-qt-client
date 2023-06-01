@@ -106,7 +106,7 @@ void AuctionCalculator::destroyInstance()
     mpInstance = nullptr;
 }
 
-void AuctionCalculator::start()
+void AuctionCalculator::refresh()
 {
     // Nothing to do
 }

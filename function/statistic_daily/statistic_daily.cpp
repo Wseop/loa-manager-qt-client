@@ -18,7 +18,9 @@
 StatisticDaily *StatisticDaily::pInstance = nullptr;
 
 StatisticDaily::StatisticDaily() :
-    ui(new Ui::StatisticDaily)
+    ui(new Ui::StatisticDaily),
+    mIsInitialized(false),
+    mIsWorking(false)
 {
     ui->setupUi(this);
     ui->vLayoutMain->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
@@ -36,6 +38,9 @@ StatisticDaily::~StatisticDaily()
 
 void StatisticDaily::initializeContentsData()
 {
+    mIsInitialized = true;
+    mIsWorking = true;
+
     mContents = {"카오스던전", "가디언토벌"};
 
     for (const QString &content : mContents)
@@ -259,6 +264,8 @@ void StatisticDaily::loadStatisticData(const QString &content)
 
         ApiManager::getInstance()->getStatistics(pStatisticLoader, statistics, level);
     }
+
+    mIsWorking = false;
 }
 
 void StatisticDaily::updateItemCount(const QJsonObject &data)
@@ -318,7 +325,15 @@ void StatisticDaily::updateItemPrice(const QString &level)
 
 void StatisticDaily::refresh()
 {
-    initializeContentsData();
+    if (!mIsInitialized)
+        initializeContentsData();
+    else
+    {
+        for (const QString &content : mContents)
+        {
+            loadStatisticData(content);
+        }
+    }
 }
 
 StatisticDaily *StatisticDaily::getInstance()

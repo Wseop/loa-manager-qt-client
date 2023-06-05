@@ -52,6 +52,9 @@ public:
 private:
     Ui::StatisticDaily *ui;
 
+    bool mIsInitialized;
+    bool mIsWorking;
+
     // contents data
     QStringList mContents;
     QHash<QString, QStringList> mContentLevels;

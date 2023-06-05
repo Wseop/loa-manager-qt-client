@@ -49,7 +49,7 @@ private:
     void addCharacter(Character *pCharacter);
 
 public:
-    void start() override;
+    void refresh() override;
 
     void updateParseStatus(uint8_t bit, Character *pCharacter);
 

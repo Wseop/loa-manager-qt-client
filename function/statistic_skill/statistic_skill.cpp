@@ -37,11 +37,6 @@ StatisticSkill::~StatisticSkill()
     delete ui;
 }
 
-void StatisticSkill::start()
-{
-
-}
-
 void StatisticSkill::initializeClassLayout()
 {
     ui->hLayoutClass->setAlignment(Qt::AlignHCenter);
@@ -159,7 +154,7 @@ void StatisticSkill::searchStatistic()
 
 void StatisticSkill::parseStatistic(QNetworkReply *pReply)
 {
-    if (!handleStatusCode(pReply)) {
+    if (!ApiManager::getInstance()->handleStatusCode(pReply)) {
         enableInput(true);
         return;
     }
@@ -297,6 +292,12 @@ void StatisticSkill::enableInput(bool enable)
     for (QPushButton *pButton : mClassEngraveButtons) {
         pButton->setEnabled(enable);
     }
+}
+
+
+void StatisticSkill::refresh()
+{
+
 }
 
 StatisticSkill *StatisticSkill::getInstance()

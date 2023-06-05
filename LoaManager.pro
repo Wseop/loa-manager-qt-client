@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     api/api_manager.cpp \
+    api/lostark/item_manager.cpp \
     api/lostark/search_option.cpp \
     api/statistics/reward_chaos.cpp \
     api/statistics/reward_guardian.cpp \
@@ -23,6 +24,7 @@ SOURCES += \
     function/character_search/gem_info.cpp \
     function/character_search/skill_info.cpp \
     function/statistic_armory/statistic_armory.cpp \
+    function/statistic_daily/statistic_daily.cpp \
     function/statistic_skill/skill_usage_widget.cpp \
     function/statistic_skill/statistic_skill.cpp \
     game/character/character.cpp \
@@ -37,6 +39,7 @@ SOURCES += \
 
 HEADERS += \
     api/api_manager.h \
+    api/lostark/item_manager.h \
     api/lostark/search_category.h \
     api/lostark/search_option.h \
     api/resources/resources.h \
@@ -57,6 +60,7 @@ HEADERS += \
     function/function_widget.h \
     function/smart_search/smart_search_menu.h \
     function/statistic_armory/statistic_armory.h \
+    function/statistic_daily/statistic_daily.h \
     function/statistic_skill/skill_usage_widget.h \
     function/statistic_skill/statistic_skill.h \
     game/character/character.h \
@@ -88,6 +92,7 @@ FORMS += \
     function/character_search/gem_info.ui \
     function/character_search/skill_info.ui \
     function/statistic_armory/statistic_armory.ui \
+    function/statistic_daily/statistic_daily.ui \
     function/statistic_skill/skill_usage_widget.ui \
     function/statistic_skill/statistic_skill.ui \
     loamanager.ui \

@@ -192,7 +192,7 @@ void StatisticArmory::searchStatistic()
 
 void StatisticArmory::parseStatistic(QNetworkReply *pReply)
 {
-    if (!handleStatusCode(pReply)) {
+    if (!ApiManager::getInstance()->handleStatusCode(pReply)) {
         enableInput(true);
         return;
     }
@@ -469,7 +469,7 @@ void StatisticArmory::enableInput(bool enable)
     pSearchButton->setEnabled(enable);
 }
 
-void StatisticArmory::start()
+void StatisticArmory::refresh()
 {
 
 }

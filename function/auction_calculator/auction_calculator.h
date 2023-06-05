@@ -27,7 +27,7 @@ public:
     static void destroyInstance();
 
 public:
-    void start() override;
+    void refresh() override;
 
 private:
     Ui::AuctionCalculator *ui;

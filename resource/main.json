@@ -1,12 +1,16 @@
 {
-    "Version": "LoaManager v1.4.0",
+    "Version": "LoaManager v1.4.1",
     "Menu": [
         {
             "Title": "캐릭터",
-            "List": ["캐릭터 검색", "직업별\n세팅 통계", "직업별\n스킬 통계"]
+            "List": ["캐릭터 검색", "세팅 통계", "스킬 통계"]
         },
         {
-            "Title": "시세",
+            "Title": "컨텐츠 보상",
+            "List": ["일일 컨텐츠"]
+        },
+        {
+            "Title": "기타",
             "List": ["경매 손익\n계산기"]
         }
     ]

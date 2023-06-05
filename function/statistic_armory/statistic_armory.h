@@ -61,7 +61,7 @@ private:
     void enableInput(bool enable);
 
 public:
-    void start() override;
+    void refresh() override;
 
 public:
     static StatisticArmory *getInstance();

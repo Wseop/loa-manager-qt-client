@@ -5,9 +5,11 @@
 #include "function/character_search/character_search.h"
 #include "function/statistic_armory/statistic_armory.h"
 #include "function/statistic_skill/statistic_skill.h"
+#include "function/statistic_daily/statistic_daily.h"
 #include "function/auction_calculator/auction_calculator.h"
 #include "resource/resource_manager.h"
 #include "api/api_manager.h"
+#include "api/lostark/item_manager.h"
 #include "user/login.h"
 #include "game/engrave/engrave_manager.h"
 #include "game/skill/skill_manager.h"
@@ -28,8 +30,10 @@ LoaManager::LoaManager() :
     mpLoginButton(nullptr),
     mpLabelVersionInfo(nullptr)
 {
+    // initialize managers
     EngraveManager::getInstance();
     SkillManager::getInstance();
+    ItemManager::getInstance()->refreshItemPrice();
 
     ui->setupUi(this);
     ui->hLayoutMenu->setAlignment(Qt::AlignLeft);
@@ -55,6 +59,7 @@ void LoaManager::initializeFunction()
     mFunctions << CharacterSearch::getInstance();
     mFunctions << StatisticArmory::getInstance();
     mFunctions << StatisticSkill::getInstance();
+    mFunctions << StatisticDaily::getInstance();
     mFunctions << AuctionCalculator::getInstance();
 
     for (QWidget* pWidget : mFunctions)
@@ -93,7 +98,7 @@ void LoaManager::initializeMenuButton()
                     if (i == menuIndex)
                     {
                         mMenuButtons[i]->setDisabled(true);
-                        dynamic_cast<FunctionWidget*>(mFunctions[i])->start();
+                        dynamic_cast<FunctionWidget*>(mFunctions[i])->refresh();
                         mFunctions[i]->show();
                     }
                     else

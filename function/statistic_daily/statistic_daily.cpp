@@ -2,6 +2,7 @@
 #include "ui_statistic_daily.h"
 #include "ui/widget_manager.h"
 #include "api/api_manager.h"
+#include "api/lostark/item_manager.h"
 #include "resource/resource_manager.h"
 
 #include <QLabel>
@@ -26,8 +27,6 @@ StatisticDaily::StatisticDaily() :
     initializeInputLayout();
     initializeResultLayout();
     initializeItemKeyMap();
-
-    initializeContentsData();
 }
 
 StatisticDaily::~StatisticDaily()
@@ -147,7 +146,12 @@ QVBoxLayout *StatisticDaily::createItemSelector(const QString &itemName, const Q
     pSelector->setCheckState(Qt::Checked);
     pItemSelectorLayout->addWidget(pSelector, 0, Qt::AlignHCenter);
 
-    connect(pSelector, &QCheckBox::stateChanged, this, &StatisticDaily::refresh);
+    connect(pSelector, &QCheckBox::stateChanged, this, [&]()
+    {
+        for (const QString &content : mContents)
+            for (const QString &level : mContentLevels[content])
+                updateItemPrice(level);
+    });
 
     for (const QString &key : keys)
     {
@@ -244,16 +248,16 @@ void StatisticDaily::loadStatisticData(const QString &content)
         connect(pStatisticLoader, &QNetworkAccessManager::finished,
                 pStatisticLoader, &QNetworkAccessManager::deleteLater);
         connect(pStatisticLoader, &QNetworkAccessManager::finished,
-                this, [&](QNetworkReply *pReply)
+                this, [&, level](QNetworkReply *pReply)
         {
             if (!ApiManager::getInstance()->handleStatusCode(pReply))
                 return;
 
             updateItemCount(QJsonDocument::fromJson(pReply->readAll()).object());
+            updateItemPrice(level);
         });
 
-        ApiManager::getInstance()->getStatistics(
-            pStatisticLoader, statistics, level);
+        ApiManager::getInstance()->getStatistics(pStatisticLoader, statistics, level);
     }
 }
 
@@ -273,16 +277,48 @@ void StatisticDaily::updateItemCount(const QJsonObject &data)
                                 .find(mItemKeyMap[itemName])->toInt();
             double avgCount = itemCount / static_cast<double>(dataCount);
 
-            mItemCountMap[level][itemName] = itemCount;
+            mItemCountMap[level][itemName] = avgCount;
             mItemCountLabelMap[level][itemName]->setText(
                 QString::number(avgCount, 'f', 2));
         }
     }
 }
 
+void StatisticDaily::updateItemPrice(const QString &level)
+{
+    const QStringList &itemNames = mLevelItemsMap[level];
+
+    ItemManager *pItemManager = ItemManager::getInstance();
+    double totalPrice = 0;
+
+    for (const QString &itemName : itemNames)
+    {
+        double price = 0;
+
+        if (!mItemSelectorMap.contains(itemName) ||
+            !mItemSelectorMap.value(itemName)->isChecked())
+            continue;
+
+        if (itemName == "명예의 파편")
+            price = pItemManager->getMarketItem("명예의 파편 주머니(소)")
+                        .minPrice / static_cast<double>(500);
+        else if (itemName.contains("강석"))
+            price = pItemManager->getMarketItem(itemName)
+                        .minPrice / static_cast<double>(10);
+        else if (itemName == "보석")
+            price = pItemManager->getAuctionItem("1레벨 멸화의 보석").buyPrice;
+        else if (itemName.contains("돌파석"))
+            price = pItemManager->getMarketItem(itemName).minPrice;
+
+        totalPrice += mItemCountMap[level][itemName] * price;
+    }
+
+    mItemCountLabelMap[level]["골드"]->setText(QString::number(totalPrice, 'f', 2));
+}
+
 void StatisticDaily::refresh()
 {
-
+    initializeContentsData();
 }
 
 StatisticDaily *StatisticDaily::getInstance()

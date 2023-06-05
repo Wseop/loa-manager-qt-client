@@ -40,6 +40,7 @@ private:
 
     void loadStatisticData(const QString &content);
     void updateItemCount(const QJsonObject &data);
+    void updateItemPrice(const QString &level);
 
 public:
     void refresh() override;
@@ -61,7 +62,7 @@ private:
     QHash<QString, QCheckBox*> mItemSelectorMap;
 
     // item count
-    QHash<QString, QHash<QString, int>> mItemCountMap;
+    QHash<QString, QHash<QString, double>> mItemCountMap;
     QHash<QString, QHash<QString, QLabel*>> mItemCountLabelMap;
 
 private:

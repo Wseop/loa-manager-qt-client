@@ -122,7 +122,7 @@ void CharacterSearch::searchCharacter(const QString &characterName)
 
     connect(pNetworkManager, &QNetworkAccessManager::finished, this, [&, characterName, pCharacter](QNetworkReply *pReply)
     {
-        if (!handleStatusCode(pReply))
+        if (!ApiManager::getInstance()->handleStatusCode(pReply))
         {
             mpSearchButton->setEnabled(true);
             return;

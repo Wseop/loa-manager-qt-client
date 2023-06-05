@@ -192,7 +192,7 @@ void StatisticArmory::searchStatistic()
 
 void StatisticArmory::parseStatistic(QNetworkReply *pReply)
 {
-    if (!handleStatusCode(pReply)) {
+    if (!ApiManager::getInstance()->handleStatusCode(pReply)) {
         enableInput(true);
         return;
     }

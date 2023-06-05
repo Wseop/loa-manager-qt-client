@@ -3,11 +3,11 @@
 
 #include "api/resources/resources.h"
 #include "api/statistics/statistics.h"
-#include "api/lostark/search_option.h"
 
 #include <QObject>
 
 class QNetworkAccessManager;
+class QNetworkReply;
 
 class ApiManager : public QObject
 {
@@ -19,10 +19,6 @@ private:
 
     void get(QNetworkAccessManager *pNetworkManager, const QString &url);
     void post(QNetworkAccessManager *pNetworkManager, const QString &url, const QByteArray &data);
-
-public:
-    static ApiManager *getInstance();
-    static void destroyInstance();
 
 public:
     void setAccessToken(const QString &token);
@@ -47,12 +43,18 @@ public:
     void getAuctionItems(QNetworkAccessManager *pNetworkManager, const QString &searchOptionQuery);
     void getMarketItems(QNetworkAccessManager *pNetworkManager, const QString &searchOptionQuery);
 
-private:
-    static ApiManager *mpInstance;
+    bool handleStatusCode(QNetworkReply *pReply);
 
 private:
     QString mUrlBase;
     QString mAccessToken;
+
+public:
+    static ApiManager *getInstance();
+    static void destroyInstance();
+
+private:
+    static ApiManager *mpInstance;
 };
 
 #endif // APIMANAGER_H

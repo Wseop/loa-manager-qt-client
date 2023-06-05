@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     api/api_manager.cpp \
+    api/lostark/item_manager.cpp \
     api/lostark/search_option.cpp \
     api/statistics/reward_chaos.cpp \
     api/statistics/reward_guardian.cpp \
@@ -38,6 +39,7 @@ SOURCES += \
 
 HEADERS += \
     api/api_manager.h \
+    api/lostark/item_manager.h \
     api/lostark/search_category.h \
     api/lostark/search_option.h \
     api/resources/resources.h \

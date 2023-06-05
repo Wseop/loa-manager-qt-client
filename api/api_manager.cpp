@@ -1,13 +1,16 @@
 #include "api_manager.h"
 
 #include <QNetworkAccessManager>
+#include <QNetworkReply>
 #include <QJsonObject>
 #include <QJsonDocument>
+
+#include <QMessageBox>
 
 ApiManager *ApiManager::mpInstance = nullptr;
 
 ApiManager::ApiManager() :
-    mUrlBase("http://localhost:3000")
+    mUrlBase("https://loamgr.xyz")
 {
 
 }
@@ -35,23 +38,6 @@ void ApiManager::post(QNetworkAccessManager *pNetworkManager, const QString &url
     request.setUrl(QUrl(url));
 
     pNetworkManager->post(request, data);
-}
-
-ApiManager *ApiManager::getInstance()
-{
-    if (mpInstance == nullptr)
-        mpInstance = new ApiManager();
-
-    return mpInstance;
-}
-
-void ApiManager::destroyInstance()
-{
-    if (mpInstance == nullptr)
-        return;
-
-    delete mpInstance;
-    mpInstance = nullptr;
 }
 
 void ApiManager::setAccessToken(const QString &token)
@@ -158,3 +144,42 @@ void ApiManager::getMarketItems(QNetworkAccessManager *pNetworkManager, const QS
     get(pNetworkManager, url);
 }
 
+bool ApiManager::handleStatusCode(QNetworkReply *pReply)
+{
+    int statusCode = pReply->attribute(QNetworkRequest::HttpStatusCodeAttribute)
+                         .toInt();
+    QMessageBox msgBox;
+
+    if (statusCode == 200 || statusCode == 201) {
+        return true;
+    } else if (statusCode == 429) {
+        msgBox.setText("API 요청 횟수 제한 - 1분뒤 재시도해주세요.");
+        msgBox.exec();
+        return false;
+    } else if (statusCode == 503) {
+        msgBox.setText("로스트아크 서버 점검중");
+        msgBox.exec();
+        return false;
+    } else {
+        msgBox.setText(QString::number(statusCode));
+        msgBox.exec();
+        return false;
+    }
+}
+
+ApiManager *ApiManager::getInstance()
+{
+    if (mpInstance == nullptr)
+        mpInstance = new ApiManager();
+
+    return mpInstance;
+}
+
+void ApiManager::destroyInstance()
+{
+    if (mpInstance == nullptr)
+        return;
+
+    delete mpInstance;
+    mpInstance = nullptr;
+}

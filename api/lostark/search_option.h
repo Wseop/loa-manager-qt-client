@@ -4,13 +4,14 @@
 #include "api/lostark/search_category.h"
 #include "game/item/item_grade.h"
 
-#include <QObject>
+#include <QList>
 
-class SearchOption : public QObject {
-    Q_OBJECT
-
+class SearchOption
+{
 public:
     SearchOption();
+    SearchOption(const SearchOption &other);
+    SearchOption &operator=(const SearchOption &other);
     virtual ~SearchOption();
 
     virtual QString getQuery();
@@ -29,6 +30,8 @@ class AuctionSearchOption : public SearchOption
 {
 public:
     AuctionSearchOption(AuctionCategory auctionCategory);
+    AuctionSearchOption(const AuctionSearchOption &other);
+    AuctionSearchOption &operator=(const AuctionSearchOption &other);
     ~AuctionSearchOption();
 
     QString getQuery() override;
@@ -52,6 +55,8 @@ class MarketSearchOption : public SearchOption
 {
 public:
     MarketSearchOption(MarketCategory marketCategory);
+    MarketSearchOption(const MarketSearchOption &other);
+    MarketSearchOption &operator=(const MarketSearchOption &other);
     ~MarketSearchOption();
 
     QString getQuery() override;

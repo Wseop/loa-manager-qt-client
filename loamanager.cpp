@@ -9,6 +9,7 @@
 #include "function/auction_calculator/auction_calculator.h"
 #include "resource/resource_manager.h"
 #include "api/api_manager.h"
+#include "api/lostark/item_manager.h"
 #include "user/login.h"
 #include "game/engrave/engrave_manager.h"
 #include "game/skill/skill_manager.h"
@@ -29,8 +30,10 @@ LoaManager::LoaManager() :
     mpLoginButton(nullptr),
     mpLabelVersionInfo(nullptr)
 {
+    // initialize managers
     EngraveManager::getInstance();
     SkillManager::getInstance();
+    ItemManager::getInstance()->refreshItemPrice();
 
     ui->setupUi(this);
     ui->hLayoutMenu->setAlignment(Qt::AlignLeft);

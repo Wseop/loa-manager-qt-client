@@ -10,6 +10,23 @@ SearchOption::SearchOption() :
 
 }
 
+SearchOption::SearchOption(const SearchOption &other) :
+    mItemGrade(other.mItemGrade),
+    mItemName(other.mItemName),
+    mPageAll(other.mPageAll)
+{
+
+}
+
+SearchOption &SearchOption::operator=(const SearchOption &other)
+{
+    mItemGrade = other.mItemGrade;
+    mItemName = other.mItemName;
+    mPageAll = other.mPageAll;
+
+    return *this;
+}
+
 SearchOption::~SearchOption()
 {
 
@@ -58,6 +75,32 @@ AuctionSearchOption::AuctionSearchOption(AuctionCategory auctionCategory) :
     mQuality(-1)
 {
 
+}
+
+AuctionSearchOption::AuctionSearchOption(const AuctionSearchOption &other) :
+    SearchOption(other),
+    mAuctionCategory(other.mAuctionCategory),
+    mQuality(other.mQuality),
+    mSkillCodes(other.mSkillCodes),
+    mTripodCodes(other.mTripodCodes),
+    mAbilityCodes(other.mAbilityCodes),
+    mEngraveCodes(other.mEngraveCodes)
+{
+
+}
+
+AuctionSearchOption &AuctionSearchOption::operator=(const AuctionSearchOption &other)
+{
+    SearchOption::operator=(other);
+
+    mAuctionCategory = other.mAuctionCategory;
+    mQuality = other.mQuality;
+    mSkillCodes = other.mSkillCodes;
+    mTripodCodes = other.mTripodCodes;
+    mAbilityCodes = other.mAbilityCodes;
+    mEngraveCodes = other.mEngraveCodes;
+
+    return *this;
 }
 
 AuctionSearchOption::~AuctionSearchOption()
@@ -127,6 +170,24 @@ MarketSearchOption::MarketSearchOption(MarketCategory marketCategory) :
     mMarketCategory(marketCategory)
 {
 
+}
+
+MarketSearchOption::MarketSearchOption(const MarketSearchOption &other) :
+    SearchOption(other),
+    mMarketCategory(other.mMarketCategory),
+    mClassName(other.mClassName)
+{
+
+}
+
+MarketSearchOption &MarketSearchOption::operator=(const MarketSearchOption &other)
+{
+    SearchOption::operator=(other);
+
+    mMarketCategory = other.mMarketCategory;
+    mClassName = other.mClassName;
+
+    return *this;
 }
 
 MarketSearchOption::~MarketSearchOption()

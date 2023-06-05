@@ -2,7 +2,6 @@
 #include "ui_statistic_daily.h"
 #include "ui/widget_manager.h"
 #include "api/api_manager.h"
-#include "api/lostark/search_option.h"
 #include "resource/resource_manager.h"
 
 #include <QLabel>
@@ -49,7 +48,7 @@ void StatisticDaily::initializeContentsData()
         connect(pResourceLoader, &QNetworkAccessManager::finished,
                 this, [&, content](QNetworkReply *pReply)
         {
-            if (!handleStatusCode(pReply))
+            if (!ApiManager::getInstance()->handleStatusCode(pReply))
                 return;
 
             const QJsonArray &rewards = QJsonDocument::fromJson(pReply->readAll())
@@ -247,7 +246,7 @@ void StatisticDaily::loadStatisticData(const QString &content)
         connect(pStatisticLoader, &QNetworkAccessManager::finished,
                 this, [&](QNetworkReply *pReply)
         {
-            if (!handleStatusCode(pReply))
+            if (!ApiManager::getInstance()->handleStatusCode(pReply))
                 return;
 
             updateItemCount(QJsonDocument::fromJson(pReply->readAll()).object());

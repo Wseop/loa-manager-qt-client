@@ -23,6 +23,8 @@ SOURCES += \
     function/character_search/equip_info.cpp \
     function/character_search/gem_info.cpp \
     function/character_search/skill_info.cpp \
+    function/raid_profit/raid_profit.cpp \
+    function/raid_profit/raid_profit_widget.cpp \
     function/statistic_armory/statistic_armory.cpp \
     function/statistic_daily/statistic_daily.cpp \
     function/statistic_skill/skill_usage_widget.cpp \
@@ -43,6 +45,7 @@ HEADERS += \
     api/lostark/search_category.h \
     api/lostark/search_option.h \
     api/resources/resources.h \
+    api/resources/reward.h \
     api/statistics/reward_chaos.h \
     api/statistics/reward_guardian.h \
     api/statistics/settings_armory.h \
@@ -58,6 +61,8 @@ HEADERS += \
     function/character_search/gem_info.h \
     function/character_search/skill_info.h \
     function/function_widget.h \
+    function/raid_profit/raid_profit.h \
+    function/raid_profit/raid_profit_widget.h \
     function/smart_search/smart_search_menu.h \
     function/statistic_armory/statistic_armory.h \
     function/statistic_daily/statistic_daily.h \
@@ -91,6 +96,8 @@ FORMS += \
     function/character_search/equip_info.ui \
     function/character_search/gem_info.ui \
     function/character_search/skill_info.ui \
+    function/raid_profit/raid_profit.ui \
+    function/raid_profit/raid_profit_widget.ui \
     function/statistic_armory/statistic_armory.ui \
     function/statistic_daily/statistic_daily.ui \
     function/statistic_skill/skill_usage_widget.ui \

@@ -6,6 +6,7 @@
 #include "function/statistic_armory/statistic_armory.h"
 #include "function/statistic_skill/statistic_skill.h"
 #include "function/statistic_daily/statistic_daily.h"
+#include "function/raid_profit/raid_profit.h"
 #include "function/auction_calculator/auction_calculator.h"
 #include "resource/resource_manager.h"
 #include "api/api_manager.h"
@@ -60,6 +61,7 @@ void LoaManager::initializeFunction()
     mFunctions << StatisticArmory::getInstance();
     mFunctions << StatisticSkill::getInstance();
     mFunctions << StatisticDaily::getInstance();
+    mFunctions << RaidProfit::getInstance();
     mFunctions << AuctionCalculator::getInstance();
 
     for (QWidget* pWidget : mFunctions)

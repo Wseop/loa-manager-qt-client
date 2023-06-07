@@ -29,6 +29,8 @@ SOURCES += \
     function/statistic_daily/statistic_daily.cpp \
     function/statistic_skill/skill_usage_widget.cpp \
     function/statistic_skill/statistic_skill.cpp \
+    function/tripod_search/tripod_search.cpp \
+    function/tripod_search/tripod_search_item.cpp \
     game/character/character.cpp \
     game/engrave/engrave_manager.cpp \
     game/skill/skill_manager.cpp \
@@ -68,6 +70,8 @@ HEADERS += \
     function/statistic_daily/statistic_daily.h \
     function/statistic_skill/skill_usage_widget.h \
     function/statistic_skill/statistic_skill.h \
+    function/tripod_search/tripod_search.h \
+    function/tripod_search/tripod_search_item.h \
     game/character/character.h \
     game/character/collectible.h \
     game/character/profile.h \
@@ -102,6 +106,8 @@ FORMS += \
     function/statistic_daily/statistic_daily.ui \
     function/statistic_skill/skill_usage_widget.ui \
     function/statistic_skill/statistic_skill.ui \
+    function/tripod_search/tripod_search.ui \
+    function/tripod_search/tripod_search_item.ui \
     loamanager.ui \
     user/login.ui
 

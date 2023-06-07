@@ -163,6 +163,7 @@ bool ApiManager::handleStatusCode(QNetworkReply *pReply)
     } else {
         msgBox.setText(QString::number(statusCode));
         msgBox.exec();
+        qDebug() << pReply->url();
         return false;
     }
 }

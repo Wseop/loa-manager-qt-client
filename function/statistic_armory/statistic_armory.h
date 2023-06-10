@@ -2,6 +2,7 @@
 #define STATISTIC_ARMORY_H
 
 #include "function/function_widget.h"
+#include "api/statistics/statistics.h"
 #include "api/statistics/settings_armory.h"
 
 #include <QWidget>
@@ -32,10 +33,6 @@ private:
     QPushButton *createSearchButton();
     QLabel *createInfoLabel();
 
-    // total layout
-    void initializeTotalLayout();
-    QLabel *createTotalLabel();
-
     // class engrave layout
     void initializeClassEngraveLayout();
     QLabel *createClassEngraveLabel();
@@ -47,16 +44,14 @@ private:
 
     // handle datas
     void searchStatistic();
-    void parseStatistic(QNetworkReply *pReply);
+    void parseStatistic(Statistics category, QNetworkReply *pReply);
+    void parseEngraveStatistic(QNetworkReply *pReply);
 
     // ui
     void clearResult();
-    void setTotalCount();
-    void setClassEngraveCount(const QStringList &classEngraves);
-    void setAbilityCount(const QStringList &classEngraves);
-    void setEngraveCount(const QStringList &classEngraves);
-    void setItemSetCount(const QStringList &classEngraves);
-    void setElixirCount(const QStringList &classEngraves);
+    void setSettingCount(const QStringList &classEngraves, Statistics category, SettingsArmory settingsArmory);
+    void setEngraveSettingCount(const QStringList &classEngraves, int engraveLevel, SettingsArmory settingsArmory);
+    void setClassEngraveCount(const QStringList &classEngraves, const QList<int> &counts, int totalCount);
 
     void enableInput(bool enable);
 
@@ -71,12 +66,10 @@ private:
     Ui::StatisticArmory *ui;
 
     QString mSelectedClassName;
-    SettingsArmory mStatisticData;
 
     // ui
     QComboBox *pClassSelector;
     QPushButton *pSearchButton;
-    QLabel *pTotalLabel;
     QList<QLabel*> mClassEngraveLabels;
     QHash<QString, QList<QVBoxLayout*>> mCategoryLayouts;
     QList<QLabel*> mResultLabels;

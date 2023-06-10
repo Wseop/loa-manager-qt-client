@@ -18,9 +18,6 @@
     <layout class="QHBoxLayout" name="hLayoutClass"/>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="hLayoutTotal"/>
-   </item>
-   <item>
     <widget class="Line" name="line">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -48,7 +45,7 @@
         <x>0</x>
         <y>0</y>
         <width>380</width>
-        <height>238</height>
+        <height>246</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="vLayoutResult"/>

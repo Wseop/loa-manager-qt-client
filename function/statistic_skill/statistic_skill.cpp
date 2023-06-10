@@ -98,7 +98,7 @@ void StatisticSkill::initializeClassEngraveLayout()
 {
     ui->hLayoutClassEngrave->setAlignment(Qt::AlignHCenter);
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 2; i++) {
         ui->hLayoutClassEngrave->addWidget(createClassEngraveButton());
     }
 }
@@ -149,7 +149,7 @@ void StatisticSkill::searchStatistic()
             this, &StatisticSkill::parseStatistic);
 
     ApiManager::getInstance()->getStatistics(
-        pStatisticLoader, Statistics::SettingsSkill, mSelectedClassName);
+        pStatisticLoader, Statistics::Skill, mSelectedClassName);
 }
 
 void StatisticSkill::parseStatistic(QNetworkReply *pReply)
@@ -161,8 +161,6 @@ void StatisticSkill::parseStatistic(QNetworkReply *pReply)
 
     QStringList classEngraves = EngraveManager::getInstance()
                                     ->getClassEngraves(mSelectedClassName);
-    classEngraves << "쌍직각";
-
     SettingsSkill statisticData;
     QJsonObject response = QJsonDocument::fromJson(pReply->readAll()).object();
 
@@ -171,7 +169,8 @@ void StatisticSkill::parseStatistic(QNetworkReply *pReply)
     for (int i = 0; i < classEngraves.size(); i++) {
         const QJsonObject &skills = response.find(classEngraves[i])->toObject();
 
-        statisticData.settings[classEngraves[i]].count = skills.find("count")->toInt();
+        statisticData.settings[classEngraves[i]].count = skills.find("count")
+                                                             ->toInt();
 
         for (auto iter = skills.constBegin(); iter != skills.constEnd(); iter++) {
             if (iter.key() == "count")
@@ -186,7 +185,8 @@ void StatisticSkill::parseStatistic(QNetworkReply *pReply)
             skillUsage.count = skill.find("count")->toInt();
 
             for (auto levelIter = levels.constBegin(); levelIter != levels.constEnd(); levelIter++) {
-                skillUsage.levels[levelIter.key().toInt()] = levelIter.value().toInt();
+                skillUsage.levels[levelIter.key().toInt()] = levelIter.value()
+                                                                 .toInt();
             }
 
             for (auto tripodIter = tripods.constBegin(); tripodIter != tripods.constEnd(); tripodIter++) {
@@ -197,12 +197,15 @@ void StatisticSkill::parseStatistic(QNetworkReply *pReply)
                 if (runeIter.key() == "null") {
                     skillUsage.runes.append({"미착용", runeIter.value().toInt()});
                 } else {
-                    skillUsage.runes.append({runeIter.key(), runeIter.value().toInt()});
+                    skillUsage.runes.append({runeIter.key(),
+                                             runeIter.value().toInt()});
                 }
             }
 
             // 룬 사용률 내림차순 정렬
-            std::sort(skillUsage.runes.begin(), skillUsage.runes.end(), [&](auto a, auto b){
+            std::sort(skillUsage.runes.begin(), skillUsage.runes.end(),
+                      [&](auto a, auto b)
+            {
                 return a.second > b.second;
             });
 

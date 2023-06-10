@@ -243,8 +243,8 @@ void StatisticDaily::loadStatisticData(const QString &content)
 {
     const QStringList &levels = mContentLevels[content];
     const Statistics statistics = content == "카오스던전"
-                                      ? Statistics::RewardsChaos
-                                      : Statistics::RewardsGuardian;
+                                      ? Statistics::Chaos
+                                      : Statistics::Guardian;
 
     for (const QString &level : levels)
     {

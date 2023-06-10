@@ -1,20 +1,17 @@
 #ifndef SETTINGS_ARMORY_H
 #define SETTINGS_ARMORY_H
 
-#include <QHash>
 #include <QString>
+#include <QHash>
 
-struct SettingArmory {
+struct SettingCount {
     int count = -1;
-    QList<QPair<QString, int>> abilities;
-    QList<QPair<QString, int>> engraves[3];
-    QList<QPair<QString, int>> itemSets;
-    QList<QPair<QString, int>> elixirs;
+    QList<QPair<QString, int>> settingCounts;
 };
 
 struct SettingsArmory {
     int count = -1;
-    QHash<QString, SettingArmory> settings;
+    QHash<QString, SettingCount> settingCountMap;
 };
 
 #endif // SETTINGS_ARMORY_H

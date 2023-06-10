@@ -4,10 +4,13 @@
 #include <QString>
 
 enum class Statistics {
-    RewardsChaos,
-    RewardsGuardian,
-    SettingsArmory,
-    SettingsSkill,
+    Chaos,
+    Guardian,
+    Skill,
+    Ability,
+    Elixir,
+    Engrave,
+    Set
 };
 
 #endif // STATISTICS_H

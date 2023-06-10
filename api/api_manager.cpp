@@ -97,18 +97,30 @@ void ApiManager::getStatistics(QNetworkAccessManager *pNetworkManager, Statistic
     QString url = mUrlBase + "/statistics";
 
     switch (statistic) {
-    case Statistics::RewardsChaos:
-        url += "/rewards/chaos";
+    case Statistics::Chaos:
+        url += "/chaos";
         break;
-    case Statistics::RewardsGuardian:
-        url += "/rewards/guardian";
+    case Statistics::Guardian:
+        url += "/guardian";
         break;
-    case Statistics::SettingsArmory:
-        url += "/settings/armory";
+    case Statistics::Skill:
+        url += "/skill";
         break;
-    case Statistics::SettingsSkill:
-        url += "/settings/skill";
+    case Statistics::Ability:
+        url += "/ability";
         break;
+    case Statistics::Elixir:
+        url += "/elixir";
+        break;
+    case Statistics::Engrave:
+        url += "/engrave";
+        break;
+    case Statistics::Set:
+        url += "/set";
+        break;
+    default:
+        qDebug() << "Invalid category";
+        return;
     }
 
     url += QString("/%1").arg(param);

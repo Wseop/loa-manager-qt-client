@@ -3,6 +3,7 @@
 #include "ui/widget_manager.h"
 #include "ui/font_manager.h"
 #include "api/api_manager.h"
+#include "api/statistics/settings_armory.h"
 #include "game/engrave/engrave_manager.h"
 
 #include <QNetworkAccessManager>
@@ -23,14 +24,12 @@ StatisticArmory *StatisticArmory::pInstance = nullptr;
 StatisticArmory::StatisticArmory() :
     ui(new Ui::StatisticArmory),
     pClassSelector(nullptr),
-    pSearchButton(nullptr),
-    pTotalLabel(nullptr)
+    pSearchButton(nullptr)
 {
     ui->setupUi(this);
     ui->vLayoutMain->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 
     initializeClassLayout();
-    initializeTotalLayout();
     initializeClassEngraveLayout();
     initializeResultLayout();
 }
@@ -101,21 +100,9 @@ QLabel *StatisticArmory::createInfoLabel()
     return WidgetManager::createLabel("데이터 수가 10개 미만일 경우\n결과에서 제외됩니다.", 10, 200, 50);
 }
 
-void StatisticArmory::initializeTotalLayout()
-{
-    ui->hLayoutTotal->addWidget(createTotalLabel());
-}
-
-QLabel *StatisticArmory::createTotalLabel()
-{
-    pTotalLabel = WidgetManager::createLabel("", 14, 200, 30);
-
-    return pTotalLabel;
-}
-
 void StatisticArmory::initializeClassEngraveLayout()
 {
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 2; i++) {
         ui->hLayoutEngrave->addWidget(createClassEngraveLabel());
     }
 }
@@ -163,7 +150,7 @@ QHBoxLayout *StatisticArmory::createCategoryLayout(const QString &category)
     QHBoxLayout *pHLayout = new QHBoxLayout();
     QList<QVBoxLayout*> categoryLayouts;
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 2; i++) {
         QVBoxLayout *pVLayout = new QVBoxLayout();
         pVLayout->setAlignment(Qt::AlignTop);
         categoryLayouts << pVLayout;
@@ -178,114 +165,135 @@ QHBoxLayout *StatisticArmory::createCategoryLayout(const QString &category)
 void StatisticArmory::searchStatistic()
 {
     enableInput(false);
-
-    QNetworkAccessManager *pStatisticLoader = new QNetworkAccessManager;
-
-    connect(pStatisticLoader, &QNetworkAccessManager::finished,
-            pStatisticLoader, &QNetworkAccessManager::deleteLater);
-    connect(pStatisticLoader, &QNetworkAccessManager::finished,
-            this, &StatisticArmory::parseStatistic);
-
-    ApiManager::getInstance()->getStatistics(
-        pStatisticLoader, Statistics::SettingsArmory, mSelectedClassName);
-}
-
-void StatisticArmory::parseStatistic(QNetworkReply *pReply)
-{
-    if (!ApiManager::getInstance()->handleStatusCode(pReply)) {
-        enableInput(true);
-        return;
-    }
-
-    QStringList classEngraves = EngraveManager::getInstance()
-                                           ->getClassEngraves(mSelectedClassName);
-    classEngraves << "쌍직각";
-
-    SettingsArmory statisticData;
-    QJsonObject response = QJsonDocument::fromJson(pReply->readAll()).object();
-
-    statisticData.count = response.find("count")->toInt();
-
-    for (const QString &classEngrave : classEngraves) {
-        const QJsonObject &data = response.find(classEngrave)->toObject();
-        const QJsonObject &abilities = data.find("abilities")->toObject();
-        const QJsonObject &itemSets = data.find("itemSets")->toObject();
-        const QJsonObject &elixirs = data.find("elixirs")->toObject();
-        const QJsonArray &engraves = data.find("engraves")->toArray();
-
-        statisticData.settings[classEngrave].count = data.find("count")->toInt();
-
-        for (auto iter = abilities.constBegin(); iter != abilities.constEnd(); iter++) {
-            if (iter.value().toInt() >= 10 && iter.key() != "") {
-                statisticData.settings[classEngrave].abilities.append(
-                    {iter.key(), iter.value().toInt()}
-                );
-            }
-        }
-
-        for (auto iter = itemSets.constBegin(); iter != itemSets.constEnd(); iter++) {
-            if (iter.value().toInt() >= 10 && iter.key() != "") {
-                statisticData.settings[classEngrave].itemSets.append(
-                    {iter.key(), iter.value().toInt()}
-                );
-            }
-        }
-
-        for (auto iter = elixirs.constBegin(); iter != elixirs.constEnd(); iter++) {
-            if (iter.value().toInt() >= 10 && iter.key() != "") {
-                statisticData.settings[classEngrave].elixirs.append(
-                    {iter.key(), iter.value().toInt()}
-                );
-            }
-        }
-
-        for (int i = 0; i < 3; i++) {
-            const QJsonObject &engrave = engraves[i].toObject();
-
-            for (auto iter = engrave.constBegin(); iter != engrave.constEnd(); iter++) {
-                if (iter.value().toInt() >= 10 && iter.key() != "") {
-                    statisticData.settings[classEngrave].engraves[i].append(
-                        {iter.key(), iter.value().toInt()}
-                    );
-                }
-            }
-        }
-    }
-
-    mStatisticData = statisticData;
-
-    // 데이터 내림차순 정렬
-    for (int i = 0; i < classEngraves.size(); i++) {
-        auto &abilities = mStatisticData.settings[classEngraves[i]].abilities;
-        auto &itemSets = mStatisticData.settings[classEngraves[i]].itemSets;
-        auto &elixirs = mStatisticData.settings[classEngraves[i]].elixirs;
-        auto &engraves = mStatisticData.settings[classEngraves[i]].engraves;
-
-        std::sort(abilities.begin(), abilities.end(), [&](auto a, auto b){
-            return a.second > b.second;
-        });
-        std::sort(itemSets.begin(), itemSets.end(), [&](auto a, auto b){
-            return a.second > b.second;
-        });
-        std::sort(elixirs.begin(), elixirs.end(), [&](auto a, auto b){
-            return a.second > b.second;
-        });
-
-        for (int i = 0; i < 3; i++) {
-            std::sort(engraves[i].begin(), engraves[i].end(), [&](auto a, auto b){
-                return a.second > b.second;
-            });
-        }
-    }
-
     clearResult();
 
-    setTotalCount();
-    setClassEngraveCount(classEngraves);
-    setAbilityCount(classEngraves);
-    setEngraveCount(classEngraves);
-    setItemSetCount(classEngraves);
-    setElixirCount(classEngraves);
+    QList<Statistics> categories = {
+        Statistics::Ability,
+        Statistics::Engrave,
+        Statistics::Set,
+        Statistics::Elixir
+    };
+
+    for (int i = 0; i < categories.size(); i++)
+    {
+        QNetworkAccessManager *pStatisticLoader = new QNetworkAccessManager;
+
+        connect(pStatisticLoader, &QNetworkAccessManager::finished,
+                pStatisticLoader, &QNetworkAccessManager::deleteLater);
+        connect(pStatisticLoader, &QNetworkAccessManager::finished,
+                this, [&, categories, i](QNetworkReply *pReply)
+        {
+            if (!ApiManager::getInstance()->handleStatusCode(pReply)) {
+                enableInput(true);
+                return;
+            }
+
+            if (categories[i] == Statistics::Engrave)
+                parseEngraveStatistic(pReply);
+            else
+                parseStatistic(categories[i], pReply);
+        });
+
+        ApiManager::getInstance()->getStatistics(
+            pStatisticLoader, categories[i], mSelectedClassName);
+    }
+}
+
+void StatisticArmory::parseStatistic(Statistics category, QNetworkReply *pReply)
+{
+    QStringList classEngraves = EngraveManager::getInstance()
+                                           ->getClassEngraves(mSelectedClassName);
+    SettingsArmory settingsArmory;
+    QJsonObject response = QJsonDocument::fromJson(pReply->readAll()).object();
+
+    settingsArmory.count = response.find("count")->toInt();
+
+    for (int i = 0; i < classEngraves.size(); i++)
+    {
+        const QJsonObject &settingCount = response.find(classEngraves[i])->toObject();
+
+        for (auto iter = settingCount.constBegin(); iter != settingCount.constEnd(); iter++)
+        {
+            if (iter.key() == "count")
+            {
+                settingsArmory.settingCountMap[classEngraves[i]].count = iter.value()
+                                                                             .toInt();
+            }
+            else if (iter.value().toInt() >= 10 && iter.key() != "")
+            {
+                settingsArmory.settingCountMap[classEngraves[i]].settingCounts.append(
+                    {iter.key(), iter.value().toInt()});
+            }
+        }
+
+        std::sort(settingsArmory.settingCountMap[classEngraves[i]].settingCounts.begin(),
+                  settingsArmory.settingCountMap[classEngraves[i]].settingCounts.end(),
+                  [&](auto a, auto b)
+                  {
+                      return a.second > b.second;
+                  });
+    }
+
+    setSettingCount(classEngraves, category, settingsArmory);
+
+    enableInput(true);
+}
+
+void StatisticArmory::parseEngraveStatistic(QNetworkReply *pReply)
+{
+    QStringList classEngraves = EngraveManager::getInstance()
+                                    ->getClassEngraves(mSelectedClassName);
+    QJsonArray responseArray = QJsonDocument::fromJson(pReply->readAll()).array();
+
+    int totalCount;
+    QList<int> classEngraveCounts;
+
+    for (int level = 0; level < 3; level++)
+    {
+        SettingsArmory settingsArmory;
+        const QJsonObject &response = responseArray[level].toObject();
+
+        settingsArmory.count = response.find("count")->toInt();
+
+        for (int i = 0; i < classEngraves.size(); i++)
+        {
+            const QJsonObject &settingCount = response.find(classEngraves[i])
+                                                  ->toObject();
+
+            for (auto iter = settingCount.constBegin(); iter != settingCount.constEnd(); iter++)
+            {
+                if (iter.key() == "count")
+                {
+                    settingsArmory.settingCountMap[classEngraves[i]].count = iter.value()
+                                                                                 .toInt();
+                }
+                else if (iter.value().toInt() >= 10 && iter.key() != "")
+                {
+                    settingsArmory.settingCountMap[classEngraves[i]].settingCounts.append(
+                        {iter.key(), iter.value().toInt()});
+                }
+            }
+
+            std::sort(settingsArmory.settingCountMap[classEngraves[i]].settingCounts.begin(),
+                      settingsArmory.settingCountMap[classEngraves[i]].settingCounts.end(),
+                      [&](auto a, auto b)
+                      {
+                          return a.second > b.second;
+                      });
+        }
+
+        setEngraveSettingCount(classEngraves, level, settingsArmory);
+
+        if (level == 0)
+        {
+            totalCount = settingsArmory.count;
+            classEngraveCounts
+                << settingsArmory.settingCountMap[classEngraves[0]].count
+                << settingsArmory.settingCountMap[classEngraves[1]].count;
+
+            setClassEngraveCount(classEngraves, classEngraveCounts, totalCount);
+        }
+    }
 
     enableInput(true);
 }
@@ -299,167 +307,103 @@ void StatisticArmory::clearResult()
     mResultLabels.clear();
 }
 
-void StatisticArmory::setTotalCount()
+void StatisticArmory::setSettingCount(const QStringList &classEngraves, Statistics category, SettingsArmory settingsArmory)
 {
-    pTotalLabel->setText(QString("검색된 캐릭터 : %1").arg(mStatisticData.count));
+    const QString text = "%1 (%2%)";
+
+    QString key;
+
+    if (category == Statistics::Ability)
+        key = "특성";
+    else if (category == Statistics::Set)
+        key = "세트효과";
+    else if (category == Statistics::Elixir)
+        key = "엘릭서";
+    else
+        return;
+
+    for (int i = 0; i < classEngraves.size(); i++) {
+        const auto &settingCounts = settingsArmory
+                                        .settingCountMap[classEngraves[i]]
+                                        .settingCounts;
+
+        for (const auto &settingCount : settingCounts) {
+            double ratio = settingCount.second / static_cast<double>(
+                               settingsArmory.settingCountMap[classEngraves[i]].count)
+                           * 100;
+
+            QLabel *pLabel = WidgetManager::createLabel(
+                text.arg(settingCount.first).arg(ratio, 0, 'f', 2), 14);
+            pLabel->setMaximumWidth(QWIDGETSIZE_MAX);
+
+            if (ratio >= 20) {
+                pLabel->setStyleSheet("QLabel { color: blue }");
+            }
+
+            mCategoryLayouts[key][i]->addWidget(pLabel);
+            mResultLabels << pLabel;
+        }
+
+        // 데이터가 없을 경우 layout 맞춰주기 위해 dummy label 추가
+        if (settingCounts.size() == 0) {
+            QLabel *pLabel = WidgetManager::createLabel("-");
+            pLabel->setMaximumWidth(QWIDGETSIZE_MAX);
+
+            mCategoryLayouts[key][i]->addWidget(pLabel);
+            mResultLabels << pLabel;
+        }
+    }
 }
 
-void StatisticArmory::setClassEngraveCount(const QStringList &classEngraves)
+void StatisticArmory::setEngraveSettingCount(const QStringList &classEngraves, int engraveLevel, SettingsArmory settingsArmory)
+{
+    const QString text = "%1 (%2%)";
+
+    QString key = QString("각인(Lv.%1)").arg(engraveLevel + 1);
+
+    for (int i = 0; i < classEngraves.size(); i++) {
+        const auto &settingCounts = settingsArmory
+                                        .settingCountMap[classEngraves[i]]
+                                        .settingCounts;
+
+        for (const auto &settingCount : settingCounts) {
+            double ratio = settingCount.second / static_cast<double>(
+                               settingsArmory.settingCountMap[classEngraves[i]].count)
+                           * 100;
+
+            QLabel *pLabel = WidgetManager::createLabel(
+                text.arg(settingCount.first).arg(ratio, 0, 'f', 2), 14);
+            pLabel->setMaximumWidth(QWIDGETSIZE_MAX);
+
+            if (ratio >= 20) {
+                pLabel->setStyleSheet("QLabel { color: blue }");
+            }
+
+            mCategoryLayouts[key][i]->addWidget(pLabel);
+            mResultLabels << pLabel;
+        }
+
+        // 데이터가 없을 경우 layout 맞춰주기 위해 dummy label 추가
+        if (settingCounts.size() == 0) {
+            QLabel *pLabel = WidgetManager::createLabel("-");
+            pLabel->setMaximumWidth(QWIDGETSIZE_MAX);
+
+            mCategoryLayouts[key][i]->addWidget(pLabel);
+            mResultLabels << pLabel;
+        }
+    }
+}
+
+void StatisticArmory::setClassEngraveCount(const QStringList &classEngraves, const QList<int> &counts, int totalCount)
 {
     const QString statisticEngraveText = "%1\n(%2%)";
 
     for (int i = 0; i < classEngraves.size(); i++) {
-        double ratio = mStatisticData.settings[classEngraves[i]].count /
-                       static_cast<double>(mStatisticData.count) * 100;
+        double ratio = counts[i] / static_cast<double>(totalCount) * 100;
 
         mClassEngraveLabels[i]->setText(statisticEngraveText
                                        .arg(classEngraves[i])
                                        .arg(ratio, 0, 'f', 2));
-    }
-}
-
-void StatisticArmory::setAbilityCount(const QStringList &classEngraves)
-{
-    const QString text = "%1 (%2%)";
-
-    for (int i = 0; i < classEngraves.size(); i++) {
-        const auto &abilities = mStatisticData.settings[classEngraves[i]].abilities;
-
-        for (const auto &ability : abilities) {
-            double ratio = ability.second /
-                           static_cast<double>(
-                               mStatisticData.settings[classEngraves[i]].count) * 100;
-
-            QLabel *pLabel = WidgetManager::createLabel(
-                text.arg(ability.first).arg(ratio, 0, 'f', 2), 14);
-            pLabel->setMaximumWidth(QWIDGETSIZE_MAX);
-
-            if (ratio >= 20) {
-                pLabel->setStyleSheet("QLabel { color: blue }");
-            }
-
-            mCategoryLayouts["특성"][i]->addWidget(pLabel);
-            mResultLabels << pLabel;
-        }
-
-        // 데이터가 없을 경우 layout 맞춰주기 위해 dummy label 추가
-        if (abilities.size() == 0) {
-            QLabel *pLabel = WidgetManager::createLabel("-");
-            pLabel->setMaximumWidth(QWIDGETSIZE_MAX);
-
-            mCategoryLayouts["특성"][i]->addWidget(pLabel);
-            mResultLabels << pLabel;
-        }
-    }
-}
-
-void StatisticArmory::setEngraveCount(const QStringList &classEngraves)
-{
-    const QString text = "%1 (%2%)";
-
-    for (int i = 0; i < classEngraves.size(); i++) {
-        for (int j = 0; j < 3; j++) {
-            const auto &engraves = mStatisticData.settings[classEngraves[i]]
-                                       .engraves[j];
-
-            for (const auto &engrave : engraves) {
-                double ratio = engrave.second /
-                               static_cast<double>(
-                                   mStatisticData.settings[classEngraves[i]].count) * 100;
-
-                QLabel *pLabel = WidgetManager::createLabel(
-                    text.arg(engrave.first).arg(ratio, 0, 'f', 2), 14);
-                pLabel->setMaximumWidth(QWIDGETSIZE_MAX);
-
-                if (ratio >= 20) {
-                    pLabel->setStyleSheet("QLabel { color: blue }");
-                }
-
-                mCategoryLayouts[QString("각인(Lv.%1)").arg(j + 1)][i]
-                    ->addWidget(pLabel);
-                mResultLabels << pLabel;
-            }
-
-            // 데이터가 없을 경우 layout 맞춰주기 위해 dummy label 추가
-            if (engraves.size() == 0) {
-                QLabel *pLabel = WidgetManager::createLabel("-");
-                pLabel->setMaximumWidth(QWIDGETSIZE_MAX);
-
-                mCategoryLayouts[QString("각인(Lv.%1)").arg(j + 1)][i]
-                    ->addWidget(pLabel);
-                mResultLabels << pLabel;
-            }
-        }
-    }
-}
-
-void StatisticArmory::setItemSetCount(const QStringList &classEngraves)
-{
-    const QString text = "%1 (%2%)";
-
-    for (int i = 0; i < classEngraves.size(); i++) {
-        const auto &itemSets = mStatisticData.settings[classEngraves[i]].itemSets;
-
-        for (const auto &itemSet : itemSets) {
-            double ratio = itemSet.second /
-                           static_cast<double>(
-                               mStatisticData.settings[classEngraves[i]].count) * 100;
-
-            QLabel *pLabel = WidgetManager::createLabel(
-                text.arg(itemSet.first).arg(ratio, 0, 'f', 2), 14);
-            pLabel->setMaximumWidth(QWIDGETSIZE_MAX);
-
-            if (ratio >= 20) {
-                pLabel->setStyleSheet("QLabel { color: blue }");
-            }
-
-            mCategoryLayouts["세트효과"][i]->addWidget(pLabel);
-            mResultLabels << pLabel;
-        }
-
-        // 데이터가 없을 경우 layout 맞춰주기 위해 dummy label 추가
-        if (itemSets.size() == 0) {
-            QLabel *pLabel = WidgetManager::createLabel("-");
-            pLabel->setMaximumWidth(QWIDGETSIZE_MAX);
-
-            mCategoryLayouts["세트효과"][i]->addWidget(pLabel);
-            mResultLabels << pLabel;
-        }
-    }
-}
-
-void StatisticArmory::setElixirCount(const QStringList &classEngraves)
-{
-    const QString text = "%1 (%2%)";
-
-    for (int i = 0; i < classEngraves.size(); i++) {
-        const auto &elixirs = mStatisticData.settings[classEngraves[i]].elixirs;
-
-        for (const auto &elixir : elixirs) {
-            double ratio = elixir.second /
-                           static_cast<double>(
-                               mStatisticData.settings[classEngraves[i]].count) * 100;
-
-            QLabel *pLabel = WidgetManager::createLabel(
-                text.arg(elixir.first).arg(ratio, 0, 'f', 2), 14);
-            pLabel->setMaximumWidth(QWIDGETSIZE_MAX);
-
-            if (ratio >= 20) {
-                pLabel->setStyleSheet("QLabel { color: blue }");
-            }
-
-            mCategoryLayouts["엘릭서"][i]->addWidget(pLabel);
-            mResultLabels << pLabel;
-        }
-
-        // 데이터가 없을 경우 layout 맞춰주기 위해 dummy label 추가
-        if (elixirs.size() == 0) {
-            QLabel *pLabel = WidgetManager::createLabel("-");
-            pLabel->setMaximumWidth(QWIDGETSIZE_MAX);
-
-            mCategoryLayouts["엘릭서"][i]->addWidget(pLabel);
-            mResultLabels << pLabel;
-        }
     }
 }
 

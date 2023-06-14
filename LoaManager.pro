@@ -26,6 +26,7 @@ SOURCES += \
     function/raid_profit/raid_profit.cpp \
     function/raid_profit/raid_profit_widget.cpp \
     function/statistic_armory/statistic_armory.cpp \
+    function/statistic_daily/daily_data_adder.cpp \
     function/statistic_daily/statistic_daily.cpp \
     function/statistic_skill/skill_usage_widget.cpp \
     function/statistic_skill/statistic_skill.cpp \
@@ -67,6 +68,7 @@ HEADERS += \
     function/raid_profit/raid_profit_widget.h \
     function/smart_search/smart_search_menu.h \
     function/statistic_armory/statistic_armory.h \
+    function/statistic_daily/daily_data_adder.h \
     function/statistic_daily/statistic_daily.h \
     function/statistic_skill/skill_usage_widget.h \
     function/statistic_skill/statistic_skill.h \
@@ -103,6 +105,7 @@ FORMS += \
     function/raid_profit/raid_profit.ui \
     function/raid_profit/raid_profit_widget.ui \
     function/statistic_armory/statistic_armory.ui \
+    function/statistic_daily/daily_data_adder.ui \
     function/statistic_daily/statistic_daily.ui \
     function/statistic_skill/skill_usage_widget.ui \
     function/statistic_skill/statistic_skill.ui \

@@ -35,8 +35,9 @@ private:
     void initializeResultLayout();
     QVBoxLayout *createContentLayout(const QString &content);
     QLabel *createContentLabel(const QString &content);
-    QHBoxLayout *createLevelLayout(const QString &level);
+    QHBoxLayout *createLevelLayout(const QString &content, const QString &level);
     QVBoxLayout *createItemLayout(const QString &level, const QString &itemName);
+    QPushButton *createDataAddButton(const QString &content, const QString &level);
 
     void loadStatisticData(const QString &content);
     void updateItemCount(const QJsonObject &data);

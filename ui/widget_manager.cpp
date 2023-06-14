@@ -108,14 +108,14 @@ QComboBox *WidgetManager::createComboBox(QStringList items, int fontSize, int ma
     return pComboBox;
 }
 
-QLineEdit *WidgetManager::createLineEdit(QValidator *pValidator, QString placeHolder, int fontSize, int width, int height)
+QLineEdit *WidgetManager::createLineEdit(QValidator *pValidator, QString placeHolder, int fontSize, int maxWidth, int maxHeight)
 {
     QLineEdit *pLineEdit = new QLineEdit();
 
     pLineEdit->setValidator(pValidator);
     pLineEdit->setPlaceholderText(placeHolder);
     pLineEdit->setFont(FontManager::getInstance()->getFont(FontFamily::NanumSquareNeoBold, fontSize));
-    pLineEdit->setFixedSize(width, height);
+    pLineEdit->setMaximumSize(maxWidth, maxHeight);
 
     return pLineEdit;
 }

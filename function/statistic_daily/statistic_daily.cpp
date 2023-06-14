@@ -4,10 +4,12 @@
 #include "api/api_manager.h"
 #include "api/lostark/item_manager.h"
 #include "resource/resource_manager.h"
+#include "function/statistic_daily/daily_data_adder.h"
 
 #include <QLabel>
 #include <QGroupBox>
 #include <QCheckBox>
+#include <QPushButton>
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
@@ -178,7 +180,7 @@ QVBoxLayout *StatisticDaily::createContentLayout(const QString &content)
 
     for (const QString &level : mContentLevels[content])
     {
-        pContentLayout->addLayout(createLevelLayout(level));
+        pContentLayout->addLayout(createLevelLayout(content, level));
         pContentLayout->addWidget(WidgetManager::createLine(QFrame::HLine));
     }
 
@@ -194,7 +196,7 @@ QLabel *StatisticDaily::createContentLabel(const QString &content)
     return pContentLabel;
 }
 
-QHBoxLayout *StatisticDaily::createLevelLayout(const QString &level)
+QHBoxLayout *StatisticDaily::createLevelLayout(const QString &content, const QString &level)
 {
     QHBoxLayout *pLevelLayout = new QHBoxLayout();
 
@@ -208,11 +210,9 @@ QHBoxLayout *StatisticDaily::createLevelLayout(const QString &level)
         pLevelLayout->addLayout(createItemLayout(level, item));
     }
 
-    // 골드 layout 추가
     pLevelLayout->addLayout(createItemLayout(level, "골드"));
-
-    // 데이터 수 layout 추가
     pLevelLayout->addLayout(createItemLayout(level, "데이터 수"));
+    pLevelLayout->addWidget(createDataAddButton(content, level));
 
     return pLevelLayout;
 }
@@ -237,6 +237,33 @@ QVBoxLayout *StatisticDaily::createItemLayout(const QString &level, const QStrin
     mItemCountLabelMap[level][itemName] = pItemCountLabel;
 
     return pItemLayout;
+}
+
+QPushButton *StatisticDaily::createDataAddButton(const QString &content, const QString &level)
+{
+    QPushButton *pDataAddButton = WidgetManager::createPushButton("데이터 추가");
+
+    connect(pDataAddButton, &QPushButton::released, this, [&, content, level]()
+    {
+        if (ApiManager::getInstance()->accessToken() == "")
+        {
+            QMessageBox msgBox;
+            msgBox.setText("로그인이 필요합니다.");
+            msgBox.exec();
+            return;
+        }
+        else
+        {
+            DailyDataAdder *pDataAdder = new DailyDataAdder(content,
+                                                            level,
+                                                            mLevelItemsMap[level],
+                                                            mItemKeyMap);
+            pDataAdder->show();
+            this->setDisabled(true);
+        }
+    });
+
+    return pDataAddButton;
 }
 
 void StatisticDaily::loadStatisticData(const QString &content)

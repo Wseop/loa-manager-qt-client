@@ -128,6 +128,26 @@ void ApiManager::getStatistics(QNetworkAccessManager *pNetworkManager, Statistic
     get(pNetworkManager, url);
 }
 
+void ApiManager::postStatistics(QNetworkAccessManager *pNetworkManager, Statistics statistic, const QByteArray &data)
+{
+    QString url = mUrlBase + "/statistics";
+
+    switch(statistic)
+    {
+    case Statistics::Chaos:
+        url += "/chaos";
+        break;
+    case Statistics::Guardian:
+        url += "/guardian";
+        break;
+    default:
+        qDebug() << "Invalid category";
+        return;
+    }
+
+    post(pNetworkManager, url, data);
+}
+
 void ApiManager::getCharacter(QNetworkAccessManager *pNetworkManager, const QString &characterName)
 {
     QString url = mUrlBase + QString("/lostark/characters/%1").arg(characterName);

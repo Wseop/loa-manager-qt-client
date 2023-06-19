@@ -145,7 +145,7 @@ void CharacterSearch::searchCharacter(const QString &characterName)
 
         // 결과 parsing
         const QJsonObject &object = response.object();
-        const QJsonObject &equipments = object.find("equipments")->toObject();
+        const QJsonArray &equipments = object.find("equipments")->toArray();
         const QJsonArray &skills = object.find("skills")->toArray();
         const QJsonArray &gems = object.find("gems")->toArray();
         const QJsonArray &engraves = object.find("engraves")->toArray();

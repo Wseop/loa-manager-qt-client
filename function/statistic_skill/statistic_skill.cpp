@@ -3,7 +3,6 @@
 #include "ui/widget_manager.h"
 #include "api/api_manager.h"
 #include "game/engrave/engrave_manager.h"
-#include "game/skill/skill_manager.h"
 #include "function/statistic_skill/skill_usage_widget.h"
 
 #include <QGroupBox>
@@ -22,8 +21,7 @@ StatisticSkill *StatisticSkill::pInstance = nullptr;
 
 StatisticSkill::StatisticSkill() :
     ui(new Ui::StatisticSkill),
-    pClassSelector(nullptr),
-    pSearchButton(nullptr)
+    pClassSelector(nullptr)
 {
     ui->setupUi(this);
     ui->vLayoutMain->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
@@ -41,7 +39,6 @@ void StatisticSkill::initializeClassLayout()
 {
     ui->hLayoutClass->setAlignment(Qt::AlignHCenter);
     ui->hLayoutClass->addWidget(createClassSelector());
-    ui->hLayoutClass->addWidget(createSearchButton());
 }
 
 QGroupBox *StatisticSkill::createClassSelector()
@@ -53,10 +50,12 @@ QGroupBox *StatisticSkill::createClassSelector()
 
     pClassSelector = WidgetManager::createComboBox({});
     connect(pClassSelector, &QComboBox::currentTextChanged,
-            this, [&](const QString &text)
-            {
-                mSelectedClassName = text;
-            });
+            this, &StatisticSkill::updateEngraveButton);
+    connect(pClassSelector, &QComboBox::currentTextChanged,
+            this, [&](const QString &className)
+    {
+        mSelectedClass = className;
+    });
     pLayout->addWidget(pClassSelector);
 
     QNetworkAccessManager *pClassLoader = new QNetworkAccessManager;
@@ -64,43 +63,41 @@ QGroupBox *StatisticSkill::createClassSelector()
             pClassLoader, &QNetworkAccessManager::deleteLater);
     connect(pClassLoader, &QNetworkAccessManager::finished,
             this, [&](QNetworkReply *pReply)
-            {
-                QJsonArray classes = QJsonDocument::fromJson(
-                                 pReply->readAll()).array();
-                QStringList classNames;
+    {
+        QJsonArray classes = QJsonDocument::fromJson(pReply->readAll()).array();
+        QStringList classNames;
 
-                for (const QJsonValue &value : classes) {
-                    classNames << value.toObject().find("child")->toVariant()
-                                      .toStringList();
-                }
+        for (const QJsonValue &value : classes) {
+            classNames << value.toObject().find("child")->toVariant()
+                              .toStringList();
+        }
 
-                pClassSelector->addItems(classNames);
-            });
+        pClassSelector->addItems(classNames);
+    });
 
     ApiManager::getInstance()->getResources(pClassLoader, Resources::Class, "");
 
     return pGroupBox;
 }
 
-QPushButton *StatisticSkill::createSearchButton()
+void StatisticSkill::updateEngraveButton(const QString &className)
 {
-    pSearchButton = WidgetManager::createPushButton("검색");
+    enableInput(false);
 
-    connect(pSearchButton, &QPushButton::released,
-            this, &StatisticSkill::searchStatistic);
-    connect(pSearchButton, &QPushButton::released,
-            this, &StatisticSkill::clearSkillUsageWidget);
+    const QStringList &classEngraves = EngraveManager::getInstance()->getClassEngraves(className);
 
-    return pSearchButton;
+    for (int i = 0; i < classEngraves.size(); i++)
+        mClassEngraveButtons[i]->setText(classEngraves[i]);
+
+    enableInput(true);
 }
 
 void StatisticSkill::initializeClassEngraveLayout()
 {
     ui->hLayoutClassEngrave->setAlignment(Qt::AlignHCenter);
 
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; i++)
         ui->hLayoutClassEngrave->addWidget(createClassEngraveButton());
-    }
 }
 
 QPushButton *StatisticSkill::createClassEngraveButton()
@@ -117,30 +114,22 @@ QPushButton *StatisticSkill::createClassEngraveButton()
             return;
         }
 
-        for (QPushButton *pButton : mClassEngraveButtons) {
+        for (QPushButton *pButton : mClassEngraveButtons)
             pButton->setStyleSheet("");
-        }
 
-        pClassEngraveButton->setStyleSheet("QPushButton { border: 2px solid blue;"
-                                           "              border-radius: 5px; }");
+        pClassEngraveButton->setStyleSheet("QPushButton { "
+                                           "border: 2px solid blue;"
+                                           "border-radius: 5px; "
+                                           "}");
 
-        setSkillUsageWidget(pClassEngraveButton->text());
-        enableInput(true);
+        searchStatistic(pClassEngraveButton->text());
     });
 
     return pClassEngraveButton;
 }
 
-void StatisticSkill::setClassEngraveButtonText(int index, const QString &classEngrave)
+void StatisticSkill::searchStatistic(const QString &classEngrave)
 {
-    mClassEngraveButtons[index]->setText(classEngrave);
-    mClassEngraveButtons[index]->setStyleSheet("");
-}
-
-void StatisticSkill::searchStatistic()
-{
-    enableInput(false);
-
     QNetworkAccessManager *pStatisticLoader = new QNetworkAccessManager;
 
     connect(pStatisticLoader, &QNetworkAccessManager::finished,
@@ -149,7 +138,7 @@ void StatisticSkill::searchStatistic()
             this, &StatisticSkill::parseStatistic);
 
     ApiManager::getInstance()->getStatistics(
-        pStatisticLoader, Statistics::Skill, mSelectedClassName);
+        pStatisticLoader, Statistics::Skill, {classEngrave});
 }
 
 void StatisticSkill::parseStatistic(QNetworkReply *pReply)
@@ -159,138 +148,104 @@ void StatisticSkill::parseStatistic(QNetworkReply *pReply)
         return;
     }
 
-    QStringList classEngraves = EngraveManager::getInstance()
-                                    ->getClassEngraves(mSelectedClassName);
-    SettingsSkill statisticData;
-    QJsonObject response = QJsonDocument::fromJson(pReply->readAll()).object();
+    clearSkillUsageWidget();
 
-    statisticData.count = response.find("count")->toInt();
+    const QJsonObject response = QJsonDocument::fromJson(pReply->readAll()).object();
+    const double &count = response.find("count")->toDouble();
+    const QJsonArray &skillCounts = response.find("skillCounts")->toArray();
 
-    for (int i = 0; i < classEngraves.size(); i++) {
-        const QJsonObject &skills = response.find(classEngraves[i])->toObject();
+    for (auto iter = skillCounts.constBegin(); iter != skillCounts.constEnd(); iter++)
+    {
+        const int skillCount = iter->toObject().find("count")->toInt();
+        const QString &skillName = iter->toObject().find("skillName")->toString();
+        const QJsonArray &skillLevelCounts = iter->toObject().find("skillLevelCounts")->toArray();
+        const QJsonArray &tripodCounts = iter->toObject().find("tripodCounts")->toArray();
+        const QJsonArray &runeCounts = iter->toObject().find("runeCounts")->toArray();
 
-        statisticData.settings[classEngraves[i]].count = skills.find("count")
-                                                             ->toInt();
+        SkillUsageWidget *pSkillUsageWidget = new SkillUsageWidget(
+            mSelectedClass, count, skillCount, skillName,
+            parseSkillLevel(skillLevelCounts),
+            parseTripod(tripodCounts),
+            parseRune(runeCounts)
+        );
+        ui->vLayoutResult->addWidget(pSkillUsageWidget);
+        mSkillUsageWidgets << pSkillUsageWidget;
 
-        for (auto iter = skills.constBegin(); iter != skills.constEnd(); iter++) {
-            if (iter.key() == "count")
-                continue;
-
-            const QJsonObject &skill = iter.value().toObject();
-            const QJsonObject &levels = skill.find("levels")->toObject();
-            const QJsonObject &tripods = skill.find("tripods")->toObject();
-            const QJsonObject &runes = skill.find("runes")->toObject();
-
-            SkillUsage skillUsage;
-            skillUsage.count = skill.find("count")->toInt();
-
-            for (auto levelIter = levels.constBegin(); levelIter != levels.constEnd(); levelIter++) {
-                skillUsage.levels[levelIter.key().toInt()] = levelIter.value()
-                                                                 .toInt();
-            }
-
-            for (auto tripodIter = tripods.constBegin(); tripodIter != tripods.constEnd(); tripodIter++) {
-                skillUsage.tripods[tripodIter.key()] = tripodIter.value().toInt();
-            }
-
-            for (auto runeIter = runes.constBegin(); runeIter != runes.constEnd(); runeIter++) {
-                if (runeIter.key() == "null") {
-                    skillUsage.runes.append({"미착용", runeIter.value().toInt()});
-                } else {
-                    skillUsage.runes.append({runeIter.key(),
-                                             runeIter.value().toInt()});
-                }
-            }
-
-            // 룬 사용률 내림차순 정렬
-            std::sort(skillUsage.runes.begin(), skillUsage.runes.end(),
-                      [&](auto a, auto b)
-            {
-                return a.second > b.second;
-            });
-
-            statisticData.settings[classEngraves[i]].skillUsages.append({
-                iter.key(), skillUsage
-            });
-        }
-
-        setClassEngraveButtonText(i, classEngraves[i]);
+        QFrame *pHLine = WidgetManager::createLine(QFrame::HLine);
+        ui->vLayoutResult->addWidget(pHLine);
+        mLines << pHLine;
     }
-
-    mStatisticData = statisticData;
 
     enableInput(true);
 }
 
-void StatisticSkill::setSkillUsageWidget(const QString &classEngraveName)
+QList<QPair<int, int> > StatisticSkill::parseSkillLevel(const QJsonArray &skillLevelCounts)
 {
-    clearSkillUsageWidget();
+    QList<QPair<int, int>> result;
 
-    const QHash<QString, Skill> skills = SkillManager::getInstance()->skills(
-        mSelectedClassName);
+    for (auto iter = skillLevelCounts.constBegin(); iter != skillLevelCounts.constEnd(); iter++)
+    {
+        const QJsonObject &skillLevelCount = iter->toObject();
 
-    for (auto iter = skills.constBegin(); iter != skills.constEnd(); iter++) {
-        SkillUsageWidget *pSkillUsageWidget = new SkillUsageWidget(iter.value());
-
-        mSkillUsageWidgetMap[iter.value().skillName] = pSkillUsageWidget;
-        mSkillUsageWidgets << pSkillUsageWidget;
+        result.append({
+            skillLevelCount.find("count")->toInt(),
+            skillLevelCount.find("skillLevel")->toInt()
+        });
     }
 
-    updateSkillUsageRatio(classEngraveName);
+    return result;
+}
+
+QList<QPair<int, QString> > StatisticSkill::parseTripod(const QJsonArray &tripodCounts)
+{
+    QList<QPair<int, QString>> result;
+
+    for (auto iter = tripodCounts.constBegin(); iter != tripodCounts.constEnd(); iter++)
+    {
+        const QJsonObject &tripodCount = iter->toObject();
+
+        result.append({
+            tripodCount.find("count")->toInt(),
+            tripodCount.find("tripodName")->toString()
+        });
+    }
+
+    return result;
+}
+
+QList<QPair<int, QString> > StatisticSkill::parseRune(const QJsonArray &runeCounts)
+{
+    QList<QPair<int, QString>> result;
+
+    for (auto iter = runeCounts.constBegin(); iter != runeCounts.constEnd(); iter++)
+    {
+        const QJsonObject &runeCount = iter->toObject();
+
+        result.append({
+            runeCount.find("count")->toInt(),
+            runeCount.find("runeName")->toString()
+        });
+    }
+
+    return result;
 }
 
 void StatisticSkill::clearSkillUsageWidget()
 {
-    mSkillUsageWidgetMap.clear();
-
-    for (SkillUsageWidget *pSkillUsageWidget : mSkillUsageWidgets) {
+    for (SkillUsageWidget *pSkillUsageWidget : mSkillUsageWidgets)
         delete pSkillUsageWidget;
-    }
 
     mSkillUsageWidgets.clear();
 
-    for (QFrame *pLine : mLines) {
+    for (QFrame *pLine : mLines)
         delete pLine;
-    }
 
     mLines.clear();
-}
-
-void StatisticSkill::updateSkillUsageRatio(const QString &classEngraveName)
-{
-    const SettingSkill &settings = mStatisticData.settings[classEngraveName];
-    const QList<QPair<QString, SkillUsage>> &skillUsages = settings.skillUsages;
-
-    for (auto &skillUsage : skillUsages) {
-        mSkillUsageWidgetMap[skillUsage.first]->updateUsageRatio(
-            settings.count, skillUsage.second);
-    }
-
-    // 스킬 사용률 내림차순 정렬
-    std::sort(mSkillUsageWidgets.begin(), mSkillUsageWidgets.end(),
-              [&](auto a, auto b)
-              {
-                return a->getSkillUsageCount() > b->getSkillUsageCount();
-              });
-
-    showSkillUsageWidget();
-}
-
-void StatisticSkill::showSkillUsageWidget()
-{
-    for (SkillUsageWidget *pWidget : mSkillUsageWidgets) {
-        ui->vLayoutResult->addWidget(pWidget);
-
-        QFrame *hLine = WidgetManager::createLine(QFrame::HLine);
-        mLines << hLine;
-        ui->vLayoutResult->addWidget(hLine);
-    }
 }
 
 void StatisticSkill::enableInput(bool enable)
 {
     pClassSelector->setEnabled(enable);
-    pSearchButton->setEnabled(enable);
 
     for (QPushButton *pButton : mClassEngraveButtons) {
         pButton->setEnabled(enable);

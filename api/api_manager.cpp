@@ -92,7 +92,7 @@ void ApiManager::getResources(QNetworkAccessManager *pNetworkManager, Resources 
     get(pNetworkManager, url);
 }
 
-void ApiManager::getStatistics(QNetworkAccessManager *pNetworkManager, Statistics statistic, const QString &param)
+void ApiManager::getStatistics(QNetworkAccessManager *pNetworkManager, Statistics statistic, const QStringList &params)
 {
     QString url = mUrlBase + "/statistics";
 
@@ -118,12 +118,16 @@ void ApiManager::getStatistics(QNetworkAccessManager *pNetworkManager, Statistic
     case Statistics::Set:
         url += "/set";
         break;
+    case Statistics::Profile:
+        url += "/profile";
+        break;
     default:
         qDebug() << "Invalid category";
         return;
     }
 
-    url += QString("/%1").arg(param);
+    for (const QString &param : params)
+        url += QString("/%1").arg(param);
 
     get(pNetworkManager, url);
 }
@@ -164,14 +168,14 @@ void ApiManager::getSiblings(QNetworkAccessManager *pNetworkManager, const QStri
 
 void ApiManager::getAuctionItems(QNetworkAccessManager *pNetworkManager, const QString &searchOptionQuery)
 {
-    QString url = mUrlBase + "/lostark/auctions/items" + searchOptionQuery;
+    QString url = mUrlBase + "/lostark/auction/items" + searchOptionQuery;
 
     get(pNetworkManager, url);
 }
 
 void ApiManager::getMarketItems(QNetworkAccessManager *pNetworkManager, const QString &searchOptionQuery)
 {
-    QString url = mUrlBase + "/lostark/markets/items" + searchOptionQuery;
+    QString url = mUrlBase + "/lostark/market/items" + searchOptionQuery;
 
     get(pNetworkManager, url);
 }

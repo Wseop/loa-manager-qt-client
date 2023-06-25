@@ -51,7 +51,6 @@ HEADERS += \
     api/resources/reward.h \
     api/statistics/reward_chaos.h \
     api/statistics/reward_guardian.h \
-    api/statistics/settings_armory.h \
     api/statistics/settings_skill.h \
     api/statistics/statistics.h \
     function/auction_calculator/auction_calculator.h \

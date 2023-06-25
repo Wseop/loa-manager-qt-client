@@ -34,7 +34,7 @@ public:
     void getResources(QNetworkAccessManager *pNetworkManager, Resources resource, const QString &param);
 
     // statistics
-    void getStatistics(QNetworkAccessManager *pNetworkManager, Statistics statistic, const QString &param);
+    void getStatistics(QNetworkAccessManager *pNetworkManager, Statistics statistic, const QStringList &params);
     void postStatistics(QNetworkAccessManager *pNetworkManager, Statistics statistic, const QByteArray &data);
 
     // lostark

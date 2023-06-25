@@ -3,7 +3,6 @@
 
 #include "function/function_widget.h"
 #include "api/statistics/statistics.h"
-#include "api/statistics/settings_armory.h"
 
 #include <QWidget>
 
@@ -30,29 +29,27 @@ private:
     // class layout
     void initializeClassLayout();
     QGroupBox *createClassSelector();
-    QPushButton *createSearchButton();
     QLabel *createInfoLabel();
 
     // class engrave layout
     void initializeClassEngraveLayout();
-    QLabel *createClassEngraveLabel();
+    QPushButton *createClassEngraveButton();
 
     // result layout
     void initializeResultLayout();
     QLabel *createCategoryLabel(const QString &category);
-    QHBoxLayout *createCategoryLayout(const QString &category);
+    QVBoxLayout *createResultLayout(const QString &category);
 
     // handle datas
-    void searchStatistic();
-    void parseStatistic(Statistics category, QNetworkReply *pReply);
-    void parseEngraveStatistic(QNetworkReply *pReply);
+    void searchProfile(const QString &className);
+    void parseProfile(QNetworkReply *pReply);
+
+    void searchStatistic(const QString &classEngrave);
+    void parseStatistic(Statistics category, QString engraveLevel, QNetworkReply *pReply);
 
     // ui
     void clearResult();
-    void setSettingCount(const QStringList &classEngraves, Statistics category, SettingsArmory settingsArmory);
-    void setEngraveSettingCount(const QStringList &classEngraves, int engraveLevel, SettingsArmory settingsArmory);
-    void setClassEngraveCount(const QStringList &classEngraves, const QList<int> &counts, int totalCount);
-
+    void setResult(Statistics category, const QString &engraveLevel, const QString &value, const double &ratio);
     void enableInput(bool enable);
 
 public:
@@ -65,13 +62,17 @@ public:
 private:
     Ui::StatisticArmory *ui;
 
-    QString mSelectedClassName;
+    QStringList mClassEngraves;
+    QStringList mParseMainKeys;
+    QStringList mParseSubKeys;
+    QStringList mLayoutKeys;
+
+    int mResponseCount;
 
     // ui
     QComboBox *pClassSelector;
-    QPushButton *pSearchButton;
-    QList<QLabel*> mClassEngraveLabels;
-    QHash<QString, QList<QVBoxLayout*>> mCategoryLayouts;
+    QList<QPushButton*> mClassEngraveButtons;
+    QHash<QString, QVBoxLayout*> mResultLayoutMap;
     QList<QLabel*> mResultLabels;
 
 private:

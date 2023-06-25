@@ -8,9 +8,10 @@ enum class Statistics {
     Guardian,
     Skill,
     Ability,
-    Elixir,
+    Set,
     Engrave,
-    Set
+    Elixir,
+    Profile
 };
 
 #endif // STATISTICS_H

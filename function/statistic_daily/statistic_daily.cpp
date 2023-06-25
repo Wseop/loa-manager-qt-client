@@ -289,7 +289,7 @@ void StatisticDaily::loadStatisticData(const QString &content)
             updateItemPrice(level);
         });
 
-        ApiManager::getInstance()->getStatistics(pStatisticLoader, statistics, level);
+        ApiManager::getInstance()->getStatistics(pStatisticLoader, statistics, {level});
     }
 
     mIsWorking = false;
@@ -307,8 +307,7 @@ void StatisticDaily::updateItemCount(const QJsonObject &data)
     {
         for (const QString &itemName : itemNames)
         {
-            int itemCount = data.find("itemCounts")->toObject()
-                                .find(mItemKeyMap[itemName])->toInt();
+            int itemCount = data.find(mItemKeyMap[itemName])->toInt();
             double avgCount = itemCount / static_cast<double>(dataCount);
 
             mItemCountMap[level][itemName] = avgCount;

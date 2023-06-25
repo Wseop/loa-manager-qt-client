@@ -149,7 +149,7 @@ void StatisticSkill::searchStatistic()
             this, &StatisticSkill::parseStatistic);
 
     ApiManager::getInstance()->getStatistics(
-        pStatisticLoader, Statistics::Skill, mSelectedClassName);
+        pStatisticLoader, Statistics::Skill, {mSelectedClassName});
 }
 
 void StatisticSkill::parseStatistic(QNetworkReply *pReply)

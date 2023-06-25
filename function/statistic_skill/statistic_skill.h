@@ -27,20 +27,19 @@ private:
     // class layout
     void initializeClassLayout();
     QGroupBox *createClassSelector();
-    QPushButton *createSearchButton();
+    void updateEngraveButton(const QString &className);
 
     // class-engrave layout
     void initializeClassEngraveLayout();
     QPushButton *createClassEngraveButton();
-    void setClassEngraveButtonText(int index, const QString &classEngrave);
 
-    void searchStatistic();
+    void searchStatistic(const QString &classEngrave);
     void parseStatistic(QNetworkReply *pReply);
+    QList<QPair<int, int>> parseSkillLevel(const QJsonArray &skillLevelCounts);
+    QList<QPair<int, QString>> parseTripod(const QJsonArray &tripodCounts);
+    QList<QPair<int, QString>> parseRune(const QJsonArray &runeCounts);
 
-    void setSkillUsageWidget(const QString &classEngraveName);
     void clearSkillUsageWidget();
-    void updateSkillUsageRatio(const QString &classEngraveName);
-    void showSkillUsageWidget();
 
     void enableInput(bool enable);
 
@@ -54,14 +53,12 @@ public:
 private:
     Ui::StatisticSkill *ui;
 
-    QString mSelectedClassName;
+    QString mSelectedClass;
     SettingsSkill mStatisticData;
 
     // ui
     QComboBox *pClassSelector;
-    QPushButton *pSearchButton;
     QList<QPushButton*> mClassEngraveButtons;
-    QHash<QString, SkillUsageWidget*> mSkillUsageWidgetMap;
     QList<SkillUsageWidget*> mSkillUsageWidgets;
     QList<QFrame*> mLines;
 

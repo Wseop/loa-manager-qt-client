@@ -2,23 +2,33 @@
 #include "ui_skill_usage_widget.h"
 #include "ui/widget_manager.h"
 #include "resource/resource_manager.h"
+#include "game/skill/skill_manager.h"
 
 #include <QLabel>
 #include <QGroupBox>
 
-SkillUsageWidget::SkillUsageWidget(const Skill &skill) :
+SkillUsageWidget::SkillUsageWidget(const QString &className,
+                                   const double &count, const int skillCount,
+                                   const QString &skillName,
+                                   const QList<QPair<int, int>> &skillLevelCounts,
+                                   const QList<QPair<int, QString>> &tripodCounts,
+                                   const QList<QPair<int, QString>> &runeCounts) :
     ui(new Ui::SkillUsageWidget),
     mSkillUsageCount(0),
-    pSkillUsageRatioLabel(nullptr),
-    mLevels({1, 4, 7, 10, 12}),
+    mLevels({1, 4, 7, 10, 11, 12}),
     pRuneLayout(nullptr)
 {
     ui->setupUi(this);
 
-    initializeTitleLayout(skill.isCounter, skill.iconPath, skill.skillName);
-    initializeLevelLayout();
-    initializeTripodLayout(skill.tripods);
-    initializeRuneLayout();
+    const Skill &skill = SkillManager::getInstance()->skill(className, skillName);
+
+    initializeTitleLayout(skill.isCounter,
+                          skill.iconPath,
+                          skill.skillName,
+                          count, skillCount);
+    initializeLevelLayout(skillCount, skillLevelCounts);
+    initializeTripodLayout(skill.tripods, skillCount, tripodCounts);
+    initializeRuneLayout(skillCount, runeCounts);
 }
 
 SkillUsageWidget::~SkillUsageWidget()
@@ -26,40 +36,16 @@ SkillUsageWidget::~SkillUsageWidget()
     delete ui;
 }
 
-void SkillUsageWidget::updateUsageRatio(int total, const SkillUsage &skillUsage)
+void SkillUsageWidget::initializeTitleLayout(bool isCounter,
+                                             const QString &iconPath,
+                                             const QString &skillName,
+                                             const double &count, const int skillCount)
 {
-    mSkillUsageCount = skillUsage.count;
-
-    updateSkillUsageRatio(total, skillUsage.count);
-    updateLevelUsageRatio(skillUsage.count, skillUsage.levels);
-    updateTripodUsageRatio(skillUsage.count, skillUsage.tripods);
-
-    const QList<QPair<QString, int>> &runes = skillUsage.runes;
-    int addedCount = 0;
-
-    for (const QPair<QString, int> &rune : runes) {
-        pRuneLayout->addLayout(createRuneUsageRatio(skillUsage.count, rune));
-        addedCount++;
-
-        if (addedCount == 5) {
-            break;
-        }
-    }
-}
-
-int SkillUsageWidget::getSkillUsageCount()
-{
-    return mSkillUsageCount;
-}
-
-void SkillUsageWidget::initializeTitleLayout(bool isCounter, const QString &iconPath, const QString &skillName)
-{
-    if (isCounter) {
+    if (isCounter)
         ui->vLayoutTitle->addWidget(createCounterLabel(), 0, Qt::AlignHCenter);
-    }
     ui->vLayoutTitle->addWidget(createSkillIcon(iconPath), 0, Qt::AlignHCenter);
     ui->vLayoutTitle->addWidget(createSkillNameLabel(skillName), 0, Qt::AlignHCenter);
-    ui->vLayoutTitle->addWidget(createSkillUsageRatioLabel(), 0, Qt::AlignHCenter);
+    ui->vLayoutTitle->addWidget(createSkillUsageRatioLabel(skillCount / count * 100), 0, Qt::AlignHCenter);
 }
 
 QLabel *SkillUsageWidget::createCounterLabel()
@@ -81,27 +67,21 @@ QLabel *SkillUsageWidget::createSkillNameLabel(const QString &skillName)
     return WidgetManager::createLabel(skillName);
 }
 
-QLabel *SkillUsageWidget::createSkillUsageRatioLabel()
+QLabel *SkillUsageWidget::createSkillUsageRatioLabel(double ratio)
 {
-    pSkillUsageRatioLabel = WidgetManager::createLabel("-");
+    QLabel *pSkillUsageRatioLabel = WidgetManager::createLabel(QString("(%1%)").arg(ratio, 0, 'f', 2));
+
+    if (ratio >= 30)
+        pSkillUsageRatioLabel->setStyleSheet("QLabel { color: blue }");
 
     return pSkillUsageRatioLabel;
 }
 
-void SkillUsageWidget::updateSkillUsageRatio(int total, int count)
-{
-    double ratio = count / static_cast<double>(total) * 100;
-
-    pSkillUsageRatioLabel->setText(QString("(%1%)").arg(ratio, 0, 'f', 2));
-
-    if (ratio >= 30) {
-        pSkillUsageRatioLabel->setStyleSheet("QLabel { color: blue }");
-    }
-}
-
-void SkillUsageWidget::initializeLevelLayout()
+void SkillUsageWidget::initializeLevelLayout(const int skillCount, const QList<QPair<int, int>> &skillLevels)
 {
     ui->vLayoutMain->addWidget(createLevelGroupBox());
+
+    setLevelUsageRatio(skillCount, skillLevels);
 }
 
 QGroupBox *SkillUsageWidget::createLevelGroupBox()
@@ -138,27 +118,31 @@ QLabel *SkillUsageWidget::createLevelUsageRatioLabel(int level)
     return pLevelRatioLabel;
 }
 
-void SkillUsageWidget::updateLevelUsageRatio(int total, const QHash<int, int> &levels)
+void SkillUsageWidget::setLevelUsageRatio(const int skillCount, const QList<QPair<int, int>> &skillLevels)
 {
-    for (int level : mLevels) {
-        if (levels.contains(level)) {
-            double ratio = levels[level] / static_cast<double>(total) * 100;
+    for (auto iter = skillLevels.constBegin(); iter != skillLevels.constEnd(); iter++)
+    {
+        if (mLevels.contains(iter->second))
+        {
+            double ratio = iter->first / static_cast<double>(skillCount) * 100;
 
-            mLevelUsageRatioLabelMap[level]->setText(
+            mLevelUsageRatioLabelMap[iter->second]->setText(
                 QString("(%1%)").arg(ratio, 0, 'f', 2));
 
             if (ratio >= 30) {
-                mLevelUsageRatioLabelMap[level]->setStyleSheet("QLabel { color: blue }");
+                mLevelUsageRatioLabelMap[iter->second]->setStyleSheet(
+                    "QLabel { color: blue }");
             }
         }
     }
 }
 
-void SkillUsageWidget::initializeTripodLayout(const QList<Tripod> &tripods)
+void SkillUsageWidget::initializeTripodLayout(const QList<Tripod> &tripods, const int skillCount, const QList<QPair<int, QString>> &tripodCounts)
 {
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++)
         ui->vLayoutMain->addWidget(createTripodGroupBox(i, tripods));
-    }
+
+    setTripodUsageRatio(skillCount, tripodCounts);
 }
 
 QGroupBox *SkillUsageWidget::createTripodGroupBox(int tripodTier, const QList<Tripod> &tripods)
@@ -215,23 +199,26 @@ QLabel *SkillUsageWidget::createTripodUsageRatioLabel(const QString &tripodName)
     return pTripodUsageRatioLabel;
 }
 
-void SkillUsageWidget::updateTripodUsageRatio(int total, const QHash<QString, int> &tripods)
+void SkillUsageWidget::setTripodUsageRatio(const int skillCount, const QList<QPair<int, QString>> &tripods)
 {
-    for (auto iter = tripods.constBegin(); iter != tripods.constEnd(); iter++) {
-        double ratio = iter.value() / static_cast<double>(total) * 100;
+    for (auto iter = tripods.constBegin(); iter != tripods.constEnd(); iter++)
+    {
+        double ratio = iter->first / static_cast<double>(skillCount) * 100;
 
-        mTripodUsageRatioLabelMap[iter.key()]->setText(
+        mTripodUsageRatioLabelMap[iter->second]->setText(
             QString("(%1%)").arg(ratio, 0, 'f', 2));
 
         if (ratio >= 30) {
-            mTripodUsageRatioLabelMap[iter.key()]->setStyleSheet("QLabel { color: blue }");
+            mTripodUsageRatioLabelMap[iter->second]->setStyleSheet("QLabel { color: blue }");
         }
     }
 }
 
-void SkillUsageWidget::initializeRuneLayout()
+void SkillUsageWidget::initializeRuneLayout(const int skillCount, const QList<QPair<int, QString>> &runeCounts)
 {
     ui->vLayoutMain->addWidget(createRuneGroupBox());
+
+    createRuneUsageRatio(skillCount, runeCounts);
 }
 
 QGroupBox *SkillUsageWidget::createRuneGroupBox()
@@ -244,15 +231,21 @@ QGroupBox *SkillUsageWidget::createRuneGroupBox()
     return pGroupBox;
 }
 
-QVBoxLayout *SkillUsageWidget::createRuneUsageRatio(int total, const QPair<QString, int> &rune)
+void SkillUsageWidget::createRuneUsageRatio(int skillCount, const QList<QPair<int, QString>> &runeCounts)
 {
-    QVBoxLayout *pRuneUsageLayout = new QVBoxLayout();
+    for (int i = 0; i < runeCounts.size(); i++)
+    {
+        if (i >= 5)
+            break;
 
-    pRuneUsageLayout->addWidget(createRuneIcon(rune.first), 0, Qt::AlignHCenter);
-    pRuneUsageLayout->addWidget(createRuneNameLabel(rune.first), 0, Qt::AlignHCenter);
-    pRuneUsageLayout->addWidget(createRuneUsageRatioLabel(total, rune.second), 0, Qt::AlignHCenter);
+        QVBoxLayout *pRuneUsageLayout = new QVBoxLayout();
 
-    return pRuneUsageLayout;
+        pRuneUsageLayout->addWidget(createRuneIcon(runeCounts[i].second), 0, Qt::AlignHCenter);
+        pRuneUsageLayout->addWidget(createRuneNameLabel(runeCounts[i].second), 0, Qt::AlignHCenter);
+        pRuneUsageLayout->addWidget(createRuneUsageRatioLabel(skillCount, runeCounts[i].first), 0, Qt::AlignHCenter);
+
+        pRuneLayout->addLayout(pRuneUsageLayout);
+    }
 }
 
 QLabel *SkillUsageWidget::createRuneIcon(const QString &runeName)
@@ -267,16 +260,15 @@ QLabel *SkillUsageWidget::createRuneNameLabel(const QString &runeName)
     return WidgetManager::createLabel(runeName);
 }
 
-QLabel *SkillUsageWidget::createRuneUsageRatioLabel(int total, int count)
+QLabel *SkillUsageWidget::createRuneUsageRatioLabel(const int skillCount, const int runeCount)
 {
-    double ratio = count / static_cast<double>(total) * 100;
+    double ratio = runeCount / static_cast<double>(skillCount) * 100;
 
     QLabel *pRuneUsageRatioLabel = WidgetManager::createLabel(
         QString("(%1%)").arg(ratio, 0, 'f', 2));
 
-    if (ratio >= 30) {
+    if (ratio >= 30)
         pRuneUsageRatioLabel->setStyleSheet("QLabel { color: blue }");
-    }
 
     return pRuneUsageRatioLabel;
 }

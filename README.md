@@ -1,5 +1,6 @@
 # QT_LoaManager
 Lostark OpenAPI를 활용한 편의기능 제공 앱
+> 지원종료 [loastat-discord-bot](https://github.com/Wseop/loastat-discord-bot)으로 오세요.
 ## 기술 스택
 ### Environment
 <img src="https://img.shields.io/badge/qt-41CD52?style=for-the-badge&logo=qt&logoColor=white"> 

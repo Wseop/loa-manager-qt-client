@@ -9,7 +9,7 @@ Lostark OpenAPI를 활용한 편의기능 제공 앱
 
 ## 프로젝트 구조
 - 현재 페이지는 Front End 영역에 해당
-- BackEnd 페이지는 [여기](https://github.com/Wseop/LoaManagerServer)로
+- ~~BackEnd 페이지는 [여기](https://github.com/Wseop/LoaManagerServer)로~~
 ![loa-manager](https://github.com/Wseop/QT_LoaManager/assets/18005580/0c626eb4-46f2-459a-93fb-b63b6daba2f8)
 ## 기능
 ### 캐릭터
